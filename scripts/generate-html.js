@@ -7,22 +7,29 @@ const __dirname = path.dirname(__filename);
 
 // Generate HTML with correct base path for production
 const isProduction = process.env.NODE_ENV === 'production';
-const basePath = isProduction ? '/Portfolio' : '';
+const basePath = ''; // Deploy to root, no subdirectory needed
 
 // Read the current index.html
 const htmlPath = path.join(__dirname, '../index.html');
 let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-// Replace favicon paths - only if not already using base path
+// Replace paths - but exclude favicon and static assets that should be in root
 if (basePath) {
+  // Replace paths for images, CSS, JS, but NOT favicon files
   htmlContent = htmlContent.replace(
-    /href="\/(?!Portfolio\/)/g, 
+    /href="\/(?!Portfolio\/)(?!favicon|apple-touch-icon|android-chrome|site\.webmanifest)/g, 
     `href="${basePath}/`
   );
   
   htmlContent = htmlContent.replace(
-    /content="\/(?!Portfolio\/)/g, 
+    /content="\/(?!Portfolio\/)(?!favicon|apple-touch-icon|android-chrome|site\.webmanifest)/g, 
     `content="${basePath}/`
+  );
+  
+  // Also replace src attributes for images
+  htmlContent = htmlContent.replace(
+    /src="\/(?!Portfolio\/)(?!favicon|apple-touch-icon|android-chrome|site\.webmanifest)/g, 
+    `src="${basePath}/`
   );
 }
 
