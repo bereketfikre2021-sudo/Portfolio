@@ -57,7 +57,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
   },
   publicDir: 'public',
-  base: process.env.NODE_ENV === 'production' ? '/bereketfikre/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/Portfolio/' : '/',
   server: {
     fs: {
       allow: ['..']

@@ -7,13 +7,13 @@ const __dirname = path.dirname(__filename);
 
 // Generate manifest with correct base path for production
 const isProduction = process.env.NODE_ENV === 'production';
-const basePath = isProduction ? '/bereketfikre' : '';
+const basePath = isProduction ? '/Portfolio' : '';
 
 const manifest = {
   "name": "Bereket Fikre - Creative Designer Portfolio",
   "short_name": "Bereket Fikre",
   "description": "Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing",
-  "start_url": "/",
+  "start_url": basePath ? `${basePath}/` : "/",
   "display": "standalone",
   "background_color": "#101027",
   "theme_color": "#101027",
