@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Preview Test - Bereket Fikre</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .preview-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+        .preview-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .test-links {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .test-links a {
+            display: block;
+            margin: 10px 0;
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .test-links a:hover {
+            text-decoration: underline;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Social Media Preview Testing</h1>
+    
+    <div class="preview-card">
+        <h3>Current Social Media Preview</h3>
+        <p><strong>Title:</strong> Bereket Fikre - Creative Designer & Brand Builder | UI/UX Expert</p>
+        <p><strong>Description:</strong> Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing. Transform your brand with stunning visual solutions.</p>
+        <p><strong>Image:</strong> https://bereketfikre.com/img/Bereket-Fikre.webp</p>
+        <p><strong>URL:</strong> https://bereketfikre.com/</p>
+    </div>
+
+    <div class="test-links">
+        <h3>Test Your Social Media Preview</h3>
+        <p>Use these tools to test and refresh your social media previews:</p>
+        
+        <a href="https://developers.facebook.com/tools/debug/" target="_blank">
+            🔍 Facebook Sharing Debugger
+        </a>
+        <a href="https://cards-dev.twitter.com/validator" target="_blank">
+            🐦 Twitter Card Validator
+        </a>
+        <a href="https://www.linkedin.com/post-inspector/" target="_blank">
+            💼 LinkedIn Post Inspector
+        </a>
+        <a href="https://developers.pinterest.com/tools/url-debugger/" target="_blank">
+            📌 Pinterest Rich Pins Validator
+        </a>
+        <a href="https://www.opengraph.xyz/" target="_blank">
+            🌐 Open Graph Preview Tool
+        </a>
+    </div>
+
+    <div class="preview-card">
+        <h3>What to Check</h3>
+        <ul>
+            <li>✅ Image displays correctly (1200x630 recommended)</li>
+            <li>✅ Title is clear and descriptive</li>
+            <li>✅ Description is engaging and under 160 characters</li>
+            <li>✅ URL is correct and accessible</li>
+            <li>✅ All meta tags are properly formatted</li>
+        </ul>
+    </div>
+
+    <div class="status success">
+        <strong>✅ Fixed Issues:</strong>
+        <ul>
+            <li>Corrected Twitter meta tags to use 'name' attribute instead of 'property'</li>
+            <li>Added og:image:secure_url for HTTPS support</li>
+            <li>Added og:image:alt for accessibility</li>
+            <li>Added og:image dimensions and type</li>
+            <li>Fixed image URL encoding issues</li>
+        </ul>
+    </div>
+
+    <div class="status warning">
+        <strong>⚠️ Next Steps:</strong>
+        <ul>
+            <li>Test the preview on all social media platforms</li>
+            <li>Clear any cached previews using the debugger tools above</li>
+            <li>Verify the image loads correctly at the specified URL</li>
+            <li>Check that all meta tags are present in the page source</li>
+        </ul>
+    </div>
+
+    <div class="preview-card">
+        <h3>Meta Tags Checklist</h3>
+        <p>Ensure these meta tags are present in your HTML:</p>
+        <ul>
+            <li>✅ og:title</li>
+            <li>✅ og:description</li>
+            <li>✅ og:image</li>
+            <li>✅ og:image:secure_url</li>
+            <li>✅ og:image:alt</li>
+            <li>✅ og:image:width</li>
+            <li>✅ og:image:height</li>
+            <li>✅ og:image:type</li>
+            <li>✅ og:url</li>
+            <li>✅ og:type</li>
+            <li>✅ og:site_name</li>
+            <li>✅ og:locale</li>
+            <li>✅ twitter:card</li>
+            <li>✅ twitter:title</li>
+            <li>✅ twitter:description</li>
+            <li>✅ twitter:image</li>
+            <li>✅ twitter:image:alt</li>
+            <li>✅ twitter:creator</li>
+            <li>✅ twitter:site</li>
+        </ul>
+    </div>
+</body>
+</html>
