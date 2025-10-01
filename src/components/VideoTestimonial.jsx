@@ -14,7 +14,7 @@ const VIDEO_TESTIMONIALS = [
     company: "Swan Clothing",
     industry: "Fashion",
     duration: "2:30",
-    thumbnail: import.meta.env.PROD ? '/bereketfikre/img/swan-clothing.webp' : '/img/swan-clothing.webp',
+    thumbnail: '/img/swan-clothing.webp',
     videoUrl: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4", // Replace with actual video
     quote: "Bereket transformed our vision into a stunning reality. The brand identity perfectly captures our essence and has been instrumental in our success.",
     rating: 5,
@@ -34,7 +34,7 @@ const VIDEO_TESTIMONIALS = [
     company: "Finix Financial",
     industry: "Fintech",
     duration: "1:45",
-    thumbnail: import.meta.env.PROD ? '/bereketfikre/img/Finix.webp' : '/img/Finix.webp',
+    thumbnail: '/img/Finix.webp',
     videoUrl: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_2mb.mp4", // Replace with actual video
     quote: "The web assets have revolutionized our digital presence. Our marketing team can now create stunning content in minutes instead of hours.",
     rating: 5,
@@ -54,7 +54,7 @@ const VIDEO_TESTIMONIALS = [
     company: "YAT Construction PLC",
     industry: "Construction",
     duration: "2:15",
-    thumbnail: import.meta.env.PROD ? '/bereketfikre/img/YAT-Construction-PLC.webp' : '/img/YAT-Construction-PLC.webp',
+    thumbnail: '/img/YAT-Construction-PLC.webp',
     videoUrl: "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4", // Replace with actual video
     quote: "The complete rebranding elevated our company from traditional construction firm to modern industry leader. Professional and impactful.",
     rating: 5,

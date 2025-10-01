@@ -35,8 +35,8 @@ class ResourceOptimizer {
     // this.addResourceHint('/fonts/inter-var.woff', 'preload', 'font', true);
     
     // Critical images (above the fold) - DISABLED FOR TEST APP
-    // this.addResourceHint(import.meta.env.PROD ? '/bereketfikre/img/Bereket-Fikre.webp' : '/img/Bereket-Fikre.webp', 'preload', 'image');
-    // this.addResourceHint(import.meta.env.PROD ? '/bereketfikre/img/Logo.webp' : '/img/Logo.webp', 'preload', 'image');
+    // this.addResourceHint('/img/Bereket-Fikre.webp', 'preload', 'image');
+    // this.addResourceHint('/img/Logo.webp', 'preload', 'image');
     
     // Critical JavaScript chunks
     this.addResourceHint('/assets/react-vendor-[hash].js', 'preload', 'script');
@@ -101,7 +101,7 @@ class ResourceOptimizer {
       { href: '/assets/tools-[hash].js', as: 'script' },
       { href: '/assets/optimization-[hash].js', as: 'script' },
       { href: '/styles/animations.css', as: 'style' },
-      { href: import.meta.env.PROD ? '/bereketfikre/img/portfolio-bg.webp' : '/img/portfolio-bg.webp', as: 'image' }
+      { href: '/img/portfolio-bg.webp', as: 'image' }
     ];
 
     nonCriticalResources.forEach(resource => {
@@ -206,7 +206,7 @@ class ResourceOptimizer {
     const idleResources = [
       { href: '/assets/blog-[hash].js', as: 'script' },
       { href: '/assets/case-study-[hash].js', as: 'script' },
-      { href: import.meta.env.PROD ? '/bereketfikre/img/gallery-bg.webp' : '/img/gallery-bg.webp', as: 'image' }
+      { href: '/img/gallery-bg.webp', as: 'image' }
     ];
 
     idleResources.forEach(resource => {

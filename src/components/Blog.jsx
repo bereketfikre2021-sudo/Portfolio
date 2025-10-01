@@ -5,12 +5,12 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, ArrowRight, ExternalLink, Tag, X } from 'lucide-react';
 
-// BG images - using dynamic base path for production
-const BG1 = import.meta.env.PROD ? '/bereketfikre/img/BG.webp' : '/img/BG.webp';
-const BG2 = import.meta.env.PROD ? '/bereketfikre/img/BG-2.webp' : '/img/BG-2.webp';
-const BG3 = import.meta.env.PROD ? '/bereketfikre/img/BG-3.webp' : '/img/BG-3.webp';
-const BG4 = import.meta.env.PROD ? '/bereketfikre/img/BG-4.webp' : '/img/BG-4.webp';
-const BG5 = import.meta.env.PROD ? '/bereketfikre/img/BG-5.webp' : '/img/BG-5.webp';
+// BG images - using consistent paths
+const BG1 = '/img/BG.webp';
+const BG2 = '/img/BG-2.webp';
+const BG3 = '/img/BG-3.webp';
+const BG4 = '/img/BG-4.webp';
+const BG5 = '/img/BG-5.webp';
 
 const BLOG_POSTS = [
   {

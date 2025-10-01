@@ -48,7 +48,7 @@ const CASE_STUDIES = [
       }
     ],
     technologies: ['Adobe Illustrator', 'Adobe Photoshop', 'Adobe InDesign', 'Figma'],
-    images: [import.meta.env.PROD ? '/bereketfikre/img/swan-clothing.webp' : '/img/swan-clothing.webp'],
+    images: ['/img/swan-clothing.webp'],
     testimonial: {
       quote: "Bereket transformed our vision into a stunning reality. The brand identity perfectly captures our essence and has been instrumental in our success.",
       author: "Sarah Johnson",
@@ -91,7 +91,7 @@ const CASE_STUDIES = [
       }
     ],
     technologies: ['Figma', 'Adobe Creative Suite', 'HTML/CSS', 'JavaScript'],
-    images: [import.meta.env.PROD ? '/bereketfikre/img/Finix.webp' : '/img/Finix.webp'],
+    images: ['/img/Finix.webp'],
     testimonial: {
       quote: "The web assets have revolutionized our digital presence. Our marketing team can now create stunning content in minutes instead of hours.",
       author: "Michael Chen",
@@ -141,8 +141,8 @@ const CASE_STUDIES = [
     ],
     technologies: ['Adobe Illustrator', 'Adobe InDesign', 'Adobe Photoshop', 'Figma'],
     images: [
-      import.meta.env.PROD ? '/bereketfikre/img/Medavail.webp' : '/img/Medavail.webp', 
-      import.meta.env.PROD ? '/bereketfikre/img/Medavail-logo.webp' : '/img/Medavail-logo.webp'
+      '/img/Medavail.webp', 
+      '/img/Medavail-logo.webp'
     ],
     testimonial: {
       quote: "Bereket's rebranding work has transformed our company's image. We now stand out in the pharmaceutical industry while maintaining the trust and professionalism our clients expect.",

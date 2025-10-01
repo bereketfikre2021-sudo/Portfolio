@@ -34,7 +34,7 @@ const EnhancedSEO = ({
     siteName: "Bereket Fikre Portfolio",
     locale: "en_US",
     type: "website",
-    image: import.meta.env.PROD ? '/bereketfikre/img/Bereket-Fikre.webp' : '/img/Bereket-Fikre.webp',
+    image: '/img/Bereket-Fikre.webp',
     imageAlt: "Bereket Fikre - Creative Designer",
     twitterCard: "summary_large_image",
     twitterSite: "@bereketfikre",
@@ -102,7 +102,7 @@ const EnhancedSEO = ({
             name: "Bereket Fikre Design Studio",
             description: "Professional creative design services specializing in brand identity and digital experiences",
             url: baseUrl,
-            logo: `${baseUrl}${import.meta.env.PROD ? '/bereketfikre' : ''}/img/Logo.webp`,
+            logo: `${baseUrl}/img/Logo.webp`,
             email: "hello@bereketfikre.com",
             phone: "+251-XXX-XXXX",
             socialProfiles: [
@@ -134,9 +134,9 @@ const EnhancedSEO = ({
             genre: "Portfolio",
             keywords: seoData.keywords,
             images: [
-              `${baseUrl}${import.meta.env.PROD ? '/bereketfikre' : ''}/img/Andegna.webp`,
-              `${baseUrl}${import.meta.env.PROD ? '/bereketfikre' : ''}/img/Niqat.webp`,
-              `${baseUrl}${import.meta.env.PROD ? '/bereketfikre' : ''}/img/Prime-All.webp`
+              `${baseUrl}/img/Andegna.webp`,
+              `${baseUrl}/img/Niqat.webp`,
+              `${baseUrl}/img/Prime-All.webp`
             ]
           }
         };

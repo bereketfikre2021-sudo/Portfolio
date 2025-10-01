@@ -90,8 +90,8 @@ const AdvancedPWA = ({ isOpen, onClose }) => {
     if (notificationPermission === 'granted') {
       new Notification('Test Notification', {
         body: 'This is a test notification from your portfolio!',
-        icon: import.meta.env.PROD ? '/bereketfikre/favicon-192x192.png' : '/favicon-192x192.png',
-        badge: import.meta.env.PROD ? '/bereketfikre/favicon-192x192.png' : '/favicon-192x192.png',
+        icon: '/favicon-192x192.png',
+        badge: '/favicon-192x192.png',
         tag: 'test-notification',
         requireInteraction: true,
         actions: [
@@ -371,7 +371,7 @@ const showUpdateNotification = () => {
   if ('Notification' in window && Notification.permission === 'granted') {
     new Notification('Portfolio Updated', {
       body: 'New content is available. Refresh to see the latest updates!',
-      icon: import.meta.env.PROD ? '/bereketfikre/favicon-192x192.png' : '/favicon-192x192.png',
+      icon: '/favicon-192x192.png',
       tag: 'update-notification',
       requireInteraction: true,
       actions: [

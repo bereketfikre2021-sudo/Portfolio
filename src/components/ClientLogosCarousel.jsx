@@ -29,7 +29,7 @@ const ClientLogosCarousel = ({
   const defaultClients = [
     {
       name: 'Swan Clothing',
-      logo: import.meta.env.PROD ? '/bereketfikre/img/swan-clothing.webp' : '/img/swan-clothing.webp',
+      logo: '/img/swan-clothing.webp',
       category: 'Fashion',
       description: 'Complete brand identity and marketing materials',
       testimonial: 'Bereket transformed our brand with stunning visuals that perfectly captured our vision.',
@@ -38,7 +38,7 @@ const ClientLogosCarousel = ({
     },
     {
       name: 'Finix',
-      logo: import.meta.env.PROD ? '/bereketfikre/img/Finix.webp' : '/img/Finix.webp',
+      logo: '/img/Finix.webp',
       category: 'Technology',
       description: 'Modern logo design and brand guidelines',
       testimonial: 'Professional, creative, and delivered exactly what we needed.',
@@ -47,7 +47,7 @@ const ClientLogosCarousel = ({
     },
     {
       name: 'Maleda Coffee',
-      logo: import.meta.env.PROD ? '/bereketfikre/img/Maleda-Coffee.webp' : '/img/Maleda-Coffee.webp',
+      logo: '/img/Maleda-Coffee.webp',
       category: 'Food & Beverage',
       description: 'Coffee shop branding and packaging design',
       testimonial: 'Our sales increased by 40% after the rebrand. Amazing work!',
@@ -56,7 +56,7 @@ const ClientLogosCarousel = ({
     },
     {
       name: 'Andegna',
-      logo: import.meta.env.PROD ? '/bereketfikre/img/Andegna.webp' : '/img/Andegna.webp',
+      logo: '/img/Andegna.webp',
       category: 'Fashion',
       description: 'Fashion brand identity and social media graphics',
       testimonial: 'Bereket understood our brand perfectly and created beautiful designs.',
@@ -65,7 +65,7 @@ const ClientLogosCarousel = ({
     },
     {
       name: 'YAT Construction',
-      logo: import.meta.env.PROD ? '/bereketfikre/img/YAT-Construction-PLC.webp' : '/img/YAT-Construction-PLC.webp',
+      logo: '/img/YAT-Construction-PLC.webp',
       category: 'Construction',
       description: 'Corporate identity and marketing materials',
       testimonial: 'Professional and reliable. Highly recommend for any design project.',
@@ -74,7 +74,7 @@ const ClientLogosCarousel = ({
     },
     {
       name: 'Alta',
-      logo: import.meta.env.PROD ? '/bereketfikre/img/Alta.webp' : '/img/Alta.webp',
+      logo: '/img/Alta.webp',
       category: 'Technology',
       description: 'Tech startup branding and UI design',
       testimonial: 'Creative solutions that helped us stand out in the market.',

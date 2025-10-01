@@ -47,34 +47,34 @@ import PWAInstaller, { OfflineIndicator, registerServiceWorker } from "./compone
 import { ArrowRight, Mail, Phone, ExternalLink, Palette, LayoutGrid, PenTool, Rocket, Instagram, Linkedin, Github, Dribbble, ChevronUp, MessageCircle, Eye, X, Send, MessageSquare, BarChart3, Play, Pause, Volume2, VolumeX, Maximize, Minimize, RotateCcw, Settings, Star, Quote, ChevronDown } from "lucide-react";
 import { useForm, ValidationError } from '@formspree/react';
 
-// Logo image path - using dynamic base path
-const logoImg = import.meta.env.PROD ? '/Portfolio/img/Logo.webp' : '/img/Logo.webp';
+// Logo image path - using consistent path
+const logoImg = '/img/Logo.webp';
 
-// Image paths for deployment - using dynamic base path for production
+// Image paths for deployment - using consistent paths for both development and production
 const IMAGES = {
-  swanClothing: import.meta.env.PROD ? '/Portfolio/img/swan-clothing.webp' : '/img/swan-clothing.webp',
-  finix: import.meta.env.PROD ? '/Portfolio/img/Finix.webp' : '/img/Finix.webp',
-  maledaCoffee: import.meta.env.PROD ? '/Portfolio/img/Maleda-Coffee.webp' : '/img/Maleda-Coffee.webp',
-  andegna: import.meta.env.PROD ? '/Portfolio/img/Andegna.webp' : '/img/Andegna.webp',
-  yatConstruction: import.meta.env.PROD ? '/Portfolio/img/YAT-Construction-PLC.webp' : '/img/YAT-Construction-PLC.webp',
-  alta: import.meta.env.PROD ? '/Portfolio/img/Alta.webp' : '/img/Alta.webp',
-  medavail: import.meta.env.PROD ? '/Portfolio/img/Medavail.webp' : '/img/Medavail.webp',
-  andegnaTshirt: import.meta.env.PROD ? '/Portfolio/img/Andegna-Tshirt.webp' : '/img/Andegna-Tshirt.webp',
-  niqatMenu: import.meta.env.PROD ? '/Portfolio/img/Niqat-Menu.webp' : '/img/Niqat-Menu.webp',
-  rollupBanners: import.meta.env.PROD ? '/Portfolio/img/Rollup-Banners.webp' : '/img/Rollup-Banners.webp',
-  bereketFikre: import.meta.env.PROD ? '/Portfolio/img/Bereket-Fikre.webp' : '/img/Bereket-Fikre.webp',
-  gedy: import.meta.env.PROD ? '/Portfolio/img/Gedy.webp' : '/img/Gedy.webp',
-  dag: import.meta.env.PROD ? '/Portfolio/img/Dag.webp' : '/img/Dag.webp',
-  abenezer: import.meta.env.PROD ? '/Portfolio/img/Abenezer.webp' : '/img/Abenezer.webp',
-  kass: import.meta.env.PROD ? '/Portfolio/img/Kass.webp' : '/img/Kass.webp',
-  miko: import.meta.env.PROD ? '/Portfolio/img/Miko.webp' : '/img/Miko.webp',
-  hayle: import.meta.env.PROD ? '/Portfolio/img/Hayle.webp' : '/img/Hayle.webp',
-  andegnaLogo: import.meta.env.PROD ? '/Portfolio/img/Andegna-Logo-Outline.webp' : '/img/Andegna-Logo-Outline.webp',
-  niqat: import.meta.env.PROD ? '/Portfolio/img/Niqat.webp' : '/img/Niqat.webp',
-  primeAll: import.meta.env.PROD ? '/Portfolio/img/Prime-All.webp' : '/img/Prime-All.webp',
-  medavailLogo: import.meta.env.PROD ? '/Portfolio/img/Medavail-logo.webp' : '/img/Medavail-logo.webp',
-  gedylaw: import.meta.env.PROD ? '/Portfolio/img/Gedylaw.webp' : '/img/Gedylaw.webp',
-  pdcLogo: import.meta.env.PROD ? '/Portfolio/img/PDC-Logo.webp' : '/img/PDC-Logo.webp',
+  swanClothing: '/img/swan-clothing.webp',
+  finix: '/img/Finix.webp',
+  maledaCoffee: '/img/Maleda-Coffee.webp',
+  andegna: '/img/Andegna.webp',
+  yatConstruction: '/img/YAT-Construction-PLC.webp',
+  alta: '/img/Alta.webp',
+  medavail: '/img/Medavail.webp',
+  andegnaTshirt: '/img/Andegna-Tshirt.webp',
+  niqatMenu: '/img/Niqat-Menu.webp',
+  rollupBanners: '/img/Rollup-Banners.webp',
+  bereketFikre: '/img/Bereket-Fikre.webp',
+  gedy: '/img/Gedy.webp',
+  dag: '/img/Dag.webp',
+  abenezer: '/img/Abenezer.webp',
+  kass: '/img/Kass.webp',
+  miko: '/img/Miko.webp',
+  hayle: '/img/Hayle.webp',
+  andegnaLogo: '/img/Andegna-Logo-Outline.webp',
+  niqat: '/img/Niqat.webp',
+  primeAll: '/img/Prime-All.webp',
+  medavailLogo: '/img/Medavail-logo.webp',
+  gedylaw: '/img/Gedylaw.webp',
+  pdcLogo: '/img/PDC-Logo.webp',
 };
 
 // ——————————————————————————————————————

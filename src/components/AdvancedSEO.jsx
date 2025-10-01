@@ -6,7 +6,7 @@ const SEO_CONFIG = {
     title: "Bereket Fikre - Creative Designer & Brand Builder | UI/UX Expert | Addis Ababa",
     description: "Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing. Based in Addis Ababa, Ethiopia. Transform your brand with stunning visual solutions.",
     keywords: "creative designer, UI/UX designer, brand designer, graphic designer, web designer, logo design, brand identity, digital marketing, Addis Ababa, Ethiopia, portfolio, freelance designer",
-    image: import.meta.env.PROD ? 'https://bereketfikre.com/bereketfikre/img/Bereket-Fikre.webp' : 'https://bereketfikre.com/img/Bereket-Fikre.webp',
+    image: 'https://bereketfikre.com/img/Bereket-Fikre.webp',
     url: "https://bereketfikre.com",
     type: "website"
   },
@@ -63,7 +63,7 @@ const generateStructuredData = (section, additionalData = {}) => {
     "jobTitle": "Creative Designer, Brand Builder & Educator",
     "description": "Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing",
     "url": "https://bereketfikre.com",
-    "image": import.meta.env.PROD ? 'https://bereketfikre.com/bereketfikre/img/Bereket-Fikre.webp' : 'https://bereketfikre.com/img/Bereket-Fikre.webp',
+    "image": 'https://bereketfikre.com/img/Bereket-Fikre.webp',
     "sameAs": [
       "https://www.linkedin.com/in/bereket-fikre",
       "https://www.instagram.com/bereket_fikre",

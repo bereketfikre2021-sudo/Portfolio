@@ -5,7 +5,7 @@ const LazyImage = ({
   src, 
   alt, 
   className = '', 
-  placeholder = import.meta.env.PROD ? '/Portfolio/img/placeholder.webp' : '/img/placeholder.webp',
+  placeholder = '/img/placeholder.webp',
   ...props 
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
