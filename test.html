@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Test</title>
+</head>
+<body>
+    <h1>Image Loading Test</h1>
+    <p>Testing if images load from public folder:</p>
+    
+    <h2>Direct Image Test:</h2>
+    <img src="/img/BG.webp" alt="BG Image" style="width: 200px; height: 100px; border: 1px solid red;">
+    
+    <h2>Favicon Test:</h2>
+    <img src="/favicon.svg" alt="Favicon" style="width: 32px; height: 32px; border: 1px solid blue;">
+    
+    <h2>Logo Test:</h2>
+    <img src="/img/Logo.webp" alt="Logo" style="width: 100px; height: 50px; border: 1px solid green;">
+    
+    <script>
+        // Test if we can fetch the images
+        fetch('/img/BG.webp')
+            .then(response => {
+                console.log('BG.webp status:', response.status);
+                if (response.ok) {
+                    console.log('BG.webp loaded successfully');
+                } else {
+                    console.log('BG.webp failed to load');
+                }
+            })
+            .catch(error => {
+                console.log('BG.webp fetch error:', error);
+            });
+            
+        fetch('/favicon.svg')
+            .then(response => {
+                console.log('favicon.svg status:', response.status);
+                if (response.ok) {
+                    console.log('favicon.svg loaded successfully');
+                } else {
+                    console.log('favicon.svg failed to load');
+                }
+            })
+            .catch(error => {
+                console.log('favicon.svg fetch error:', error);
+            });
+    </script>
+</body>
+</html>
