@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
+import { useTheme } from './ThemeProvider';
+import scrollOptimizer from '../utils/scrollOptimizer';
 
 const ScrollProgress = ({ 
   position = 'top',
@@ -12,6 +14,7 @@ const ScrollProgress = ({
 }) => {
   const [scrollPercentage, setScrollPercentage] = useState(0);
   const { scrollYProgress } = useScroll();
+  const { resolvedTheme } = useTheme();
   
   // Smooth spring animation for progress bar
   const scaleX = useSpring(scrollYProgress, {
@@ -22,17 +25,15 @@ const ScrollProgress = ({
 
   useEffect(() => {
     const updateScrollPercentage = () => {
-      const scrollTop = window.pageYOffset;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      setScrollPercentage(Math.round(scrollPercent));
+      const scrollData = scrollOptimizer.getScrollPosition();
+      setScrollPercentage(scrollData.percentage);
     };
 
-    window.addEventListener('scroll', updateScrollPercentage, { passive: true });
+    scrollOptimizer.addListener('scrollProgress', updateScrollPercentage);
     updateScrollPercentage(); // Initial call
 
     return () => {
-      window.removeEventListener('scroll', updateScrollPercentage);
+      scrollOptimizer.removeListener('scrollProgress');
     };
   }, []);
 
@@ -96,7 +97,11 @@ const ScrollProgress = ({
       {/* Percentage display */}
       {showPercentage && (
         <motion.div
-          className="absolute top-2 right-2 bg-primary/80 text-accent text-xs px-2 py-1 rounded-full backdrop-blur-sm"
+          className={`absolute top-2 right-2 text-xs px-2 py-1 rounded-full backdrop-blur-sm ${
+            resolvedTheme === 'light'
+              ? 'bg-accent text-black border border-accent/30'
+              : 'bg-primary/80 text-accent'
+          }`}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5 }}
@@ -120,6 +125,7 @@ export const CircularScrollProgress = ({
 }) => {
   const [scrollPercentage, setScrollPercentage] = useState(0);
   const { scrollYProgress } = useScroll();
+  const { resolvedTheme } = useTheme();
   
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -129,17 +135,15 @@ export const CircularScrollProgress = ({
 
   useEffect(() => {
     const updateScrollPercentage = () => {
-      const scrollTop = window.pageYOffset;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      setScrollPercentage(Math.round(scrollPercent));
+      const scrollData = scrollOptimizer.getScrollPosition();
+      setScrollPercentage(scrollData.percentage);
     };
 
-    window.addEventListener('scroll', updateScrollPercentage, { passive: true });
+    scrollOptimizer.addListener('circularProgress', updateScrollPercentage);
     updateScrollPercentage();
 
     return () => {
-      window.removeEventListener('scroll', updateScrollPercentage);
+      scrollOptimizer.removeListener('circularProgress');
     };
   }, []);
 
@@ -163,7 +167,7 @@ export const CircularScrollProgress = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke={backgroundColor}
+          stroke={resolvedTheme === 'light' ? '#8AEA92' : backgroundColor}
           strokeWidth={strokeWidth}
           fill="none"
         />
@@ -173,7 +177,7 @@ export const CircularScrollProgress = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke={color}
+          stroke={resolvedTheme === 'light' ? '#8AEA92' : color}
           strokeWidth={strokeWidth}
           fill="none"
           strokeLinecap="round"
@@ -185,7 +189,11 @@ export const CircularScrollProgress = ({
       {/* Percentage text */}
       {showPercentage && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xs font-medium text-accent">
+          <span className={`text-xs font-medium ${
+            resolvedTheme === 'light'
+              ? 'text-black'
+              : 'text-accent'
+          }`}>
             {scrollPercentage}%
           </span>
         </div>
@@ -255,19 +263,21 @@ export const ScrollToTop = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const { scrollYProgress } = useScroll();
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.pageYOffset > threshold) {
+      const scrollData = scrollOptimizer.getScrollPosition();
+      if (scrollData.scrollY > threshold) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
     };
 
-    window.addEventListener('scroll', toggleVisibility, { passive: true });
+    scrollOptimizer.addListener('scrollToTop', toggleVisibility);
     return () => {
-      window.removeEventListener('scroll', toggleVisibility);
+      scrollOptimizer.removeListener('scrollToTop');
     };
   }, [threshold]);
 
@@ -280,7 +290,11 @@ export const ScrollToTop = ({
 
   return (
     <motion.button
-      className={`fixed bottom-4 left-4 z-50 p-3 bg-accent/20 text-accent rounded-full backdrop-blur-sm border border-accent/30 hover:bg-accent/30 transition-colors ${className}`}
+      className={`fixed bottom-4 left-4 z-50 p-3 rounded-full backdrop-blur-sm transition-colors ${className} ${
+        resolvedTheme === 'light'
+          ? 'bg-accent text-black border border-accent/30 hover:bg-accent/80 hover:shadow-lg'
+          : 'bg-accent/20 text-accent border border-accent/30 hover:bg-accent/30'
+      }`}
       onClick={scrollToTop}
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ 

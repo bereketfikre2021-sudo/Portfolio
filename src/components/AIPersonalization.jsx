@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,12 +10,21 @@ const AIPersonalization = ({ isOpen, onClose }) => {
   const [personalizedContent, setPersonalizedContent] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  // Only log when isOpen changes to reduce console spam
+  useEffect(() => {
+    if (isOpen) {
+      console.log('AIPersonalization component opened');
+    }
+  }, [isOpen]);
+
   // Mock AI analysis - in real implementation, this would use actual AI/ML services
-  const analyzeUserBehavior = () => {
+  const analyzeUserBehavior = useCallback(() => {
+    console.log('Starting AI analysis...');
     setIsAnalyzing(true);
     
     // Simulate AI analysis
     setTimeout(() => {
+      console.log('AI analysis completed, setting user profile');
       const mockProfile = {
         userType: 'Creative Professional',
         interests: ['UI/UX Design', 'Brand Identity', 'Web Development'],
@@ -66,12 +75,12 @@ const AIPersonalization = ({ isOpen, onClose }) => {
       setPersonalizedContent(mockPersonalizedContent);
       setIsAnalyzing(false);
     }, 2000);
-  };
+  }, []);
 
   useEffect(() => {
     // Analyze user behavior on component mount
     analyzeUserBehavior();
-  }, []);
+  }, [analyzeUserBehavior]);
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -92,13 +101,13 @@ const AIPersonalization = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed bottom-4 left-4 z-40">
+    <div className="fixed top-4 right-4 z-50">
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, x: -100, scale: 0.9 }}
+            initial={{ opacity: 0, x: 100, scale: 0.9 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -100, scale: 0.9 }}
+            exit={{ opacity: 0, x: 100, scale: 0.9 }}
             className="w-64 bg-primary/95 backdrop-blur-sm border border-accent/20 rounded-xl shadow-lg overflow-hidden"
           >
             {/* Header */}
@@ -126,7 +135,7 @@ const AIPersonalization = ({ isOpen, onClose }) => {
             <div className="p-3 border-b border-accent/20">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-xs font-semibold text-light">Profile</h4>
-                <Badge className="bg-accent/20 text-accent border-accent/30 text-xs">
+                <Badge className="bg-accent/20 text-accent border-accent/30 text-xs font-medium">
                   {userProfile?.userType}
                 </Badge>
               </div>
@@ -148,7 +157,7 @@ const AIPersonalization = ({ isOpen, onClose }) => {
               <h4 className="text-xs font-semibold text-light mb-2">Interests</h4>
               <div className="flex flex-wrap gap-1">
                 {userProfile?.interests.slice(0, 3).map((interest, index) => (
-                  <Badge key={index} className="bg-secondary/20 text-accent border-secondary/30 text-xs px-1 py-0">
+                  <Badge key={index} className="bg-secondary/20 text-accent border-secondary/30 text-xs font-medium px-1 py-0">
                     {interest}
                   </Badge>
                 ))}
@@ -288,4 +297,4 @@ const generatePersonalizedContent = (behavior) => {
   return recommendations;
 };
 
-export default AIPersonalization;
+export default React.memo(AIPersonalization);

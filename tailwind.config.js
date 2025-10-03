@@ -7,9 +7,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        // New Coolors palette: #8aea92, #80ada0, #5f5566, #33202a, #000000
+        // Keep original colors as default (dark mode)
         primary: {
-          DEFAULT: '#000000', // Pure black
+          DEFAULT: '#000000', // Pure black (dark mode default)
           50: '#f5f5f5',
           100: '#e5e5e5',
           200: '#cccccc',
@@ -22,7 +22,7 @@ export default {
           900: '#000000',
         },
         secondary: {
-          DEFAULT: '#33202A', // Dark purple-brown
+          DEFAULT: '#33202A', // Dark purple-brown (dark mode default)
           50: '#f7f5f6',
           100: '#efebed',
           200: '#dfd7db',
@@ -35,7 +35,7 @@ export default {
           900: '#0f080a',
         },
         accent: {
-          DEFAULT: '#8AEA92', // Bright green
+          DEFAULT: '#8AEA92', // Bright green (same for both modes)
           50: '#f0fdf2',
           100: '#dcfce7',
           200: '#bbf7d0',
@@ -48,7 +48,7 @@ export default {
           900: '#1c921e',
         },
         neutral: {
-          DEFAULT: '#5F5566', // Muted purple-gray
+          DEFAULT: '#5F5566', // Muted purple-gray (dark mode default)
           50: '#f8f7f9',
           100: '#f1eff2',
           200: '#e3dfe5',
@@ -61,7 +61,7 @@ export default {
           900: '#131116',
         },
         light: {
-          DEFAULT: '#80ADA0', // Sage green
+          DEFAULT: '#80ADA0', // Sage green (dark mode default)
           50: '#f0f7f5',
           100: '#e1efea',
           200: '#c3dfd5',

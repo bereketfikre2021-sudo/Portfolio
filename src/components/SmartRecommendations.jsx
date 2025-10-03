@@ -326,7 +326,7 @@ const SmartRecommendations = ({ isOpen, onClose }) => {
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2 mb-2">
                                     <h3 className="text-lg font-semibold text-light">{rec.title}</h3>
-                                    <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+                                    <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-sm font-medium">
                                       #{rec.priority}
                                     </Badge>
                                   </div>
@@ -395,7 +395,7 @@ const SmartRecommendations = ({ isOpen, onClose }) => {
                                 <span className="text-sm text-light">{page.page}</span>
                                 <div className="flex items-center gap-2">
                                   <span className="text-xs text-accent">{page.views} views</span>
-                                  <Badge className="bg-accent/20 text-accent border-accent/30">
+                                  <Badge className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                                     {page.bounceRate}% bounce
                                   </Badge>
                                 </div>
@@ -412,7 +412,7 @@ const SmartRecommendations = ({ isOpen, onClose }) => {
                                 <div className="flex items-center gap-2">
                                   <span className="text-xs text-accent">{step.users} users</span>
                                   {step.dropoff > 0 && (
-                                    <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+                                    <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-sm font-medium">
                                       -{step.dropoff}%
                                     </Badge>
                                   )}

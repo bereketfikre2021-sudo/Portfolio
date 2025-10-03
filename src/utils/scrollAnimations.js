@@ -178,13 +178,18 @@ class ScrollAnimations {
       this.parallaxElements.set(element, { speed, offset: 0 });
     });
 
-    // Throttled scroll handler
+    // Throttled scroll handler with debouncing
     let ticking = false;
+    let lastScrollTime = 0;
+    const SCROLL_THROTTLE = 16; // ~60fps
+    
     const handleScroll = () => {
-      if (!ticking) {
+      const now = Date.now();
+      if (!ticking && (now - lastScrollTime) > SCROLL_THROTTLE) {
         requestAnimationFrame(() => {
           this.updateParallaxElements();
           ticking = false;
+          lastScrollTime = now;
         });
         ticking = true;
       }

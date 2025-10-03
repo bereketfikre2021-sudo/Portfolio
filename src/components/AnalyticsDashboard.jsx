@@ -10,87 +10,247 @@ const AnalyticsDashboard = ({ isOpen, onClose }) => {
   const [timeRange, setTimeRange] = useState('7d');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Mock analytics data - in real implementation, this would come from your analytics service
-  const analyticsData = {
-    overview: {
-      totalViews: 12450,
-      uniqueVisitors: 8930,
-      avgSessionDuration: '3:24',
-      bounceRate: 23.5,
-      conversionRate: 8.2,
-      topPages: [
-        { page: '/', views: 3450, percentage: 27.7 },
-        { page: '/#work', views: 2890, percentage: 23.2 },
-        { page: '/#about', views: 2100, percentage: 16.9 },
-        { page: '/#contact', views: 1890, percentage: 15.2 },
-        { page: '/#services', views: 2120, percentage: 17.0 }
-      ],
-      trafficSources: [
-        { source: 'Direct', visitors: 4560, percentage: 51.1 },
-        { source: 'Google Search', visitors: 2890, percentage: 32.4 },
-        { source: 'Social Media', visitors: 980, percentage: 11.0 },
-        { source: 'Referrals', visitors: 500, percentage: 5.6 }
-      ],
-      deviceBreakdown: [
-        { device: 'Desktop', visitors: 5350, percentage: 59.9 },
-        { device: 'Mobile', visitors: 3120, percentage: 34.9 },
-        { device: 'Tablet', visitors: 460, percentage: 5.2 }
-      ]
-    },
-    engagement: {
-      videoViews: 2340,
-      videoCompletionRate: 78.5,
-      caseStudyViews: 1890,
-      contactFormSubmissions: 45,
-      newsletterSignups: 120,
-      socialShares: 89,
-      timeOnPage: {
-        home: '2:45',
-        work: '4:12',
-        about: '1:58',
-        contact: '3:30'
+  // Function to get analytics data based on time range
+  const getAnalyticsData = (range) => {
+    const baseData = {
+      '24h': {
+        overview: {
+          totalViews: 1250,
+          uniqueVisitors: 890,
+          avgSessionDuration: '2:45',
+          bounceRate: 28.5,
+          conversionRate: 6.8,
+          topPages: [
+            { page: '/', views: 350, percentage: 28.0 },
+            { page: '/#work', views: 290, percentage: 23.2 },
+            { page: '/#about', views: 210, percentage: 16.8 },
+            { page: '/#contact', views: 190, percentage: 15.2 },
+            { page: '/#services', views: 210, percentage: 16.8 }
+          ],
+          trafficSources: [
+            { source: 'Direct', visitors: 456, percentage: 51.2 },
+            { source: 'Google Search', visitors: 289, percentage: 32.5 },
+            { source: 'Social Media', visitors: 98, percentage: 11.0 },
+            { source: 'Referrals', visitors: 47, percentage: 5.3 }
+          ],
+          deviceBreakdown: [
+            { device: 'Desktop', visitors: 535, percentage: 60.1 },
+            { device: 'Mobile', visitors: 312, percentage: 35.1 },
+            { device: 'Tablet', visitors: 43, percentage: 4.8 }
+          ]
+        },
+        engagement: {
+          videoViews: 234,
+          videoCompletionRate: 75.5,
+          caseStudyViews: 189,
+          contactFormSubmissions: 4,
+          newsletterSignups: 12,
+          socialShares: 8,
+          timeOnPage: {
+            home: '2:15',
+            work: '3:45',
+            about: '1:30',
+            contact: '2:45'
+          },
+          userInteractions: [
+            { action: 'Portfolio View', count: 189, trend: '+8%' },
+            { action: 'Case Study Open', count: 120, trend: '+5%' },
+            { action: 'Video Play', count: 234, trend: '+18%' },
+            { action: 'Contact Form', count: 4, trend: '+12%' },
+            { action: 'Download CV', count: 8, trend: '+3%' }
+          ]
+        }
       },
-      userInteractions: [
-        { action: 'Portfolio View', count: 1890, trend: '+12%' },
-        { action: 'Case Study Open', count: 1200, trend: '+8%' },
-        { action: 'Video Play', count: 2340, trend: '+25%' },
-        { action: 'Contact Form', count: 45, trend: '+15%' },
-        { action: 'Download CV', count: 89, trend: '+5%' }
-      ]
-    },
-    performance: {
-      pageLoadTime: 1.2,
-      coreWebVitals: {
-        lcp: 1.8,
-        fid: 45,
-        cls: 0.05
+      '7d': {
+        overview: {
+          totalViews: 12450,
+          uniqueVisitors: 8930,
+          avgSessionDuration: '3:24',
+          bounceRate: 23.5,
+          conversionRate: 8.2,
+          topPages: [
+            { page: '/', views: 3450, percentage: 27.7 },
+            { page: '/#work', views: 2890, percentage: 23.2 },
+            { page: '/#about', views: 2100, percentage: 16.9 },
+            { page: '/#contact', views: 1890, percentage: 15.2 },
+            { page: '/#services', views: 2120, percentage: 17.0 }
+          ],
+          trafficSources: [
+            { source: 'Direct', visitors: 4560, percentage: 51.1 },
+            { source: 'Google Search', visitors: 2890, percentage: 32.4 },
+            { source: 'Social Media', visitors: 980, percentage: 11.0 },
+            { source: 'Referrals', visitors: 500, percentage: 5.6 }
+          ],
+          deviceBreakdown: [
+            { device: 'Desktop', visitors: 5350, percentage: 59.9 },
+            { device: 'Mobile', visitors: 3120, percentage: 34.9 },
+            { device: 'Tablet', visitors: 460, percentage: 5.2 }
+          ]
+        },
+        engagement: {
+          videoViews: 2340,
+          videoCompletionRate: 78.5,
+          caseStudyViews: 1890,
+          contactFormSubmissions: 45,
+          newsletterSignups: 120,
+          socialShares: 89,
+          timeOnPage: {
+            home: '2:45',
+            work: '4:12',
+            about: '1:58',
+            contact: '3:30'
+          },
+          userInteractions: [
+            { action: 'Portfolio View', count: 1890, trend: '+12%' },
+            { action: 'Case Study Open', count: 1200, trend: '+8%' },
+            { action: 'Video Play', count: 2340, trend: '+25%' },
+            { action: 'Contact Form', count: 45, trend: '+15%' },
+            { action: 'Download CV', count: 89, trend: '+5%' }
+          ]
+        }
       },
-      seoScore: 94,
-      accessibilityScore: 98,
-      bestPracticesScore: 96,
-      performanceScore: 89,
-      pwaScore: 92
-    },
-    userBehavior: {
-      heatmapData: [
-        { element: 'Hero CTA', clicks: 890, percentage: 23.4 },
-        { element: 'Portfolio Cards', clicks: 2340, percentage: 61.5 },
-        { element: 'Contact Form', clicks: 450, percentage: 11.8 },
-        { element: 'Social Links', clicks: 130, percentage: 3.4 }
-      ],
-      scrollDepth: {
-        '0-25%': 100,
-        '25-50%': 89.2,
-        '50-75%': 67.8,
-        '75-100%': 45.3
+      '30d': {
+        overview: {
+          totalViews: 45600,
+          uniqueVisitors: 32400,
+          avgSessionDuration: '3:52',
+          bounceRate: 21.8,
+          conversionRate: 9.1,
+          topPages: [
+            { page: '/', views: 12600, percentage: 27.6 },
+            { page: '/#work', views: 10560, percentage: 23.2 },
+            { page: '/#about', views: 7700, percentage: 16.9 },
+            { page: '/#contact', views: 6920, percentage: 15.2 },
+            { page: '/#services', views: 7820, percentage: 17.1 }
+          ],
+          trafficSources: [
+            { source: 'Direct', visitors: 16560, percentage: 51.1 },
+            { source: 'Google Search', visitors: 10500, percentage: 32.4 },
+            { source: 'Social Media', visitors: 3560, percentage: 11.0 },
+            { source: 'Referrals', visitors: 1780, percentage: 5.5 }
+          ],
+          deviceBreakdown: [
+            { device: 'Desktop', visitors: 19400, percentage: 59.9 },
+            { device: 'Mobile', visitors: 11300, percentage: 34.9 },
+            { device: 'Tablet', visitors: 1700, percentage: 5.2 }
+          ]
+        },
+        engagement: {
+          videoViews: 8560,
+          videoCompletionRate: 81.2,
+          caseStudyViews: 6920,
+          contactFormSubmissions: 165,
+          newsletterSignups: 440,
+          socialShares: 325,
+          timeOnPage: {
+            home: '3:15',
+            work: '4:45',
+            about: '2:20',
+            contact: '3:55'
+          },
+          userInteractions: [
+            { action: 'Portfolio View', count: 6920, trend: '+18%' },
+            { action: 'Case Study Open', count: 4400, trend: '+12%' },
+            { action: 'Video Play', count: 8560, trend: '+32%' },
+            { action: 'Contact Form', count: 165, trend: '+22%' },
+            { action: 'Download CV', count: 325, trend: '+8%' }
+          ]
+        }
       },
-      exitPages: [
-        { page: '/#work', exits: 234, percentage: 18.7 },
-        { page: '/#contact', exits: 189, percentage: 15.1 },
-        { page: '/#about', exits: 156, percentage: 12.5 }
-      ]
-    }
+      '90d': {
+        overview: {
+          totalViews: 125600,
+          uniqueVisitors: 89400,
+          avgSessionDuration: '4:12',
+          bounceRate: 19.5,
+          conversionRate: 10.8,
+          topPages: [
+            { page: '/', views: 34720, percentage: 27.6 },
+            { page: '/#work', views: 29120, percentage: 23.2 },
+            { page: '/#about', views: 21240, percentage: 16.9 },
+            { page: '/#contact', views: 19080, percentage: 15.2 },
+            { page: '/#services', views: 21440, percentage: 17.1 }
+          ],
+          trafficSources: [
+            { source: 'Direct', visitors: 45680, percentage: 51.1 },
+            { source: 'Google Search', visitors: 28960, percentage: 32.4 },
+            { source: 'Social Media', visitors: 9840, percentage: 11.0 },
+            { source: 'Referrals', visitors: 4920, percentage: 5.5 }
+          ],
+          deviceBreakdown: [
+            { device: 'Desktop', visitors: 53500, percentage: 59.9 },
+            { device: 'Mobile', visitors: 31200, percentage: 34.9 },
+            { device: 'Tablet', visitors: 4700, percentage: 5.2 }
+          ]
+        },
+        engagement: {
+          videoViews: 23520,
+          videoCompletionRate: 83.5,
+          caseStudyViews: 19080,
+          contactFormSubmissions: 456,
+          newsletterSignups: 1210,
+          socialShares: 890,
+          timeOnPage: {
+            home: '3:45',
+            work: '5:20',
+            about: '2:50',
+            contact: '4:15'
+          },
+          userInteractions: [
+            { action: 'Portfolio View', count: 19080, trend: '+25%' },
+            { action: 'Case Study Open', count: 12120, trend: '+18%' },
+            { action: 'Video Play', count: 23520, trend: '+38%' },
+            { action: 'Contact Form', count: 456, trend: '+28%' },
+            { action: 'Download CV', count: 890, trend: '+12%' }
+          ]
+        }
+      }
+    };
+
+    // Performance and user behavior data (same for all time ranges as they're more static)
+    const staticData = {
+      performance: {
+        pageLoadTime: 1.2,
+        coreWebVitals: {
+          lcp: 1.8,
+          fid: 45,
+          cls: 0.05
+        },
+        seoScore: 94,
+        accessibilityScore: 98,
+        bestPracticesScore: 96,
+        performanceScore: 89,
+        pwaScore: 92
+      },
+      userBehavior: {
+        heatmapData: [
+          { element: 'Hero CTA', clicks: 890, percentage: 23.4 },
+          { element: 'Portfolio Cards', clicks: 2340, percentage: 61.5 },
+          { element: 'Contact Form', clicks: 450, percentage: 11.8 },
+          { element: 'Social Links', clicks: 130, percentage: 3.4 }
+        ],
+        scrollDepth: {
+          '0-25%': 100,
+          '25-50%': 89.2,
+          '50-75%': 67.8,
+          '75-100%': 45.3
+        },
+        exitPages: [
+          { page: '/#work', exits: 234, percentage: 18.7 },
+          { page: '/#contact', exits: 189, percentage: 15.1 },
+          { page: '/#about', exits: 156, percentage: 12.5 }
+        ]
+      }
+    };
+
+    return {
+      ...baseData[range],
+      ...staticData
+    };
   };
+
+  // Get current analytics data based on selected time range
+  const analyticsData = getAnalyticsData(timeRange);
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: BarChart3 },
@@ -146,14 +306,14 @@ const AnalyticsDashboard = ({ isOpen, onClose }) => {
               <div className="flex items-center gap-4">
                 {/* Time Range Selector */}
                 <div className="flex items-center gap-2">
-                  <Filter className="w-4 h-4 text-accent/60" />
+                  <Filter className="w-4 h-4 text-accent" />
                   <select
                     value={timeRange}
                     onChange={(e) => setTimeRange(e.target.value)}
-                    className="bg-primary/50 border border-accent/20 rounded-lg px-3 py-2 text-light text-sm"
+                    className="bg-accent/10 border-2 border-accent/30 rounded-lg px-4 py-2 text-accent text-sm font-medium hover:bg-accent/20 hover:border-accent/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent"
                   >
                     {timeRanges.map((range) => (
-                      <option key={range.id} value={range.id}>
+                      <option key={range.id} value={range.id} className="bg-primary text-accent">
                         {range.label}
                       </option>
                     ))}
@@ -485,7 +645,7 @@ const AnalyticsDashboard = ({ isOpen, onClose }) => {
                           </div>
                           <p className="text-light font-semibold">LCP</p>
                           <p className="text-accent/60 text-sm">Largest Contentful Paint</p>
-                          <Badge className="bg-green-500/20 text-green-400 mt-2">Good</Badge>
+                          <Badge className="bg-green-500/20 text-green-400 mt-2 text-sm font-medium">Good</Badge>
                         </div>
 
                         <div className="text-center">
@@ -494,7 +654,7 @@ const AnalyticsDashboard = ({ isOpen, onClose }) => {
                           </div>
                           <p className="text-light font-semibold">FID</p>
                           <p className="text-accent/60 text-sm">First Input Delay</p>
-                          <Badge className="bg-green-500/20 text-green-400 mt-2">Good</Badge>
+                          <Badge className="bg-green-500/20 text-green-400 mt-2 text-sm font-medium">Good</Badge>
                         </div>
 
                         <div className="text-center">
@@ -503,7 +663,7 @@ const AnalyticsDashboard = ({ isOpen, onClose }) => {
                           </div>
                           <p className="text-light font-semibold">CLS</p>
                           <p className="text-accent/60 text-sm">Cumulative Layout Shift</p>
-                          <Badge className="bg-green-500/20 text-green-400 mt-2">Good</Badge>
+                          <Badge className="bg-green-500/20 text-green-400 mt-2 text-sm font-medium">Good</Badge>
                         </div>
                       </div>
                     </CardContent>

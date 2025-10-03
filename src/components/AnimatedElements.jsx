@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import scrollOptimizer from '../utils/scrollOptimizer';
 
 // Floating Animation Component
 export const FloatingElement = ({ children, delay = 0, duration = 3, className = '' }) => {
@@ -147,9 +148,13 @@ export const ParallaxElement = ({ children, speed = 0.5, className = '' }) => {
   const [offsetY, setOffsetY] = React.useState(0);
 
   React.useEffect(() => {
-    const handleScroll = () => setOffsetY(window.pageYOffset);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      const scrollData = scrollOptimizer.getScrollPosition();
+      setOffsetY(scrollData.scrollY);
+    };
+    
+    scrollOptimizer.addListener('parallaxElement', handleScroll);
+    return () => scrollOptimizer.removeListener('parallaxElement');
   }, []);
 
   return (

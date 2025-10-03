@@ -107,6 +107,71 @@ export const LazyAnimations = withLazyLoading(
   <LoadingSpinner className="h-32" />
 );
 
+export const LazyAnalytics = withLazyLoading(
+  () => import('./Analytics.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazyProjectGallery = withLazyLoading(
+  () => import('./ProjectGallery.jsx'),
+  <LoadingSpinner className="h-64" />
+);
+
+export const LazyNewsletterSignup = withLazyLoading(
+  () => import('./NewsletterSignup.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazyAccessibilitySettings = withLazyLoading(
+  () => import('./AccessibilitySettings.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazyAdvancedAnimations = withLazyLoading(
+  () => import('./AdvancedAnimations.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazyPerformanceDashboard = withLazyLoading(
+  () => import('./PerformanceDashboard.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazySEOManager = withLazyLoading(
+  () => import('./SEOManager.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazySecurityDashboard = withLazyLoading(
+  () => import('./SecurityDashboard.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazyAIContentGenerator = withLazyLoading(
+  () => import('./AIContentGenerator.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazySmartRecommendations = withLazyLoading(
+  () => import('./SmartRecommendations.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazyCRMIntegration = withLazyLoading(
+  () => import('./CRMIntegration.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazyEmailMarketing = withLazyLoading(
+  () => import('./EmailMarketing.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
+export const LazyPWAInstaller = withLazyLoading(
+  () => import('./PWAInstaller.jsx'),
+  <LoadingSpinner className="h-32" />
+);
+
 // Utility function to preload components
 export const preloadComponent = (importFunc) => {
   return () => {

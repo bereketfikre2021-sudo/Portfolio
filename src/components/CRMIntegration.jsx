@@ -340,7 +340,7 @@ const CRMIntegration = ({ isOpen, onClose }) => {
                               <div className="flex items-center justify-between">
                                 <div className="flex gap-1">
                                   {contact.tags.map((tag, index) => (
-                                    <Badge key={index} className="bg-accent/20 text-accent border-accent/30 text-xs">
+                                    <Badge key={index} className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                                       {tag}
                                     </Badge>
                                   ))}

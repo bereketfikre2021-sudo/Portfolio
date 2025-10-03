@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, ArrowRight, ExternalLink, Tag, X } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
 
 // BG images - using consistent paths
 const BG1 = '/img/BG.webp';
@@ -127,7 +128,7 @@ const BlogPost = ({ post, isFeatured = false, onReadArticle }) => {
         
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2 text-sm text-accent/70 mb-2">
-            <Badge variant="outline" className="border-accent/30 text-accent">
+            <Badge variant="outline" className="border-accent/30 text-accent text-sm font-medium">
               {post.category}
             </Badge>
             <span>•</span>
@@ -154,7 +155,7 @@ const BlogPost = ({ post, isFeatured = false, onReadArticle }) => {
           
           <div className="flex flex-wrap gap-1 mb-4">
             {post.tags.slice(0, 3).map((tag, index) => (
-              <Badge key={index} variant="secondary" className="text-xs bg-secondary/20 text-accent/80">
+              <Badge key={index} variant="secondary" className="text-sm font-medium bg-secondary/20 text-accent/80">
                 {tag}
               </Badge>
             ))}
@@ -180,6 +181,7 @@ const BlogPost = ({ post, isFeatured = false, onReadArticle }) => {
 };
 
 const Blog = () => {
+  const { resolvedTheme } = useTheme();
   const [selectedArticle, setSelectedArticle] = useState(null);
   const featuredPosts = BLOG_POSTS.filter(post => post.featured);
   const regularPosts = BLOG_POSTS.filter(post => !post.featured);
@@ -207,10 +209,15 @@ const Blog = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <Badge className="bg-accent/20 text-accent border-accent/30 mb-4">
+          <Badge className={`bg-accent/20 border-accent/30 mb-4 text-lg font-semibold ${
+            resolvedTheme === 'light'
+              ? 'text-black'
+              : 'text-accent'
+          }`}>
             Design Insights
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold text-light mb-6">
+          {/* Design Insights Main Heading */}
+          <h2 className="text-5xl md:text-6xl font-bold text-light mb-6">
             Latest from the
             <span className="text-accent block">Design Blog</span>
           </h2>
@@ -341,7 +348,7 @@ const Blog = () => {
               <div className="p-6 border-t border-accent/20 flex items-center justify-between">
                 <div className="flex flex-wrap gap-2">
                   {selectedArticle.tags.map((tag, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs bg-secondary/20 text-accent/80">
+                    <Badge key={index} variant="secondary" className="text-sm font-medium bg-secondary/20 text-accent/80">
                       {tag}
                     </Badge>
                   ))}

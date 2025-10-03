@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { X, ArrowLeft, ArrowRight, ExternalLink, Calendar, Clock, Users, Target, TrendingUp, Award } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
 
 const CASE_STUDIES = [
   {
@@ -300,14 +301,14 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }) => {
                     <div className="flex-1">
                       <div className="flex items-center gap-4 mb-2">
                         <h4 className="text-lg font-semibold text-light">{phase.phase}</h4>
-                        <Badge variant="outline" className="border-accent/30 text-accent">
+                        <Badge variant="outline" className="border-accent/30 text-accent text-sm font-medium">
                           {phase.duration}
                         </Badge>
                       </div>
                       <p className="text-accent/80 mb-3">{phase.description}</p>
                       <div className="flex flex-wrap gap-2">
                         {phase.deliverables.map((deliverable, idx) => (
-                          <Badge key={idx} variant="secondary" className="bg-secondary/20 text-accent/80 text-xs">
+                          <Badge key={idx} variant="secondary" className="bg-secondary/20 text-accent/80 text-sm font-medium">
                             {deliverable}
                           </Badge>
                         ))}
@@ -323,7 +324,7 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }) => {
               <h3 className="text-xl font-bold text-light mb-4">Technologies Used</h3>
               <div className="flex flex-wrap gap-2">
                 {caseStudy.technologies.map((tech, index) => (
-                  <Badge key={index} className="bg-accent/20 text-accent border-accent/30">
+                  <Badge key={index} className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                     {tech}
                   </Badge>
                 ))}
@@ -357,6 +358,7 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }) => {
 };
 
 const CaseStudy = () => {
+  const { resolvedTheme } = useTheme();
   const [selectedCaseStudy, setSelectedCaseStudy] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -381,10 +383,14 @@ const CaseStudy = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <Badge className="bg-accent/20 text-accent border-accent/30 mb-4">
+          <Badge className={`bg-accent/20 border-accent/30 mb-4 text-lg font-semibold ${
+            resolvedTheme === 'light'
+              ? 'text-black'
+              : 'text-accent'
+          }`}>
             Case Studies
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold text-light mb-6">
+          <h2 className="text-5xl md:text-6xl font-bold text-light mb-6">
             Detailed Project
             <span className="text-accent block">Case Studies</span>
           </h2>
@@ -416,7 +422,7 @@ const CaseStudy = () => {
                 
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-2 text-xs text-accent/70 mb-2">
-                    <Badge variant="outline" className="border-accent/30 text-accent text-xs px-2 py-1">
+                    <Badge variant="outline" className="border-accent/30 text-accent text-sm font-medium px-2 py-1">
                       {caseStudy.industry}
                     </Badge>
                     <span>•</span>

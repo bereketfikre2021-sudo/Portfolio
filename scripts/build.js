@@ -29,7 +29,7 @@ try {
   console.log('Building with Vite...');
   execSync('npx vite build', { 
     stdio: 'inherit',
-    env: { ...process.env, NODE_ENV: 'production' }
+    env: { ...process.env, NODE_ENV: 'production', VITE_BASE_PATH: '/Portfolio/' }
   });
 
   console.log('Build completed successfully!');

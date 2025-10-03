@@ -97,7 +97,7 @@ const NewsletterSignup = ({ className = '' }) => {
     >
       <Card className="bg-gradient-to-br from-accent/10 to-secondary/10 border-accent/30 overflow-hidden">
         <CardHeader className="text-center pb-4">
-          <Badge className="bg-accent/20 text-accent border-accent/30 mb-4 w-fit mx-auto">
+          <Badge className="bg-accent/20 text-accent border-accent/30 mb-4 w-fit mx-auto text-lg font-semibold">
             <Mail className="w-3 h-3 mr-1" />
             Design Insights
           </Badge>

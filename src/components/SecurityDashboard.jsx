@@ -380,7 +380,7 @@ const SecurityDashboard = ({ isOpen, onClose }) => {
                                   <span className="text-sm text-accent/80 capitalize">
                                     {type.replace(/_/g, ' ')}
                                   </span>
-                                  <Badge className="bg-accent/20 text-accent border-accent/30">
+                                  <Badge className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                                     {count}
                                   </Badge>
                                 </div>
@@ -395,7 +395,7 @@ const SecurityDashboard = ({ isOpen, onClose }) => {
                                   <span className="text-sm text-accent/80">
                                     {hour}:00
                                   </span>
-                                  <Badge className="bg-accent/20 text-accent border-accent/30">
+                                  <Badge className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                                     {count}
                                   </Badge>
                                 </div>

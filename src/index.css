@@ -16,18 +16,762 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Light mode styles */
+  /* Light mode styles - using dark brand colors for better visibility */
   .light {
-    --primary: #ffffff;
-    --primary-foreground: #000000;
-    --secondary: #f1f5f9;
-    --secondary-foreground: #0f172a;
-    --accent: #8AEA92;
-    --accent-foreground: #000000;
-    --neutral: #64748b;
-    --neutral-foreground: #ffffff;
-    --light: #f8fafc;
-    --light-foreground: #0f172a;
+    --primary: #ffffff !important;
+    --primary-foreground: #000000 !important;
+    --secondary: #33202A !important; /* Dark purple-brown from brand */
+    --secondary-foreground: #ffffff !important;
+    --accent: #8AEA92 !important; /* Keep bright green */
+    --accent-foreground: #000000 !important;
+    --neutral: #5F5566 !important; /* Dark purple-gray from brand */
+    --neutral-foreground: #ffffff !important;
+    --light: #5A7A6B !important; /* Darker sage green for better contrast */
+    --light-foreground: #000000 !important;
+  }
+  
+  /* Light mode specific overrides for Tailwind classes */
+  .light .bg-primary {
+    background-color: #ffffff !important;
+  }
+  
+  .light .text-light {
+    color: #000000 !important; /* Dark text on light background */
+  }
+  
+  .light .text-primary {
+    color: #000000 !important; /* Dark text on light background */
+  }
+  
+  .light .bg-secondary {
+    background-color: #33202A !important; /* Dark brand color */
+  }
+  
+  .light .text-secondary {
+    color: #ffffff !important; /* Light text on dark secondary */
+  }
+  
+  .light .text-neutral {
+    color: #5F5566 !important; /* Dark neutral from brand */
+  }
+  
+  .light .text-neutral-300 {
+    color: #5F5566 !important; /* Dark neutral for better visibility */
+  }
+  
+  .light .text-neutral-400 {
+    color: #5F5566 !important; /* Dark neutral for better visibility */
+  }
+  
+  .light .bg-neutral-50 {
+    background-color: #f8f7f9 !important; /* Very light neutral */
+  }
+  
+  .light .bg-neutral-100 {
+    background-color: #f1eff2 !important; /* Light neutral */
+  }
+  
+  /* Comprehensive light mode overrides for all sections */
+  
+  /* Hero section */
+  .light .bg-primary {
+    background-color: #ffffff !important;
+  }
+  
+  /* Text colors - ensure dark text on light backgrounds */
+  .light h1, .light h2, .light h3, .light h4, .light h5, .light h6 {
+    color: #000000 !important;
+  }
+  
+  .light p, .light span, .light div {
+    color: #000000 !important;
+  }
+  
+  /* Buttons and interactive elements */
+  .light .bg-accent {
+    background-color: #8AEA92 !important;
+    color: #000000 !important;
+  }
+  
+  .light .text-accent {
+    color: #8AEA92 !important;
+  }
+  
+  /* Cards and containers */
+  .light .bg-primary\/90, .light .bg-primary\/95 {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+  }
+  
+  .light .bg-primary\/5 {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+  
+  .light .bg-primary\/10 {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  /* Borders */
+  .light .border-accent\/20 {
+    border-color: rgba(138, 234, 146, 0.2) !important;
+  }
+  
+  .light .border-accent\/30 {
+    border-color: rgba(138, 234, 146, 0.3) !important;
+  }
+  
+  .light .border-primary\/20 {
+    border-color: rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  /* Shadows and overlays */
+  .light .shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  }
+  
+  .light .shadow-xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  }
+  
+  /* Specific section overrides */
+  .light .bg-light {
+    background-color: #f8fafc !important;
+  }
+  
+  /* Darker sage green accents for better contrast and readability */
+  .light .bg-light\/10 {
+    background-color: rgba(90, 122, 107, 0.1) !important;
+  }
+  
+  .light .bg-light\/20 {
+    background-color: rgba(90, 122, 107, 0.2) !important;
+  }
+  
+  .light .bg-light\/30 {
+    background-color: rgba(90, 122, 107, 0.3) !important;
+  }
+  
+  .light .border-light {
+    border-color: #5A7A6B !important;
+  }
+  
+  .light .border-light\/20 {
+    border-color: rgba(90, 122, 107, 0.2) !important;
+  }
+  
+  .light .border-light\/30 {
+    border-color: rgba(90, 122, 107, 0.3) !important;
+  }
+  
+  .light .text-light {
+    color: #5A7A6B !important;
+  }
+  
+  /* Navigation */
+  .light nav {
+    background-color: transparent !important;
+  }
+  
+  /* Footer */
+  .light footer {
+    background-color: #33202A !important;
+    color: #ffffff !important;
+  }
+  
+  .light footer * {
+    color: #ffffff !important;
+  }
+  
+  /* Footer - Light Mode Override for Better Visibility */
+  .light footer {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  .light footer * {
+    color: #000000 !important;
+  }
+  
+  .light footer h1,
+  .light footer h2,
+  .light footer h3,
+  .light footer h4,
+  .light footer h5,
+  .light footer h6 {
+    color: #000000 !important;
+  }
+  
+  .light footer p,
+  .light footer span,
+  .light footer div {
+    color: #000000 !important;
+  }
+  
+  .light footer a {
+    color: #8AEA92 !important;
+  }
+  
+  /* Sage green enhancements for visual life and depth */
+  
+  /* Portfolio cards and project containers */
+  .light .bg-primary\/5, .light .bg-primary\/10, .light .bg-primary\/20 {
+    background-color: rgba(90, 122, 107, 0.05) !important;
+    border: 1px solid rgba(90, 122, 107, 0.1) !important;
+  }
+  
+  /* Service cards subtle darker sage green backgrounds */
+  .light .service-card, .light [class*="service"] {
+    background-color: rgba(90, 122, 107, 0.08) !important;
+    border: 1px solid rgba(90, 122, 107, 0.15) !important;
+  }
+  
+  /* Input fields with darker sage green borders */
+  .light input, .light textarea, .light select {
+    border-color: rgba(90, 122, 107, 0.3) !important;
+  }
+  
+  .light input:focus, .light textarea:focus, .light select:focus {
+    border-color: #5A7A6B !important;
+    box-shadow: 0 0 0 3px rgba(90, 122, 107, 0.1) !important;
+  }
+  
+  /* Navigation hover states with darker sage green */
+  .light nav a:hover, .light nav button:hover {
+    background-color: rgba(90, 122, 107, 0.1) !important;
+  }
+  
+  /* Dropdown backgrounds with darker sage green tint */
+  .light .dropdown, .light [class*="dropdown"] {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(90, 122, 107, 0.2) !important;
+  }
+  
+  /* Section dividers and progress indicators */
+  .light hr, .light [class*="divider"], .light [class*="separator"] {
+    border-color: rgba(90, 122, 107, 0.2) !important;
+  }
+  
+  /* Card hover effects with darker sage green */
+  .light .card:hover, .light [class*="card"]:hover {
+    border-color: rgba(90, 122, 107, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(90, 122, 107, 0.1) !important;
+  }
+  
+  /* Subtle darker sage green backgrounds for empty states */
+  .light .empty-state, .light [class*="empty"] {
+    background-color: rgba(90, 122, 107, 0.05) !important;
+    border: 1px dashed rgba(90, 122, 107, 0.2) !important;
+  }
+  
+  .light footer a:hover {
+    color: #6dd475 !important;
+  }
+  
+  /* Address hover effect in light mode */
+  .light footer .group:hover { color: #8AEA92 !important; }
+  .light footer .group:hover span { color: #8AEA92 !important; }
+  .light footer .group:hover svg { color: #8AEA92 !important; }
+  
+  .light footer .address,
+  .light footer .contact-info,
+  .light footer .get-in-touch {
+    color: #000000 !important;
+  }
+  
+  .light footer .address *,
+  .light footer .contact-info *,
+  .light footer .get-in-touch * {
+    color: #000000 !important;
+  }
+  
+  /* Testimonials and cards */
+  .light .bg-secondary {
+    background-color: #33202A !important;
+    color: #ffffff !important;
+  }
+  
+  .light .bg-secondary * {
+    color: #ffffff !important;
+  }
+  
+  /* Form elements */
+  .light input, .light textarea, .light select {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #5F5566 !important;
+  }
+  
+  /* Links */
+  .light a {
+    color: #8AEA92 !important;
+  }
+  
+  .light a:hover {
+    color: #6dd475 !important;
+  }
+  
+  /* Portfolio Cards - Match Works Section Styling */
+  .light .bg-primary\/90,
+  .light .bg-primary\/95,
+  .light .bg-primary\/80,
+  .light .bg-primary\/70,
+  .light .bg-primary\/60,
+  .light .bg-primary\/50,
+  .light .bg-primary\/40,
+  .light .bg-primary\/30,
+  .light .bg-primary\/20,
+  .light .bg-primary\/10,
+  .light .bg-primary\/5 {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(138, 234, 146, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+  }
+  
+  /* Portfolio Card Text */
+  .light .bg-primary\/90 *,
+  .light .bg-primary\/95 *,
+  .light .bg-primary\/80 *,
+  .light .bg-primary\/70 *,
+  .light .bg-primary\/60 *,
+  .light .bg-primary\/50 *,
+  .light .bg-primary\/40 *,
+  .light .bg-primary\/30 *,
+  .light .bg-primary\/20 *,
+  .light .bg-primary\/10 *,
+  .light .bg-primary\/5 * {
+    color: #000000 !important;
+  }
+  
+  /* Portfolio Card Headings */
+  .light .bg-primary\/90 h1,
+  .light .bg-primary\/90 h2,
+  .light .bg-primary\/90 h3,
+  .light .bg-primary\/90 h4,
+  .light .bg-primary\/90 h5,
+  .light .bg-primary\/90 h6,
+  .light .bg-primary\/95 h1,
+  .light .bg-primary\/95 h2,
+  .light .bg-primary\/95 h3,
+  .light .bg-primary\/95 h4,
+  .light .bg-primary\/95 h5,
+  .light .bg-primary\/95 h6 {
+    color: #000000 !important;
+  }
+  
+  /* Portfolio Card Paragraphs */
+  .light .bg-primary\/90 p,
+  .light .bg-primary\/95 p,
+  .light .bg-primary\/80 p,
+  .light .bg-primary\/70 p,
+  .light .bg-primary\/60 p,
+  .light .bg-primary\/50 p {
+    color: #5F5566 !important;
+  }
+  
+  /* Portfolio Card Links */
+  .light .bg-primary\/90 a,
+  .light .bg-primary\/95 a,
+  .light .bg-primary\/80 a,
+  .light .bg-primary\/70 a,
+  .light .bg-primary\/60 a,
+  .light .bg-primary\/50 a {
+    color: #8AEA92 !important;
+  }
+  
+  .light .bg-primary\/90 a:hover,
+  .light .bg-primary\/95 a:hover,
+  .light .bg-primary\/80 a:hover,
+  .light .bg-primary\/70 a:hover,
+  .light .bg-primary\/60 a:hover,
+  .light .bg-primary\/50 a:hover {
+    color: #6dd475 !important;
+  }
+  
+  /* Portfolio Card Buttons */
+  .light .bg-primary\/90 .bg-accent,
+  .light .bg-primary\/95 .bg-accent,
+  .light .bg-primary\/80 .bg-accent,
+  .light .bg-primary\/70 .bg-accent,
+  .light .bg-primary\/60 .bg-accent,
+  .light .bg-primary\/50 .bg-accent {
+    background-color: #8AEA92 !important;
+    color: #000000 !important;
+  }
+  
+  /* Portfolio Card Shadows */
+  .light .bg-primary\/90,
+  .light .bg-primary\/95,
+  .light .bg-primary\/80,
+  .light .bg-primary\/70,
+  .light .bg-primary\/60,
+  .light .bg-primary\/50 {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  }
+  
+  /* Portfolio Card Hover Effects */
+  .light .bg-primary\/90:hover,
+  .light .bg-primary\/95:hover,
+  .light .bg-primary\/80:hover,
+  .light .bg-primary\/70:hover,
+  .light .bg-primary\/60:hover,
+  .light .bg-primary\/50:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    transform: translateY(-2px) !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  /* Contact Form Button - Light Mode Fix */
+  .light button[type="submit"],
+  .light .btn-primary,
+  .light .hero-btn,
+  .light .bg-accent {
+    background-color: #8AEA92 !important;
+    color: #000000 !important;
+    border: none !important;
+  }
+  
+  .light button[type="submit"]:hover,
+  .light .btn-primary:hover,
+  .light .hero-btn:hover,
+  .light .bg-accent:hover {
+    background-color: #6dd475 !important;
+    color: #000000 !important;
+  }
+  
+  .light button[type="submit"]:focus,
+  .light .btn-primary:focus,
+  .light .hero-btn:focus,
+  .light .bg-accent:focus {
+    background-color: #8AEA92 !important;
+    color: #000000 !important;
+    outline: 2px solid #8AEA92 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Contact Form Button Text */
+  .light button[type="submit"] *,
+  .light .btn-primary *,
+  .light .hero-btn *,
+  .light .bg-accent * {
+    color: #000000 !important;
+  }
+  
+  /* Contact Form Button Span Text */
+  .light button[type="submit"] span,
+  .light .btn-primary span,
+  .light .hero-btn span,
+  .light .bg-accent span {
+    color: #000000 !important;
+  }
+  
+  /* Contact Form Button Direct Text */
+  .light button[type="submit"]:not(:has(*)),
+  .light .btn-primary:not(:has(*)),
+  .light .hero-btn:not(:has(*)),
+  .light .bg-accent:not(:has(*)) {
+    color: #000000 !important;
+  }
+  
+  /* Contact Form - Complete Light Mode Styling */
+  .light #contact,
+  .light .contact-section,
+  .light [id*="contact"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  /* Contact Form Container */
+  .light #contact *,
+  .light .contact-section *,
+  .light [id*="contact"] * {
+    color: #000000 !important;
+  }
+  
+  /* Contact Form Headings */
+  .light #contact h1,
+  .light #contact h2,
+  .light #contact h3,
+  .light #contact h4,
+  .light #contact h5,
+  .light #contact h6,
+  .light .contact-section h1,
+  .light .contact-section h2,
+  .light .contact-section h3,
+  .light .contact-section h4,
+  .light .contact-section h5,
+  .light .contact-section h6 {
+    color: #000000 !important;
+  }
+  
+  /* Contact Form Paragraphs */
+  .light #contact p,
+  .light .contact-section p {
+    color: #5F5566 !important;
+  }
+  
+  /* Contact Form Labels */
+  .light #contact label,
+  .light .contact-section label {
+    color: #000000 !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Contact Form Input Fields */
+  .light #contact input,
+  .light #contact textarea,
+  .light #contact select,
+  .light .contact-section input,
+  .light .contact-section textarea,
+  .light .contact-section select {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #8AEA92 !important;
+    border-radius: 8px !important;
+  }
+  
+  .light #contact input:focus,
+  .light #contact textarea:focus,
+  .light #contact select:focus,
+  .light .contact-section input:focus,
+  .light .contact-section textarea:focus,
+  .light .contact-section select:focus {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #6dd475 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(138, 234, 146, 0.2) !important;
+  }
+  
+  /* Contact Form Input Placeholders */
+  .light #contact input::placeholder,
+  .light #contact textarea::placeholder,
+  .light .contact-section input::placeholder,
+  .light .contact-section textarea::placeholder {
+    color: #5F5566 !important;
+    opacity: 0.7 !important;
+  }
+  
+  /* Contact Form Field Groups */
+  .light #contact .form-group,
+  .light #contact .field-group,
+  .light .contact-section .form-group,
+  .light .contact-section .field-group {
+    background-color: transparent !important;
+  }
+  
+  /* Contact Form Grid/Container */
+  .light #contact .grid,
+  .light #contact .container,
+  .light .contact-section .grid,
+  .light .contact-section .container {
+    background-color: transparent !important;
+  }
+  
+  /* Contact Form Cards/Boxes */
+  .light #contact .card,
+  .light #contact .box,
+  .light .contact-section .card,
+  .light .contact-section .box {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(138, 234, 146, 0.2) !important;
+    color: #000000 !important;
+  }
+  
+  /* Contact Form Links */
+  .light #contact a,
+  .light .contact-section a {
+    color: #8AEA92 !important;
+  }
+  
+  .light #contact a:hover,
+  .light .contact-section a:hover {
+    color: #6dd475 !important;
+  }
+  
+  /* Contact Form Icons */
+  .light #contact svg,
+  .light #contact .icon,
+  .light .contact-section svg,
+  .light .contact-section .icon {
+    color: #8AEA92 !important;
+  }
+  
+  /* Contact Form Success/Error Messages */
+  .light #contact .success,
+  .light #contact .error,
+  .light .contact-section .success,
+  .light .contact-section .error {
+    background-color: rgba(138, 234, 146, 0.1) !important;
+    color: #000000 !important;
+    border: 1px solid #8AEA92 !important;
+  }
+  
+  /* Contact Form Required Field Indicators */
+  .light #contact .required,
+  .light #contact .required::after,
+  .light .contact-section .required,
+  .light .contact-section .required::after {
+    color: #8AEA92 !important;
+  }
+  
+  /* Send Button - Force Green Background with Visible Text */
+  .light button[type="submit"],
+  .light .send-button,
+  .light .submit-button,
+  .light [class*="send"],
+  .light [class*="submit"],
+  .light button:contains("Send"),
+  .light button:contains("Submit"),
+  .light input[type="submit"] {
+    background-color: #8AEA92 !important;
+    background: #8AEA92 !important;
+    color: #000000 !important;
+    border: 2px solid #8AEA92 !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+  }
+  
+  /* Send Button Text - Force Visibility */
+  .light button[type="submit"] span,
+  .light button[type="submit"] div,
+  .light button[type="submit"] p,
+  .light .send-button span,
+  .light .send-button div,
+  .light .send-button p,
+  .light .submit-button span,
+  .light .submit-button div,
+  .light .submit-button p {
+    color: #000000 !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+  }
+  
+  /* Force All Button Text to be Black */
+  .light button[type="submit"],
+  .light .send-button,
+  .light .submit-button {
+    color: #000000 !important;
+    text-shadow: none !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Override any conflicting styles */
+  .light button[type="submit"] *,
+  .light .send-button *,
+  .light .submit-button * {
+    color: #000000 !important;
+    text-shadow: none !important;
+  }
+  
+  /* Send Button Icon - Make Green */
+  .light button[type="submit"] svg,
+  .light button[type="submit"] .icon,
+  .light .send-button svg,
+  .light .send-button .icon,
+  .light .submit-button svg,
+  .light .submit-button .icon {
+    color: #000000 !important;
+    fill: #000000 !important;
+    stroke: #000000 !important;
+  }
+  
+  /* Send Button Hover State */
+  .light button[type="submit"]:hover,
+  .light .send-button:hover,
+  .light .submit-button:hover {
+    background-color: #6dd475 !important;
+    color: #000000 !important;
+    border: 2px solid #6dd475 !important;
+  }
+  
+  .light button[type="submit"]:hover span,
+  .light button[type="submit"]:hover div,
+  .light button[type="submit"]:hover p,
+  .light .send-button:hover span,
+  .light .send-button:hover div,
+  .light .send-button:hover p,
+  .light .submit-button:hover span,
+  .light .submit-button:hover div,
+  .light .submit-button:hover p {
+    color: #000000 !important;
+  }
+  
+  .light button[type="submit"]:hover svg,
+  .light button[type="submit"]:hover .icon,
+  .light .send-button:hover svg,
+  .light .send-button:hover .icon,
+  .light .submit-button:hover svg,
+  .light .submit-button:hover .icon {
+    color: #000000 !important;
+    fill: #000000 !important;
+    stroke: #000000 !important;
+  }
+  
+  /* Send Button Focus State */
+  .light button[type="submit"]:focus,
+  .light .send-button:focus,
+  .light .submit-button:focus {
+    background-color: #8AEA92 !important;
+    color: #000000 !important;
+    border: 2px solid #8AEA92 !important;
+    outline: 2px solid #8AEA92 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Force All Button Content to be Dark */
+  .light button[type="submit"] *,
+  .light .send-button *,
+  .light .submit-button * {
+    color: #000000 !important;
+  }
+  
+  /* Alternative: Make Icon Black for Visibility */
+  .light button[type="submit"] svg,
+  .light .send-button svg,
+  .light .submit-button svg {
+    color: #000000 !important;
+    fill: #000000 !important;
+    stroke: #000000 !important;
+  }
+  
+  .light button[type="submit"]:hover svg,
+  .light .send-button:hover svg,
+  .light .submit-button:hover svg {
+    color: #000000 !important;
+    fill: #000000 !important;
+    stroke: #000000 !important;
+  }
+  
+  /* Nuclear Option - Force ALL buttons in contact form to be green with black text */
+  .light #contact button,
+  .light .contact-section button,
+  .light [id*="contact"] button {
+    background-color: #8AEA92 !important;
+    background: #8AEA92 !important;
+    color: #000000 !important;
+    border: 2px solid #8AEA92 !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+  }
+  
+  .light #contact button *,
+  .light .contact-section button *,
+  .light [id*="contact"] button * {
+    color: #000000 !important;
+    text-shadow: none !important;
+  }
+  
+  .light #contact button:hover,
+  .light .contact-section button:hover,
+  .light [id*="contact"] button:hover {
+    background-color: #6dd475 !important;
+    background: #6dd475 !important;
+    color: #000000 !important;
+  }
+  
+  .light #contact button:hover *,
+  .light .contact-section button:hover *,
+  .light [id*="contact"] button:hover * {
+    color: #000000 !important;
   }
 
   /* Dark mode styles (default) */

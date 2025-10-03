@@ -271,7 +271,7 @@ const PerformanceDashboard = ({ isOpen, onClose }) => {
                           <span className="text-sm text-accent/80 capitalize">
                             {metric.replace(/([A-Z])/g, ' $1').trim()}
                           </span>
-                          <Badge className="bg-accent/20 text-accent border-accent/30">
+                          <Badge className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                             {value}
                           </Badge>
                         </div>

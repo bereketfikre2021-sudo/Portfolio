@@ -6,16 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import Blog from "./components/Blog";
-import Analytics from "./components/Analytics";
-import ProjectGallery from "./components/ProjectGallery";
-import NewsletterSignup from "./components/NewsletterSignup";
-import { ThemeProvider } from "./components/ThemeProvider";
-import ThemeToggle from "./components/ThemeToggle";
-import CaseStudy from "./components/CaseStudy";
-import { LanguageProvider } from "./components/LanguageProvider";
-import LanguageToggle from "./components/LanguageToggle";
-import { LazyTools, LazyAI, LazyPWA, LazyPerformance, preloadCriticalComponents } from "./components/LazyWrapper";
+import { ThemeProvider, useTheme } from "./components/ThemeProvider";
+import { LanguageProvider, useLanguage } from "./components/LanguageProvider";
+import { LazyTools, LazyAI, LazyPWA, LazyPerformance, LazyBlog, LazyAnalytics, LazyProjectGallery, LazyNewsletterSignup, LazyCaseStudy, LazyAccessibilitySettings, LazyAdvancedAnimations, LazyPerformanceDashboard, LazySEOManager, LazySecurityDashboard, LazyAIContentGenerator, LazySmartRecommendations, LazyCRMIntegration, LazyEmailMarketing, LazyPWAInstaller, preloadCriticalComponents } from "./components/LazyWrapper";
 import { registerAdvancedServiceWorker } from "./components/AdvancedPWA";
 // Disabled utilities to reduce console noise
 // import performanceOptimizer from "./utils/performanceOptimizer";
@@ -24,27 +17,15 @@ import scrollAnimations from "./utils/scrollAnimations";
 import ScrollProgress, { CircularScrollProgress, ScrollToTop } from "./components/ScrollProgress";
 import ParallaxSection, { RevealOnScroll, StaggeredReveal } from "./components/ParallaxSection";
 import accessibilityManager from "./utils/accessibility";
-import AccessibilitySettings from "./components/AccessibilitySettings";
 import pageTransitions from "./utils/pageTransitions";
-import AdvancedAnimations from "./components/AdvancedAnimations";
 // Removed AdvancedContactForm - using simpler ContactForm instead
 // Removed duplicate sections - ClientLogosCarousel, AwardsSection, StatisticsSection
 // import advancedAnalytics from "./utils/advancedAnalytics";
 // import CriticalResourceHints from "./components/CriticalResourceHints";
-import PerformanceDashboard from "./components/PerformanceDashboard";
-// import performanceMonitor from "./utils/performanceMonitor";
-// import EnhancedSEO from "./components/EnhancedSEO";
-import SEOManager from "./components/SEOManager";
+// Lazy-loaded components moved to LazyWrapper
 import sitemapGenerator from "./utils/sitemapGenerator";
-import SecurityDashboard from "./components/SecurityDashboard";
-// import securityManager from "./utils/securityManager";
-import AIContentGenerator from "./components/AIContentGenerator";
-import SmartRecommendations from "./components/SmartRecommendations";
-import CRMIntegration from "./components/CRMIntegration";
-import EmailMarketing from "./components/EmailMarketing";
-import PWAInstaller, { OfflineIndicator, registerServiceWorker } from "./components/PWAInstaller";
 
-import { ArrowRight, Mail, Phone, ExternalLink, Palette, LayoutGrid, PenTool, Rocket, Instagram, Linkedin, Github, Dribbble, ChevronUp, MessageCircle, Eye, X, Send, MessageSquare, BarChart3, Play, Pause, Volume2, VolumeX, Maximize, Minimize, RotateCcw, Settings, Star, Quote, ChevronDown } from "lucide-react";
+import { ArrowRight, Mail, Phone, ExternalLink, Palette, LayoutGrid, PenTool, Rocket, Instagram, Linkedin, Github, Dribbble, ChevronUp, MessageCircle, Eye, X, Send, MessageSquare, BarChart3, Play, Pause, Volume2, VolumeX, Maximize, Minimize, RotateCcw, Settings, Star, Quote, ChevronDown, MapPin } from "lucide-react";
 import { useForm, ValidationError } from '@formspree/react';
 
 // Logo image path - using consistent path
@@ -821,7 +802,8 @@ const TermsOfService = ({ isOpen, onClose }) => {
   );
 };
 
-const Header = ({ 
+// Header component that can use context hooks
+const HeaderWithContext = ({ 
   isAnalyticsOpen, setIsAnalyticsOpen,
   isAIOpen, setIsAIOpen,
   isPWAOpen, setIsPWAOpen,
@@ -834,25 +816,87 @@ const Header = ({
   isCRMIntegrationOpen, setIsCRMIntegrationOpen,
   isEmailMarketingOpen, setIsEmailMarketingOpen
 }) => {
+  const { theme, resolvedTheme, toggleTheme, setTheme } = useTheme();
+  const { language, changeLanguage, availableLanguages, t } = useLanguage();
   const [isOverLightBackground, setIsOverLightBackground] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [activeMobileDropdown, setActiveMobileDropdown] = useState(null);
   
   // Handle install app functionality
   const handleInstallApp = async () => {
+    console.log('handleInstallApp called');
     try {
       // Check if we have a deferred prompt
       if (window.deferredPrompt) {
-        window.deferredPrompt.prompt();
-        const { outcome } = await window.deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
+        console.log('Deferred prompt found, showing install prompt');
+        // Show the install prompt
+        const result = await window.deferredPrompt.prompt();
+        console.log('Install prompt result:', result);
+        
+        // Wait for user choice
+        const choiceResult = await window.deferredPrompt.userChoice;
+        console.log('User choice result:', choiceResult);
+        
+        if (choiceResult.outcome === 'accepted') {
           console.log('PWA installation accepted');
+          // Show success message
+          alert('App installation started! Check your browser for the installation prompt.');
         } else {
           console.log('PWA installation dismissed');
+          alert('Installation cancelled. You can try again anytime.');
         }
+        
+        // Clear the deferred prompt
         window.deferredPrompt = null;
       } else {
-        // Show browser-specific instructions
+        console.log('No deferred prompt found');
+        // Check if app is already installed
+        if (window.matchMedia('(display-mode: standalone)').matches || 
+            window.navigator.standalone === true) {
+          console.log('App is already installed');
+          alert('App is already installed!');
+          return;
+        }
+        
+        // Try to trigger the install prompt programmatically
+        if ('serviceWorker' in navigator) {
+          // Register service worker if not already registered
+          if (!navigator.serviceWorker.controller) {
+            try {
+              await navigator.serviceWorker.register('/sw.js');
+              console.log('Service Worker registered successfully');
+            } catch (error) {
+              console.error('Service Worker registration failed:', error);
+            }
+          }
+          
+          // Try to trigger install prompt
+          const installEvent = new CustomEvent('beforeinstallprompt', {
+            detail: {
+              prompt: () => Promise.resolve({ outcome: 'accepted' })
+            }
+          });
+          window.dispatchEvent(installEvent);
+          
+          // Show instructions if no prompt appears
+          setTimeout(() => {
+            if (!window.deferredPrompt) {
+              showInstallInstructions();
+            }
+          }, 1000);
+        } else {
+          showInstallInstructions();
+        }
+      }
+    } catch (error) {
+      console.error('Install error:', error);
+      alert('Installation failed. Please try using your browser\'s install option manually.');
+    }
+  };
+
+  // Show install instructions in a better way
+  const showInstallInstructions = () => {
         const userAgent = navigator.userAgent.toLowerCase();
         let instructions = '';
         
@@ -866,69 +910,65 @@ const Header = ({
           instructions = 'Look for an install option in your browser menu or address bar';
         }
         
+    // For now, use console.log and alert as fallback until notification system is implemented
+    console.log('Install instructions:', instructions);
         alert(`To install this app:\n\n${instructions}\n\nThis will add the app to your home screen or desktop for quick access.`);
-      }
-    } catch (error) {
-      console.error('Install error:', error);
-      alert('Installation failed. Please try using your browser\'s install option manually.');
-    }
   };
 
   // Handle tool actions
   const handleToolAction = (action) => {
+    console.log(`Tool action triggered: ${action}`);
     switch (action) {
       case 'analytics':
+        console.log('Opening Analytics Dashboard');
         setIsAnalyticsOpen(true);
         break;
       case 'ai-insights':
+        console.log('Opening AI Insights');
         setIsAIOpen(true);
         break;
       case 'pwa-features':
+        console.log('Opening PWA Features');
         setIsPWAOpen(true);
         break;
       case 'performance':
+        console.log('Opening Performance Monitor');
         setIsPerformanceOpen(true);
         break;
       case 'performance-dashboard':
+        console.log('Opening Performance Dashboard');
         setIsPerformanceDashboardOpen(true);
         break;
       case 'seo-manager':
+        console.log('Opening SEO Manager');
         setIsSEOManagerOpen(true);
         break;
       case 'security-dashboard':
+        console.log('Opening Security Dashboard');
         setIsSecurityDashboardOpen(true);
         break;
       case 'ai-content-generator':
+        console.log('Opening AI Content Generator');
         setIsAIContentGeneratorOpen(true);
         break;
       case 'smart-recommendations':
+        console.log('Opening Smart Recommendations');
         setIsSmartRecommendationsOpen(true);
         break;
       case 'crm-integration':
+        console.log('Opening CRM Integration');
         setIsCRMIntegrationOpen(true);
         break;
       case 'email-marketing':
+        console.log('Opening Email Marketing');
         setIsEmailMarketingOpen(true);
         break;
-      case 'theme-toggle':
-        // Trigger theme toggle - we'll need to access the theme context
-        const themeToggleButton = document.querySelector('[data-theme-toggle]');
-        if (themeToggleButton) {
-          themeToggleButton.click();
-        }
-        break;
-      case 'language-toggle':
-        // Trigger language toggle - we'll need to access the language context
-        const languageToggleButton = document.querySelector('[data-language-toggle]');
-        if (languageToggleButton) {
-          languageToggleButton.click();
-        }
-        break;
       case 'install-app':
-        // Handle install app functionality
+        console.log('Handling Install App');
         handleInstallApp();
         break;
       default:
+        console.warn(`Unknown tool action: ${action}`);
         break;
     }
     setActiveDropdown(null);
@@ -936,18 +976,19 @@ const Header = ({
   };
   
   const NAV = [
-    { label: "Home", href: "#home" },
-    { label: "About", href: "#about" },
-    { label: "Services", href: "#services" },
+    { label: t('nav.home'), href: "#home" },
+    { label: t('nav.about'), href: "#about" },
+    { label: t('nav.services'), href: "#services" },
     { 
       label: "Portfolio", 
       dropdown: [
-    { label: "Work", href: "#work" },
-        { label: "Case Studies", href: "#case-studies" },
-        { label: "Testimonials", href: "#testimonials" }
+    { label: t('nav.work'), href: "#work" },
+        { label: t('nav.caseStudies'), href: "#case-studies" },
+        { label: t('nav.testimonials'), href: "#testimonials" }
       ]
     },
-    { label: "Blog", href: "#blog" },
+    { label: t('nav.blog'), href: "#blog" },
+    { label: t('nav.contact'), href: "#contact" },
     { 
       label: "Tools", 
       dropdown: [
@@ -962,12 +1003,9 @@ const Header = ({
         { label: "AI Content Generator", action: "ai-content-generator" },
         { label: "Smart Recommendations", action: "smart-recommendations" },
         { label: "CRM Integration", action: "crm-integration" },
-        { label: "Email Marketing", action: "email-marketing" },
-        { label: "Theme Toggle", action: "theme-toggle" },
-        { label: "Language Toggle", action: "language-toggle" }
+        { label: "Email Marketing", action: "email-marketing" }
       ]
     },
-    { label: "Contact", href: "#contact" },
   ];
 
   useEffect(() => {
@@ -1010,14 +1048,18 @@ const Header = ({
   }, []);
 
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 backdrop-blur border-b shadow-lg transition-all duration-300 ${
-      isOverLightBackground 
-        ? 'bg-primary/95 border-primary/20' 
-        : 'bg-primary/95 border-accent/20'
+    <header className={`fixed top-0 inset-x-0 z-50 border-b shadow-lg transition-all duration-300 ${
+      resolvedTheme === 'light' 
+        ? 'bg-accent/95 border-accent/20' 
+        : 'bg-primary/95 border-accent/20 backdrop-blur'
     }`}>
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <a href="#home" className="flex items-center hover:opacity-80 transition-opacity">
-          <img src={logoImg} alt="Logo" className="h-8 sm:h-10 w-auto" />
+          <img 
+            src={resolvedTheme === 'light' ? '/img/Logo.png' : logoImg} 
+            alt="Logo" 
+            className="h-8 sm:h-10 w-auto" 
+          />
         </a>
         
         {/* Desktop Navigation */}
@@ -1032,8 +1074,8 @@ const Header = ({
                 >
                   <button
                     className={`flex items-center gap-1 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-md px-2 py-1 ${
-                      isOverLightBackground
-                        ? 'text-accent hover:text-light focus:ring-accent/20 focus:ring-offset-primary'
+                      resolvedTheme === 'light'
+                        ? 'text-primary hover:text-white focus:ring-white/20 focus:ring-offset-accent'
                         : 'text-accent hover:text-light focus:ring-accent/20 focus:ring-offset-primary'
                     }`}
                   >
@@ -1046,14 +1088,22 @@ const Header = ({
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="absolute top-full left-0 mt-2 w-48 bg-primary/95 backdrop-blur-sm border border-accent/20 rounded-xl shadow-lg overflow-hidden z-50"
+                      className={`absolute top-full left-0 mt-2 w-48 rounded-xl shadow-lg overflow-hidden z-50 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-accent/95 backdrop-blur-sm border border-accent/20'
+                          : 'bg-primary/95 backdrop-blur-sm border border-accent/20'
+                      }`}
                     >
                       {item.dropdown.map((dropdownItem, dropdownIndex) => (
                         dropdownItem.action ? (
                           <button
                             key={dropdownIndex}
                             onClick={() => handleToolAction(dropdownItem.action)}
-                            className="block w-full text-left px-4 py-3 text-sm text-accent hover:text-light hover:bg-accent/10 transition-colors"
+                            className={`block w-full text-left px-4 py-3 text-sm transition-colors ${
+                              resolvedTheme === 'light'
+                                ? 'text-primary hover:text-primary hover:bg-accent/20'
+                                : 'text-accent hover:text-light hover:bg-accent/10'
+                            }`}
                           >
                             {dropdownItem.label}
                           </button>
@@ -1061,7 +1111,11 @@ const Header = ({
                           <a
                             key={dropdownIndex}
                             href={dropdownItem.href}
-                            className="block px-4 py-3 text-sm text-accent hover:text-light hover:bg-accent/10 transition-colors"
+                            className={`block px-4 py-3 text-sm transition-colors ${
+                              resolvedTheme === 'light'
+                                ? 'text-primary hover:text-primary hover:bg-accent/20'
+                                : 'text-accent hover:text-light hover:bg-accent/10'
+                            }`}
                           >
                             {dropdownItem.label}
                           </a>
@@ -1074,8 +1128,8 @@ const Header = ({
                 <a 
               href={item.href} 
               className={`text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-md px-2 py-1 ${
-                isOverLightBackground
-                  ? 'text-accent hover:text-light focus:ring-accent/20 focus:ring-offset-primary'
+                resolvedTheme === 'light'
+                  ? 'text-primary hover:text-white focus:ring-white/20 focus:ring-offset-accent'
                   : 'text-accent hover:text-light focus:ring-accent/20 focus:ring-offset-primary'
               }`}
             >
@@ -1085,18 +1139,73 @@ const Header = ({
             </div>
           ))}
           
-          {/* Hidden toggles for Tools dropdown access */}
-          <div style={{ display: 'none' }}>
-            <ThemeToggle data-theme-toggle />
-            <LanguageToggle data-language-toggle />
+          {/* Theme and Language Toggle Buttons */}
+          <div className="flex items-center gap-2">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={() => {
+                console.log('Theme toggle clicked, current theme:', resolvedTheme);
+                if (resolvedTheme === 'dark') {
+                  console.log('Switching to light mode');
+                  setTheme('light');
+                } else {
+                  console.log('Switching to dark mode');
+                  setTheme('dark');
+                }
+              }}
+              className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 ${
+                resolvedTheme === 'light'
+                  ? 'bg-transparent text-primary hover:bg-transparent border border-transparent'
+                  : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
+              }`}
+              title={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              <Settings className="w-4 h-4" />
+              <span className="hidden sm:inline">
+                {resolvedTheme === 'dark' ? 'Light' : 'Dark'}
+              </span>
+            </button>
+
+            {/* Language Toggle Button */}
+            <button
+              onClick={() => {
+                console.log('Language toggle clicked');
+                const currentLang = language;
+                if (currentLang === 'en') {
+                  changeLanguage('am');
+                } else {
+                  changeLanguage('en');
+                }
+              }}
+              className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 ${
+                resolvedTheme === 'light'
+                  ? 'bg-transparent text-primary hover:bg-transparent border border-transparent'
+                  : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
+              }`}
+              title={`Switch to ${language === 'en' ? 'Amharic' : 'English'}`}
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span className="hidden sm:inline">
+                {language === 'en' ? 'አማርኛ' : 'EN'}
+              </span>
+            </button>
           </div>
           
         </nav>
 
         {/* Mobile Menu Button */}
         <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden p-2 rounded-md text-accent hover:text-light focus:outline-none focus:ring-2 focus:ring-accent/20 focus:ring-offset-2 focus:ring-offset-primary transition-colors"
+          onClick={() => {
+            setIsMobileMenuOpen(!isMobileMenuOpen);
+            if (isMobileMenuOpen) {
+              setActiveMobileDropdown(null); // Close dropdowns when closing mobile menu
+            }
+          }}
+          className={`md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ${
+            resolvedTheme === 'light'
+              ? 'text-primary hover:text-white focus:ring-white/20 focus:ring-offset-accent'
+              : 'text-accent hover:text-light focus:ring-accent/20 focus:ring-offset-primary'
+          }`}
           aria-label="Toggle mobile menu"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1115,26 +1224,42 @@ const Header = ({
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="md:hidden bg-primary/95 backdrop-blur border-t border-accent/20"
+          className={`md:hidden backdrop-blur border-t border-accent/20 ${
+            resolvedTheme === 'light' 
+              ? 'bg-accent/95' 
+              : 'bg-primary/95'
+          }`}
         >
           <nav className="px-4 py-4 space-y-2">
             {NAV.map((item, index) => (
               <div key={index}>
                 {item.dropdown ? (
                   <div>
-                    <div className="flex items-center justify-between px-3 py-2 text-sm font-medium text-accent">
+                    <button
+                      onClick={() => setActiveMobileDropdown(activeMobileDropdown === index ? null : index)}
+                      className={`flex items-center justify-between w-full px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                        resolvedTheme === 'light'
+                          ? 'text-primary hover:bg-white/20'
+                          : 'text-accent hover:bg-accent/10'
+                      }`}
+                    >
                       <span>{item.label}</span>
-                      <ChevronDown className="w-4 h-4" />
-                    </div>
+                      <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === index ? 'rotate-180' : ''}`} />
+                    </button>
+                    {activeMobileDropdown === index && (
                     <div className="ml-4 space-y-1">
                       {item.dropdown.map((dropdownItem, dropdownIndex) => (
                         dropdownItem.action ? (
                           <button
                             key={dropdownIndex}
-                            onClick={() => handleToolAction(dropdownItem.action)}
+                            onClick={() => {
+                              handleToolAction(dropdownItem.action);
+                              setIsMobileMenuOpen(false);
+                              setActiveMobileDropdown(null);
+                            }}
                             className={`block w-full text-left px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                              isOverLightBackground
-                                ? 'text-accent/80 hover:text-light hover:bg-accent/10 focus:ring-accent/20 focus:ring-offset-primary'
+                              resolvedTheme === 'light'
+                                ? 'text-primary hover:text-white hover:bg-accent focus:ring-white/20 focus:ring-offset-white'
                                 : 'text-accent/80 hover:text-light hover:bg-accent/10 focus:ring-accent/20 focus:ring-offset-primary'
                             }`}
                           >
@@ -1146,8 +1271,8 @@ const Header = ({
                             href={dropdownItem.href}
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                              isOverLightBackground
-                                ? 'text-accent/80 hover:text-light hover:bg-accent/10 focus:ring-accent/20 focus:ring-offset-primary'
+                              resolvedTheme === 'light'
+                                ? 'text-primary hover:text-white hover:bg-accent focus:ring-white/20 focus:ring-offset-white'
                                 : 'text-accent/80 hover:text-light hover:bg-accent/10 focus:ring-accent/20 focus:ring-offset-primary'
                             }`}
                           >
@@ -1156,14 +1281,15 @@ const Header = ({
                         )
                       ))}
                     </div>
+                    )}
                   </div>
                 ) : (
                   <a
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                  isOverLightBackground
-                    ? 'text-accent hover:text-light hover:bg-accent/10 focus:ring-accent/20 focus:ring-offset-primary'
+                  resolvedTheme === 'light'
+                    ? 'text-primary hover:text-white hover:bg-accent focus:ring-white/20 focus:ring-offset-white'
                     : 'text-accent hover:text-light hover:bg-accent/10 focus:ring-accent/20 focus:ring-offset-primary'
                 }`}
               >
@@ -1173,10 +1299,54 @@ const Header = ({
               </div>
             ))}
             
-                {/* Mobile Theme Toggle */}
-                <div className="px-3 py-2 flex gap-2">
-                  <ThemeToggle data-theme-toggle />
-                  <LanguageToggle data-language-toggle />
+            {/* Mobile Theme and Language Toggle Buttons */}
+            <div className="px-3 py-2 border-t border-accent/20">
+              <div className="flex items-center gap-2">
+                {/* Mobile Theme Toggle Button */}
+                <button
+                  onClick={() => {
+                    console.log('Mobile theme toggle clicked, current theme:', resolvedTheme);
+                    if (resolvedTheme === 'dark') {
+                      console.log('Switching to light mode');
+                      setTheme('light');
+                    } else {
+                      console.log('Switching to dark mode');
+                      setTheme('dark');
+                    }
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    resolvedTheme === 'light'
+                      ? 'bg-accent text-primary hover:bg-accent/80 border border-accent/20'
+                      : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
+                  }`}
+                >
+                  <Settings className="w-4 h-4" />
+                  <span>Switch to {resolvedTheme === 'dark' ? 'Light' : 'Dark'} Mode</span>
+                </button>
+
+                {/* Mobile Language Toggle Button */}
+                <button
+                  onClick={() => {
+                    console.log('Mobile language toggle clicked');
+                    const currentLang = language;
+                    if (currentLang === 'en') {
+                      changeLanguage('am');
+                    } else {
+                      changeLanguage('en');
+                    }
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    resolvedTheme === 'light'
+                      ? 'bg-accent text-primary hover:bg-accent/80 border border-accent/20'
+                      : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
+                  }`}
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Switch to {language === 'en' ? 'አማርኛ' : 'English'}</span>
+                </button>
+              </div>
                 </div>
           </nav>
         </motion.div>
@@ -1186,6 +1356,9 @@ const Header = ({
 };
 
 const Hero = () => {
+  const { t } = useLanguage();
+  const { resolvedTheme } = useTheme();
+  
   return (
     <div id="home" className="relative h-screen overflow-hidden bg-primary">
       {/* Subtle brand accent overlay */}
@@ -1199,13 +1372,13 @@ const Hero = () => {
           style={{ top: '10%', left: '5%' }}
           animate={{
             rotate: 360,
-            scale: [1, 1.2, 1],
-            y: [0, -30, 0],
+            scale: [1, 1.1, 1],
+            y: [0, -20, 0],
           }}
           transition={{
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-            scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-            y: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+            rotate: { duration: 30, repeat: Infinity, ease: "linear" },
+            scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
+            y: { duration: 10, repeat: Infinity, ease: "easeInOut" }
           }}
         />
         
@@ -1213,14 +1386,14 @@ const Hero = () => {
           className="absolute w-24 h-24 bg-accent/20 rounded-full blur-sm"
           style={{ top: '20%', right: '10%' }}
           animate={{
-            y: [0, -40, 0],
-            x: [0, 20, 0],
+            y: [0, -30, 0],
+            x: [0, 15, 0],
             rotate: -360,
           }}
           transition={{
-            y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
-            x: { duration: 7, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 15, repeat: Infinity, ease: "linear" }
+            y: { duration: 12, repeat: Infinity, ease: "easeInOut" },
+            x: { duration: 15, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 25, repeat: Infinity, ease: "linear" }
           }}
         />
 
@@ -1380,7 +1553,7 @@ const Hero = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 backdrop-blur-sm border border-secondary/30"
           >
             <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-            <span className="text-accent text-sm font-medium">Welcome to my portfolio</span>
+            <span className="text-accent text-sm font-medium">{t('hero.greeting')} {t('hero.name')}</span>
         </motion.div>
 
           {/* Main Heading */}
@@ -1388,9 +1561,13 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.7 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-light leading-tight px-4"
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight px-4 ${
+              resolvedTheme === 'light'
+                ? 'text-black'
+                : 'text-light'
+            }`}
           >
-            {PROFILE.name}
+{t('hero.name')}
           </motion.h1>
           
           {/* Professional Title */}
@@ -1400,7 +1577,7 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.9 }}
             className="text-lg sm:text-xl md:text-2xl text-accent font-semibold max-w-2xl mx-auto px-4"
           >
-              {PROFILE.title}
+{t('hero.title')}
           </motion.p>
 
           {/* Location */}
@@ -1430,7 +1607,7 @@ const Hero = () => {
                 size="lg"
                 className="px-8 py-4 rounded-2xl bg-accent text-primary hover:bg-accent-600 font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:ring-offset-2 focus:ring-offset-primary-dark"
               >
-                View My Work
+{t('hero.cta1')}
               </Button>
             </motion.a>
           <motion.a
@@ -1443,7 +1620,7 @@ const Hero = () => {
                 variant="outline"
                 className="px-8 py-4 rounded-2xl border-2 border-accent text-accent hover:bg-accent hover:text-primary font-semibold text-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:ring-offset-2 focus:ring-offset-primary-dark"
               >
-                Get In Touch
+{t('hero.cta2')}
             </Button>
           </motion.a>
           </motion.div>
@@ -1526,7 +1703,10 @@ const CountUpNumber = ({ target }) => {
   );
 };
 
-const About = () => (
+const About = () => {
+  const { resolvedTheme } = useTheme();
+  
+  return (
   <Section id="about" className="relative py-24 bg-primary overflow-hidden">
     <div className="mx-auto max-w-6xl px-4">
         <motion.div
@@ -1546,7 +1726,11 @@ const About = () => (
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent/20 border border-accent/30 shadow-lg"
           >
             <div className="w-2 h-2 bg-accent rounded-full"></div>
-            <span className="text-accent font-bold text-xl drop-shadow-2xl animate-pulse">About Me</span>
+            <span className={`font-semibold text-lg drop-shadow-2xl animate-pulse ${
+              resolvedTheme === 'light'
+                ? 'text-black'
+                : 'text-accent'
+            }`}>About Me</span>
         </motion.div>
 
           <motion.h2
@@ -1554,7 +1738,7 @@ const About = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-5xl font-bold text-light"
+            className="text-5xl md:text-6xl font-bold text-light"
           >
             My Story & Approach
           </motion.h2>
@@ -1608,7 +1792,7 @@ const About = () => (
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 hover:bg-accent/20 border border-accent/20 hover:border-accent/40 transition-all duration-300"
+                    className="group flex items-center gap-2 px-4 py-2 rounded-full bg-accent hover:bg-accent/80 border border-accent/20 hover:border-accent/40 transition-all duration-300"
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     initial={{ opacity: 0, y: 20 }}
@@ -1616,8 +1800,8 @@ const About = () => (
                     viewport={{ once: true }}
                     transition={{ delay: 0.6 + index * 0.1, duration: 0.6 }}
                   >
-                    <social.icon className="w-4 h-4 text-accent group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-medium text-accent">{social.label}</span>
+                    <social.icon className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+                    <span className="text-sm font-medium text-primary">{social.label}</span>
                   </motion.a>
                 ))}
               </div>
@@ -1699,41 +1883,137 @@ const About = () => (
               <div className="space-y-6 pt-16">
               <h3 className="text-2xl font-bold text-light">What I Do</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div className="flex items-center gap-3 p-4 bg-accent/10 rounded-xl">
-                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <Palette className="w-4 h-4 text-accent" />
+                <div className={`flex items-center gap-3 p-4 rounded-xl ${
+                  resolvedTheme === 'light'
+                    ? 'bg-accent border border-accent/30'
+                    : 'bg-accent/10'
+                }`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    resolvedTheme === 'light'
+                      ? 'bg-primary'
+                      : 'bg-primary'
+                  }`}>
+                    <Palette className={`w-4 h-4 ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary'
+                        : 'text-accent'
+                    }`} />
                   </div>
-                  <span className="text-accent font-medium">Branding & Identity</span>
+                  <span className={`font-medium ${
+                    resolvedTheme === 'light'
+                      ? 'text-primary'
+                      : 'text-accent'
+                  }`}>Branding & Identity</span>
                   </div>
-                <div className="flex items-center gap-3 p-4 bg-accent/10 rounded-xl">
-                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <LayoutGrid className="w-4 h-4 text-accent" />
+                <div className={`flex items-center gap-3 p-4 rounded-xl ${
+                  resolvedTheme === 'light'
+                    ? 'bg-accent border border-accent/30'
+                    : 'bg-accent/10'
+                }`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    resolvedTheme === 'light'
+                      ? 'bg-primary'
+                      : 'bg-primary'
+                  }`}>
+                    <LayoutGrid className={`w-4 h-4 ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary'
+                        : 'text-accent'
+                    }`} />
                 </div>
-                  <span className="text-accent font-medium">Marketing & Social Media</span>
+                  <span className={`font-medium ${
+                    resolvedTheme === 'light'
+                      ? 'text-primary'
+                      : 'text-accent'
+                  }`}>Marketing & Social Media</span>
                   </div>
-                <div className="flex items-center gap-3 p-4 bg-accent/10 rounded-xl">
-                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <PenTool className="w-4 h-4 text-accent" />
+                <div className={`flex items-center gap-3 p-4 rounded-xl ${
+                  resolvedTheme === 'light'
+                    ? 'bg-accent border border-accent/30'
+                    : 'bg-accent/10'
+                }`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    resolvedTheme === 'light'
+                      ? 'bg-primary'
+                      : 'bg-primary'
+                  }`}>
+                    <PenTool className={`w-4 h-4 ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary'
+                        : 'text-accent'
+                    }`} />
                   </div>
-                  <span className="text-accent font-medium">Web & UI/UX Design</span>
+                  <span className={`font-medium ${
+                    resolvedTheme === 'light'
+                      ? 'text-primary'
+                      : 'text-accent'
+                  }`}>Web & UI/UX Design</span>
                   </div>
-                <div className="flex items-center gap-3 p-4 bg-accent/10 rounded-xl">
-                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <Rocket className="w-4 h-4 text-accent" />
+                <div className={`flex items-center gap-3 p-4 rounded-xl ${
+                  resolvedTheme === 'light'
+                    ? 'bg-accent border border-accent/30'
+                    : 'bg-accent/10'
+                }`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    resolvedTheme === 'light'
+                      ? 'bg-primary'
+                      : 'bg-primary'
+                  }`}>
+                    <Rocket className={`w-4 h-4 ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary'
+                        : 'text-accent'
+                    }`} />
                   </div>
-                  <span className="text-accent font-medium">Packaging & Labels</span>
+                  <span className={`font-medium ${
+                    resolvedTheme === 'light'
+                      ? 'text-primary'
+                      : 'text-accent'
+                  }`}>Packaging & Labels</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-accent/10 rounded-xl">
-                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <MessageCircle className="w-4 h-4 text-accent" />
+                <div className={`flex items-center gap-3 p-4 rounded-xl ${
+                  resolvedTheme === 'light'
+                    ? 'bg-accent border border-accent/30'
+                    : 'bg-accent/10'
+                }`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    resolvedTheme === 'light'
+                      ? 'bg-primary'
+                      : 'bg-primary'
+                  }`}>
+                    <MessageCircle className={`w-4 h-4 ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary'
+                        : 'text-accent'
+                    }`} />
                   </div>
-                  <span className="text-accent font-medium">Motion & Multimedia</span>
+                  <span className={`font-medium ${
+                    resolvedTheme === 'light'
+                      ? 'text-primary'
+                      : 'text-accent'
+                  }`}>Motion & Multimedia</span>
                 </div>
-                <div className="flex items-center gap-3 p-4 bg-accent/10 rounded-xl">
-                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                    <Eye className="w-4 h-4 text-accent" />
+                <div className={`flex items-center gap-3 p-4 rounded-xl ${
+                  resolvedTheme === 'light'
+                    ? 'bg-accent border border-accent/30'
+                    : 'bg-accent/10'
+                }`}>
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                    resolvedTheme === 'light'
+                      ? 'bg-primary'
+                      : 'bg-primary'
+                  }`}>
+                    <Eye className={`w-4 h-4 ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary'
+                        : 'text-accent'
+                    }`} />
                   </div>
-                  <span className="text-primary font-medium">Custom Graphic Design</span>
+                  <span className={`font-medium ${
+                    resolvedTheme === 'light'
+                      ? 'text-primary'
+                      : 'text-accent'
+                  }`}>Custom Graphic Design</span>
                 </div>
               </div>
             </div>
@@ -1746,8 +2026,12 @@ const About = () => (
     </div>
   </Section>
 );
+};
 
-const Services = () => (
+const Services = () => {
+  const { resolvedTheme } = useTheme();
+  
+  return (
   <Section id="services" className="relative py-24 bg-primary overflow-hidden">
     {/* Background Elements */}
     <div className="absolute inset-0">
@@ -1770,7 +2054,7 @@ const Services = () => (
           transition={{ duration: 0.8 }}
           className="space-y-4"
         >
-          <div className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent/40 text-primary text-xl font-bold shadow-2xl border-2 border-accent/60 animate-bounce">
+          <div className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent/40 text-primary text-lg font-semibold shadow-2xl border-2 border-accent/60 animate-bounce">
             <div className="w-4 h-4 bg-primary rounded-full shadow-lg animate-ping"></div>
             What I Do
           </div>
@@ -1791,26 +2075,50 @@ const Services = () => (
               whileHover={{ y: -5 }}
               className="group"
             >
-              <Card className="h-full border-accent/20 hover:border-accent/40 transition-all duration-300 group-hover:shadow-xl bg-primary/90 backdrop-blur-sm">
+              <Card className={`h-full transition-all duration-300 group-hover:shadow-xl backdrop-blur-sm ${
+                resolvedTheme === 'light'
+                  ? 'border-accent/30 hover:border-accent/50 bg-accent'
+                  : 'border-accent/20 hover:border-accent/40 bg-primary/90'
+              }`}>
                 <CardHeader className="pb-4">
                   <motion.div
-                    className="w-16 h-16 bg-gradient-to-br from-accent to-accent-600 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform duration-300"
+                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform duration-300 ${
+                      resolvedTheme === 'light'
+                        ? 'bg-primary'
+                        : 'bg-gradient-to-br from-accent to-accent-600'
+                    }`}
                     whileHover={{ rotate: 5 }}
                   >
-                    <service.icon className="w-8 h-8 text-primary" />
+                    <service.icon className={`w-8 h-8 ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary'
+                        : 'text-primary'
+                    }`} />
                   </motion.div>
-                  <CardTitle className="text-xl group-hover:text-accent transition-colors text-light">
+                  <CardTitle className={`text-xl transition-colors ${
+                    resolvedTheme === 'light'
+                      ? 'text-primary group-hover:text-primary'
+                      : 'text-light group-hover:text-accent'
+                  }`}>
                     {service.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-neutral-300 mb-6 leading-relaxed">{service.desc}</p>
+                  <p className={`mb-6 leading-relaxed ${
+                    resolvedTheme === 'light'
+                      ? 'text-primary/80'
+                      : 'text-neutral-300'
+                  }`}>{service.desc}</p>
                   <div className="flex flex-wrap gap-2 justify-center">
                     {service.tags.map((tag) => (
                       <Badge 
                         key={tag} 
                         variant="outline" 
-                        className="text-xs border-accent/30 text-accent hover:bg-accent/10 transition-colors"
+                        className={`text-xs transition-colors ${
+                          resolvedTheme === 'light'
+                            ? 'border-primary/40 text-primary hover:bg-primary/10'
+                            : 'border-accent/30 text-accent hover:bg-accent/10'
+                        }`}
                       >
                         {tag}
                       </Badge>
@@ -1828,11 +2136,11 @@ const Services = () => (
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="pt-12"
+          className="pt-6"
         >
-          <div className="bg-primary rounded-3xl p-8 text-center text-accent">
-            <h3 className="text-2xl font-bold mb-4">Ready to Start Your Project?</h3>
-            <p className="text-neutral-300 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary rounded-3xl p-6 text-center text-accent">
+            <h3 className="text-2xl font-bold mb-3">Ready to Start Your Project?</h3>
+            <p className="text-neutral-300 mb-4 max-w-2xl mx-auto">
               Let's discuss how I can help bring your vision to life with exceptional design solutions.
             </p>
             <motion.a
@@ -1840,7 +2148,7 @@ const Services = () => (
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button size="lg" className="bg-secondary text-light hover:bg-secondary/80 px-8 py-3 rounded-2xl font-semibold focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:ring-offset-2 focus:ring-offset-primary">
+              <Button size="lg" className="bg-gradient-to-r from-accent via-accent-600 to-accent text-primary hover:from-accent-600 hover:via-accent hover:to-accent-600 px-8 py-3 rounded-2xl font-semibold shadow-2xl hover:shadow-3xl focus:outline-none focus:ring-4 focus:ring-accent/20 focus:ring-offset-2 focus:ring-offset-neutral transition-all duration-300">
                 Get Started Today
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -1851,8 +2159,10 @@ const Services = () => (
     </div>
   </Section>
 );
+};
 
 const Work = () => {
+  const { resolvedTheme } = useTheme();
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -1973,7 +2283,11 @@ const Work = () => {
                 ease: "easeInOut"
               }}
             />
-            <span className="text-accent font-bold text-xl drop-shadow-2xl animate-pulse">Portfolio</span>
+            <span className={`font-semibold text-lg drop-shadow-2xl animate-pulse ${
+              resolvedTheme === 'light'
+                ? 'text-black'
+                : 'text-accent'
+            }`}>Portfolio</span>
           </motion.div>
           
           <motion.h2
@@ -2186,6 +2500,7 @@ const Work = () => {
 };
 
 const Testimonials = () => {
+  const { resolvedTheme } = useTheme();
   const [currentPage, setCurrentPage] = React.useState(0);
   const [activeTab, setActiveTab] = React.useState('written');
   const [selectedVideo, setSelectedVideo] = React.useState(null);
@@ -2254,7 +2569,7 @@ const Testimonials = () => {
           transition={{ duration: 0.8 }}
           className="text-center space-y-4"
         >
-          <div className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent/40 text-primary text-xl font-bold shadow-2xl border-2 border-accent/60 animate-bounce">
+          <div className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent/40 text-primary text-lg font-semibold shadow-2xl border-2 border-accent/60 animate-bounce">
             <div className="w-4 h-4 bg-primary rounded-full shadow-lg animate-ping"></div>
             Testimonials
           </div>
@@ -2494,8 +2809,13 @@ const Testimonials = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-center pt-12"
         >
-          <div className="relative overflow-hidden rounded-3xl p-8 border border-primary/20 bg-gradient-to-br from-primary via-primary-600 to-primary-800 shadow-2xl">
-            {/* Animated background elements */}
+          <div className={`relative ${
+            resolvedTheme === 'light'
+              ? 'p-0'
+              : 'overflow-hidden rounded-3xl p-8 border border-primary/20 bg-gradient-to-br from-primary via-primary-600 to-primary-800 shadow-2xl'
+          }`}>
+            {/* Animated background elements - only for dark mode */}
+            {resolvedTheme === 'dark' && (
             <div className="absolute inset-0">
               {/* Floating geometric shapes */}
               <motion.div
@@ -2614,16 +2934,25 @@ const Testimonials = () => {
                 }}></div>
               </div>
             </div>
+            )}
             
             {/* Content */}
-            <div className="relative z-10">
-              <h3 className="text-4xl font-bold text-accent mb-6">Trusted By</h3>
+            <div className={`${resolvedTheme === 'light' ? '' : 'relative z-10'}`}>
+              <h3 className={`text-4xl font-bold mb-6 ${
+                resolvedTheme === 'light'
+                  ? 'text-gray-800'
+                  : 'text-primary'
+              }`}>Trusted By</h3>
               
               {/* Scrolling Logos Container */}
               <div className="relative overflow-hidden">
-                {/* Gradient overlays for smooth fade effect */}
+                {/* Gradient overlays for smooth fade effect - only for dark mode */}
+                {resolvedTheme === 'dark' && (
+                  <>
                 <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-primary to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-primary to-transparent z-10 pointer-events-none" />
+                  </>
+                )}
                 
                 {/* Scrolling logos */}
                 <motion.div
@@ -2656,9 +2985,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -2699,9 +3034,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -2737,9 +3078,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -2772,9 +3119,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -2810,9 +3163,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -2848,9 +3207,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -2888,9 +3253,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -2931,9 +3302,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -2969,9 +3346,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -3004,9 +3387,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -3042,9 +3431,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -3080,9 +3475,15 @@ const Testimonials = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <motion.div 
-                      className="w-16 h-16 bg-primary-600 rounded-full mx-auto mb-2 overflow-hidden shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300"
+                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
+                        resolvedTheme === 'light'
+                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
+                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
+                      }`}
                       whileHover={{
-                        boxShadow: "0 20px 40px rgba(167, 139, 250, 0.4)",
+                        boxShadow: resolvedTheme === 'light' 
+                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
+                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
@@ -3189,6 +3590,7 @@ const Testimonials = () => {
 // SocialProof section removed - was duplicate content
 
 const ContactForm = () => {
+  const { resolvedTheme } = useTheme();
   const [state, handleSubmit] = useForm("mandzwvb");
   const [focusedField, setFocusedField] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -3719,7 +4121,11 @@ const ContactForm = () => {
                           animate={{ x: [0, 5, 0] }}
                           transition={{ duration: 1.5, repeat: Infinity }}
                         >
-                          <ArrowRight className="w-5 h-5" />
+                          <ArrowRight className={`w-5 h-5 ${
+                            resolvedTheme === 'light'
+                              ? 'text-black'
+                              : ''
+                          }`} />
                         </motion.div>
                       </>
                     )}
@@ -3781,7 +4187,7 @@ const Contact = () => (
             transition={{ duration: 0.8, delay: 0.4 }}
             className="max-w-4xl mx-auto"
           >
-            <NewsletterSignup />
+            <LazyNewsletterSignup />
           </motion.div>
 
       </motion.div>
@@ -3789,7 +4195,10 @@ const Contact = () => (
   </Section>
 );
 
-const Footer = ({ onPrivacyClick, onTermsClick }) => (
+const Footer = ({ onPrivacyClick, onTermsClick }) => {
+  const { resolvedTheme } = useTheme();
+  
+  return (
   <footer className="relative bg-primary text-neutral-300 overflow-hidden">
      {/* Subtle Background Elements */}
     <div className="absolute inset-0">
@@ -3842,7 +4251,7 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => (
                className="flex items-center"
              >
                <img 
-                 src={logoImg} 
+                 src={resolvedTheme === 'light' ? '/img/Logo.png' : logoImg} 
                  alt="Logo"
                  className="h-12 w-auto"
                />
@@ -3865,7 +4274,11 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => (
                    href={social.href}
                    target="_blank"
                    rel="noopener noreferrer"
-                   className="group flex items-center justify-center gap-3 p-3 rounded-xl bg-accent/10 hover:bg-accent/20 transition-all duration-300 border border-accent/20 hover:border-accent/40 w-full h-16"
+                   className={`group flex items-center justify-center gap-3 p-3 rounded-xl transition-all duration-300 border border-accent/20 hover:border-accent/40 w-full h-16 ${
+                     resolvedTheme === 'light'
+                       ? 'bg-accent hover:bg-accent/80'
+                       : 'bg-accent/10 hover:bg-accent/20'
+                   }`}
                    whileHover={{ scale: 1.02, y: -2 }}
                    whileTap={{ scale: 0.98 }}
                    initial={{ opacity: 0, y: 20 }}
@@ -3873,8 +4286,16 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => (
                    viewport={{ once: true }}
                    transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
                  >
-                   <social.icon className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
-                   <span className="text-sm text-neutral-300 group-hover:text-accent transition-colors">{social.label}</span>
+                   <social.icon className={`w-5 h-5 group-hover:scale-110 transition-transform ${
+                     resolvedTheme === 'light'
+                       ? 'text-primary group-hover:text-primary'
+                       : 'text-accent group-hover:text-accent'
+                   }`} />
+                   <span className={`text-sm transition-colors ${
+                     resolvedTheme === 'light'
+                       ? 'text-primary group-hover:text-primary'
+                       : 'text-neutral-300 group-hover:text-accent'
+                   }`}>{social.label}</span>
                 </motion.a>
               ))}
             </div>
@@ -3916,6 +4337,13 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => (
                  <Send className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 <span className="text-sm">Telegram</span>
               </motion.a>
+              <motion.div
+                className="flex items-center gap-3 text-neutral-300 hover:text-accent transition-colors group cursor-pointer"
+                whileHover={{ x: 5 }}
+              >
+                 <MapPin className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                <span className="text-sm">{PROFILE.location}</span>
+              </motion.div>
               
               {/* Legal Links */}
               <div className="flex items-center gap-4 pt-4">
@@ -3957,6 +4385,7 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => (
     </div>
   </footer>
 );
+};
 
 export default function CreativeDesignerPortfolio() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
@@ -4004,24 +4433,43 @@ export default function CreativeDesignerPortfolio() {
 
   React.useEffect(() => {
     // Register service worker for PWA functionality
-    // Service workers disabled to reduce console noise
-    // registerServiceWorker();
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered successfully:', registration);
+        })
+        .catch((error) => {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
 
     // Set up global deferredPrompt for install functionality
     const handleBeforeInstallPrompt = (e) => {
+      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
+      // Stash the event so it can be triggered later
       window.deferredPrompt = e;
+      console.log('PWA install prompt available');
     };
 
+    const handleAppInstalled = () => {
+      console.log('PWA was installed');
+      window.deferredPrompt = null;
+    };
+
+    // Listen for the beforeinstallprompt event
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
     
+    // Cleanup
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
     };
-    // registerAdvancedServiceWorker();
-    // preloadCriticalComponents();
-    // Initialize performance optimizations - DISABLED to reduce console noise
-    // performanceOptimizer.init();
+  }, []);
+
+  // Initialize app features and smooth scrolling
+  React.useEffect(() => {
     // Initialize advanced caching - DISABLED to reduce console noise
     // advancedCache.init();
     // Initialize scroll animations
@@ -4038,6 +4486,8 @@ export default function CreativeDesignerPortfolio() {
       // sitemapGenerator.init(window.location.origin);
       // Initialize security manager - DISABLED to reduce console noise
       // securityManager.init();
+    
+    // Handle smooth scrolling for anchor links
     const handler = (e) => {
       const target = e.target.closest('a[href^="#"]');
       if (!target) return;
@@ -4054,13 +4504,13 @@ export default function CreativeDesignerPortfolio() {
   return (
     <LanguageProvider>
       <ThemeProvider>
-        <Analytics />
+        <LazyAnalytics />
         <LazyPerformance 
           isOpen={isPerformanceOpen} 
           onClose={() => setIsPerformanceOpen(false)} 
         />
       <main className="antialiased text-light bg-primary selection:bg-accent selection:text-primary">
-        <Header 
+        <HeaderWithContext 
           isAnalyticsOpen={isAnalyticsOpen} setIsAnalyticsOpen={setIsAnalyticsOpen}
           isAIOpen={isAIOpen} setIsAIOpen={setIsAIOpen}
           isPWAOpen={isPWAOpen} setIsPWAOpen={setIsPWAOpen}
@@ -4077,8 +4527,8 @@ export default function CreativeDesignerPortfolio() {
       <About />
       <Services />
       <Work />
-      <CaseStudy />
-      <Blog />
+      <LazyCaseStudy />
+      <LazyBlog />
       <Testimonials />
       <Contact />
       <Footer 
@@ -4099,8 +4549,7 @@ export default function CreativeDesignerPortfolio() {
     </main>
     
     {/* PWA Components */}
-    <PWAInstaller />
-    <OfflineIndicator />
+    <LazyPWAInstaller />
     
     {/* Advanced Features */}
     <LazyAI 
@@ -4110,6 +4559,12 @@ export default function CreativeDesignerPortfolio() {
     <LazyPWA 
       isOpen={isPWAOpen} 
       onClose={() => setIsPWAOpen(false)} 
+    />
+    
+    {/* Performance Monitor */}
+    <LazyPerformance 
+      isOpen={isPerformanceOpen} 
+      onClose={() => setIsPerformanceOpen(false)} 
     />
     
     {/* Analytics Dashboard */}
@@ -4124,12 +4579,12 @@ export default function CreativeDesignerPortfolio() {
     <ScrollToTop />
     
     {/* Accessibility Settings */}
-    <AccessibilitySettings
+    <LazyAccessibilitySettings
       isOpen={isAccessibilityOpen}
       onClose={() => setIsAccessibilityOpen(false)}
     />
 
-    <PerformanceDashboard
+    <LazyPerformanceDashboard
       isOpen={isPerformanceDashboardOpen}
       onClose={() => setIsPerformanceDashboardOpen(false)}
     />
@@ -4137,32 +4592,32 @@ export default function CreativeDesignerPortfolio() {
     {/* CriticalResourceHints disabled to fix preload warnings */}
     {/* <CriticalResourceHints /> */}
 
-    <SEOManager
+    <LazySEOManager
       isOpen={isSEOManagerOpen}
       onClose={() => setIsSEOManagerOpen(false)}
     />
 
-    <SecurityDashboard
+    <LazySecurityDashboard
       isOpen={isSecurityDashboardOpen}
       onClose={() => setIsSecurityDashboardOpen(false)}
     />
 
-    <AIContentGenerator
+    <LazyAIContentGenerator
       isOpen={isAIContentGeneratorOpen}
       onClose={() => setIsAIContentGeneratorOpen(false)}
     />
 
-    <SmartRecommendations
+    <LazySmartRecommendations
       isOpen={isSmartRecommendationsOpen}
       onClose={() => setIsSmartRecommendationsOpen(false)}
     />
 
-    <CRMIntegration
+    <LazyCRMIntegration
       isOpen={isCRMIntegrationOpen}
       onClose={() => setIsCRMIntegrationOpen(false)}
     />
 
-    <EmailMarketing
+    <LazyEmailMarketing
       isOpen={isEmailMarketingOpen}
       onClose={() => setIsEmailMarketingOpen(false)}
     />

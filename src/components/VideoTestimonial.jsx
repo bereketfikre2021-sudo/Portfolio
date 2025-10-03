@@ -396,7 +396,7 @@ const VideoTestimonial = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <Badge className="bg-accent/20 text-accent border-accent/30 mb-4">
+          <Badge className="bg-accent/20 text-accent border-accent/30 mb-4 text-lg font-semibold">
             Video Testimonials
           </Badge>
           <h2 className="text-4xl md:text-5xl font-bold text-light mb-6">
@@ -447,7 +447,7 @@ const VideoTestimonial = () => {
 
                   {/* Industry Badge */}
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-accent/90 text-primary">
+                    <Badge className="bg-accent/90 text-primary text-sm font-medium">
                       {video.industry}
                     </Badge>
                   </div>

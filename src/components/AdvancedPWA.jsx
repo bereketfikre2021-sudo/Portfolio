@@ -274,7 +274,7 @@ const AdvancedPWA = ({ isOpen, onClose }) => {
                 <Download className="w-3 h-3 text-accent" />
                 <span className="text-light">App</span>
               </div>
-              <Badge className={isInstalled ? 'bg-green-500/20 text-green-400 text-xs' : 'bg-yellow-500/20 text-yellow-400 text-xs'}>
+              <Badge className={isInstalled ? 'bg-green-500/20 text-green-400 text-xs font-medium' : 'bg-yellow-500/20 text-yellow-400 text-xs font-medium'}>
                 {isInstalled ? '✓' : '○'}
               </Badge>
             </div>
@@ -305,7 +305,7 @@ const AdvancedPWA = ({ isOpen, onClose }) => {
                 <RefreshCw className="w-3 h-3 text-accent" />
                 <span className="text-light">Sync</span>
               </div>
-              <Badge className={backgroundSyncSupported ? 'bg-green-500/20 text-green-400 text-xs' : 'bg-red-500/20 text-red-400 text-xs'}>
+              <Badge className={backgroundSyncSupported ? 'bg-green-500/20 text-green-400 text-xs font-medium' : 'bg-red-500/20 text-red-400 text-xs font-medium'}>
                 {backgroundSyncSupported ? '✓' : '✗'}
               </Badge>
             </div>

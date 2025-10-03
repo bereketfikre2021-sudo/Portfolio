@@ -143,7 +143,7 @@ const ClientLogosCarousel = ({
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-light">{currentClient.name}</h3>
-                    <Badge className="bg-accent/20 text-accent border-accent/30">
+                    <Badge className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                       {currentClient.category}
                     </Badge>
                   </div>
@@ -318,7 +318,7 @@ export const AwardsSection = ({ awards = [], className = '' }) => {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="text-lg font-semibold text-light">{award.title}</h3>
-                        <Badge className="bg-accent/20 text-accent border-accent/30 text-xs">
+                        <Badge className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                           {award.year}
                         </Badge>
                       </div>

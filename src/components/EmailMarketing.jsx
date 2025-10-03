@@ -385,7 +385,7 @@ const EmailMarketing = ({ isOpen, onClose }) => {
                             <div className="flex items-start justify-between mb-3">
                               <div>
                                 <h4 className="text-lg font-semibold text-light">{template.name}</h4>
-                                <Badge className="bg-accent/20 text-accent border-accent/30">
+                                <Badge className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                                   {template.category}
                                 </Badge>
                               </div>
@@ -463,7 +463,7 @@ const EmailMarketing = ({ isOpen, onClose }) => {
                             <div className="flex items-center justify-between">
                               <div className="flex gap-1">
                                 {subscriber.tags.map((tag, index) => (
-                                  <Badge key={index} className="bg-accent/20 text-accent border-accent/30 text-xs">
+                                  <Badge key={index} className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                                     {tag}
                                   </Badge>
                                 ))}

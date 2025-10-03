@@ -323,7 +323,7 @@ const SEOManager = ({ isOpen, onClose }) => {
                           <label className="text-sm font-medium text-light">Keywords</label>
                           <div className="mt-1 flex flex-wrap gap-2">
                             {seoData.metaTags.keywords.map((keyword, index) => (
-                              <Badge key={index} className="bg-accent/20 text-accent border-accent/30">
+                              <Badge key={index} className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                                 {keyword}
                               </Badge>
                             ))}
@@ -404,7 +404,7 @@ const SEOManager = ({ isOpen, onClose }) => {
                                   {page.type} • Priority: {page.priority} • Updated: {page.lastmod}
                                 </div>
                               </div>
-                              <Badge className="bg-accent/20 text-accent border-accent/30">
+                              <Badge className="bg-accent/20 text-accent border-accent/30 text-sm font-medium">
                                 {page.changefreq}
                               </Badge>
                             </div>
