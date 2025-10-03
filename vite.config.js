@@ -56,7 +56,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
   },
   publicDir: 'public',
-  base: '/',
   server: {
     fs: {
       allow: ['..']
