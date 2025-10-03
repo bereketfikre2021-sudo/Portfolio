@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { useTheme } from './ThemeProvider';
-import scrollOptimizer from '../utils/scrollOptimizer.js';
+import scrollOptimizer from '@/utils/scrollOptimizer.js';
 
 const ScrollProgress = ({ 
   position = 'top',

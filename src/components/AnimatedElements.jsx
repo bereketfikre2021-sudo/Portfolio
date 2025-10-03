@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import scrollOptimizer from '../utils/scrollOptimizer.js';
+import scrollOptimizer from '@/utils/scrollOptimizer.js';
 
 // Floating Animation Component
 export const FloatingElement = ({ children, delay = 0, duration = 3, className = '' }) => {
