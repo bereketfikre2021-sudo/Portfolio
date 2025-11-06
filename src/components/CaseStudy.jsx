@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -155,6 +155,23 @@ const CASE_STUDIES = [
 
 const CaseStudyModal = ({ caseStudy, isOpen, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen || !caseStudy) return null;
 
@@ -416,7 +433,10 @@ const CaseStudy = () => {
                   <img
                     src={caseStudy.images[0]}
                     alt={caseStudy.title}
+                    width="1280"
+                    height="720"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    style={{ aspectRatio: '16 / 9' }}
                   />
                 </div>
                 

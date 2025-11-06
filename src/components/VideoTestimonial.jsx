@@ -426,7 +426,10 @@ const VideoTestimonial = () => {
                   <img
                     src={video.thumbnail}
                     alt={video.title}
+                    width="1280"
+                    height="720"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    style={{ aspectRatio: '16 / 9' }}
                   />
                   
                   {/* Play Button Overlay */}

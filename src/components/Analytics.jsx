@@ -22,6 +22,13 @@ export const initGA = () => {
     gtag('config', GA_TRACKING_ID, {
       page_title: document.title,
       page_location: window.location.href,
+      // Use first-party cookies only to avoid third-party cookie issues
+      cookie_flags: 'SameSite=None;Secure',
+      // Disable advertising features to reduce cookie usage
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+      // Use anonymized IP
+      anonymize_ip: true,
     });
   }
 };

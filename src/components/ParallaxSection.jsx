@@ -152,7 +152,13 @@ export const ParallaxImage = ({
       style={{ y: transform }}
       {...props}
     >
-      <img src={src} alt={alt} className="w-full h-full object-cover" />
+      <img 
+        src={src} 
+        alt={alt} 
+        className="w-full h-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
     </motion.div>
   );
 };

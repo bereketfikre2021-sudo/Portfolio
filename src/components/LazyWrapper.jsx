@@ -1,20 +1,10 @@
 import React, { Suspense, lazy } from 'react';
-import { motion } from 'framer-motion';
 
-// Loading component with animation
+// Loading component with CSS animation (no JS library needed)
 const LoadingSpinner = ({ className = '' }) => (
-  <motion.div
-    className={`flex items-center justify-center p-8 ${className}`}
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-  >
-    <motion.div
-      className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full"
-      animate={{ rotate: 360 }}
-      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-    />
-  </motion.div>
+  <div className={`flex items-center justify-center p-8 animate-fade-in ${className}`}>
+    <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+  </div>
 );
 
 // Error boundary for lazy components
@@ -89,6 +79,11 @@ export const LazyPerformance = withLazyLoading(
 
 export const LazyBlog = withLazyLoading(
   () => import('./Blog.jsx'),
+  <LoadingSpinner className="h-64" />
+);
+
+export const LazyFAQ = withLazyLoading(
+  () => import('./FAQ.jsx'),
   <LoadingSpinner className="h-64" />
 );
 

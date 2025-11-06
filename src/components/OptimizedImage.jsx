@@ -134,6 +134,8 @@ const OptimizedImage = ({
           <motion.img
             src={hasError ? imageUrls.fallback : imageUrls.webp}
             alt={alt}
+            width={width}
+            height={height}
             className={`w-full h-full object-cover transition-opacity duration-300 ${
               isLoaded ? 'opacity-100' : 'opacity-0'
             }`}
@@ -145,7 +147,8 @@ const OptimizedImage = ({
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover'
+              objectFit: 'cover',
+              aspectRatio: width && height ? `${width} / ${height}` : undefined
             }}
           />
         </picture>

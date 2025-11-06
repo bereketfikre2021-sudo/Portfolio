@@ -198,36 +198,69 @@ class ScrollAnimations {
     window.addEventListener('scroll', handleScroll, { passive: true });
   }
 
-  // Update parallax elements
+  // Update parallax elements - optimized to prevent forced reflow
   updateParallaxElements() {
-    const scrollY = window.pageYOffset;
+    // Batch all layout reads together to prevent forced reflow
+    const scrollY = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
     
-    this.parallaxElements.forEach((config, element) => {
-      const rect = element.getBoundingClientRect();
+    // Batch all getBoundingClientRect calls together
+    const elementRects = Array.from(this.parallaxElements.entries()).map(([element, config]) => ({
+      element,
+      config,
+      rect: element.getBoundingClientRect()
+    }));
+    
+    // Process cached rects and apply transforms (no layout reads here)
+    elementRects.forEach(({ element, config, rect }) => {
       const speed = config.speed;
       
       // Only animate if element is in viewport
-      if (rect.bottom >= 0 && rect.top <= window.innerHeight) {
+      if (rect.bottom >= 0 && rect.top <= windowHeight) {
         const yPos = -(scrollY * speed);
         element.style.transform = `translateY(${yPos}px)`;
       }
     });
   }
 
-  // Setup scroll progress indicator
+  // Setup scroll progress indicator - optimized to prevent forced reflow
   setupScrollProgress() {
     const progressBar = document.querySelector('[data-scroll-progress]');
     if (!progressBar) return;
 
+    let rafId = null;
+    let ticking = false;
+
     const updateProgress = () => {
-      const scrollTop = window.pageYOffset;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / docHeight) * 100;
+      if (ticking) return;
+      ticking = true;
       
-      progressBar.style.width = `${scrollPercent}%`;
+      // Batch all layout reads in requestAnimationFrame to prevent forced reflow
+      rafId = requestAnimationFrame(() => {
+        // Batch all layout property reads together
+        const scrollTop = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const innerHeight = window.innerHeight || document.documentElement.clientHeight;
+        const docHeight = scrollHeight - innerHeight;
+        
+        const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        
+        progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent))}%`;
+        ticking = false;
+      });
     };
 
     window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress, { passive: true });
+    
+    // Cleanup
+    return () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
+    };
   }
 
   // Setup reveal animations for text

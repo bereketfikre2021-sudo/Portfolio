@@ -171,15 +171,23 @@ class ResourceOptimizer {
     });
   }
 
-  // Get visible elements
+  // Get visible elements - optimized to prevent forced reflow
   getVisibleElements() {
     const elements = document.querySelectorAll('[data-src]');
-    const visible = [];
+    if (elements.length === 0) return [];
     
-    elements.forEach(element => {
-      const rect = element.getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-      
+    const visible = [];
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    
+    // Batch all getBoundingClientRect calls together to prevent forced reflow
+    const rects = Array.from(elements).map(element => ({
+      element,
+      rect: element.getBoundingClientRect()
+    }));
+    
+    // Process cached rects (no layout reads here)
+    rects.forEach(({ element, rect }) => {
+      const isVisible = rect.top < windowHeight && rect.bottom > 0;
       if (isVisible) {
         visible.push(element);
       }

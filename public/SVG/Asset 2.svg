@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920.95 368.17">
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920.95 462.76">
   <defs>
     <style>
       .cls-1 {
@@ -33,9 +33,7 @@
     </style>
   </defs>
   <g id="Layer_1-2" data-name="Layer 1">
-    <g>
-      <text class="cls-1" transform="translate(67.14 259.95)"><tspan class="cls-5" x="0" y="0">CRE</tspan><tspan class="cls-4" x="151.42" y="0">A</tspan><tspan class="cls-5" x="201.24" y="0">TIVE DESIGNER</tspan></text>
-      <text class="cls-2" transform="translate(96.62 147.03)"><tspan x="0" y="0">Ber</tspan><tspan class="cls-3" x="233.65" y="0">e</tspan><tspan x="275.23" y="0">ket Fikre</tspan></text>
-    </g>
+    <text class="cls-1" transform="translate(67.14 259.95)"><tspan class="cls-5" x="0" y="0">CRE</tspan><tspan class="cls-4" x="151.42" y="0">A</tspan><tspan class="cls-5" x="201.24" y="0">TIVE DESIGNER</tspan></text>
+    <text class="cls-2" transform="translate(96.62 147.03)"><tspan x="0" y="0">Ber</tspan><tspan class="cls-3" x="233.65" y="0">e</tspan><tspan x="275.23" y="0">ket Fikre</tspan></text>
   </g>
 </svg>

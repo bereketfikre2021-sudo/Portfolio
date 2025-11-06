@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { ThemeProvider, useTheme } from "./components/ThemeProvider";
 import { LanguageProvider, useLanguage } from "./components/LanguageProvider";
-import { LazyTools, LazyAI, LazyPWA, LazyPerformance, LazyBlog, LazyAnalytics, LazyProjectGallery, LazyNewsletterSignup, LazyCaseStudy, LazyAccessibilitySettings, LazyAdvancedAnimations, LazyPerformanceDashboard, LazySEOManager, LazySecurityDashboard, LazyAIContentGenerator, LazySmartRecommendations, LazyCRMIntegration, LazyEmailMarketing, LazyPWAInstaller, preloadCriticalComponents } from "./components/LazyWrapper";
+import { LazyTools, LazyAI, LazyPWA, LazyPerformance, LazyBlog, LazyFAQ, LazyAnalytics, LazyProjectGallery, LazyNewsletterSignup, LazyCaseStudy, LazyAccessibilitySettings, LazyAdvancedAnimations, LazyPerformanceDashboard, LazySEOManager, LazySecurityDashboard, LazyAIContentGenerator, LazySmartRecommendations, LazyCRMIntegration, LazyEmailMarketing, LazyPWAInstaller, preloadCriticalComponents } from "./components/LazyWrapper";
 import { registerAdvancedServiceWorker } from "./components/AdvancedPWA";
 // Disabled utilities to reduce console noise
 // import performanceOptimizer from "./utils/performanceOptimizer";
@@ -25,11 +25,47 @@ import pageTransitions from "./utils/pageTransitions";
 // Lazy-loaded components moved to LazyWrapper
 import sitemapGenerator from "./utils/sitemapGenerator";
 
-import { ArrowRight, Mail, Phone, ExternalLink, Palette, LayoutGrid, PenTool, Rocket, Instagram, Linkedin, Github, Dribbble, ChevronUp, MessageCircle, Eye, X, Send, MessageSquare, BarChart3, Play, Pause, Volume2, VolumeX, Maximize, Minimize, RotateCcw, Settings, Star, Quote, ChevronDown, MapPin } from "lucide-react";
+// Icons needed for constants and components defined in this file
+// Note: Since all components are in App.jsx, all icons must be imported here.
+// To truly optimize, extract components to separate files and lazy load them.
+import { 
+  // Header/Hero icons
+  ArrowRight, 
+  ChevronDown, 
+  // Constants (PROFILE, SERVICES) - needed for constant definitions
+  Instagram, 
+  Dribbble, 
+  Linkedin, 
+  Github,
+  Palette, 
+  Layers, 
+  Monitor, 
+  Smartphone, 
+  Megaphone, 
+  Paintbrush, 
+  Target, 
+  FileText, 
+  Building,
+  // Component icons (PrivacyPolicy, TermsOfService, About, Services, Work, Testimonials, Contact, Footer)
+  X,
+  Eye,
+  ExternalLink,
+  LayoutGrid,
+  PenTool,
+  Rocket,
+  MessageCircle,
+  Quote,
+  Play,
+  Mail,
+  Phone,
+  Send,
+  MapPin,
+  Star
+} from "lucide-react";
 import { useForm, ValidationError } from '@formspree/react';
 
-// Logo image path - using consistent path
-const logoImg = '/img/Logo.webp';
+// Logo image path - using SVG for better scalability
+const logoImg = '/img/Logo.svg';
 
 // Image paths for deployment - using consistent paths for both development and production
 const IMAGES = {
@@ -80,39 +116,57 @@ const PROFILE = {
 const SERVICES = [
   {
     icon: Palette,
-    title: "Branding & Visual Identity Design",
-    desc: "Brand identity solutions including logo design, guidelines, business cards & templates.",
-    tags: ["Logo Design", "Brand Guidelines", "Business Cards", "Brand Collateral"],
+    title: "Graphic Design",
+    desc: "Visual communication through images, typography, and layout for print and digital media.",
+    tags: ["Print Design", "Digital Graphics", "Typography", "Visual Communication"],
   },
   {
-    icon: LayoutGrid,
-    title: "Marketing & Social Media Design",
-    desc: "Engaging social media graphics, digital ads, flyers, posters, and campaign visuals that drive results.",
-    tags: ["Social Media", "Digital Ads", "Flyers", "Campaign Visuals"],
+    icon: Layers,
+    title: "Branding & Identity Design",
+    desc: "Building brand visuals — logos, color palettes, and style systems that define a company's image.",
+    tags: ["Logo Design", "Brand Guidelines", "Color Palettes", "Style Systems"],
   },
   {
-    icon: PenTool,
-    title: "Web & UI/UX Design",
-    desc: "Modern website layouts, app interfaces, landing pages, and custom icon sets with user-centered design.",
-    tags: ["Website UI", "App Design", "Landing Pages", "Icons"],
+    icon: Monitor,
+    title: "Web & Digital Design",
+    desc: "Designing websites, landing pages, and digital platforms focused on usability and visual appeal.",
+    tags: ["Websites", "Landing Pages", "Digital Platforms", "Usability"],
   },
   {
-    icon: Rocket,
-    title: "Packaging & Label Design",
-    desc: "Eye-catching product packaging concepts, label designs, and professional mockups for presentation.",
-    tags: ["Packaging", "Labels", "Mockups", "Product Design"],
+    icon: Smartphone,
+    title: "UX/UI Design",
+    desc: "Crafting seamless user experiences and intuitive interfaces for web and mobile applications.",
+    tags: ["User Experience", "Interface Design", "Mobile Apps", "Web Apps"],
   },
   {
-    icon: MessageCircle,
-    title: "Motion & Multimedia Graphics",
-    desc: "Dynamic animated social media posts, video thumbnails, presentation templates, and infographic animations.",
-    tags: ["Animation", "Video Graphics", "Presentations", "Infographics"],
+    icon: Megaphone,
+    title: "Social Media & Marketing Design",
+    desc: "Creating digital visuals, campaigns, and advertisements tailored for social platforms and marketing needs.",
+    tags: ["Social Media", "Digital Campaigns", "Advertisements", "Marketing Visuals"],
   },
   {
-    icon: Eye,
-    title: "Custom Graphic Design",
-    desc: "Tailored infographics, pitch decks, event branding, and custom templates for your specific needs.",
-    tags: ["Infographics", "Pitch Decks", "Event Branding", "Templates"],
+    icon: Paintbrush,
+    title: "Illustration & Art",
+    desc: "Producing original illustrations, digital art, and creative visuals for brands and storytelling.",
+    tags: ["Illustrations", "Digital Art", "Creative Visuals", "Storytelling"],
+  },
+  {
+    icon: Target,
+    title: "Advertising & Creative Strategy",
+    desc: "Conceptualizing and developing creative campaigns and brand storytelling strategies.",
+    tags: ["Creative Campaigns", "Brand Storytelling", "Strategy", "Advertising"],
+  },
+  {
+    icon: FileText,
+    title: "Print & Publication Design",
+    desc: "Designing printed materials like brochures, magazines, flyers, and editorial layouts.",
+    tags: ["Brochures", "Magazines", "Flyers", "Editorial Layouts"],
+  },
+  {
+    icon: Building,
+    title: "Environmental & Spatial Design",
+    desc: "Design for physical spaces — exhibitions, retail, signage, and installations.",
+    tags: ["Exhibitions", "Retail Design", "Signage", "Installations"],
   },
 ];
 
@@ -435,7 +489,8 @@ const PrivacyPolicy = ({ isOpen, onClose }) => {
           <h2 className="text-2xl font-bold text-accent">Privacy Policy</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-primary/10 rounded-full transition-colors"
+            className="p-3 hover:bg-primary/10 rounded-full transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5 text-accent" />
           </button>
@@ -558,7 +613,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
           </div>
           <button
             onClick={onClose}
-            className="p-3 hover:bg-primary/10 rounded-full transition-colors ml-4"
+            className="p-3 hover:bg-primary/10 rounded-full transition-colors ml-4 min-h-[48px] min-w-[48px] flex items-center justify-center"
           >
             <X className="w-6 h-6 text-primary" />
           </button>
@@ -567,11 +622,15 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
         <div className="p-6 space-y-8">
           {/* Project Image */}
           <div className="relative">
-            <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary-600/10 rounded-2xl overflow-hidden">
+            <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary-600/10 rounded-2xl overflow-hidden" style={{ minHeight: '200px' }}>
               <img
                 src={project.thumb}
-                alt={project.title}
+                alt={`${project.title} project thumbnail`}
+                width="1280"
+                height="720"
                 className="w-full h-full object-cover"
+                style={{ aspectRatio: '16 / 9', minHeight: '200px' }}
+                loading="lazy"
               />
             </div>
           </div>
@@ -702,7 +761,8 @@ const TermsOfService = ({ isOpen, onClose }) => {
           <h2 className="text-2xl font-bold text-accent">Terms of Service</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-primary/10 rounded-full transition-colors"
+            className="p-3 hover:bg-primary/10 rounded-full transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5 text-accent" />
           </button>
@@ -816,8 +876,8 @@ const HeaderWithContext = ({
   isCRMIntegrationOpen, setIsCRMIntegrationOpen,
   isEmailMarketingOpen, setIsEmailMarketingOpen
 }) => {
-  const { theme, resolvedTheme, toggleTheme, setTheme } = useTheme();
-  const { language, changeLanguage, availableLanguages, t } = useLanguage();
+  const { resolvedTheme } = useTheme();
+  const { language, availableLanguages, t } = useLanguage();
   const [isOverLightBackground, setIsOverLightBackground] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -825,47 +885,39 @@ const HeaderWithContext = ({
   
   // Handle install app functionality
   const handleInstallApp = async () => {
-    console.log('handleInstallApp called');
     try {
       // Check if we have a deferred prompt
       if (window.deferredPrompt) {
-        console.log('Deferred prompt found, showing install prompt');
         // Show the install prompt
-        const result = await window.deferredPrompt.prompt();
-        console.log('Install prompt result:', result);
+        await window.deferredPrompt.prompt();
         
         // Wait for user choice
         const choiceResult = await window.deferredPrompt.userChoice;
-        console.log('User choice result:', choiceResult);
         
         if (choiceResult.outcome === 'accepted') {
-          console.log('PWA installation accepted');
           // Show success message
           alert('App installation started! Check your browser for the installation prompt.');
         } else {
-          console.log('PWA installation dismissed');
           alert('Installation cancelled. You can try again anytime.');
         }
         
         // Clear the deferred prompt
         window.deferredPrompt = null;
       } else {
-        console.log('No deferred prompt found');
         // Check if app is already installed
         if (window.matchMedia('(display-mode: standalone)').matches || 
             window.navigator.standalone === true) {
-          console.log('App is already installed');
           alert('App is already installed!');
           return;
         }
         
         // Try to trigger the install prompt programmatically
         if ('serviceWorker' in navigator) {
-          // Register service worker if not already registered
-          if (!navigator.serviceWorker.controller) {
+          // Check if service worker is already registered before registering again
+          const existingRegistration = await navigator.serviceWorker.getRegistration();
+          if (!existingRegistration && !navigator.serviceWorker.controller) {
             try {
               await navigator.serviceWorker.register('/sw.js');
-              console.log('Service Worker registered successfully');
             } catch (error) {
               console.error('Service Worker registration failed:', error);
             }
@@ -910,61 +962,47 @@ const HeaderWithContext = ({
           instructions = 'Look for an install option in your browser menu or address bar';
         }
         
-    // For now, use console.log and alert as fallback until notification system is implemented
-    console.log('Install instructions:', instructions);
-        alert(`To install this app:\n\n${instructions}\n\nThis will add the app to your home screen or desktop for quick access.`);
+    // Show install instructions
+    alert(`To install this app:\n\n${instructions}\n\nThis will add the app to your home screen or desktop for quick access.`);
   };
 
   // Handle tool actions
   const handleToolAction = (action) => {
-    console.log(`Tool action triggered: ${action}`);
     switch (action) {
       case 'analytics':
-        console.log('Opening Analytics Dashboard');
         setIsAnalyticsOpen(true);
         break;
       case 'ai-insights':
-        console.log('Opening AI Insights');
         setIsAIOpen(true);
         break;
       case 'pwa-features':
-        console.log('Opening PWA Features');
         setIsPWAOpen(true);
         break;
       case 'performance':
-        console.log('Opening Performance Monitor');
         setIsPerformanceOpen(true);
         break;
       case 'performance-dashboard':
-        console.log('Opening Performance Dashboard');
         setIsPerformanceDashboardOpen(true);
         break;
       case 'seo-manager':
-        console.log('Opening SEO Manager');
         setIsSEOManagerOpen(true);
         break;
       case 'security-dashboard':
-        console.log('Opening Security Dashboard');
         setIsSecurityDashboardOpen(true);
         break;
       case 'ai-content-generator':
-        console.log('Opening AI Content Generator');
         setIsAIContentGeneratorOpen(true);
         break;
       case 'smart-recommendations':
-        console.log('Opening Smart Recommendations');
         setIsSmartRecommendationsOpen(true);
         break;
       case 'crm-integration':
-        console.log('Opening CRM Integration');
         setIsCRMIntegrationOpen(true);
         break;
       case 'email-marketing':
-        console.log('Opening Email Marketing');
         setIsEmailMarketingOpen(true);
         break;
       case 'install-app':
-        console.log('Handling Install App');
         handleInstallApp();
         break;
       default:
@@ -978,13 +1016,13 @@ const HeaderWithContext = ({
   const NAV = [
     { label: t('nav.home'), href: "#home" },
     { label: t('nav.about'), href: "#about" },
-    { label: t('nav.services'), href: "#services" },
+    { label: t('nav.services'), href: "#what-i-do" },
     { 
       label: "Portfolio", 
       dropdown: [
     { label: t('nav.work'), href: "#work" },
-        { label: t('nav.caseStudies'), href: "#case-studies" },
-        { label: t('nav.testimonials'), href: "#testimonials" }
+        { label: t('nav.testimonials'), href: "#testimonials" },
+        { label: t('nav.caseStudies'), href: "#case-studies" }
       ]
     },
     { label: t('nav.blog'), href: "#blog" },
@@ -1009,39 +1047,64 @@ const HeaderWithContext = ({
   ];
 
   useEffect(() => {
+    let rafId = null;
+    let ticking = false;
+    
     const handleScroll = () => {
-      const header = document.querySelector('header');
-      if (!header) return;
-
-      const headerRect = header.getBoundingClientRect();
-      const headerBottom = headerRect.bottom;
+      if (ticking) return;
+      ticking = true;
       
-      // Check if header is overlapping with light background sections
-      const lightSections = document.querySelectorAll('.bg-light, .bg-neutral-50, .bg-neutral-100');
-      let isOverLight = false;
-      
-      lightSections.forEach(section => {
-        const sectionRect = section.getBoundingClientRect();
-        const sectionTop = sectionRect.top;
-        const sectionBottom = sectionRect.bottom;
-        
-        // Check if header bottom is within the light section
-        if (headerBottom > sectionTop && headerRect.top < sectionBottom) {
-          isOverLight = true;
+      // Batch all layout reads in requestAnimationFrame to prevent forced reflow
+      rafId = requestAnimationFrame(() => {
+        const header = document.querySelector('header');
+        if (!header) {
+          ticking = false;
+          return;
         }
+
+        // Batch all layout reads together
+        const headerRect = header.getBoundingClientRect();
+        const headerBottom = headerRect.bottom;
+        const headerTop = headerRect.top;
+        
+        // Check if header is overlapping with light background sections
+        const lightSections = document.querySelectorAll('.bg-light, .bg-neutral-50, .bg-neutral-100');
+        let isOverLight = false;
+        
+        // Batch all getBoundingClientRect calls together
+        const sectionRects = Array.from(lightSections).map(section => ({
+          element: section,
+          rect: section.getBoundingClientRect()
+        }));
+        
+        // Process cached rects (no layout reads here)
+        for (const { rect } of sectionRects) {
+          const sectionTop = rect.top;
+          const sectionBottom = rect.bottom;
+          
+          // Check if header bottom is within the light section
+          if (headerBottom > sectionTop && headerTop < sectionBottom) {
+            isOverLight = true;
+            break; // Early exit once found
+          }
+        }
+        
+        setIsOverLightBackground(isOverLight);
+        ticking = false;
       });
-      
-      setIsOverLightBackground(isOverLight);
     };
 
-    // Initial check
+    // Initial check with RAF
     handleScroll();
     
-    // Add scroll listener
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleScroll);
+    // Add scroll listener with passive flag for better performance
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     
     return () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
@@ -1056,9 +1119,14 @@ const HeaderWithContext = ({
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <a href="#home" className="flex items-center hover:opacity-80 transition-opacity">
           <img 
-            src={resolvedTheme === 'light' ? '/img/Logo.png' : logoImg} 
+            src={logoImg} 
             alt="Logo" 
-            className="h-8 sm:h-10 w-auto" 
+            width="180"
+            height="60"
+            className="h-12 sm:h-14 md:h-16 w-auto object-contain" 
+            style={{ minHeight: '48px' }}
+            loading="eager"
+            fetchpriority="high"
           />
         </a>
         
@@ -1078,6 +1146,9 @@ const HeaderWithContext = ({
                         ? 'text-primary hover:text-white focus:ring-white/20 focus:ring-offset-accent'
                         : 'text-accent hover:text-light focus:ring-accent/20 focus:ring-offset-primary'
                     }`}
+                    aria-label={`${item.label} menu`}
+                    aria-expanded={activeDropdown === index}
+                    aria-haspopup="true"
                   >
                     {item.label}
                     <ChevronDown className="w-3 h-3" />
@@ -1104,6 +1175,7 @@ const HeaderWithContext = ({
                                 ? 'text-primary hover:text-primary hover:bg-accent/20'
                                 : 'text-accent hover:text-light hover:bg-accent/10'
                             }`}
+                            aria-label={dropdownItem.label}
                           >
                             {dropdownItem.label}
                           </button>
@@ -1111,7 +1183,7 @@ const HeaderWithContext = ({
                           <a
                             key={dropdownIndex}
                             href={dropdownItem.href}
-                            className={`block px-4 py-3 text-sm transition-colors ${
+                            className={`block px-4 py-3 text-base transition-colors min-h-[48px] ${
                               resolvedTheme === 'light'
                                 ? 'text-primary hover:text-primary hover:bg-accent/20'
                                 : 'text-accent hover:text-light hover:bg-accent/10'
@@ -1127,10 +1199,10 @@ const HeaderWithContext = ({
               ) : (
                 <a 
               href={item.href} 
-              className={`text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-md px-2 py-1 ${
+              className={`block px-4 py-3 text-base font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-md min-h-[48px] ${
                 resolvedTheme === 'light'
-                  ? 'text-primary hover:text-white focus:ring-white/20 focus:ring-offset-accent'
-                  : 'text-accent hover:text-light focus:ring-accent/20 focus:ring-offset-primary'
+                  ? 'text-primary hover:text-white hover:bg-accent/20 focus:ring-white/20 focus:ring-offset-accent'
+                  : 'text-accent hover:text-light hover:bg-accent/10 focus:ring-accent/20 focus:ring-offset-primary'
               }`}
             >
               {item.label}
@@ -1139,61 +1211,9 @@ const HeaderWithContext = ({
             </div>
           ))}
           
-          {/* Theme and Language Toggle Buttons */}
-          <div className="flex items-center gap-2">
-            {/* Theme Toggle Button */}
-            <button
-              onClick={() => {
-                console.log('Theme toggle clicked, current theme:', resolvedTheme);
-                if (resolvedTheme === 'dark') {
-                  console.log('Switching to light mode');
-                  setTheme('light');
-                } else {
-                  console.log('Switching to dark mode');
-                  setTheme('dark');
-                }
-              }}
-              className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 ${
-                resolvedTheme === 'light'
-                  ? 'bg-transparent text-primary hover:bg-transparent border border-transparent'
-                  : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
-              }`}
-              title={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
-            >
-              <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline">
-                {resolvedTheme === 'dark' ? 'Light' : 'Dark'}
-              </span>
-            </button>
-
-            {/* Language Toggle Button */}
-            <button
-              onClick={() => {
-                console.log('Language toggle clicked');
-                const currentLang = language;
-                if (currentLang === 'en') {
-                  changeLanguage('am');
-                } else {
-                  changeLanguage('en');
-                }
-              }}
-              className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 ${
-                resolvedTheme === 'light'
-                  ? 'bg-transparent text-primary hover:bg-transparent border border-transparent'
-                  : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
-              }`}
-              title={`Switch to ${language === 'en' ? 'Amharic' : 'English'}`}
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span className="hidden sm:inline">
-                {language === 'en' ? 'አማርኛ' : 'EN'}
-              </span>
-            </button>
-          </div>
-          
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button - Minimum 48px touch area */}
         <button
           onClick={() => {
             setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -1201,14 +1221,14 @@ const HeaderWithContext = ({
               setActiveMobileDropdown(null); // Close dropdowns when closing mobile menu
             }
           }}
-          className={`md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ${
+          className={`md:hidden p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center ${
             resolvedTheme === 'light'
               ? 'text-primary hover:text-white focus:ring-white/20 focus:ring-offset-accent'
               : 'text-accent hover:text-light focus:ring-accent/20 focus:ring-offset-primary'
           }`}
           aria-label="Toggle mobile menu"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             {isMobileMenuOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
@@ -1237,17 +1257,20 @@ const HeaderWithContext = ({
                   <div>
                     <button
                       onClick={() => setActiveMobileDropdown(activeMobileDropdown === index ? null : index)}
-                      className={`flex items-center justify-between w-full px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                      className={`flex items-center justify-between w-full px-4 py-3 text-base font-medium rounded-md transition-colors min-h-[48px] ${
                         resolvedTheme === 'light'
                           ? 'text-primary hover:bg-white/20'
                           : 'text-accent hover:bg-accent/10'
                       }`}
+                      aria-label={`${item.label} menu`}
+                      aria-expanded={activeMobileDropdown === index}
+                      aria-haspopup="true"
                     >
                       <span>{item.label}</span>
                       <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === index ? 'rotate-180' : ''}`} />
                     </button>
                     {activeMobileDropdown === index && (
-                    <div className="ml-4 space-y-1">
+                    <div className="ml-4 space-y-2">
                       {item.dropdown.map((dropdownItem, dropdownIndex) => (
                         dropdownItem.action ? (
                           <button
@@ -1257,11 +1280,12 @@ const HeaderWithContext = ({
                               setIsMobileMenuOpen(false);
                               setActiveMobileDropdown(null);
                             }}
-                            className={`block w-full text-left px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                            className={`block w-full text-left px-4 py-3 text-base font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 min-h-[48px] ${
                               resolvedTheme === 'light'
                                 ? 'text-primary hover:text-white hover:bg-accent focus:ring-white/20 focus:ring-offset-white'
                                 : 'text-accent/80 hover:text-light hover:bg-accent/10 focus:ring-accent/20 focus:ring-offset-primary'
                             }`}
+                            aria-label={dropdownItem.label}
                           >
                             {dropdownItem.label}
                           </button>
@@ -1270,7 +1294,7 @@ const HeaderWithContext = ({
                             key={dropdownIndex}
                             href={dropdownItem.href}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className={`block px-3 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                            className={`block px-4 py-3 text-base font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 min-h-[48px] ${
                               resolvedTheme === 'light'
                                 ? 'text-primary hover:text-white hover:bg-accent focus:ring-white/20 focus:ring-offset-white'
                                 : 'text-accent/80 hover:text-light hover:bg-accent/10 focus:ring-accent/20 focus:ring-offset-primary'
@@ -1298,56 +1322,6 @@ const HeaderWithContext = ({
                 )}
               </div>
             ))}
-            
-            {/* Mobile Theme and Language Toggle Buttons */}
-            <div className="px-3 py-2 border-t border-accent/20">
-              <div className="flex items-center gap-2">
-                {/* Mobile Theme Toggle Button */}
-                <button
-                  onClick={() => {
-                    console.log('Mobile theme toggle clicked, current theme:', resolvedTheme);
-                    if (resolvedTheme === 'dark') {
-                      console.log('Switching to light mode');
-                      setTheme('light');
-                    } else {
-                      console.log('Switching to dark mode');
-                      setTheme('dark');
-                    }
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    resolvedTheme === 'light'
-                      ? 'bg-accent text-primary hover:bg-accent/80 border border-accent/20'
-                      : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
-                  }`}
-                >
-                  <Settings className="w-4 h-4" />
-                  <span>Switch to {resolvedTheme === 'dark' ? 'Light' : 'Dark'} Mode</span>
-                </button>
-
-                {/* Mobile Language Toggle Button */}
-                <button
-                  onClick={() => {
-                    console.log('Mobile language toggle clicked');
-                    const currentLang = language;
-                    if (currentLang === 'en') {
-                      changeLanguage('am');
-                    } else {
-                      changeLanguage('en');
-                    }
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    resolvedTheme === 'light'
-                      ? 'bg-accent text-primary hover:bg-accent/80 border border-accent/20'
-                      : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
-                  }`}
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>Switch to {language === 'en' ? 'አማርኛ' : 'English'}</span>
-                </button>
-              </div>
-                </div>
           </nav>
         </motion.div>
       )}
@@ -1361,11 +1335,21 @@ const Hero = () => {
   
   return (
     <div id="home" className="relative h-screen overflow-hidden bg-primary">
+      {/* Hero Background Image with reduced opacity */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/img/hero%20image.webp)',
+          opacity: 0.3,
+          zIndex: 0
+        }}
+      ></div>
+      
       {/* Subtle brand accent overlay */}
-      <div className="absolute inset-0 bg-accent/5"></div>
+      <div className="absolute inset-0 bg-accent/5 z-[1]"></div>
 
       {/* Floating Background Elements */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none z-[1]">
         {/* Large floating circles */}
         <motion.div
           className="absolute w-32 h-32 border-2 border-accent/30 rounded-full"
@@ -1537,66 +1521,77 @@ const Hero = () => {
           />
       </div>
 
-      {/* Content Overlay */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+      {/* Content Overlay - Optimized for LCP */}
+      <div className="relative z-[2] h-full flex flex-col items-center justify-center text-center px-6">
       <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           className="max-w-4xl mx-auto space-y-8"
+          style={{ 
+            willChange: 'opacity, transform',
+            contentVisibility: 'auto'
+          }}
         >
-          {/* Welcome Badge */}
+          {/* Welcome Badge - Reduced delay for faster LCP */}
         <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 backdrop-blur-sm border border-secondary/30"
           >
             <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
             <span className="text-accent text-sm font-medium">{t('hero.greeting')} {t('hero.name')}</span>
         </motion.div>
 
-          {/* Main Heading */}
+          {/* Main Heading - LCP Element - Optimized for fast rendering and no layout shift */}
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.7 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight px-4 ${
               resolvedTheme === 'light'
                 ? 'text-black'
                 : 'text-light'
             }`}
+            style={{ 
+              willChange: 'opacity, transform',
+              contentVisibility: 'auto',
+              minHeight: '1.2em', // Reserve space to prevent layout shift
+              lineHeight: '1.2'
+            }}
           >
 {t('hero.name')}
           </motion.h1>
           
-          {/* Professional Title */}
+          {/* Professional Title - Reduced delay for faster LCP */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             className="text-lg sm:text-xl md:text-2xl text-accent font-semibold max-w-2xl mx-auto px-4"
+            style={{ minHeight: '1.5em', lineHeight: '1.5' }}
           >
 {t('hero.title')}
           </motion.p>
 
-          {/* Location */}
+          {/* Location - Reduced delay */}
           <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
             className="text-base sm:text-lg text-neutral-300 flex items-center justify-center gap-2 px-4"
           >
             <div className="w-1.5 h-1.5 bg-accent rounded-full"></div>
             {PROFILE.location}
           </motion.div>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - Reduced delay */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="flex flex-col sm:flex-row gap-6 sm:gap-4 justify-center items-center pt-4"
           >
             <motion.a
               href="#work"
@@ -1626,11 +1621,11 @@ const Hero = () => {
           </motion.div>
         </motion.div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator - Reduced delay (non-critical for LCP) */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.5 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
           <motion.div
@@ -1765,14 +1760,27 @@ const About = () => {
             className="space-y-8"
           >
             {/* Profile Image */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-accent rounded-3xl transform rotate-3"></div>
-              <div className="relative bg-light rounded-3xl p-8 shadow-2xl">
+            <div className="relative group">
+              {/* Elegant frame with gradient border and soft shadow */}
+              <div className="relative bg-gradient-to-br from-accent/10 via-primary/5 to-accent/10 rounded-3xl p-6 shadow-2xl border border-accent/20 backdrop-blur-sm">
+                {/* Inner elegant border */}
+                <div className="absolute inset-0 rounded-3xl border-2 border-accent/30 pointer-events-none"></div>
+                {/* Image container with padding for elegant spacing */}
+                <div className="relative rounded-2xl overflow-hidden bg-primary/50 p-4">
                 <img 
                   src={IMAGES.bereketFikre} 
-                  alt="Bereket Fikre"
-                  className="w-full h-80 object-contain rounded-2xl"
-                />
+                    alt="Bereket Fikre - Creative Designer and Brand Builder"
+                  width="400"
+                    height="500"
+                    className="w-full h-auto object-contain rounded-xl"
+                    loading="lazy"
+                  />
+                </div>
+                {/* Decorative corner accents */}
+                <div className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-accent/40 rounded-tl-lg"></div>
+                <div className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-accent/40 rounded-tr-lg"></div>
+                <div className="absolute bottom-2 left-2 w-6 h-6 border-b-2 border-l-2 border-accent/40 rounded-bl-lg"></div>
+                <div className="absolute bottom-2 right-2 w-6 h-6 border-b-2 border-r-2 border-accent/40 rounded-br-lg"></div>
               </div>
             </div>
 
@@ -1880,9 +1888,40 @@ const About = () => {
                 </div>
                 
             {/* Skills & Services */}
-              <div className="space-y-6 pt-16">
+              <div id="what-i-do" className="space-y-6 pt-16">
               <h3 className="text-2xl font-bold text-light">What I Do</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              {/* Mobile: Show SERVICES array */}
+              <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {SERVICES.map((service, index) => {
+                  const IconComponent = service.icon;
+                  return (
+                    <div key={index} className={`flex items-center gap-3 p-4 rounded-xl ${
+                      resolvedTheme === 'light'
+                        ? 'bg-accent border border-accent/30'
+                        : 'bg-accent/10'
+                    }`}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                        resolvedTheme === 'light'
+                          ? 'bg-primary'
+                          : 'bg-primary'
+                      }`}>
+                        <IconComponent className={`w-4 h-4 ${
+                          resolvedTheme === 'light'
+                            ? 'text-primary'
+                            : 'text-accent'
+                        }`} />
+                      </div>
+                      <span className={`font-medium ${
+                        resolvedTheme === 'light'
+                          ? 'text-primary'
+                          : 'text-accent'
+                      }`}>{service.title}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              {/* Desktop: Show original hardcoded list */}
+              <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className={`flex items-center gap-3 p-4 rounded-xl ${
                   resolvedTheme === 'light'
                     ? 'bg-accent border border-accent/30'
@@ -2032,7 +2071,7 @@ const Services = () => {
   const { resolvedTheme } = useTheme();
   
   return (
-  <Section id="services" className="relative py-24 bg-primary overflow-hidden">
+  <Section id="services" className="hidden md:block relative py-24 bg-primary overflow-hidden">
     {/* Background Elements */}
     <div className="absolute inset-0">
       <div className="absolute top-20 left-10 w-32 h-32 bg-accent/10 rounded-full blur-2xl"></div>
@@ -2165,6 +2204,40 @@ const Work = () => {
   const { resolvedTheme } = useTheme();
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('All');
+
+  // Use services as filter categories
+  const filterCategories = React.useMemo(() => {
+    return [
+      { title: 'All', icon: null },
+      ...SERVICES.map(service => ({ title: service.title, icon: service.icon }))
+    ];
+  }, []);
+
+  // Filter projects based on active service filter
+  const filteredProjects = React.useMemo(() => {
+    if (activeFilter === 'All') {
+      return PROJECTS;
+    }
+    
+    // Find the service that matches the active filter
+    const selectedService = SERVICES.find(service => service.title === activeFilter);
+    if (!selectedService) return PROJECTS;
+    
+    // Match projects to service based on tags
+    return PROJECTS.filter(project => {
+      // Check if any project tag matches any service tag (case-insensitive)
+      return project.tags.some(projectTag => 
+        selectedService.tags.some(serviceTag => 
+          projectTag.toLowerCase().includes(serviceTag.toLowerCase()) ||
+          serviceTag.toLowerCase().includes(projectTag.toLowerCase())
+        )
+      ) || 
+      // Also check project role/title for service keywords
+      project.role.toLowerCase().includes(selectedService.title.toLowerCase().split(' ')[0].toLowerCase()) ||
+      project.title.toLowerCase().includes(selectedService.title.toLowerCase().split(' ')[0].toLowerCase());
+    });
+  }, [activeFilter]);
 
   // Handle ESC key to close modal
   useEffect(() => {
@@ -2190,300 +2263,601 @@ const Work = () => {
   };
 
   return (
-  <Section id="work" className="relative py-24 bg-primary overflow-hidden">
-    {/* Magical Background Elements */}
+  <Section id="work" className="relative py-32 bg-primary overflow-hidden">
+    {/* Extraordinary Background Elements */}
     <div className="absolute inset-0 pointer-events-none">
-      {/* Floating Sparkles */}
-      {[...Array(30)].map((_, i) => (
+      {/* Animated Grid Pattern */}
+      <div className="absolute inset-0 opacity-5" style={{
+        backgroundImage: `linear-gradient(#8AEA92 1px, transparent 1px), linear-gradient(90deg, #8AEA92 1px, transparent 1px)`,
+        backgroundSize: '50px 50px',
+      }}>
+        <motion.div
+          className="absolute inset-0"
+          animate={{
+            backgroundPosition: ['0% 0%', '50px 50px'],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      </div>
+
+      {/* Dynamic Gradient Orbs - Lime green and black only */}
+      <motion.div
+        className="absolute w-[600px] h-[600px] rounded-full blur-3xl"
+        style={{ 
+          top: '-10%', 
+          right: '-5%',
+          background: 'linear-gradient(to right, rgba(138,234,146,0.2), rgba(138,234,146,0.15), rgba(138,234,146,0.2))',
+        }}
+        animate={{
+          scale: [1, 1.4, 1],
+          opacity: [0.2, 0.5, 0.2],
+          rotate: [0, 180, 360],
+          x: [0, 50, 0],
+          y: [0, 30, 0],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      <motion.div
+        className="absolute w-[500px] h-[500px] rounded-full blur-3xl"
+        style={{ 
+          bottom: '-10%', 
+          left: '-5%',
+          background: 'linear-gradient(to left, rgba(138,234,146,0.2), rgba(138,234,146,0.15), rgba(138,234,146,0.2))',
+        }}
+        animate={{
+          scale: [1.2, 1, 1.2],
+          opacity: [0.3, 0.6, 0.3],
+          rotate: [360, 180, 0],
+          x: [0, -50, 0],
+          y: [0, -30, 0],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      {/* Floating Particles - Reduced from 50 to 20 for better performance */}
+      {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-accent rounded-full"
+          className="absolute w-1.5 h-1.5 rounded-full"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
+            backgroundColor: '#8AEA92',
           }}
           animate={{
-            opacity: [0, 1, 0],
-            scale: [0, 1, 0],
-            y: [0, -50, -100],
-            x: [0, (Math.random() - 0.5) * 50],
+            opacity: [0, 0.6, 0],
+            scale: [0, 1.5, 0],
+            y: [0, -100, -200],
+            x: [0, (Math.random() - 0.5) * 100],
           }}
           transition={{
-            duration: 3 + Math.random() * 2,
+            duration: 4 + Math.random() * 3,
             repeat: Infinity,
-            delay: Math.random() * 5,
-            ease: "easeInOut"
+            delay: Math.random() * 8,
+            ease: "easeOut"
           }}
         />
       ))}
-
-      {/* Magical Orbs */}
-      <motion.div
-        className="absolute w-96 h-96 bg-gradient-to-r from-accent/15 via-secondary/10 to-accent/15 rounded-full blur-3xl"
-        style={{ top: '10%', right: '-10%' }}
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.3, 0.6, 0.3],
-          rotate: [0, 180, 360],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-
-      <motion.div
-        className="absolute w-80 h-80 bg-gradient-to-l from-secondary/15 via-accent/10 to-secondary/15 rounded-full blur-3xl"
-        style={{ bottom: '10%', left: '-10%' }}
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.4, 0.7, 0.4],
-          rotate: [360, 180, 0],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
     </div>
 
-    <div className="mx-auto max-w-6xl px-4 relative z-10">
+    <div className="mx-auto max-w-7xl px-4 relative z-10">
       <motion.div
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
         variants={fadeInUp}
-        className="space-y-16"
+        className="space-y-20"
       >
+        {/* Extraordinary Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center space-y-4"
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="text-center space-y-6 relative"
         >
+          {/* Animated Badge */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-accent/40 via-accent/50 to-accent/40 text-primary text-xl font-bold border-2 border-accent/60 shadow-2xl animate-bounce"
+            transition={{ delay: 0.2, type: "spring", stiffness: 150, damping: 12 }}
+            className="inline-block"
           >
             <motion.div
-              className="w-3 h-3 bg-primary rounded-full shadow-md"
-              animate={{
-                scale: [1, 1.3, 1],
-                opacity: [0.7, 1, 0.7],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            <span className={`font-semibold text-lg drop-shadow-2xl animate-pulse ${
-              resolvedTheme === 'light'
-                ? 'text-black'
-                : 'text-accent'
-            }`}>Portfolio</span>
+              className="relative px-8 py-4 rounded-full overflow-hidden"
+              whileHover={{ scale: 1.05 }}
+            >
+              <motion.div
+                className="absolute inset-0"
+                style={{
+                  background: 'linear-gradient(to right, #8AEA92, #8AEA92, #8AEA92)',
+                  backgroundSize: '200% 200%',
+                }}
+                animate={{
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              />
+              <div className="relative flex items-center gap-3">
+                <motion.div
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: '#000000' }}
+                  animate={{
+                    scale: [1, 1.5, 1],
+                    opacity: [0.8, 1, 0.8],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                <span className="font-bold text-lg tracking-wide" style={{ color: '#000000' }}>PORTFOLIO</span>
+                <motion.div
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: '#000000' }}
+                  animate={{
+                    scale: [1, 1.5, 1],
+                    opacity: [0.8, 1, 0.8],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    delay: 0.5,
+                    ease: "easeInOut"
+                  }}
+                />
+              </div>
+            </motion.div>
           </motion.div>
           
+          {/* Main Title with Gradient Text */}
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="text-5xl md:text-6xl font-bold text-primary"
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="text-6xl md:text-7xl lg:text-8xl font-bold relative"
           >
-            Featured Work
+            <span className={`block bg-clip-text text-transparent bg-gradient-to-r ${
+              resolvedTheme === 'light'
+                ? 'from-primary via-accent to-primary'
+                : 'from-light via-accent to-light'
+            }`}>
+              Featured Work
+            </span>
+            {/* Decorative Underline */}
+            <motion.div
+              className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-accent to-transparent"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+            />
           </motion.h2>
           
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.6 }}
-            className="text-xl text-primary/80 max-w-2xl mx-auto"
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className={`text-xl md:text-2xl max-w-3xl mx-auto ${
+              resolvedTheme === 'light'
+                ? 'text-primary/90'
+                : 'text-light/90'
+            }`}
           >
-            A showcase of my recent projects and creative solutions
+            A curated collection of transformative design projects that showcase innovation, creativity, and strategic thinking
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          {PROJECTS.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="group relative"
-            >
-              {/* Magical Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-accent/20 via-secondary/20 to-accent/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
-              
-              <Card className="relative overflow-hidden border-2 border-primary/20 hover:border-accent/60 transition-all duration-500 group-hover:shadow-2xl bg-gradient-to-br from-light/90 via-light/80 to-light/90 backdrop-blur-sm group-hover:bg-gradient-to-br group-hover:from-light group-hover:via-light/90 group-hover:to-light h-full flex flex-col">
-                {/* Shimmer Effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100"
-                  animate={{
-                    x: ['-100%', '100%'],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: 0.5
-                  }}
-                />
-
-                <div className="relative aspect-video bg-gradient-to-br from-primary/10 to-primary-600/10 overflow-hidden">
-                  <img
-                    src={project.thumb}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  
-                  {/* Magical Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-accent/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  {/* Floating Sparkles on Hover */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    {[...Array(8)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute w-1 h-1 bg-white rounded-full"
-                        style={{
-                          left: `${20 + (i * 10)}%`,
-                          top: `${20 + (i * 8)}%`,
-                        }}
-                        animate={{
-                          opacity: [0, 1, 0],
-                          scale: [0, 1, 0],
-                          y: [0, -20, -40],
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Infinity,
-                          delay: i * 0.2,
-                          ease: "easeInOut"
-                        }}
-                      />
-                    ))}
-                    </div>
-                  
-                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110">
-                    <motion.div
-                      className="w-12 h-12 bg-gradient-to-br from-accent to-accent-600 rounded-full flex items-center justify-center shadow-lg"
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <ExternalLink className="w-5 h-5 text-primary" />
-                    </motion.div>
-                  </div>
-                </div>
-                
-                <CardContent className="p-8 relative flex-1 flex flex-col">
-                  <div className="space-y-4 flex-1 flex flex-col">
-                    <div>
-                      <motion.h3
-                        className="font-bold text-xl text-primary group-hover:text-accent transition-colors duration-300"
-                        whileHover={{ x: 5 }}
-                      >
-                        {project.title}
-                      </motion.h3>
-                      <p className="text-sm text-primary/70 font-medium">{project.role}</p>
-                    </div>
-                    <p className="text-primary/80 leading-relaxed">{project.summary}</p>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {project.tags.map((tag, tagIndex) => (
-                        <motion.div
-                          key={tag} 
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: tagIndex * 0.1 }}
-                          whileHover={{ scale: 1.1, y: -2 }}
-                        >
-                          <Badge 
-                          variant="outline" 
-                            className="text-xs border-accent/40 text-primary hover:bg-accent/10 hover:border-accent/60 transition-all duration-300 cursor-pointer"
-                        >
-                          {tag}
-                        </Badge>
-                        </motion.div>
-                      ))}
-                    </div>
-                    <motion.button
-                        onClick={() => {
-                          openProjectModal(project);
-                          // Track project view
-                          if (window.gtag) {
-                            window.gtag('event', 'view_item', {
-                              event_category: 'portfolio',
-                              event_label: project.title
-                            });
-                          }
-                        }}
-                      className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-accent group/link transition-all duration-300 cursor-pointer mx-auto mt-auto px-4 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-accent/40 shadow-sm hover:shadow-md"
-                      whileHover={{ x: 8, scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <span>View Project</span>
-                      <motion.div
-                        animate={{ x: [0, 5, 0], scale: [1, 1.1, 1] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                        <Eye className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                      </motion.div>
-                    </motion.button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* View More Projects - Enhanced */}
+        {/* Filter Tabs - Mobile Optimized - Based on Services */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="sticky top-16 md:top-20 z-40 bg-primary/95 backdrop-blur-sm border-b border-accent/10 mb-8 -mx-4 px-4 md:mx-0 md:px-0 md:static md:bg-transparent md:border-0"
+        >
+          <div className="relative">
+            {/* Scroll Fade Indicators - Mobile Only */}
+            <div className="md:hidden absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-primary to-transparent pointer-events-none z-10"></div>
+            <div className="md:hidden absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-primary to-transparent pointer-events-none z-10"></div>
+            
+            <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 scroll-smooth" style={{ 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch'
+            }}>
+              <div className="flex gap-2 md:gap-3 md:justify-center md:flex-wrap min-w-max md:min-w-0 pb-1 md:pb-0">
+                {filterCategories.map((category) => {
+                  const IconComponent = category.icon;
+                  return (
+                    <motion.button
+                      key={category.title}
+                      onClick={() => setActiveFilter(category.title)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`px-3 py-1.5 md:px-5 md:py-2.5 rounded-full text-xs md:text-base font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 flex items-center gap-1.5 md:gap-2 ${
+                        activeFilter === category.title
+                          ? 'bg-accent text-primary shadow-lg shadow-accent/30'
+                          : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
+                      }`}
+                      aria-label={`Filter by ${category.title}`}
+                      aria-pressed={activeFilter === category.title}
+                    >
+                      {IconComponent && <IconComponent className="w-3.5 h-3.5 md:w-5 md:h-5 flex-shrink-0" />}
+                      <span className="text-xs md:text-base">{category.title}</span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Extraordinary Portfolio Grid - Masonry Style with 3D Effects */}
+        {filteredProjects.length > 0 ? (
+        <motion.div
+          key={activeFilter}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        >
+          {filteredProjects.map((project, index) => {
+            const isLarge = index % 5 === 0;
+            return (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 50, rotateX: -15 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ 
+                delay: index * 0.15, 
+                duration: 0.8,
+                type: "spring",
+                stiffness: 100
+              }}
+              whileHover={{ 
+                y: -15, 
+                scale: 1.03,
+                rotateY: 5,
+                transition: { duration: 0.3 }
+              }}
+              className={`group relative ${isLarge ? 'md:col-span-2 lg:col-span-1' : ''}`}
+              style={{ perspective: '1000px' }}
+            >
+              {/* 3D Glow Effect - Lime green only */}
+              <motion.div
+                className="absolute -inset-1 rounded-3xl blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 -z-10"
+                style={{
+                  background: 'linear-gradient(to right, rgba(138,234,146,0.3), rgba(138,234,146,0.2), rgba(138,234,146,0.3))',
+                }}
+                animate={{
+                  opacity: [0, 0.3, 0],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  delay: index * 0.2,
+                }}
+              />
+              
+              {/* Glassmorphism Card - Lime green and black only */}
+              <Card className="relative overflow-hidden h-full flex flex-col border-2 border-accent/20 group-hover:border-accent/60 transition-all duration-500 backdrop-blur-xl"
+                style={{
+                  background: resolvedTheme === 'light' 
+                    ? 'linear-gradient(135deg, rgba(138,234,146,0.1) 0%, rgba(138,234,146,0.05) 100%)'
+                    : 'linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.85) 100%)',
+                  boxShadow: '0 8px 32px rgba(138,234,146,0.1), 0 0 0 1px rgba(138,234,146,0.1)',
+                }}
+              >
+                {/* Animated Shimmer - Using brand colors */}
+                <motion.div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100"
+                  style={{
+                    background: 'linear-gradient(to right, transparent, rgba(138,234,146,0.2), transparent)',
+                  }}
+                  animate={{
+                    x: ['-200%', '200%'],
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "linear",
+                    delay: 0.3
+                  }}
+                />
+
+                {/* Image Container with 3D Effect */}
+                <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20" style={{ minHeight: '200px' }}>
+                  <motion.img
+                    src={project.thumb}
+                    alt=""
+                    width="1280"
+                    height="720"
+                    className="w-full h-full object-cover"
+                    style={{ aspectRatio: '16 / 9', minHeight: '200px' }}
+                    loading="lazy"
+                    whileHover={{ 
+                      scale: 1.15,
+                      rotate: 2,
+                    }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  
+                  {/* Dynamic Gradient Overlay - Lime green only */}
+                  <motion.div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background: 'linear-gradient(to top, rgba(138,234,146,0.6), rgba(138,234,146,0.2), transparent)',
+                    }}
+                    animate={{
+                      opacity: [0.6, 0.8, 0.6],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  
+                  {/* Floating Icons - Reduced from 12 to 6 for better performance */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    {[...Array(6)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute w-2 h-2 rounded-full"
+                        style={{
+                          left: `${20 + (i * 15)}%`,
+                          top: `${25 + (i % 3) * 25}%`,
+                          backgroundColor: '#8AEA92',
+                        }}
+                        animate={{
+                          opacity: [0, 1, 0],
+                          scale: [0, 1.5, 0],
+                          y: [0, -30, -60],
+                          x: [0, (Math.random() - 0.5) * 40],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          delay: i * 0.25,
+                          ease: "easeOut"
+                        }}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* View Button - Brand colors only */}
+                  <motion.div
+                    className="absolute top-4 right-4 opacity-0 group-hover:opacity-100"
+                    whileHover={{ scale: 1.2, rotate: 360 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <div className="w-14 h-14 bg-accent rounded-full flex items-center justify-center shadow-2xl backdrop-blur-sm border-2 border-accent/40" style={{ backgroundColor: '#8AEA92' }}>
+                      <ExternalLink className="w-6 h-6" style={{ color: '#000000' }} />
+                    </div>
+                  </motion.div>
+
+                  {/* Project Number Badge - Brand colors */}
+                  <motion.div
+                    className="absolute top-4 left-4 opacity-0 group-hover:opacity-100"
+                    initial={{ scale: 0, rotate: -180 }}
+                    whileHover={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 200 }}
+                  >
+                    <div className="px-4 py-2 backdrop-blur-sm rounded-full border" style={{ backgroundColor: 'rgba(0,0,0,0.9)', borderColor: '#8AEA92' }}>
+                      <span className="font-bold text-sm" style={{ color: '#8AEA92' }}>#{String(index + 1).padStart(2, '0')}</span>
+                    </div>
+                  </motion.div>
+                </div>
+                
+                {/* Content with Enhanced Typography */}
+                <CardContent className="p-8 relative flex-1 flex flex-col space-y-5">
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <motion.h3
+                        className={`text-2xl font-bold mb-2 ${
+                          resolvedTheme === 'light'
+                            ? 'text-primary group-hover:text-accent'
+                            : 'text-light group-hover:text-accent'
+                        } transition-colors duration-300`}
+                        whileHover={{ x: 5 }}
+                      >
+                        {project.title}
+                      </motion.h3>
+                      <p className={`text-sm font-medium ${
+                        resolvedTheme === 'light'
+                          ? 'text-primary/70'
+                          : 'text-light/70'
+                      }`}>{project.role}</p>
+                    </div>
+                    
+                    <p className={`leading-relaxed ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary/80'
+                        : 'text-light/80'
+                    }`}>{project.summary}</p>
+                    
+                    {/* Enhanced Tags */}
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {project.tags.map((tag, tagIndex) => (
+                        <motion.div
+                          key={tag}
+                          initial={{ opacity: 0, scale: 0 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: tagIndex * 0.1, type: "spring" }}
+                          whileHover={{ scale: 1.15, y: -3, rotate: 2 }}
+                        >
+                          <Badge
+                            variant="outline"
+                            className="text-xs px-3 py-1.5 border-accent/50 bg-accent/10 hover:bg-accent/20 hover:border-accent transition-all duration-300 cursor-pointer backdrop-blur-sm"
+                          >
+                            {tag}
+                          </Badge>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Enhanced CTA Button */}
+                  <motion.button
+                    onClick={() => {
+                      openProjectModal(project);
+                      if (window.gtag) {
+                        window.gtag('event', 'view_item', {
+                          event_category: 'portfolio',
+                          event_label: project.title
+                        });
+                      }
+                    }}
+                    className="group/btn relative mt-6 w-full inline-flex items-center justify-center gap-3 px-6 py-3 rounded-xl font-semibold overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl text-center"
+                    style={{
+                      backgroundColor: '#8AEA92',
+                      color: '#000000',
+                    }}
+                    whileHover={{ scale: 1.05, x: 5 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-label={`Explore ${project.title} project`}
+                  >
+                    <motion.div
+                      className="absolute inset-0 opacity-0 group-hover/btn:opacity-100"
+                      style={{
+                        background: 'linear-gradient(to right, rgba(138,234,146,0.2), rgba(138,234,146,0.3), rgba(138,234,146,0.2))',
+                      }}
+                      animate={{
+                        x: ['-100%', '100%'],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "linear"
+                      }}
+                    />
+                    <span className="relative z-10 text-center" style={{ color: '#000000' }}>Explore Project</span>
+                    <motion.div
+                      className="relative z-10"
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      <Eye className="w-5 h-5" style={{ color: '#000000' }} />
+                    </motion.div>
+                  </motion.button>
+                </CardContent>
+              </Card>
+            </motion.div>
+            );
+          })}
+        </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="text-center py-16"
+          >
+            <p className={`text-xl ${resolvedTheme === 'light' ? 'text-primary/70' : 'text-light/70'}`}>
+              No projects found in this category.
+            </p>
+          </motion.div>
+        )}
+
+        {/* Extraordinary CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-center pt-8"
+          className="text-center pt-12"
         >
           <motion.a
             href="https://heyzine.com/flip-book/2e51bd7d15.html"
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ scale: 1.05, y: -3 }}
+            whileHover={{ scale: 1.08, y: -5 }}
             whileTap={{ scale: 0.95 }}
-            className="group relative inline-flex items-center gap-3 px-10 py-5 rounded-2xl bg-gradient-to-r from-accent via-accent-600 to-accent text-primary hover:from-accent-600 hover:via-accent hover:to-accent-600 transition-all duration-300 font-semibold shadow-2xl hover:shadow-3xl focus:outline-none focus:ring-4 focus:ring-accent/20 focus:ring-offset-2 focus:ring-offset-neutral overflow-hidden"
+            className="group relative inline-flex items-center gap-4 px-12 py-6 rounded-2xl overflow-hidden"
+            style={{
+              backgroundColor: '#8AEA92',
+              boxShadow: '0 10px 40px rgba(138,234,146,0.4), 0 0 0 1px rgba(138,234,146,0.2)',
+            }}
           >
-            {/* Animated Background */}
+            {/* Animated Background - Lime green only */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-secondary via-accent to-secondary opacity-0 group-hover:opacity-20"
+              className="absolute inset-0 opacity-0 group-hover:opacity-100"
+              style={{
+                background: 'linear-gradient(to right, rgba(138,234,146,0.3), rgba(138,234,146,0.4), rgba(138,234,146,0.3))',
+              }}
               animate={{
-                x: ['-100%', '100%'],
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
               }}
               transition={{
-                duration: 2,
+                duration: 3,
                 repeat: Infinity,
                 ease: "linear"
               }}
             />
             
-            <span className="relative z-10">View All Projects</span>
+            <motion.span
+              className="relative z-10 font-bold text-lg tracking-wide"
+              style={{ color: '#000000' }}
+              whileHover={{ letterSpacing: '0.1em' }}
+            >
+              View Complete Portfolio
+            </motion.span>
             <motion.div
               className="relative z-10"
-              animate={{ x: [0, 5, 0] }}
+              animate={{ x: [0, 8, 0], rotate: [0, 10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-6 h-6" style={{ color: '#000000' }} />
             </motion.div>
+            
+            {/* Sparkle Effect - Reduced from 6 to 3 for better performance */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
+              {[...Array(3)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-1 h-1 rounded-full"
+                  style={{
+                    left: `${30 + i * 20}%`,
+                    top: '50%',
+                    backgroundColor: '#8AEA92',
+                  }}
+                  animate={{
+                    y: [-20, -40],
+                    opacity: [0, 1, 0],
+                    scale: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    delay: i * 0.3,
+                  }}
+                />
+              ))}
+            </div>
           </motion.a>
         </motion.div>
       </motion.div>
@@ -2519,10 +2893,77 @@ const Testimonials = () => {
     return () => document.removeEventListener('keydown', handleEscKey);
   }, [isVideoModalOpen]);
   
-  const testimonialsPerPage = 3;
-  const totalPages = Math.ceil(TESTIMONIALS.length / testimonialsPerPage);
+  // Mobile: 1 per page (6 pages), Desktop: 3 per page (2 pages)
+  const [isMobileView, setIsMobileView] = useState(false);
+  const carouselRef = React.useRef(null);
+  const isScrollingRef = React.useRef(false);
   
-  const currentTestimonials = TESTIMONIALS.slice(
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  // Sync scroll position with current page on mobile
+  useEffect(() => {
+    if (isMobileView && carouselRef.current) {
+      isScrollingRef.current = true;
+      const scrollContainer = carouselRef.current;
+      const scrollContainerWidth = scrollContainer.clientWidth;
+      const itemWidth = scrollContainerWidth;
+      const targetScroll = currentPage * itemWidth;
+      
+      scrollContainer.scrollTo({
+        left: targetScroll,
+        behavior: 'smooth'
+      });
+      
+      // Reset flag after scroll completes
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 600);
+    }
+  }, [currentPage, isMobileView]);
+  
+  // Handle scroll to update current page on mobile
+  useEffect(() => {
+    if (!isMobileView || !carouselRef.current) return;
+    
+    const scrollContainer = carouselRef.current;
+    let scrollTimeout;
+    
+    const handleScroll = () => {
+      // Skip if we're programmatically scrolling
+      if (isScrollingRef.current) return;
+      
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const scrollLeft = scrollContainer.scrollLeft;
+        const containerWidth = scrollContainer.clientWidth;
+        const newPage = Math.round(scrollLeft / containerWidth);
+        
+        if (newPage !== currentPage && newPage >= 0 && newPage < TESTIMONIALS.length) {
+          setCurrentPage(newPage);
+        }
+      }, 150);
+    };
+    
+    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, [isMobileView, currentPage]);
+  
+  const testimonialsPerPage = isMobileView ? 1 : 3;
+  const totalPages = isMobileView ? TESTIMONIALS.length : Math.ceil(TESTIMONIALS.length / testimonialsPerPage);
+  
+  const currentTestimonials = isMobileView 
+    ? [TESTIMONIALS[currentPage]]
+    : TESTIMONIALS.slice(
     currentPage * testimonialsPerPage,
     (currentPage + 1) * testimonialsPerPage
   );
@@ -2616,7 +3057,73 @@ const Testimonials = () => {
 
         {/* Written Testimonials */}
         {activeTab === 'written' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div className="relative">
+          {/* Mobile: Horizontal scrollable carousel */}
+          <div 
+            ref={carouselRef}
+            className="md:hidden overflow-x-auto snap-x snap-mandatory scrollbar-hide" 
+            style={{ 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch',
+              scrollSnapType: 'x mandatory'
+            }}
+          >
+            <div className="flex" style={{ width: `calc(100% * ${TESTIMONIALS.length})` }}>
+              {TESTIMONIALS.map((testimonial, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex-shrink-0 snap-start px-4"
+                  style={{ width: `calc(100% / ${TESTIMONIALS.length})`, scrollSnapAlign: 'start' }}
+                >
+                  <Card className="border-accent/20 hover:border-accent/40 transition-all duration-300 bg-primary/90 backdrop-blur-sm">
+                    <CardContent className="p-5">
+                      <div className="space-y-4">
+                        {/* Quote Icon */}
+                        <div className="w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center">
+                          <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
+                          </svg>
+                        </div>
+                        
+                        <blockquote className="text-light text-base leading-relaxed">
+                          "{testimonial.quote}"
+                        </blockquote>
+                        
+                        <div className="pt-3 border-t border-accent/20">
+                          <div className="flex items-center gap-3">
+                            {/* Avatar Image */}
+                            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-accent flex-shrink-0">
+                              <img 
+                                src={testimonial.avatar} 
+                                alt={`${testimonial.author} profile picture`}
+                                width="40"
+                                height="40"
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                              />
+                            </div>
+                            
+                            {/* Author Info */}
+                            <div>
+                              <p className="font-semibold text-light text-base">{testimonial.author}</p>
+                              <p className="text-xs text-accent/80">{testimonial.role}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Desktop: Grid layout */}
+          <div className="hidden md:grid grid-cols-3 gap-6 md:gap-8">
           {currentTestimonials.map((testimonial, index) => (
             <motion.div
               key={index}
@@ -2632,7 +3139,7 @@ const Testimonials = () => {
                   <div className="space-y-6">
                     {/* Quote Icon */}
                     <div className="w-12 h-12 bg-gradient-to-br from-accent to-accent-600 rounded-xl flex items-center justify-center">
-                      <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
                       </svg>
                     </div>
@@ -2644,11 +3151,15 @@ const Testimonials = () => {
                     <div className="pt-4 border-t border-accent/20">
                       <div className="flex items-center gap-4">
                         {/* Avatar Image */}
-                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-accent flex-shrink-0">
+                          <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-accent flex-shrink-0" style={{ minWidth: '48px', minHeight: '48px' }}>
                           <img 
                             src={testimonial.avatar} 
-                            alt={`${testimonial.author} avatar`}
+                              alt={`${testimonial.author} profile picture`}
+                            width="48"
+                            height="48"
                             className="w-full h-full object-cover"
+                              style={{ aspectRatio: '1 / 1', minWidth: '48px', minHeight: '48px' }}
+                              loading="lazy"
                           />
                           <div 
                             className="w-full h-full bg-gradient-to-br from-accent to-accent-600 flex items-center justify-center text-primary font-semibold text-sm"
@@ -2670,58 +3181,126 @@ const Testimonials = () => {
               </Card>
             </motion.div>
           ))}
+          </div>
         </div>
         )}
 
         {/* Navigation Buttons */}
+        {activeTab === 'written' && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex justify-center items-center gap-4 pt-8"
+          className="pt-6"
         >
-          <motion.button
-            onClick={prevPage}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-3 rounded-full bg-accent/10 hover:bg-accent/20 transition-all duration-300 border border-accent/20 hover:border-accent/40"
-            disabled={currentPage === 0}
-          >
-            <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </motion.button>
-          
-          {/* Page Indicators */}
-          <div className="flex gap-2">
-            {Array.from({ length: totalPages }, (_, index) => (
-              <motion.button
-                key={index}
-                onClick={() => setCurrentPage(index)}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  currentPage === index 
-                    ? 'bg-accent scale-125' 
-                    : 'bg-accent/30 hover:bg-accent/50'
-                }`}
+          {/* Mobile: Minimal Progress Bar Style */}
+          <div className="md:hidden">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="text-xs text-accent/60 font-medium">
+                {currentPage + 1} / {totalPages}
+              </span>
+            </div>
+            {/* Progress Bar Indicator */}
+            <div className="relative h-0.5 bg-accent/20 rounded-full overflow-hidden max-w-xs mx-auto">
+              <motion.div
+                className="absolute top-0 left-0 h-full bg-accent rounded-full"
+                initial={false}
+                animate={{
+                  width: `${((currentPage + 1) / totalPages) * 100}%`
+                }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
               />
-            ))}
+            </div>
+            {/* Clickable Dots */}
+            <div className="flex items-center justify-center gap-1.5 mt-3">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <motion.button
+                  key={index}
+                  onClick={() => {
+                    setCurrentPage(index);
+                  }}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={`rounded-full transition-all duration-300 ${
+                    currentPage === index 
+                      ? 'w-2 h-2 bg-accent' 
+                      : 'w-1.5 h-1.5 bg-accent/40 hover:bg-accent/60'
+                  }`}
+                  aria-label={`Go to page ${index + 1}`}
+                  aria-current={currentPage === index ? 'page' : undefined}
+                />
+              ))}
+            </div>
           </div>
-          
-          <motion.button
-            onClick={nextPage}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-3 rounded-full bg-accent/10 hover:bg-accent/20 transition-all duration-300 border border-accent/20 hover:border-accent/40"
-            disabled={currentPage === totalPages - 1}
-          >
-            <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </motion.button>
+
+          {/* Desktop: Original Style with Buttons */}
+          <div className="hidden md:flex justify-center items-center gap-3">
+            <motion.button
+              onClick={() => {
+                if (currentPage > 0) {
+                  setCurrentPage(currentPage - 1);
+                }
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`p-2.5 rounded-full transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center ${
+                currentPage === 0
+                  ? 'bg-accent/5 text-accent/30 cursor-not-allowed'
+                  : 'bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40'
+              }`}
+              disabled={currentPage === 0}
+              aria-label="Previous page"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </motion.button>
+            
+            {/* Page Indicators */}
+            <div className="flex items-center gap-1 px-2">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <motion.button
+                  key={index}
+                  onClick={() => {
+                    setCurrentPage(index);
+                  }}
+                  whileHover={{ scale: 1.4 }}
+                  whileTap={{ scale: 0.7 }}
+                  className={`rounded-full transition-all duration-200 ${
+                    currentPage === index 
+                      ? 'w-1.5 h-1.5 bg-accent shadow-sm shadow-accent/30' 
+                      : 'w-1 h-1 bg-accent/30 hover:bg-accent/50'
+                  }`}
+                  aria-label={`Go to page ${index + 1}`}
+                  aria-current={currentPage === index ? 'page' : undefined}
+                />
+              ))}
+            </div>
+            
+            <motion.button
+              onClick={() => {
+                if (currentPage < totalPages - 1) {
+                  setCurrentPage(currentPage + 1);
+                }
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`p-2.5 rounded-full transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center ${
+                currentPage === totalPages - 1
+                  ? 'bg-accent/5 text-accent/30 cursor-not-allowed'
+                  : 'bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40'
+              }`}
+              disabled={currentPage === totalPages - 1}
+              aria-label="Next page"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </motion.button>
+          </div>
         </motion.div>
+        )}
 
         {/* Video Testimonials */}
         {activeTab === 'video' && (
@@ -2739,11 +3318,15 @@ const Testimonials = () => {
                 <Card className="h-full border-accent/20 hover:border-accent/40 transition-all duration-300 group-hover:shadow-xl bg-primary/90 backdrop-blur-sm overflow-hidden">
                   <CardContent className="p-0">
                     {/* Video Thumbnail */}
-                    <div className="relative aspect-video bg-gradient-to-br from-accent/20 to-secondary/20 overflow-hidden">
+                    <div className="relative aspect-video bg-gradient-to-br from-accent/20 to-secondary/20 overflow-hidden" style={{ minHeight: '200px' }}>
                       <img
                         src={video.thumbnail}
-                        alt={video.title}
+                        alt={`${video.title} video thumbnail`}
+                        width="1280"
+                        height="720"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        style={{ aspectRatio: '16 / 9', minHeight: '200px' }}
+                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
                         <motion.button
@@ -2751,6 +3334,7 @@ const Testimonials = () => {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.95 }}
                           className="w-16 h-16 bg-accent/90 hover:bg-accent rounded-full flex items-center justify-center shadow-lg"
+                          aria-label={`Play ${video.title} video`}
                         >
                           <Play className="w-6 h-6 text-primary ml-1" />
                         </motion.button>
@@ -2768,11 +3352,15 @@ const Testimonials = () => {
                       
                       {/* Author Info */}
                       <div className="flex items-center gap-3 pt-4 border-t border-accent/20">
-                        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-accent flex-shrink-0">
+                        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-accent flex-shrink-0" style={{ minWidth: '40px', minHeight: '40px' }}>
                           <img 
                             src={video.thumbnail} 
-                            alt={`${video.client} avatar`}
+                            alt=""
+                            width="40"
+                            height="40"
                             className="w-full h-full object-cover"
+                            style={{ aspectRatio: '1 / 1', minWidth: '40px', minHeight: '40px' }}
+                            loading="lazy"
                           />
                         </div>
                         <div>
@@ -2927,8 +3515,8 @@ const Testimonials = () => {
               <div className="absolute inset-0 opacity-5">
                 <div className="w-full h-full" style={{
                   backgroundImage: `
-                    linear-gradient(rgba(167, 139, 250, 0.1) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(167, 139, 250, 0.1) 1px, transparent 1px)
+                    linear-gradient(rgba(138,234,146, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(138,234,146, 0.1) 1px, transparent 1px)
                   `,
                   backgroundSize: '50px 50px'
                 }}></div>
@@ -2990,22 +3578,29 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.andegnaLogo} 
-                        alt="Andegna Furniture" 
+                        alt="Andegna Furniture client logo"
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
                         style={{ 
                           filter: 'drop-shadow(0 0 4px #8AEA92) drop-shadow(0 0 8px #8AEA92)',
                           border: '2px solid #8AEA92',
-                          borderRadius: '50%'
+                          borderRadius: '50%',
+                          aspectRatio: '1 / 1',
+                          minWidth: '64px',
+                          minHeight: '64px'
                         }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3039,17 +3634,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.niqat} 
-                        alt="Niqat Coffee" 
+                        alt="Niqat Coffee client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3083,17 +3683,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.primeAll} 
-                        alt="Prime All Trading" 
+                        alt="Prime All client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3124,17 +3729,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.medavailLogo} 
-                        alt="Medavail Pharmaceutical" 
+                        alt="Medavail Pharmaceuticals client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3168,17 +3778,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.gedylaw} 
-                        alt="GEDY-LAW" 
+                        alt="Gedy Law client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3212,17 +3827,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.pdcLogo} 
-                        alt="Pioneer Diagnostic Center" 
+                        alt="PDC client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3258,22 +3878,29 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.andegnaLogo} 
-                        alt="Andegna Furniture" 
+                        alt="Andegna Furniture client logo"
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
                         style={{ 
                           filter: 'drop-shadow(0 0 4px #8AEA92) drop-shadow(0 0 8px #8AEA92)',
                           border: '2px solid #8AEA92',
-                          borderRadius: '50%'
+                          borderRadius: '50%',
+                          aspectRatio: '1 / 1',
+                          minWidth: '64px',
+                          minHeight: '64px'
                         }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3307,17 +3934,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.niqat} 
-                        alt="Niqat Coffee" 
+                        alt="Niqat Coffee client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3351,17 +3983,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.primeAll} 
-                        alt="Prime All Trading" 
+                        alt="Prime All client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3392,17 +4029,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.medavailLogo} 
-                        alt="Medavail Pharmaceutical" 
+                        alt="Medavail Pharmaceuticals client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3436,17 +4078,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.gedylaw} 
-                        alt="GEDY-LAW" 
+                        alt="Gedy Law client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3480,17 +4127,22 @@ const Testimonials = () => {
                           ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
                           : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
                       }`}
+                      style={{ minWidth: '64px', minHeight: '64px' }}
                       whileHover={{
                         boxShadow: resolvedTheme === 'light' 
                           ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(167, 139, 250, 0.4)",
+                          : "0 20px 40px rgba(138,234,146, 0.4)",
                         transition: { duration: 0.3 }
                       }}
                     >
                       <img 
                         src={IMAGES.pdcLogo} 
-                        alt="Pioneer Diagnostic Center" 
+                        alt="PDC client logo" 
+                        width="200"
+                        height="200"
                         className="w-full h-full object-cover"
+                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                        loading="lazy"
                         onError={(e) => {
                           e.target.style.display = 'none';
                           e.target.nextSibling.style.display = 'flex';
@@ -3607,8 +4259,8 @@ const ContactForm = () => {
       <div className="relative overflow-hidden">
         {/* Animated Success Background */}
         <div className="absolute inset-0">
-          {/* Floating celebration particles */}
-          {[...Array(20)].map((_, i) => (
+          {/* Floating celebration particles - Reduced from 20 to 10 for better performance */}
+          {[...Array(10)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute w-2 h-2 bg-accent rounded-full"
@@ -3634,8 +4286,8 @@ const ContactForm = () => {
           
           {/* Gradient orbs */}
           <motion.div
-            className="absolute w-64 h-64 bg-gradient-to-r from-green-400/20 to-blue-400/20 rounded-full blur-3xl"
-            style={{ top: '-50%', left: '-50%' }}
+            className="absolute w-64 h-64 rounded-full blur-3xl"
+            style={{ background: 'rgba(138,234,146,0.2)', top: '-50%', left: '-50%' }}
             animate={{
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.6, 0.3],
@@ -3649,7 +4301,12 @@ const ContactForm = () => {
           />
             </div>
 
-        <Card className="relative border-2 border-green-400/30 bg-gradient-to-br from-green-500/10 via-primary/10 to-blue-500/10 backdrop-blur-sm shadow-2xl">
+        <Card className="relative border-2 border-accent/30 backdrop-blur-sm shadow-2xl"
+          style={{ 
+            background: 'linear-gradient(to bottom right, rgba(138,234,146,0.1), rgba(0,0,0,0.1), rgba(138,234,146,0.1))',
+            borderColor: 'rgba(138,234,146,0.3)',
+          }}
+        >
           <CardContent className="p-8 text-center relative z-10">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
@@ -3811,7 +4468,7 @@ const ContactForm = () => {
         />
 
         {/* Floating particles */}
-        {[...Array(8)].map((_, i) => (
+        {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-2 h-2 bg-primary/40 rounded-full"
@@ -4207,13 +4864,66 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => {
     </div>
 
     <div className="mx-auto max-w-6xl px-4 relative z-10">
+       {/* Mobile: Minimalist Footer */}
+       <div className="md:hidden py-8">
+         <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true }}
+           transition={{ duration: 0.6 }}
+           className="space-y-6"
+         >
+           {/* Brand & Social */}
+           <div className="flex flex-col items-center gap-4">
+             <h3 className="text-lg font-bold text-light">{PROFILE.name}</h3>
+             
+             {/* Social Icons - Compact */}
+             <div className="flex items-center gap-3">
+               {PROFILE.socials.map((social, index) => (
+                 <motion.a
+                   key={social.label}
+                   href={social.href}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className={`p-2 rounded-lg transition-all duration-200 ${
+                     resolvedTheme === 'light'
+                       ? 'bg-accent/20 hover:bg-accent/30'
+                       : 'bg-accent/10 hover:bg-accent/20'
+                   }`}
+                   whileHover={{ scale: 1.1, y: -2 }}
+                   whileTap={{ scale: 0.95 }}
+                   aria-label={social.label}
+                 >
+                   <social.icon className={`w-4 h-4 ${
+                     resolvedTheme === 'light'
+                       ? 'text-primary'
+                       : 'text-accent'
+                   }`} />
+                 </motion.a>
+               ))}
+             </div>
+           </div>
+
+           {/* Divider */}
+           <div className="h-px bg-accent/20"></div>
+
+           {/* Copyright */}
+           <div className="flex flex-col items-center">
+             <p className="text-xs text-accent/50">
+               © 2025 {PROFILE.name}
+             </p>
+           </div>
+         </motion.div>
+       </div>
+
+       {/* Desktop: Full Footer */}
        {/* Main Content */}
           <motion.div
          initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
          transition={{ duration: 0.8 }}
-         className="py-16"
+         className="hidden md:block py-16"
        >
          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 items-start">
            {/* Brand Section */}
@@ -4228,8 +4938,12 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => {
                <div className="w-16 h-16 bg-gradient-to-br from-accent to-accent-600 rounded-2xl overflow-hidden shadow-lg">
                 <img 
                   src={IMAGES.bereketFikre} 
-                  alt="Bereket Fikre"
+                  alt=""
+                  width="64"
+                  height="64"
                   className="w-full h-full object-cover"
+                  style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
+                  loading="lazy"
                 />
               </div>
               <div>
@@ -4251,9 +4965,11 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => {
                className="flex items-center"
              >
                <img 
-                 src={resolvedTheme === 'light' ? '/img/Logo.png' : logoImg} 
+                 src={logoImg} 
                  alt="Logo"
-                 className="h-12 w-auto"
+                 width="200"
+                 height="67"
+                 className="h-16 md:h-20 w-auto object-contain"
                />
              </motion.div>
           </motion.div>
@@ -4367,13 +5083,13 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => {
         </div>
       </motion.div>
 
-      {/* Bottom Section */}
+      {/* Desktop Bottom Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="pb-8 border-t border-primary/10"
+        className="hidden md:block pb-8 border-t border-primary/10"
       >
         <div className="flex items-center justify-center text-center">
             <p className="text-sm text-neutral-400">
@@ -4432,15 +5148,46 @@ export default function CreativeDesignerPortfolio() {
   }, [isPrivacyOpen, isTermsOpen, isAnalyticsOpen, isAIOpen, isPWAOpen, isPerformanceOpen, isAccessibilityOpen, isPerformanceDashboardOpen, isSEOManagerOpen, isSecurityDashboardOpen, isAIContentGeneratorOpen, isSmartRecommendationsOpen, isCRMIntegrationOpen, isEmailMarketingOpen]);
 
   React.useEffect(() => {
-    // Register service worker for PWA functionality
+    // Register service worker for PWA functionality (only in production)
+    // Skip service worker in development to avoid fetch errors with Vite dev server
+    const isDevelopment = import.meta.env.DEV || 
+                          window.location.hostname === 'localhost' || 
+                          window.location.hostname === '127.0.0.1' ||
+                          (window.location.port !== '' && window.location.port !== '443' && window.location.port !== '80');
+    
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('Service Worker registered successfully:', registration);
-        })
-        .catch((error) => {
-          console.log('Service Worker registration failed:', error);
+      if (isDevelopment) {
+        // Unregister all service workers in development
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          registrations.forEach((registration) => {
+            registration.unregister().then((success) => {
+              if (success) {
+                // Service Worker unregistered in development
+              }
+            });
+          });
         });
+        // Also unregister the controller if it exists
+        if (navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+        }
+      } else {
+        // Production: Register service worker
+        navigator.serviceWorker.getRegistration()
+          .then((registration) => {
+            if (!registration) {
+              // Only register if not already registered
+              return navigator.serviceWorker.register('/sw.js');
+            }
+            return registration;
+          })
+          .then((registration) => {
+            // Service Worker registered successfully
+          })
+          .catch((error) => {
+            console.error('Service Worker registration failed:', error);
+          });
+      }
     }
 
     // Set up global deferredPrompt for install functionality
@@ -4449,11 +5196,9 @@ export default function CreativeDesignerPortfolio() {
       e.preventDefault();
       // Stash the event so it can be triggered later
       window.deferredPrompt = e;
-      console.log('PWA install prompt available');
     };
 
     const handleAppInstalled = () => {
-      console.log('PWA was installed');
       window.deferredPrompt = null;
     };
 
@@ -4472,12 +5217,29 @@ export default function CreativeDesignerPortfolio() {
   React.useEffect(() => {
     // Initialize advanced caching - DISABLED to reduce console noise
     // advancedCache.init();
-    // Initialize scroll animations
+    // Defer non-critical scripts to reduce initial load time
+    // Use requestIdleCallback for better performance, fallback to setTimeout
+    const initNonCriticalScripts = () => {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          // Initialize scroll animations (can be deferred)
     scrollAnimations.init();
-    // Initialize accessibility features
+          // Initialize accessibility features (can be deferred)
     accessibilityManager.init();
-    // Initialize page transitions
+          // Initialize page transitions (can be deferred)
     pageTransitions.init();
+        }, { timeout: 2000 });
+      } else {
+        // Fallback for browsers without requestIdleCallback
+        setTimeout(() => {
+          scrollAnimations.init();
+          accessibilityManager.init();
+          pageTransitions.init();
+        }, 2000);
+      }
+    };
+    
+    initNonCriticalScripts();
       // Initialize advanced analytics - DISABLED to reduce console noise
       // advancedAnalytics.init();
       // Initialize performance monitoring - DISABLED to reduce console noise
@@ -4524,17 +5286,34 @@ export default function CreativeDesignerPortfolio() {
           isEmailMarketingOpen={isEmailMarketingOpen} setIsEmailMarketingOpen={setIsEmailMarketingOpen}
         />
         <Hero />
+      {/* Below-the-fold sections - Suspense boundaries added for future lazy loading
+          Note: To enable true lazy loading, extract these components to separate files
+          and use React.lazy() for code splitting. This will significantly reduce
+          initial bundle size and main-thread work. */}
+      <Suspense fallback={<div className="min-h-screen bg-primary" />}>
       <About />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-screen bg-primary" />}>
       <Services />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-screen bg-primary" />}>
       <Work />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-screen bg-primary" />}>
+      <Testimonials />
+      </Suspense>
       <LazyCaseStudy />
       <LazyBlog />
-      <Testimonials />
+      <LazyFAQ />
+      <Suspense fallback={<div className="min-h-screen bg-primary" />}>
       <Contact />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-[400px] bg-primary" />}>
       <Footer 
         onPrivacyClick={() => setIsPrivacyOpen(true)}
         onTermsClick={() => setIsTermsOpen(true)}
       />
+      </Suspense>
       
       {/* Legal Modals */}
       <PrivacyPolicy 

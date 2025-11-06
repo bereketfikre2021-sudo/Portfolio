@@ -217,21 +217,40 @@ export const ReadingProgress = ({
     const targetElement = target ? document.querySelector(target) : document.body;
     if (!targetElement) return;
 
+    let rafId = null;
+    let ticking = false;
+
     const updateProgress = () => {
-      const rect = targetElement.getBoundingClientRect();
-      const scrollTop = window.pageYOffset;
-      const docHeight = targetElement.offsetHeight;
-      const winHeight = window.innerHeight;
-      const scrollPercent = scrollTop / (docHeight - winHeight);
-      const progress = Math.min(100, Math.max(0, scrollPercent * 100));
-      setProgress(progress);
+      if (ticking) return;
+      ticking = true;
+      
+      // Batch all layout reads in requestAnimationFrame to prevent forced reflow
+      rafId = requestAnimationFrame(() => {
+        // Batch all layout property reads together
+        const scrollTop = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
+        const docHeight = targetElement.scrollHeight || targetElement.offsetHeight;
+        const winHeight = window.innerHeight || document.documentElement.clientHeight;
+        
+        const scrollPercent = docHeight > winHeight ? scrollTop / (docHeight - winHeight) : 0;
+        const progress = Math.min(100, Math.max(0, scrollPercent * 100));
+        
+        setProgress(progress);
+        ticking = false;
+      });
     };
 
     window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress, { passive: true });
+    
+    // Initial update with RAF
     updateProgress();
 
     return () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
       window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
     };
   }, [target]);
 

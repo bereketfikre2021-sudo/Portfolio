@@ -2,24 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Favicon Support - Multiple formats for maximum compatibility -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=9" />
-    <link rel="shortcut icon" href="/favicon.ico?v=9" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=9" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=9" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=9" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=9" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png?v=9" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png?v=9" />
-    <meta name="msapplication-TileImage" content="/apple-touch-icon.png?v=9" />
-    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
+    <!-- Early Resource Hints - Critical for reducing document request latency -->
+    <!-- DNS Prefetch for external domains (resolves DNS early) -->
+    <!-- Only include essential third-party services to minimize cookie usage -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <!-- Removed Google Analytics DNS prefetch to avoid third-party cookies -->
+    <!-- Removed Formspree DNS prefetch - will connect on-demand -->
+    
+    <!-- Preconnect to critical third-party origins (establishes connection early) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Removed Google Analytics preconnect to avoid third-party cookies -->
+    <!-- Removed Formspree preconnect - will connect on-demand when form is submitted -->
+    
+    <!-- Favicon Support -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=9" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=9" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=9" />
+    
     <!-- Primary Meta Tags -->
-    <title>Bereket Fikre - Creative Designer & Brand Builder | UI/UX Expert | Addis Ababa</title>
-    <meta name="title" content="Bereket Fikre - Creative Designer & Brand Builder | UI/UX Expert | Addis Ababa" />
-    <meta name="description" content="Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing. Based in Addis Ababa, Ethiopia. Transform your brand with stunning visual solutions." />
-    <meta name="keywords" content="creative designer, UI/UX designer, brand designer, graphic designer, web designer, logo design, brand identity, digital marketing, Addis Ababa, Ethiopia, portfolio, freelance designer" />
+    <title>Bereket Fikre | Creative Designer & Developer</title>
+    <meta name="title" content="Bereket Fikre | Creative Designer & Developer" />
+    <meta name="description" content="Portfolio of Bereket Fikre – Creative Designer specializing in branding, UI/UX, and digital experiences." />
+    <meta name="keywords" content="Bereket Fikre, Designer, Web Developer, Portfolio, UI/UX, Branding" />
     <meta name="author" content="Bereket Fikre" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="English" />
@@ -27,10 +35,10 @@
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://bereketfikre2021-sudo.github.io/Portfolio/" />
-    <meta property="og:title" content="Bereket Fikre - Creative Designer & Brand Builder | UI/UX Expert" />
-    <meta property="og:description" content="Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing. Transform your brand with stunning visual solutions." />
-    <meta property="og:image" content="https://bereketfikre2021-sudo.github.io/Portfolio/img/social-preview.png" />
+    <meta property="og:url" content="https://bereketfikre.netlify.app/" />
+    <meta property="og:title" content="Bereket Fikre Portfolio" />
+    <meta property="og:description" content="Explore design and development works by Bereket Fikre." />
+    <meta property="og:image" content="/preview-image.jpg" />
     <meta property="og:image:secure_url" content="https://bereketfikre2021-sudo.github.io/Portfolio/img/social-preview.png" />
     <meta property="og:image:alt" content="Bereket Fikre - Professional Creative Designer & Brand Builder" />
     <meta property="og:image:width" content="1200" />
@@ -38,27 +46,9 @@
     <meta property="og:image:type" content="image/png" />
     <meta property="og:site_name" content="Bereket Fikre Portfolio" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:updated_time" content="2025-01-10T00:00:00Z" />
-    <meta property="og:image:url" content="https://bereketfikre2021-sudo.github.io/Portfolio/img/social-preview.png" />
-    <meta property="article:author" content="Bereket Fikre" />
-    <meta property="article:section" content="Portfolio" />
-    <meta property="article:tag" content="Creative Designer, UI/UX, Brand Identity, Graphic Design" />
     
     <!-- Additional Social Media Meta Tags -->
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:image:width" content="1200" />
-    <meta name="twitter:image:height" content="630" />
     <meta name="twitter:image:src" content="https://bereketfikre2021-sudo.github.io/Portfolio/img/social-preview.png" />
-    <meta name="twitter:app:name:iphone" content="Bereket Fikre Portfolio" />
-    <meta name="twitter:app:name:ipad" content="Bereket Fikre Portfolio" />
-    <meta name="twitter:app:name:googleplay" content="Bereket Fikre Portfolio" />
-    
-    <!-- Additional debugging and fallback meta tags -->
-    <meta property="og:image:url" content="https://bereketfikre2021-sudo.github.io/Portfolio/img/social-preview.png" />
-    <meta name="image" content="https://bereketfikre2021-sudo.github.io/Portfolio/img/social-preview.png" />
-    <meta name="thumbnail" content="https://bereketfikre2021-sudo.github.io/Portfolio/img/social-preview.png" />
-    <meta name="msapplication-TileImage" content="https://bereketfikre2021-sudo.github.io/Portfolio/img/social-preview.png" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -84,147 +74,74 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json" />
     
-    <!-- Performance Optimization - SIMPLIFIED FOR TEST APP -->
-    <meta name="format-detection" content="telephone=no" />
+    <!-- Critical CSS - Inlined to prevent render blocking -->
+    <style>
+      /* Critical above-the-fold styles */
+      html{scroll-behavior:smooth}
+      body{font-family:'Raleway',-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif !important;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transition:background-color 0.3s ease,color 0.3s ease;margin:0;padding:0}
+      *{font-family:'Raleway',-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif !important}
+      img{max-width:100%;height:auto}
+      #root{min-height:100vh}
+      /* Prevent FOUC */
+      body:not(.loaded){visibility:hidden}
+      body.loaded{visibility:visible}
+      /* Critical theme colors */
+      :root{--primary:#000000;--primary-foreground:#ffffff;--secondary:#33202A;--secondary-foreground:#ffffff;--accent:#8AEA92;--accent-foreground:#000000;--neutral:#5F5566;--neutral-foreground:#ffffff;--light:#80ADA0;--light-foreground:#000000}
+      .dark{--primary:#000000;--primary-foreground:#ffffff;--secondary:#33202A;--secondary-foreground:#ffffff;--accent:#8AEA92;--accent-foreground:#000000;--neutral:#5F5566;--neutral-foreground:#ffffff;--light:#80ADA0;--light-foreground:#000000}
+    </style>
     
-    <!-- Resource Hints - ALL DISABLED FOR TEST APP -->
+    <!-- Font loading - Optimized for LCP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Raleway font stylesheet -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=optional" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"></noscript>
     
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Bereket Fikre",
-      "jobTitle": "Creative Designer, Brand Builder & Educator",
-      "description": "Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing",
-      "url": "https://bereketfikre.com",
-      "image": "https://bereketfikre.com/img/Bereket-Fikre.webp",
-      "sameAs": [
-        "https://www.linkedin.com/in/bereket-fikre",
-        "https://www.instagram.com/bereket_fikre",
-        "https://github.com/bereketfikre",
-        "https://dribbble.com/bereketfikre"
-      ],
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Addis Ababa",
-        "addressCountry": "Ethiopia"
-      },
-      "worksFor": {
-        "@type": "Organization",
-        "name": "Freelance Creative Designer"
-      },
-      "knowsAbout": [
-        "UI/UX Design",
-        "Brand Identity Design",
-        "Graphic Design",
-        "Web Design",
-        "Digital Marketing",
-        "Logo Design",
-        "Print Design"
-      ],
-      "hasOccupation": {
-        "@type": "Occupation",
-        "name": "Creative Designer",
-        "occupationLocation": {
-          "@type": "City",
-          "name": "Addis Ababa, Ethiopia"
-        }
-      }
-    }
-    </script>
+    <!-- Preload hero image for LCP optimization -->
+    <link rel="preload" as="image" href="/img/hero%20image.webp" type="image/webp" fetchpriority="high">
     
-    <!-- Portfolio Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "CreativeWork",
-      "name": "Bereket Fikre Portfolio",
-      "description": "Professional portfolio showcasing creative design work including UI/UX design, brand identity, and graphic design projects",
-      "creator": {
-        "@type": "Person",
-        "name": "Bereket Fikre"
-      },
-      "url": "https://bereketfikre.com",
-      "dateCreated": "2024",
-      "genre": "Portfolio",
-      "keywords": "creative design, UI/UX, brand identity, graphic design, portfolio"
-    }
-    </script>
-    
-    <!-- Organization Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Bereket Fikre Design Studio",
-      "description": "Professional creative design services specializing in UI/UX design, brand identity, and graphic design",
-      "url": "https://bereketfikre.com",
-      "logo": "https://bereketfikre.com/img/Bereket-Fikre.webp",
-      "founder": {
-        "@type": "Person",
-        "name": "Bereket Fikre"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Addis Ababa",
-        "addressCountry": "Ethiopia"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "bereketfikre2021@gmail.com",
-        "contactType": "customer service"
-      },
-      "sameAs": [
-        "https://www.linkedin.com/in/bereket-fikre",
-        "https://www.instagram.com/bereket_fikre",
-        "https://github.com/bereketfikre",
-        "https://dribbble.com/bereketfikre"
-      ],
-      "serviceArea": {
-        "@type": "Country",
-        "name": "Ethiopia"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Design Services",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "UI/UX Design",
-              "description": "User interface and user experience design services"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Brand Identity Design",
-              "description": "Complete brand identity and logo design services"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Graphic Design",
-              "description": "Print and digital graphic design services"
-            }
-          }
-        ]
-      }
-    }
-    </script>
+    <!-- Critical resource hints for LCP optimization -->
+    <link rel="preload" as="style" href="/src/index.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/src/index.css"></noscript>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    
-    <!-- Service workers and caches cleared -->
+    <!-- Main JavaScript - Loaded asynchronously to prevent render blocking -->
+    <script type="module" async src="/src/main.jsx"></script>
     <script>
+      // Ensure font is loaded before showing content
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function() {
+          document.body.classList.add('loaded');
+        });
+      } else {
+        // Fallback for browsers without Font Loading API
+        document.addEventListener('DOMContentLoaded', function() {
+          // Wait a bit for font to load
+          setTimeout(function() {
+            document.body.classList.add('loaded');
+          }, 100);
+        });
+      }
+      
+      // Also mark as loaded on DOMContentLoaded as backup
+      document.addEventListener('DOMContentLoaded', function() {
+        if (!document.body.classList.contains('loaded')) {
+          setTimeout(function() {
+            document.body.classList.add('loaded');
+          }, 200);
+        }
+      });
+    </script>
+    
+    <!-- Service workers and caches cleared - Deferred -->
+    <script defer>
       console.log('Main page loaded - service workers disabled');
     </script>
+    
+    <!-- JSON-LD Structured Data - Minified to reduce HTML size -->
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Bereket Fikre","jobTitle":"Creative Designer, Brand Builder & Educator","description":"Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing","url":"https://bereketfikre.com","image":"https://bereketfikre.com/img/Bereket-Fikre.webp","sameAs":["https://www.linkedin.com/in/bereket-fikre","https://www.instagram.com/bereket_fikre","https://github.com/bereketfikre","https://dribbble.com/bereketfikre"],"address":{"@type":"PostalAddress","addressLocality":"Addis Ababa","addressCountry":"Ethiopia"},"worksFor":{"@type":"Organization","name":"Freelance Creative Designer"},"knowsAbout":["UI/UX Design","Brand Identity Design","Graphic Design","Web Design","Digital Marketing","Logo Design","Print Design"],"hasOccupation":{"@type":"Occupation","name":"Creative Designer","occupationLocation":{"@type":"City","name":"Addis Ababa, Ethiopia"}}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Bereket Fikre Portfolio","description":"Professional portfolio showcasing creative design work including UI/UX design, brand identity, and graphic design projects","creator":{"@type":"Person","name":"Bereket Fikre"},"url":"https://bereketfikre.com","dateCreated":"2024","genre":"Portfolio","keywords":"creative design, UI/UX, brand identity, graphic design, portfolio"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Bereket Fikre Design Studio","description":"Professional creative design services specializing in UI/UX design, brand identity, and graphic design","url":"https://bereketfikre.com","logo":"https://bereketfikre.com/img/Bereket-Fikre.webp","founder":{"@type":"Person","name":"Bereket Fikre"},"address":{"@type":"PostalAddress","addressLocality":"Addis Ababa","addressCountry":"Ethiopia"},"contactPoint":{"@type":"ContactPoint","email":"bereketfikre2021@gmail.com","contactType":"customer service"},"sameAs":["https://www.linkedin.com/in/bereket-fikre","https://www.instagram.com/bereket_fikre","https://github.com/bereketfikre","https://dribbble.com/bereketfikre"],"serviceArea":{"@type":"Country","name":"Ethiopia"},"hasOfferCatalog":{"@type":"OfferCatalog","name":"Design Services","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"UI/UX Design","description":"User interface and user experience design services"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Brand Identity Design","description":"Complete brand identity and logo design services"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Graphic Design","description":"Print and digital graphic design services"}}]}}</script>
   </body>
 </html>

@@ -138,7 +138,10 @@ const ClientLogosCarousel = ({
                     <img
                       src={currentClient.logo}
                       alt={currentClient.name}
+                      width="80"
+                      height="80"
                       className="w-full h-full object-contain"
+                      style={{ aspectRatio: '1 / 1' }}
                     />
                   </div>
                   <div>
@@ -234,7 +237,10 @@ const ClientLogosCarousel = ({
                 <img
                   src={client.logo}
                   alt={client.name}
+                  width="200"
+                  height="64"
                   className="w-full h-16 object-contain grayscale group-hover:grayscale-0 transition-all"
+                  style={{ aspectRatio: '25 / 8' }}
                 />
               </div>
             </motion.div>

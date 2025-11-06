@@ -50,19 +50,44 @@ class ScrollOptimizer {
     this.listeners.delete(id);
   }
 
+  // Cache layout values to prevent forced reflows
+  _cachedScrollPosition = null;
+  _cacheTimestamp = 0;
+  _CACHE_DURATION = 16; // ~60fps
+
   getScrollPosition() {
-    return {
-      scrollY: window.pageYOffset,
-      scrollX: window.pageXOffset,
-      maxScroll: document.documentElement.scrollHeight - window.innerHeight,
-      percentage: Math.round((window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100)
+    const now = Date.now();
+    
+    // Return cached value if still fresh
+    if (this._cachedScrollPosition && (now - this._cacheTimestamp) < this._CACHE_DURATION) {
+      return this._cachedScrollPosition;
+    }
+    
+    // Batch all layout reads together to prevent forced reflow
+    const scrollY = window.pageYOffset || window.scrollY || document.documentElement.scrollTop;
+    const scrollX = window.pageXOffset || window.scrollX || document.documentElement.scrollLeft;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const innerHeight = window.innerHeight || document.documentElement.clientHeight;
+    const maxScroll = scrollHeight - innerHeight;
+    
+    this._cachedScrollPosition = {
+      scrollY,
+      scrollX,
+      maxScroll,
+      percentage: maxScroll > 0 ? Math.round((scrollY / maxScroll) * 100) : 0
     };
+    
+    this._cacheTimestamp = now;
+    return this._cachedScrollPosition;
   }
 
   isInViewport(element, threshold = 0.1) {
+    if (!element) return false;
+    
+    // Batch all layout reads together
     const rect = element.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    const windowWidth = window.innerWidth || document.documentElement.clientWidth;
     
     return (
       rect.top < windowHeight * (1 - threshold) &&

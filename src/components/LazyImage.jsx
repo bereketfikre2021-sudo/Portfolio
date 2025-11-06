@@ -6,6 +6,8 @@ const LazyImage = ({
   alt, 
   className = '', 
   placeholder = '/img/placeholder.webp',
+  width,
+  height,
   ...props 
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -44,7 +46,12 @@ const LazyImage = ({
   };
 
   return (
-    <div ref={imgRef} className={`relative overflow-hidden ${className}`} {...props}>
+    <div 
+      ref={imgRef} 
+      className={`relative overflow-hidden ${className}`}
+      style={width && height ? { width, height, aspectRatio: `${width} / ${height}` } : undefined}
+      {...props}
+    >
       {/* Blur Placeholder */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-accent/10 to-secondary/10 flex items-center justify-center"
@@ -61,12 +68,17 @@ const LazyImage = ({
         <motion.img
           src={hasError ? placeholder : src}
           alt={alt}
+          width={width}
+          height={height}
           className={`w-full h-full object-cover transition-opacity duration-300 ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           onLoad={handleLoad}
           onError={handleError}
           loading="lazy"
+          style={{
+            aspectRatio: width && height ? `${width} / ${height}` : undefined
+          }}
         />
       )}
 
