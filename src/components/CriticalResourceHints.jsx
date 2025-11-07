@@ -7,6 +7,11 @@ const CriticalResourceHints = () => {
       // Check if hint already exists
       const existing = document.querySelector(`link[href="${href}"]`);
       if (existing) return;
+      
+      // Skip hero image preloads - hero image was removed
+      if (href && href.includes('hero') && href.includes('image')) {
+        return;
+      }
 
       const link = document.createElement('link');
       link.rel = rel;

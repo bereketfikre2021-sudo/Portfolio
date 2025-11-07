@@ -1354,7 +1354,7 @@ const ContactForm = () => {
   
   // Handle form submission - use formspree API if loaded, otherwise use fallback
   const handleSubmit = React.useCallback(async (e) => {
-                          e.preventDefault();
+    e.preventDefault();
     setIsSubmitting(true);
     setFormState(prev => ({ ...prev, submitting: true }));
     
@@ -1385,7 +1385,7 @@ const ContactForm = () => {
       }
     } else {
       // Fallback form handling if formspree fails to load
-    setTimeout(() => {
+      setTimeout(() => {
         setIsSubmitting(false);
         setFormState({ succeeded: true, submitting: false, errors: null });
       }, 1000);

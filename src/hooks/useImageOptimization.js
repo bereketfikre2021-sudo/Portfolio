@@ -37,15 +37,25 @@ export const useImageOptimization = (src, options = {}) => {
   // Preload critical images
   useEffect(() => {
     if (priority && src) {
+      // Skip hero image preloads - hero image was removed
+      if (src.includes('hero') && src.includes('image')) {
+        return;
+      }
+      
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
       link.href = imageUrls.webp;
       link.type = 'image/webp';
+      link.crossOrigin = 'anonymous'; // Fix credentials mode mismatch
       document.head.appendChild(link);
 
       return () => {
-        document.head.removeChild(link);
+        // Safely remove link if it still exists
+        const existingLink = document.querySelector(`link[href="${imageUrls.webp}"]`);
+        if (existingLink && existingLink.parentNode) {
+          existingLink.parentNode.removeChild(existingLink);
+        }
       };
     }
   }, [priority, src, imageUrls.webp]);

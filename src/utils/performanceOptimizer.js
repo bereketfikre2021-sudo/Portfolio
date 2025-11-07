@@ -11,6 +11,11 @@ class PerformanceOptimizer {
   // Preload critical resources
   preloadResource(href, as = 'script', crossorigin = false) {
     if (this.preloadedResources.has(href)) return;
+    
+    // Skip hero image preloads - hero image was removed
+    if (href && href.includes('hero') && href.includes('image')) {
+      return;
+    }
 
     const link = document.createElement('link');
     link.rel = 'preload';
