@@ -417,11 +417,11 @@ const Work = React.memo(() => {
                         className="relative overflow-hidden h-full flex flex-col transition-all duration-300 portfolio-card rounded-lg"
                         style={{
                           background: resolvedTheme === 'light' 
-                            ? '#E7F2EF'
-                            : '#19183B',
-                          border: '1px solid rgba(138,234,146,0.1)',
-                          boxShadow: '0 2px 8px rgba(138,234,146,0.1)',
-                          color: resolvedTheme === 'light' ? '#19183B' : '#E7F2EF',
+                            ? '#8AEA92'
+                            : '#000000',
+                          border: '1px solid rgba(138,234,146,0.3)',
+                          boxShadow: '0 2px 8px rgba(138,234,146,0.2)',
+                          color: resolvedTheme === 'light' ? '#000000' : '#8AEA92',
                         }}
                       >
 
@@ -460,19 +460,21 @@ const Work = React.memo(() => {
                           <div className="space-y-3 flex-1">
                             <div>
                               <h3
-                                className={`text-2xl font-bold mb-2 ${
-                                  resolvedTheme === 'light'
-                                    ? 'text-primary'
-                                    : 'text-light'
-                                }`}
+                                className="text-2xl font-bold mb-2"
+                                style={{
+                                  color: resolvedTheme === 'light' ? '#000000' : '#8AEA92'
+                                }}
                               >
                                 {project.title}
                               </h3>
-                              <p className={`text-sm font-medium ${
-                                resolvedTheme === 'light'
-                                  ? 'text-primary/70'
-                                  : 'text-light/70'
-                              }`}>{project.role}</p>
+                              <p 
+                                className="text-sm font-medium"
+                                style={{
+                                  color: resolvedTheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(138,234,146,0.7)'
+                                }}
+                              >
+                                {project.role}
+                              </p>
                             </div>
                             
                             {/* Tags - Minimal */}
@@ -481,9 +483,10 @@ const Work = React.memo(() => {
                                 <Badge
                                   key={tag}
                                   variant="outline"
-                                  className="text-xs px-2.5 py-1 border-accent/30 bg-transparent hover:border-accent/50 transition-colors duration-200 focus:ring-accent focus:ring-2"
+                                  className="text-xs px-2.5 py-1 bg-transparent hover:border-accent/50 transition-colors duration-200 focus:ring-accent focus:ring-2"
                                   style={{
-                                    borderColor: 'rgba(138,234,146,0.3)',
+                                    borderColor: resolvedTheme === 'light' ? 'rgba(0,0,0,0.3)' : 'rgba(138,234,146,0.3)',
+                                    color: resolvedTheme === 'light' ? '#000000' : '#8AEA92',
                                   }}
                                 >
                                   {tag}

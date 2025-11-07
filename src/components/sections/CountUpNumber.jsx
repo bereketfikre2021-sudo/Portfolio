@@ -3,6 +3,7 @@ import React from "react";
 const CountUpNumber = ({ target }) => {
   const [count, setCount] = React.useState(0);
   const [isVisible, setIsVisible] = React.useState(false);
+  const elementId = React.useMemo(() => `count-up-trigger-${target}-${Math.random().toString(36).substr(2, 9)}`, [target]);
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
@@ -14,7 +15,7 @@ const CountUpNumber = ({ target }) => {
       { threshold: 0.1 }
     );
 
-    const element = document.getElementById('count-up-trigger');
+    const element = document.getElementById(elementId);
     if (element) {
       observer.observe(element);
     }
@@ -24,7 +25,7 @@ const CountUpNumber = ({ target }) => {
         observer.unobserve(element);
       }
     };
-  }, [isVisible]);
+  }, [isVisible, elementId]);
 
   React.useEffect(() => {
     if (isVisible) {
@@ -48,9 +49,13 @@ const CountUpNumber = ({ target }) => {
 
   return (
     <div 
-      id="count-up-trigger" 
+      id={elementId}
       className="font-bold text-accent leading-none"
-      style={{ fontSize: 'clamp(5rem, 15vw, 12rem)' }}
+      style={{ 
+        fontSize: '300px',
+        lineHeight: '1',
+        display: 'block'
+      }}
     >
       {count}+
     </div>

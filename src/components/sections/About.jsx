@@ -11,6 +11,16 @@ const About = React.memo(() => {
   
   return (
     <Section id="about" className="relative py-12 bg-primary overflow-hidden">
+      <style>{`
+        [id^="count-up-trigger"] {
+          font-size: 300px !important;
+          line-height: 1 !important;
+        }
+        .stat-number-5 {
+          font-size: 300px !important;
+          line-height: 1 !important;
+        }
+      `}</style>
       <div className="mx-auto max-w-6xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -171,8 +181,12 @@ const About = React.memo(() => {
                   className="text-center p-6 bg-accent/10 rounded-2xl border border-accent/20"
                 >
                   <div 
-                    className="font-bold text-accent leading-none"
-                    style={{ fontSize: 'clamp(5rem, 15vw, 12rem)' }}
+                    className="font-bold text-accent leading-none stat-number-5"
+                    style={{ 
+                      fontSize: '300px',
+                      lineHeight: '1',
+                      display: 'block'
+                    }}
                   >
                     5+
                   </div>

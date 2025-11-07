@@ -89,12 +89,11 @@
       .light{--primary:#8AEA92;--primary-foreground:#000000;--secondary:#8AEA92;--secondary-foreground:#000000;--accent:#8AEA92;--accent-foreground:#000000;--neutral:#8AEA92;--neutral-foreground:#000000;--light:#8AEA92;--light-foreground:#000000}
     </style>
     
-    <!-- Font loading - Optimized for LCP - Non-blocking -->
+    <!-- Font loading - Load synchronously to ensure fonts load in production -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Raleway font stylesheet - Load asynchronously to prevent blocking LCP -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=optional" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"></noscript>
+    <!-- Raleway font stylesheet - Use display=swap to ensure fonts load -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap">
     
     <!-- Hero image preload removed - image is hidden on mobile, causing unused preload warning -->
     
@@ -102,11 +101,7 @@
     
     <!-- Preconnect to image CDN for faster LCP -->
     <link rel="preconnect" href="https://bereketfikre.com" crossorigin>
-    
-    <!-- Critical CSS - Load asynchronously to prevent render blocking -->
-    
-    <noscript></noscript>
-    <script async type="module" crossorigin src="/assets/index-ac045e0e.js"></script>
+    <script async type="module" crossorigin src="/assets/index-02530a32.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-1bae6d6c.js">
     <link rel="modulepreload" crossorigin href="/assets/formspree-24961c33.js">
     <link rel="modulepreload" crossorigin href="/assets/react-vendor-8ef9183c.js">
