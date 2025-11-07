@@ -99,8 +99,13 @@ export default defineConfig({
               return 'framer-motion';
             }
             // Split lucide-react icons into separate chunk (large library)
+            // Tree-shaking will remove unused icons
             if (id.includes('lucide-react')) {
               return 'lucide-icons';
+            }
+            // Split react-helmet-async into separate chunk
+            if (id.includes('react-helmet-async')) {
+              return 'helmet';
             }
             // Split formspree into separate chunk
             if (id.includes('@formspree')) {
@@ -132,6 +137,16 @@ export default defineConfig({
               id.includes('components/EmailMarketing')) {
             return 'lazy-components';
           }
+          // Split ScrollProgress into separate chunk (non-critical)
+          if (id.includes('components/ScrollProgress')) {
+            return 'scroll-progress';
+          }
+          // Split utility modules into separate chunks (loaded on demand)
+          if (id.includes('utils/scrollAnimations') ||
+              id.includes('utils/accessibility') ||
+              id.includes('utils/pageTransitions')) {
+            return 'utils';
+          }
         },
       },
     },
@@ -154,7 +169,7 @@ export default defineConfig({
     // Reduce connection resets
     strictPort: false
   },
-  // Optimize dependencies
+  // Optimize dependencies - reduce network requests and bundle size
   optimizeDeps: {
     include: [
       'react',
@@ -167,7 +182,8 @@ export default defineConfig({
       '@formspree/react'
     ],
     exclude: [
-      // No exclusions - let Vite handle optimization naturally
+      // Exclude large dependencies that are lazy loaded to reduce initial bundle
+      'framer-motion'
     ],
     // Don't force optimization on every restart - only when needed
     force: false,
@@ -179,7 +195,7 @@ export default defineConfig({
       }
     }
   },
-  // Improve tree-shaking and minification
+  // Improve tree-shaking and minification - remove unused JavaScript
   esbuild: {
     treeShaking: true,
     legalComments: 'none',

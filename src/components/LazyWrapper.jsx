@@ -167,6 +167,20 @@ export const LazyPWAInstaller = withLazyLoading(
   <LoadingSpinner className="h-32" />
 );
 
+// Lazy load ScrollProgress components to reduce initial bundle size and main-thread work
+export const LazyScrollProgress = withLazyLoading(
+  () => import('./ScrollProgress.jsx').then(module => ({
+    default: () => (
+      <>
+        <module.ScrollProgress />
+        <module.CircularScrollProgress />
+        <module.ScrollToTop />
+      </>
+    )
+  })),
+  null // No loading spinner for scroll progress (non-critical, can load in background)
+);
+
 // Utility function to preload components
 export const preloadComponent = (importFunc) => {
   return () => {

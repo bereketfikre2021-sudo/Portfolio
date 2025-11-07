@@ -9,31 +9,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { ThemeProvider, useTheme } from "./components/ThemeProvider";
 import { LanguageProvider, useLanguage } from "./components/LanguageProvider";
-import { LazyTools, LazyAI, LazyPWA, LazyPerformance, LazyBlog, LazyFAQ, LazyAnalytics, LazyProjectGallery, LazyNewsletterSignup, LazyCaseStudy, LazyAccessibilitySettings, LazyAdvancedAnimations, LazyPerformanceDashboard, LazySEOManager, LazySecurityDashboard, LazyAIContentGenerator, LazySmartRecommendations, LazyCRMIntegration, LazyEmailMarketing, LazyPWAInstaller, preloadCriticalComponents } from "./components/LazyWrapper";
+import { LazyTools, LazyAI, LazyPWA, LazyPerformance, LazyBlog, LazyFAQ, LazyAnalytics, LazyProjectGallery, LazyNewsletterSignup, LazyCaseStudy, LazyAccessibilitySettings, LazyAdvancedAnimations, LazyPerformanceDashboard, LazySEOManager, LazySecurityDashboard, LazyAIContentGenerator, LazySmartRecommendations, LazyCRMIntegration, LazyEmailMarketing, LazyPWAInstaller, LazyScrollProgress, preloadCriticalComponents } from "./components/LazyWrapper";
 import { registerAdvancedServiceWorker } from "./components/AdvancedPWA";
 // Disabled utilities to reduce console noise
 // import performanceOptimizer from "./utils/performanceOptimizer";
 // import advancedCache from "./utils/advancedCache";
-import scrollAnimations from "./utils/scrollAnimations";
-import ScrollProgress, { CircularScrollProgress, ScrollToTop } from "./components/ScrollProgress";
-import ParallaxSection, { RevealOnScroll, StaggeredReveal } from "./components/ParallaxSection";
-import accessibilityManager from "./utils/accessibility";
-import pageTransitions from "./utils/pageTransitions";
-// Removed AdvancedContactForm - using simpler ContactForm instead
-// Removed duplicate sections - ClientLogosCarousel, AwardsSection, StatisticsSection
-// import advancedAnalytics from "./utils/advancedAnalytics";
-// import CriticalResourceHints from "./components/CriticalResourceHints";
-// Lazy-loaded components moved to LazyWrapper
-import sitemapGenerator from "./utils/sitemapGenerator";
+// Defer non-critical utilities to reduce main-thread work and network requests
+// These will be loaded dynamically when needed
 
 // Icons needed for constants and components defined in this file
 // Note: Since all components are in App.jsx, all icons must be imported here.
 // To truly optimize, extract components to separate files and lazy load them.
+// Import only icons that are actually used to reduce bundle size
 import { 
-  // Header/Hero icons
   ArrowRight, 
   ChevronDown, 
-  // Constants (PROFILE, SERVICES) - needed for constant definitions
   Dribbble, 
   Linkedin, 
   Github,
@@ -46,14 +36,9 @@ import {
   Target, 
   FileText, 
   Building,
-  // Component icons (PrivacyPolicy, TermsOfService, About, Services, Work, Testimonials, Contact, Footer)
   X,
   Eye,
   ExternalLink,
-  LayoutGrid,
-  PenTool,
-  Rocket,
-  MessageCircle,
   Quote,
   Play,
   Mail,
@@ -644,7 +629,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
           </div>
           <button
             onClick={onClose}
-                className="ml-4 p-2 hover:bg-primary/10 rounded-full transition-colors"
+                className="ml-4 p-2 hover:bg-primary/10 rounded-full transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center"
                 aria-label="Close modal"
           >
             <X className="w-6 h-6 text-primary" />
@@ -1094,30 +1079,48 @@ const HeaderWithContext = ({
   useEffect(() => {
     let rafId = null;
     let ticking = false;
+    let lastScrollY = window.scrollY;
+    let cachedHeader = null;
+    let cachedSections = null;
     
     const handleScroll = () => {
       if (ticking) return;
       ticking = true;
       
-      // Batch all layout reads in requestAnimationFrame to prevent forced reflow
+      // Use passive scroll listener and batch reads to prevent forced reflow
       rafId = requestAnimationFrame(() => {
-        const header = document.querySelector('header');
-        if (!header) {
+        const currentScrollY = window.scrollY;
+        const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+        lastScrollY = currentScrollY;
+        
+        // Skip processing if scroll delta is too small (performance optimization)
+        if (scrollDelta < 5) {
+          ticking = false;
+          return;
+        }
+        
+        // Cache header element to avoid repeated queries
+        if (!cachedHeader) {
+          cachedHeader = document.querySelector('header');
+        }
+        if (!cachedHeader) {
           ticking = false;
           return;
         }
 
-        // Batch all layout reads together
-        const headerRect = header.getBoundingClientRect();
+        // Batch all layout reads together in a single frame to prevent forced reflow
+        const headerRect = cachedHeader.getBoundingClientRect();
         const headerBottom = headerRect.bottom;
         const headerTop = headerRect.top;
         
-        // Check if header is overlapping with light background sections
-        const lightSections = document.querySelectorAll('.bg-light, .bg-neutral-50, .bg-neutral-100');
+        // Cache sections query to avoid repeated DOM queries
+        if (!cachedSections) {
+          cachedSections = document.querySelectorAll('.bg-light, .bg-neutral-50, .bg-neutral-100');
+        }
         let isOverLight = false;
         
-        // Batch all getBoundingClientRect calls together
-        const sectionRects = Array.from(lightSections).map(section => ({
+        // Batch all getBoundingClientRect calls together to prevent forced reflow
+        const sectionRects = Array.from(cachedSections).map(section => ({
           element: section,
           rect: section.getBoundingClientRect()
         }));
@@ -1139,8 +1142,10 @@ const HeaderWithContext = ({
       });
     };
 
-    // Initial check with RAF
-    handleScroll();
+    // Initial check with RAF (deferred to avoid blocking initial render)
+    requestAnimationFrame(() => {
+      handleScroll();
+    });
     
     // Add scroll listener with passive flag for better performance
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -1152,6 +1157,9 @@ const HeaderWithContext = ({
       }
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      // Clear caches on cleanup
+      cachedHeader = null;
+      cachedSections = null;
     };
   }, []);
 
@@ -1409,14 +1417,17 @@ const Hero = () => {
   const { resolvedTheme } = useTheme();
   
   return (
-    <div id="home" className="relative h-screen overflow-hidden bg-primary">
+    <div id="home" className="relative h-screen overflow-hidden bg-primary" style={{ minHeight: '100vh', contain: 'layout style' }}>
       {/* Hero Background Image with reduced opacity - Hidden on mobile */}
       <div 
         className="hidden md:block absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: 'url(/img/hero%20image.webp)',
           opacity: 0.3,
-          zIndex: 0
+          zIndex: 0,
+          width: '100%',
+          height: '100%',
+          willChange: 'auto'
         }}
       ></div>
 
@@ -1497,14 +1508,15 @@ const Hero = () => {
       </div>
 
       {/* Content Overlay - Optimized for LCP */}
-      <div className="relative z-[2] h-full flex flex-col items-center justify-center text-center px-4 md:px-6">
+      <div className="relative z-[2] h-full flex flex-col items-center justify-center text-center px-4 md:px-6" style={{ minHeight: '100vh' }}>
         {/* Mobile: Fresh New Hero Design */}
-        <div className="md:hidden w-full px-4">
+        <div className="md:hidden w-full px-4" style={{ minHeight: '70vh' }}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col items-center justify-center min-h-[70vh] space-y-6"
+            className="flex flex-col items-center justify-center space-y-6"
+            style={{ minHeight: '70vh' }}
           >
             {/* Greeting - Minimalist */}
             <motion.div
@@ -1571,7 +1583,7 @@ const Hero = () => {
           className="hidden md:block max-w-4xl mx-auto space-y-8"
           style={{ 
             willChange: 'opacity, transform',
-            contentVisibility: 'auto'
+            contain: 'layout style'
           }}
         >
           {/* Welcome Badge - Reduced delay for faster LCP */}
@@ -1921,10 +1933,11 @@ const About = React.memo(() => {
                 whileTap={{ scale: 0.98 }}
               >
                 <button 
-                  className="w-full px-8 py-4 rounded-2xl bg-accent text-primary hover:bg-accent/90 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:ring-offset-2 focus:ring-offset-primary flex items-center justify-center gap-2"
+                  className="w-full px-8 py-4 rounded-2xl bg-accent text-primary hover:bg-accent/90 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-accent/20 focus:ring-offset-2 focus:ring-offset-primary flex items-center justify-center gap-2 min-h-[48px]"
+                  aria-label="Let's Work Together - Contact me"
                 >
                   Let's Work Together
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </button>
               </motion.a>
             </motion.div>
@@ -2477,6 +2490,7 @@ const Work = React.memo(() => {
                       }`}
                       aria-label={`Filter by ${category.title}`}
                       role="tab"
+                      id={`tab-${category.title}`}
                       aria-selected={isActive}
                       aria-controls={`tabpanel-${category.title}`}
                     >
@@ -2561,15 +2575,32 @@ const Work = React.memo(() => {
         </motion.div>
 
         {/* Extraordinary Portfolio Grid - Masonry Style with 3D Effects */}
-        {filteredProjects.length > 0 ? (
-        <motion.div
-          key={activeFilter}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-        >
-          {filteredProjects.map((project, index) => {
+        {filterCategories.map((category) => {
+          // For "All" tab, show all projects. For other tabs, show only that category's projects
+          const categoryProjects = category.title === 'All'
+            ? PROJECTS
+            : PROJECTS.filter(project => project.category === category.title);
+          // Only show the tabpanel that matches the active filter
+          const shouldShow = activeFilter === category.title;
+          
+          return (
+            <div
+              key={category.title}
+              role="tabpanel"
+              id={`tabpanel-${category.title}`}
+              aria-labelledby={`tab-${category.title}`}
+              hidden={!shouldShow}
+              className={!shouldShow ? 'sr-only' : ''}
+            >
+              {shouldShow && categoryProjects.length > 0 ? (
+                <motion.div
+                  key={`${category.title}-${activeFilter}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+                >
+          {categoryProjects.map((project, index) => {
             const isLarge = index % 5 === 0;
             return (
             <motion.div
@@ -2625,14 +2656,14 @@ const Work = React.memo(() => {
                 />
 
                 {/* Image Container with 3D Effect */}
-                <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20" style={{ minHeight: '200px' }}>
+                <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20" style={{ minHeight: '200px', aspectRatio: '16 / 9', contain: 'layout' }}>
                   <img
                     src={project.thumb}
                     alt={`${project.title} project thumbnail - ${project.role}`}
                     width="1280"
                     height="720"
                     className="w-full h-full object-cover"
-                    style={{ aspectRatio: '16 / 9', minHeight: '200px' }}
+                    style={{ aspectRatio: '16 / 9', minHeight: '200px', display: 'block' }}
                     loading="lazy"
                     decoding="async"
                   />
@@ -2756,19 +2787,22 @@ const Work = React.memo(() => {
             </motion.div>
             );
           })}
-        </motion.div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="text-center py-16"
-          >
-            <p className={`text-xl ${resolvedTheme === 'light' ? 'text-primary/70' : 'text-light/70'}`}>
-              No projects found in this category.
-            </p>
-          </motion.div>
-        )}
+                </motion.div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-center py-16"
+                >
+                  <p className={`text-xl ${resolvedTheme === 'light' ? 'text-primary/70' : 'text-light/70'}`}>
+                    No projects found in this category.
+                  </p>
+                </motion.div>
+              )}
+            </div>
+          );
+        })}
 
         {/* Extraordinary CTA Section */}
         <motion.div
@@ -2863,19 +2897,23 @@ const Testimonials = React.memo(() => {
     if (isMobileView && carouselRef.current) {
       isScrollingRef.current = true;
       const scrollContainer = carouselRef.current;
-      const scrollContainerWidth = scrollContainer.clientWidth;
-      const itemWidth = scrollContainerWidth;
-      const targetScroll = currentPage * itemWidth;
       
-      scrollContainer.scrollTo({
-        left: targetScroll,
-        behavior: 'smooth'
+      // Batch layout read in requestAnimationFrame to prevent forced reflow
+      requestAnimationFrame(() => {
+        const scrollContainerWidth = scrollContainer.clientWidth;
+        const itemWidth = scrollContainerWidth;
+        const targetScroll = currentPage * itemWidth;
+        
+        scrollContainer.scrollTo({
+          left: targetScroll,
+          behavior: 'smooth'
+        });
+        
+        // Reset flag after scroll completes
+        setTimeout(() => {
+          isScrollingRef.current = false;
+        }, 600);
       });
-      
-      // Reset flag after scroll completes
-      setTimeout(() => {
-        isScrollingRef.current = false;
-      }, 600);
     }
   }, [currentPage, isMobileView]);
   
@@ -2892,13 +2930,16 @@ const Testimonials = React.memo(() => {
       
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        const scrollLeft = scrollContainer.scrollLeft;
-        const containerWidth = scrollContainer.clientWidth;
-        const newPage = Math.round(scrollLeft / containerWidth);
-        
-        if (newPage !== currentPage && newPage >= 0 && newPage < TESTIMONIALS.length) {
-          setCurrentPage(newPage);
-        }
+        // Batch layout reads in requestAnimationFrame to prevent forced reflow
+        requestAnimationFrame(() => {
+          const scrollLeft = scrollContainer.scrollLeft;
+          const containerWidth = scrollContainer.clientWidth;
+          const newPage = Math.round(scrollLeft / containerWidth);
+          
+          if (newPage !== currentPage && newPage >= 0 && newPage < TESTIMONIALS.length) {
+            setCurrentPage(newPage);
+          }
+        });
       }, 150);
     };
     
@@ -3218,8 +3259,8 @@ const Testimonials = React.memo(() => {
                 transition={{ duration: 0.3, ease: "easeOut" }}
               />
             </div>
-            {/* Clickable Dots */}
-            <div className="flex items-center justify-center gap-1.5 mt-3">
+            {/* Clickable Dots - Minimum 48px touch target */}
+            <div className="flex items-center justify-center gap-2 mt-3">
               {Array.from({ length: totalPages }, (_, index) => (
                 <motion.button
                   key={index}
@@ -3228,13 +3269,13 @@ const Testimonials = React.memo(() => {
                   }}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
-                  className={`rounded-full transition-all duration-300 ${
+                  className={`rounded-full transition-all duration-300 min-w-[48px] min-h-[48px] flex items-center justify-center ${
                     currentPage === index 
                       ? 'w-2 h-2 bg-accent' 
                       : 'w-1.5 h-1.5 bg-accent/40 hover:bg-accent/60'
                   }`}
-                  aria-label={`Go to page ${index + 1}`}
-                  aria-current={currentPage === index ? 'page' : undefined}
+                  aria-label={`Go to page ${index + 1} of ${totalPages}`}
+                  {...(currentPage === index ? { 'aria-current': 'page' } : {})}
                 />
               ))}
             </div>
@@ -3250,7 +3291,7 @@ const Testimonials = React.memo(() => {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`p-2.5 rounded-full transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center ${
+              className={`p-2.5 rounded-full transition-all duration-200 min-w-[48px] min-h-[48px] flex items-center justify-center ${
                 currentPage === 0
                   ? 'bg-accent/5 text-accent/30 cursor-not-allowed'
                   : 'bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40'
@@ -3263,8 +3304,8 @@ const Testimonials = React.memo(() => {
               </svg>
             </motion.button>
             
-            {/* Page Indicators */}
-            <div className="flex items-center gap-1 px-2">
+            {/* Page Indicators - Minimum 48px touch target */}
+            <div className="flex items-center gap-2 px-2">
               {Array.from({ length: totalPages }, (_, index) => (
                 <motion.button
                   key={index}
@@ -3273,13 +3314,13 @@ const Testimonials = React.memo(() => {
                   }}
                   whileHover={{ scale: 1.4 }}
                   whileTap={{ scale: 0.7 }}
-                  className={`rounded-full transition-all duration-200 ${
+                  className={`rounded-full transition-all duration-200 min-w-[48px] min-h-[48px] flex items-center justify-center ${
                     currentPage === index 
                       ? 'w-1.5 h-1.5 bg-accent shadow-sm shadow-accent/30' 
                       : 'w-1 h-1 bg-accent/30 hover:bg-accent/50'
                   }`}
-                  aria-label={`Go to page ${index + 1}`}
-                  aria-current={currentPage === index ? 'page' : undefined}
+                  aria-label={`Go to page ${index + 1} of ${totalPages}`}
+                  {...(currentPage === index ? { 'aria-current': 'page' } : {})}
                 />
               ))}
             </div>
@@ -3292,7 +3333,7 @@ const Testimonials = React.memo(() => {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`p-2.5 rounded-full transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center ${
+              className={`p-2.5 rounded-full transition-all duration-200 min-w-[48px] min-h-[48px] flex items-center justify-center ${
                 currentPage === totalPages - 1
                   ? 'bg-accent/5 text-accent/30 cursor-not-allowed'
                   : 'bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40'
@@ -4712,29 +4753,40 @@ export default function CreativeDesignerPortfolio() {
     };
   }, []);
 
-  // Initialize app features and smooth scrolling
+  // Initialize app features and smooth scrolling - Deferred to reduce main-thread work
   React.useEffect(() => {
-    // Initialize advanced caching - DISABLED to reduce console noise
-    // advancedCache.init();
-    // Defer non-critical scripts to reduce initial load time
+    // Defer non-critical scripts to reduce initial load time and network requests
     // Use requestIdleCallback for better performance, fallback to setTimeout
     const initNonCriticalScripts = () => {
       if ('requestIdleCallback' in window) {
         requestIdleCallback(() => {
-          // Initialize scroll animations (can be deferred)
-    scrollAnimations.init();
-          // Initialize accessibility features (can be deferred)
-    accessibilityManager.init();
-          // Initialize page transitions (can be deferred)
-    pageTransitions.init();
-        }, { timeout: 2000 });
+          // Dynamically import utilities only when needed (reduces initial bundle size)
+          Promise.all([
+            import('./utils/scrollAnimations'),
+            import('./utils/accessibility'),
+            import('./utils/pageTransitions')
+          ]).then(([scrollModule, accessibilityModule, pageModule]) => {
+            // Initialize utilities after they're loaded
+            scrollModule.default?.init();
+            accessibilityModule.default?.init();
+            pageModule.default?.init();
+          }).catch(() => {
+            // Silently fail if utilities can't be loaded
+          });
+        }, { timeout: 3000 });
       } else {
         // Fallback for browsers without requestIdleCallback
         setTimeout(() => {
-          scrollAnimations.init();
-          accessibilityManager.init();
-          pageTransitions.init();
-        }, 2000);
+          Promise.all([
+            import('./utils/scrollAnimations'),
+            import('./utils/accessibility'),
+            import('./utils/pageTransitions')
+          ]).then(([scrollModule, accessibilityModule, pageModule]) => {
+            scrollModule.default?.init();
+            accessibilityModule.default?.init();
+            pageModule.default?.init();
+          }).catch(() => {});
+        }, 3000);
       }
     };
     
@@ -4870,10 +4922,8 @@ export default function CreativeDesignerPortfolio() {
       onClose={() => setIsAnalyticsOpen(false)} 
     />
     
-    {/* Scroll Progress and Navigation */}
-    <ScrollProgress />
-    <CircularScrollProgress />
-    <ScrollToTop />
+    {/* Scroll Progress and Navigation - Lazy loaded to reduce initial bundle and main-thread work */}
+    <LazyScrollProgress />
     
     {/* Accessibility Settings */}
     <LazyAccessibilitySettings

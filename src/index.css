@@ -32,6 +32,13 @@
     height: auto;
     /* Reserve space to prevent layout shift */
     display: block;
+    /* Prevent layout shift during load */
+    contain: layout;
+  }
+  
+  /* Ensure images with width/height don't cause layout shift */
+  img[width][height] {
+    aspect-ratio: attr(width) / attr(height);
   }
   
   /* Ensure containers don't overflow horizontally */
@@ -65,18 +72,32 @@
   .aspect-video {
     aspect-ratio: 16 / 9;
     min-height: 200px; /* Reserve minimum space */
+    contain: layout;
   }
-  
+
   .aspect-square {
     aspect-ratio: 1 / 1;
+    contain: layout;
   }
-  
+
   .aspect-portrait {
     aspect-ratio: 3 / 4;
+    contain: layout;
   }
-  
+
   /* Prevent layout shift for dynamic content */
   [style*="aspect-ratio"] {
+    contain: layout;
+  }
+  
+  /* Prevent layout shift for hero section */
+  #home {
+    contain: layout style;
+    min-height: 100vh;
+  }
+  
+  /* Prevent layout shift for sections */
+  section {
     contain: layout;
   }
   
