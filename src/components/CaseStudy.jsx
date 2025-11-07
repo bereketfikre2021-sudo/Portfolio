@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -155,25 +156,38 @@ const CASE_STUDIES = [
 
 const CaseStudyModal = ({ caseStudy, isOpen, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
-  // Handle ESC key to close modal
   useEffect(() => {
-    const handleEscKey = (event) => {
-      if (event.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
+  // Handle ESC key to close modal and prevent body scroll
+  useEffect(() => {
     if (isOpen) {
-      document.addEventListener('keydown', handleEscKey);
-    }
+      requestAnimationFrame(() => {
+        document.body.style.overflow = 'hidden';
+      });
+      
+      const handleEscKey = (event) => {
+        if (event.key === 'Escape') {
+          onClose();
+        }
+      };
 
-    return () => {
-      document.removeEventListener('keydown', handleEscKey);
-    };
+      document.addEventListener('keydown', handleEscKey);
+
+      return () => {
+        requestAnimationFrame(() => {
+          document.body.style.overflow = '';
+        });
+        document.removeEventListener('keydown', handleEscKey);
+      };
+    }
   }, [isOpen, onClose]);
 
-  if (!isOpen || !caseStudy) return null;
+  if (!mounted || !isOpen || !caseStudy) return null;
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => 
@@ -187,24 +201,24 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }) => {
     );
   };
 
-  return (
+  const modalContent = (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+        className="fixed inset-0 z-[99999] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
         onClick={onClose}
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-primary rounded-2xl border border-accent/20"
+          className="relative w-full max-w-6xl max-h-[90vh] flex flex-col bg-primary rounded-2xl border border-accent/20"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="sticky top-0 bg-primary/95 backdrop-blur-sm border-b border-accent/20 p-6 flex justify-between items-center">
+          <div className="sticky top-0 bg-primary/95 backdrop-blur-sm border-b border-accent/20 p-6 flex justify-between items-center flex-shrink-0 z-10">
             <div>
               <h2 className="text-2xl font-bold text-light">{caseStudy.title}</h2>
               <p className="text-accent/80">{caseStudy.client} • {caseStudy.industry}</p>
@@ -217,7 +231,7 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }) => {
             </button>
           </div>
 
-          <div className="p-6 space-y-8">
+          <div className="p-6 space-y-8 overflow-y-auto flex-1 min-h-0">
             {/* Project Overview */}
             <div className="grid md:grid-cols-4 gap-6">
               <div className="flex items-center gap-3">
@@ -372,6 +386,8 @@ const CaseStudyModal = ({ caseStudy, isOpen, onClose }) => {
       </motion.div>
     </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 const CaseStudy = () => {

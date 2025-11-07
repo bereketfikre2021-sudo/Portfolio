@@ -62,7 +62,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
             exit={{ opacity: 0, scale: 0.96, y: 10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-3xl rounded-lg overflow-hidden"
+            className="relative w-full max-w-3xl rounded-lg flex flex-col"
             style={{ 
               maxHeight: '90vh',
               background: resolvedTheme === 'light' ? '#8AEA92' : '#000000',
@@ -72,7 +72,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
           >
             {/* Minimal Header */}
             <div 
-              className="flex items-center justify-between p-5 border-b"
+              className="flex items-center justify-between p-5 border-b flex-shrink-0"
               style={{
                 borderColor: resolvedTheme === 'light' ? 'rgba(0,0,0,0.2)' : 'rgba(138,234,146,0.3)',
               }}
@@ -115,7 +115,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
             
             {/* Scrollable Content - Simplified */}
             <div 
-              className="overflow-y-auto"
+              className="overflow-y-auto flex-1 min-h-0"
               style={{ maxHeight: 'calc(90vh - 100px)' }}
             >
               <div className="p-5 space-y-4">

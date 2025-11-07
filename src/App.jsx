@@ -67,12 +67,34 @@ const logoImg = '/img/Logo.svg';
 // Defined outside component to prevent React hooks violations
 const logoPaths = [
   '/img/Logo.svg',
+  '/img/Logo.webp',
   '/SVG/Logo.svg',
   './img/Logo.svg',
+  './img/Logo.webp',
   './SVG/Logo.svg',
   'img/Logo.svg',
+  'img/Logo.webp',
   'SVG/Logo.svg'
 ];
+
+// Preload logo for better mobile performance
+const preloadLogo = (src) => {
+  if (typeof window !== 'undefined') {
+    // Check if link already exists to avoid duplicates
+    const existingLink = document.querySelector(`link[rel="preload"][href="${src}"]`);
+    if (!existingLink) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      // Only set crossOrigin for non-SVG files
+      if (!src.endsWith('.svg')) {
+        link.crossOrigin = 'anonymous';
+      }
+      document.head.appendChild(link);
+    }
+  }
+};
 
 // Constants are now imported from ./constants.jsx
 // Removed duplicate definitions to prevent conflicts
@@ -358,7 +380,44 @@ const HeaderWithContext = ({
   const [activeMobileDropdown, setActiveMobileDropdown] = useState(null);
   const [logoError, setLogoError] = useState(false);
   const [logoSrc, setLogoSrc] = useState(logoImg);
+  const [logoLoaded, setLogoLoaded] = useState(true); // Start as true to show logo immediately
   
+  // Preload logo on mount and verify it loads
+  useEffect(() => {
+    // Preload the logo
+    preloadLogo(logoSrc);
+    
+    // Verify logo loads on mobile devices
+    const img = new Image();
+    img.src = logoSrc;
+    
+    img.onload = () => {
+      setLogoLoaded(true);
+      setLogoError(false);
+    };
+    
+    img.onerror = () => {
+      // Try alternative paths
+      const currentIndex = logoPaths.findIndex(path => logoSrc === path || logoSrc.includes(path));
+      const nextIndex = currentIndex + 1;
+      
+      if (nextIndex < logoPaths.length) {
+        const nextPath = logoPaths[nextIndex];
+        setLogoSrc(nextPath);
+        preloadLogo(nextPath);
+      } else {
+        // If all paths fail, still show the logo (might be a timing issue)
+        setLogoLoaded(true);
+        logger.warn('Logo failed to load from all paths, showing anyway:', logoPaths);
+      }
+    };
+    
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [logoSrc]);
+
   // Handle install app functionality
   const handleInstallApp = async () => {
     try {
@@ -621,21 +680,44 @@ const HeaderWithContext = ({
           {!logoError ? (
             <img 
               src={logoSrc} 
-              alt="Logo" 
+              alt="Bereket Fikre Logo" 
               width="180"
               height="60"
               className="h-12 sm:h-14 md:h-16 w-auto object-contain" 
-              style={{ minHeight: '48px' }}
+              style={{ 
+                minHeight: '48px',
+                maxWidth: '180px'
+              }}
               loading="eager"
               fetchpriority="high"
+              decoding="async"
+              onLoad={(e) => {
+                setLogoLoaded(true);
+                setLogoError(false);
+              }}
               onError={(e) => {
+                // Prevent infinite loops
+                if (e.target.dataset.retryCount) {
+                  const retryCount = parseInt(e.target.dataset.retryCount);
+                  if (retryCount >= logoPaths.length - 1) {
+                    setLogoError(true);
+                    logger.warn('Logo failed to load from all paths:', logoPaths);
+                    return;
+                  }
+                  e.target.dataset.retryCount = (retryCount + 1).toString();
+                } else {
+                  e.target.dataset.retryCount = '0';
+                }
+                
                 // Try alternative paths for Netlify compatibility
                 const currentIndex = logoPaths.findIndex(path => logoSrc === path || logoSrc.includes(path));
                 const nextIndex = currentIndex + 1;
                 
                 if (nextIndex < logoPaths.length) {
                   // Try next path
-                  setLogoSrc(logoPaths[nextIndex]);
+                  const nextPath = logoPaths[nextIndex];
+                  setLogoSrc(nextPath);
+                  preloadLogo(nextPath);
                 } else {
                   // All paths failed - show text logo
                   setLogoError(true);
@@ -644,7 +726,7 @@ const HeaderWithContext = ({
               }}
             />
           ) : (
-            <div className="text-accent font-bold text-xl md:text-2xl">
+            <div className="text-accent font-bold text-xl md:text-2xl whitespace-nowrap">
               Bereket Fikre
             </div>
           )}
@@ -1041,27 +1123,7 @@ const Hero = () => {
           </motion.a>
           </motion.div>
         </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="w-6 h-10 border-2 border-accent/50 rounded-full flex justify-center"
-          >
-              <motion.div
-                animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="w-1 h-3 bg-accent/80 rounded-full mt-2"
-              />
-        </motion.div>
-      </motion.div>
-    </div>
+      </div>
     </div>
   );
 };
@@ -1988,7 +2050,44 @@ Contact.displayName = 'Contact';
 const Footer = React.memo(({ onPrivacyClick, onTermsClick }) => {
   const [footerLogoError, setFooterLogoError] = useState(false);
   const [footerLogoSrc, setFooterLogoSrc] = useState(logoImg);
+  const [footerLogoLoaded, setFooterLogoLoaded] = useState(true); // Start as true to show logo immediately
   const { resolvedTheme } = useTheme();
+
+  // Preload footer logo on mount and verify it loads
+  useEffect(() => {
+    // Preload the logo
+    preloadLogo(footerLogoSrc);
+    
+    // Verify logo loads
+    const img = new Image();
+    img.src = footerLogoSrc;
+    
+    img.onload = () => {
+      setFooterLogoLoaded(true);
+      setFooterLogoError(false);
+    };
+    
+    img.onerror = () => {
+      // Try alternative paths
+      const currentIndex = logoPaths.findIndex(path => footerLogoSrc === path || footerLogoSrc.includes(path));
+      const nextIndex = currentIndex + 1;
+      
+      if (nextIndex < logoPaths.length) {
+        const nextPath = logoPaths[nextIndex];
+        setFooterLogoSrc(nextPath);
+        preloadLogo(nextPath);
+      } else {
+        // If all paths fail, still show the logo (might be a timing issue)
+        setFooterLogoLoaded(true);
+        logger.warn('Footer logo failed to load from all paths, showing anyway:', logoPaths);
+      }
+    };
+    
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [footerLogoSrc]);
   
   return (
   <footer className="relative bg-primary text-neutral-300 overflow-hidden">
@@ -2104,21 +2203,43 @@ const Footer = React.memo(({ onPrivacyClick, onTermsClick }) => {
                {!footerLogoError ? (
                  <img 
                    src={footerLogoSrc} 
-                   alt="Logo"
+                   alt="Bereket Fikre Logo"
                    width="200"
                    height="67"
                    className="h-16 md:h-20 w-auto object-contain"
+                   style={{ 
+                     maxWidth: '200px'
+                   }}
                    loading="lazy"
                    decoding="async"
                    fetchpriority="low"
+                   onLoad={(e) => {
+                     setFooterLogoLoaded(true);
+                     setFooterLogoError(false);
+                   }}
                    onError={(e) => {
+                     // Prevent infinite loops
+                     if (e.target.dataset.retryCount) {
+                       const retryCount = parseInt(e.target.dataset.retryCount);
+                       if (retryCount >= logoPaths.length - 1) {
+                         setFooterLogoError(true);
+                         logger.warn('Footer logo failed to load from all paths:', logoPaths);
+                         return;
+                       }
+                       e.target.dataset.retryCount = (retryCount + 1).toString();
+                     } else {
+                       e.target.dataset.retryCount = '0';
+                     }
+                     
                      // Try alternative paths for Netlify compatibility
                      const currentIndex = logoPaths.findIndex(path => footerLogoSrc === path || footerLogoSrc.includes(path));
                      const nextIndex = currentIndex + 1;
                      
                      if (nextIndex < logoPaths.length) {
                        // Try next path
-                       setFooterLogoSrc(logoPaths[nextIndex]);
+                       const nextPath = logoPaths[nextIndex];
+                       setFooterLogoSrc(nextPath);
+                       preloadLogo(nextPath);
                      } else {
                        // All paths failed - show text logo
                        setFooterLogoError(true);
@@ -2127,7 +2248,7 @@ const Footer = React.memo(({ onPrivacyClick, onTermsClick }) => {
                    }}
                  />
                ) : (
-                 <div className="text-accent font-bold text-xl md:text-2xl">
+                 <div className="text-accent font-bold text-xl md:text-2xl whitespace-nowrap">
                    Bereket Fikre
                  </div>
                )}

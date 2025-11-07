@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -186,19 +187,37 @@ const BlogPost = ({ post, isFeatured = false, onReadArticle }) => {
 const Blog = () => {
   const { resolvedTheme } = useTheme();
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [mounted, setMounted] = useState(false);
   const featuredPosts = BLOG_POSTS.filter(post => post.featured);
   const regularPosts = BLOG_POSTS.filter(post => !post.featured);
 
-  // Handle ESC key to close article modal
   useEffect(() => {
-    const handleEscKey = (event) => {
-      if (event.key === 'Escape' && selectedArticle) {
-        setSelectedArticle(null);
-      }
-    };
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
-    document.addEventListener('keydown', handleEscKey);
-    return () => document.removeEventListener('keydown', handleEscKey);
+  // Handle ESC key to close article modal and prevent body scroll
+  useEffect(() => {
+    if (selectedArticle) {
+      requestAnimationFrame(() => {
+        document.body.style.overflow = 'hidden';
+      });
+      
+      const handleEscKey = (event) => {
+        if (event.key === 'Escape') {
+          setSelectedArticle(null);
+        }
+      };
+
+      document.addEventListener('keydown', handleEscKey);
+
+      return () => {
+        requestAnimationFrame(() => {
+          document.body.style.overflow = '';
+        });
+        document.removeEventListener('keydown', handleEscKey);
+      };
+    }
   }, [selectedArticle]);
 
   return (
@@ -276,24 +295,24 @@ const Blog = () => {
       </div>
 
       {/* Article Modal */}
-      <AnimatePresence>
-        {selectedArticle && (
+      {mounted && selectedArticle && createPortal(
+        <AnimatePresence>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[99999] flex items-center justify-center p-4"
             onClick={() => setSelectedArticle(null)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-primary rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl"
+              className="bg-primary rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="p-6 border-b border-accent/20 flex items-center justify-between">
+              <div className="p-6 border-b border-accent/20 flex items-center justify-between flex-shrink-0">
                 <div>
                   <h2 className="text-2xl font-bold text-light">{selectedArticle.title}</h2>
                   <div className="flex items-center gap-4 mt-2 text-sm text-accent/80">
@@ -313,7 +332,7 @@ const Blog = () => {
               </div>
 
               {/* Modal Content */}
-              <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+              <div className="p-6 overflow-y-auto flex-1 min-h-0">
                 <div className="prose prose-invert max-w-none">
                   <div className="mb-6">
                     <img 
@@ -351,7 +370,7 @@ const Blog = () => {
               </div>
 
               {/* Modal Footer */}
-              <div className="p-6 border-t border-accent/20 flex items-center justify-between">
+              <div className="p-6 border-t border-accent/20 flex items-center justify-between flex-shrink-0">
                 <div className="flex flex-wrap gap-2">
                   {selectedArticle.tags.map((tag, index) => (
                     <Badge key={index} variant="secondary" className="text-sm font-medium bg-secondary/20 text-accent/80">
@@ -368,8 +387,9 @@ const Blog = () => {
               </div>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 };
