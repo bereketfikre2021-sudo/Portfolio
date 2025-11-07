@@ -42,15 +42,35 @@ const OptimizedImage = ({
     return () => observer.disconnect();
   }, [priority]);
 
-  // Generate WebP and fallback URLs
+  // Generate responsive image URLs with multiple sizes
   const generateImageUrls = (originalSrc) => {
     const baseUrl = originalSrc.replace(/\.[^/.]+$/, '');
     const extension = originalSrc.split('.').pop();
     
+    // Generate responsive srcset for different screen sizes
+    // Assuming images are available in multiple sizes (you may need to adjust based on your setup)
+    const generateSrcSet = (format) => {
+      // Common responsive breakpoints: 400w, 800w, 1200w, 1600w, 1920w
+      const widths = [400, 800, 1200, 1600, 1920];
+      return widths
+        .map(w => `${baseUrl}-${w}w.${format} ${w}w`)
+        .join(', ');
+    };
+    
     return {
       webp: `${baseUrl}.webp`,
+      webpSrcSet: generateSrcSet('webp'),
       fallback: originalSrc,
-      placeholder: `${baseUrl}-placeholder.webp`
+      fallbackSrcSet: generateSrcSet(extension),
+      placeholder: `${baseUrl}-placeholder.webp`,
+      // Individual sizes for srcset
+      sizes: {
+        small: `${baseUrl}-400w.webp`,
+        medium: `${baseUrl}-800w.webp`,
+        large: `${baseUrl}-1200w.webp`,
+        xlarge: `${baseUrl}-1600w.webp`,
+        xxlarge: `${baseUrl}-1920w.webp`
+      }
     };
   };
 
@@ -119,20 +139,22 @@ const OptimizedImage = ({
         />
       )}
 
-      {/* Actual Image */}
+      {/* Actual Image with Responsive srcset */}
       {isInView && (
         <picture>
-          {/* WebP Source */}
+          {/* WebP Source with responsive srcset */}
           <source
-            srcSet={imageUrls.webp}
+            srcSet={imageUrls.webpSrcSet || imageUrls.webp}
             type="image/webp"
+            sizes={sizes}
             onLoad={handleLoad}
             onError={handleError}
           />
           
-          {/* Fallback Image */}
+          {/* Fallback Image with responsive srcset */}
           <motion.img
             src={hasError ? imageUrls.fallback : imageUrls.webp}
+            srcSet={hasError ? imageUrls.fallbackSrcSet : imageUrls.webpSrcSet || imageUrls.webp}
             alt={alt}
             width={width}
             height={height}
@@ -144,6 +166,7 @@ const OptimizedImage = ({
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
             sizes={sizes}
+            fetchpriority={priority ? 'high' : 'low'}
             style={{
               width: '100%',
               height: '100%',
@@ -163,6 +186,29 @@ const OptimizedImage = ({
             </svg>
             <p className="text-xs">Image unavailable</p>
           </div>
+        </div>
+      )}
+
+      {/* Loading Indicator */}
+      {!isLoaded && !hasError && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="absolute inset-0 flex items-center justify-center"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full"
+          />
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+export default OptimizedImage;
+
         </div>
       )}
 

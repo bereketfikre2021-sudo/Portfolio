@@ -1,4 +1,6 @@
 // Advanced security management system
+import logger from './logger.js';
+
 class SecurityManager {
   constructor() {
     this.securityPolicies = {
@@ -42,7 +44,7 @@ class SecurityManager {
     this.setupThreatDetection();
     this.setupDataProtection();
     this.startSecurityMonitoring();
-    console.log('Security manager initialized');
+    logger.log('Security manager initialized');
   }
 
   // Setup Content Security Policy
@@ -63,7 +65,7 @@ class SecurityManager {
       this.handleCSPViolation(e);
     });
 
-    console.log('Content Security Policy applied');
+    logger.log('Content Security Policy applied');
   }
 
   // Handle CSP violations
@@ -80,7 +82,7 @@ class SecurityManager {
     };
 
     this.recordThreat(violation);
-    console.warn('CSP Violation detected:', violation);
+    logger.warn('CSP Violation detected:', violation);
   }
 
   // Setup security headers
@@ -95,7 +97,7 @@ class SecurityManager {
       'Permissions-Policy': this.generatePermissionsPolicy()
     };
 
-    console.log('Security headers configured:', headers);
+    logger.log('Security headers configured:', headers);
   }
 
   // Generate Permissions Policy
@@ -546,7 +548,7 @@ class SecurityManager {
     try {
       localStorage.setItem('security_threats', JSON.stringify(this.threats));
     } catch (error) {
-      console.warn('Failed to store security threats:', error);
+      logger.warn('Failed to store security threats:', error);
     }
 
     // Send to security monitoring service (if available)
@@ -556,7 +558,7 @@ class SecurityManager {
   // Report threat
   reportThreat(threat) {
     // In a real application, this would send to a security monitoring service
-    console.warn('Security threat detected:', threat);
+    logger.warn('Security threat detected:', threat);
   }
 
   // Analyze threats
@@ -626,4 +628,6 @@ if (typeof window !== 'undefined') {
 }
 
 export default securityManager;
+export { SecurityManager };
+
 export { SecurityManager };

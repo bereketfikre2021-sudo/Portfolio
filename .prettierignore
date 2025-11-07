@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Build outputs
+*.min.js
+*.min.css
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+

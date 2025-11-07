@@ -1,4 +1,6 @@
 // Advanced performance monitoring with real-time metrics and optimization recommendations
+import logger from './logger.js';
+
 class PerformanceMonitor {
   constructor() {
     this.metrics = {
@@ -177,19 +179,19 @@ class PerformanceMonitor {
 
   // Record slow resource
   recordSlowResource(resource) {
-    console.warn('Slow resource detected:', resource);
+    logger.warn('Slow resource detected:', resource);
     this.sendPerformanceEvent('slow_resource', resource);
   }
 
   // Record large resource
   recordLargeResource(resource) {
-    console.warn('Large resource detected:', resource);
+    logger.warn('Large resource detected:', resource);
     this.sendPerformanceEvent('large_resource', resource);
   }
 
   // Record render-blocking resource
   recordRenderBlockingResource(resource) {
-    console.warn('Render-blocking resource detected:', resource);
+    logger.warn('Render-blocking resource detected:', resource);
     this.sendPerformanceEvent('render_blocking_resource', resource);
   }
 
@@ -258,7 +260,7 @@ class PerformanceMonitor {
 
   // Record resource issues
   recordResourceIssues(metrics, issues) {
-    console.warn('Resource performance issues:', { metrics, issues });
+    logger.warn('Resource performance issues:', { metrics, issues });
     this.sendPerformanceEvent('resource_issues', { metrics, issues });
   }
 
@@ -355,7 +357,7 @@ class PerformanceMonitor {
       
       localStorage.setItem('performance_events', JSON.stringify(events));
     } catch (error) {
-      console.warn('Failed to store performance event:', error);
+      logger.warn('Failed to store performance event:', error);
     }
   }
 
@@ -423,7 +425,7 @@ class PerformanceMonitor {
       const usagePercent = (memoryInfo.used / memoryInfo.limit) * 100;
       
       if (usagePercent > 80) {
-        console.warn('High memory usage detected:', usagePercent + '%');
+        logger.warn('High memory usage detected:', usagePercent + '%');
         this.sendPerformanceEvent('high_memory_usage', {
           usage: usagePercent,
           memory: memoryInfo
@@ -568,4 +570,6 @@ if (typeof window !== 'undefined') {
 }
 
 export default performanceMonitor;
+export { PerformanceMonitor };
+
 export { PerformanceMonitor };

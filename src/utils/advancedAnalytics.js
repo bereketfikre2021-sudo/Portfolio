@@ -1,4 +1,6 @@
 // Advanced analytics with heatmap tracking and user journey analysis
+import logger from './logger.js';
+
 class AdvancedAnalytics {
   constructor() {
     this.sessionId = this.generateSessionId();
@@ -432,11 +434,11 @@ class AdvancedAnalytics {
           },
           body: JSON.stringify(event)
         }).catch(error => {
-          console.warn('Analytics send failed:', error);
+          logger.warn('Analytics send failed:', error);
         });
       }
     } catch (error) {
-      console.warn('Analytics error:', error);
+      logger.warn('Analytics error:', error);
     }
   }
 
@@ -453,7 +455,7 @@ class AdvancedAnalytics {
       
       localStorage.setItem('analytics_events', JSON.stringify(localData));
     } catch (error) {
-      console.warn('Local storage error:', error);
+      logger.warn('Local storage error:', error);
     }
   }
 
@@ -507,7 +509,7 @@ class AdvancedAnalytics {
         navigator.sendBeacon('/api/analytics/batch', JSON.stringify(batchData));
       }
     } catch (error) {
-      console.warn('Batch send failed:', error);
+      logger.warn('Batch send failed:', error);
     }
   }
 
@@ -588,4 +590,6 @@ if (typeof window !== 'undefined') {
 }
 
 export default advancedAnalytics;
+export { AdvancedAnalytics };
+
 export { AdvancedAnalytics };

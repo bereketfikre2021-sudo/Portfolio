@@ -1,4 +1,5 @@
 import React, { Suspense, lazy } from 'react';
+import logger from '../utils/logger';
 
 // Loading component with CSS animation (no JS library needed)
 const LoadingSpinner = ({ className = '' }) => (
@@ -19,7 +20,7 @@ class LazyErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Lazy component error:', error, errorInfo);
+    logger.error('Lazy component error:', error, errorInfo);
   }
 
   render() {
@@ -169,15 +170,19 @@ export const LazyPWAInstaller = withLazyLoading(
 
 // Lazy load ScrollProgress components to reduce initial bundle size and main-thread work
 export const LazyScrollProgress = withLazyLoading(
-  () => import('./ScrollProgress.jsx').then(module => ({
-    default: () => (
-      <>
-        <module.ScrollProgress />
-        <module.CircularScrollProgress />
-        <module.ScrollToTop />
-      </>
-    )
-  })),
+  () => import('./ScrollProgress.jsx').then(module => {
+    const ScrollProgress = module.default;
+    const { CircularScrollProgress, ScrollToTop } = module;
+    return {
+      default: () => (
+        <>
+          <ScrollProgress />
+          <CircularScrollProgress />
+          <ScrollToTop />
+        </>
+      )
+    };
+  }),
   null // No loading spinner for scroll progress (non-critical, can load in background)
 );
 
@@ -185,7 +190,7 @@ export const LazyScrollProgress = withLazyLoading(
 export const preloadComponent = (importFunc) => {
   return () => {
     importFunc().then(module => {
-      console.log('Component preloaded:', module.default.name || 'Unknown');
+      logger.log('Component preloaded:', module.default.name || 'Unknown');
     });
   };
 };

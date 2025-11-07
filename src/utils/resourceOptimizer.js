@@ -1,4 +1,6 @@
 // Advanced resource optimization with critical resource hints and preloading strategies
+import logger from './logger.js';
+
 class ResourceOptimizer {
   constructor() {
     this.preloadedResources = new Set();
@@ -379,12 +381,12 @@ class ResourceOptimizer {
 
     // Log slow resources
     if (resource.duration > 1000) {
-      console.warn('Slow resource detected:', resource);
+      logger.warn('Slow resource detected:', resource);
     }
 
     // Log large resources
     if (resource.size > 500000) {
-      console.warn('Large resource detected:', resource);
+      logger.warn('Large resource detected:', resource);
     }
   }
 
@@ -427,4 +429,6 @@ if (typeof window !== 'undefined') {
 }
 
 export default resourceOptimizer;
+export { ResourceOptimizer };
+
 export { ResourceOptimizer };

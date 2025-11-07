@@ -1,4 +1,6 @@
 // Simple Scroll Optimizer for better CI compatibility
+import logger from './logger.js';
+
 class ScrollOptimizer {
   constructor() {
     this.listeners = new Map();
@@ -36,7 +38,7 @@ class ScrollOptimizer {
       try {
         callback();
       } catch (error) {
-        console.warn(`Scroll listener ${id} error:`, error);
+        logger.warn(`Scroll listener ${id} error:`, error);
       }
     });
   }

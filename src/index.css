@@ -22,6 +22,30 @@
     font-size: 18px !important; /* Minimum 18pt for normal text to meet WCAG AA */
   }
   
+  /* Global focus styles for accessibility - WCAG 2.4.7 */
+  *:focus-visible {
+    outline: 2px solid #8AEA92 !important;
+    outline-offset: 2px !important;
+    border-radius: 2px;
+  }
+  
+  /* Ensure all interactive elements have focus indicators */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid #8AEA92 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Remove default outline for mouse users, keep for keyboard users */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+  
   /* Force Raleway font on all elements */
   * {
     font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;

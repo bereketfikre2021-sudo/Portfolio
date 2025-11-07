@@ -11,7 +11,8 @@ const NewsletterSignup = ({ className = '' }) => {
   const [email, setEmail] = useState('');
   
   // Formspree integration
-  const [state, handleSubmit] = useForm('mandzwvb'); // Using the same Formspree form ID
+  const formspreeFormId = import.meta.env.VITE_FORMSPREE_FORM_ID || 'mandzwvb';
+  const [state, handleSubmit] = useForm(formspreeFormId);
   
   // Track newsletter signup on successful submission
   React.useEffect(() => {

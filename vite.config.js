@@ -110,6 +110,10 @@ export default defineConfig({
             if (id.includes('@formspree')) {
               return 'formspree';
             }
+            // Split other large dependencies for better code splitting
+            if (id.includes('clsx') || id.includes('tailwind-merge')) {
+              return 'utils-vendor';
+            }
             // Other vendor libraries - group together
             return 'vendor';
           }
@@ -186,6 +190,14 @@ export default defineConfig({
       'react',
       'react-dom',
       'react/jsx-runtime',
+      // Include react-fast-compare to fix ESM import issues (used by framer-motion)
+      'react-fast-compare',
+      // Include invariant to fix ESM import issues (used by framer-motion and other libraries)
+      'invariant',
+      // Include shallowequal to fix ESM import issues (used by framer-motion and other libraries)
+      'shallowequal',
+      // Include @formspree/core to fix ESM import issues (used by @formspree/react)
+      '@formspree/core',
       // Exclude non-critical dependencies to reduce initial bundle
     ],
     exclude: [

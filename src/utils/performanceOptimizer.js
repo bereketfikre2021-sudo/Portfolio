@@ -1,4 +1,6 @@
 // Performance optimization utilities
+import logger from './logger.js';
+
 class PerformanceOptimizer {
   constructor() {
     this.observers = new Map();
@@ -229,9 +231,9 @@ class PerformanceOptimizer {
       this.optimizeNetworkRequests();
       this.optimizeMemoryUsage();
       
-      console.log('🚀 Performance optimizations applied');
+      logger.log('🚀 Performance optimizations applied');
     } catch (error) {
-      console.error('Performance optimization error:', error);
+      logger.error('Performance optimization error:', error);
     }
   }
 
@@ -260,4 +262,6 @@ if (typeof window !== 'undefined') {
 }
 
 export default performanceOptimizer;
+export { PerformanceOptimizer };
+
 export { PerformanceOptimizer };

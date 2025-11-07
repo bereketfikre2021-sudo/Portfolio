@@ -1,4 +1,6 @@
 // Bundle analysis utilities for development and production
+import logger from './logger.js';
+
 class BundleAnalyzer {
   constructor() {
     this.metrics = {
@@ -149,23 +151,20 @@ class BundleAnalyzer {
   logReport() {
     const report = this.generateReport();
     
-    console.group('📊 Bundle Analysis Report');
-    console.log('Load Time:', `${report.loadTime}ms`);
-    console.log('Total Size:', this.formatBytes(report.totalSize));
-    console.log('JavaScript:', this.formatBytes(report.jsSize));
-    console.log('CSS:', this.formatBytes(report.cssSize));
-    console.log('Images:', this.formatBytes(report.imageSize));
-    console.log('Fonts:', this.formatBytes(report.fontSize));
-    console.log('Resources:', report.resourceCount);
-    console.log('Performance Score:', `${report.score}/100`);
+    logger.log('📊 Bundle Analysis Report');
+    logger.log('Load Time:', `${report.loadTime}ms`);
+    logger.log('Total Size:', this.formatBytes(report.totalSize));
+    logger.log('JavaScript:', this.formatBytes(report.jsSize));
+    logger.log('CSS:', this.formatBytes(report.cssSize));
+    logger.log('Images:', this.formatBytes(report.imageSize));
+    logger.log('Fonts:', this.formatBytes(report.fontSize));
+    logger.log('Resources:', report.resourceCount);
+    logger.log('Performance Score:', `${report.score}/100`);
     
     if (report.recommendations.length > 0) {
-      console.group('💡 Recommendations');
-      report.recommendations.forEach(rec => console.log('•', rec));
-      console.groupEnd();
+      logger.log('💡 Recommendations');
+      report.recommendations.forEach(rec => logger.log('•', rec));
     }
-    
-    console.groupEnd();
     
     return report;
   }

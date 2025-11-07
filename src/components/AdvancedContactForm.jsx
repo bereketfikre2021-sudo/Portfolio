@@ -18,6 +18,7 @@ import {
   Paperclip,
   Trash2
 } from 'lucide-react';
+import logger from '../utils/logger';
 
 const AdvancedContactForm = ({ onSubmit, className = '' }) => {
   const [formData, setFormData] = useState({
@@ -229,7 +230,9 @@ const AdvancedContactForm = ({ onSubmit, className = '' }) => {
         await onSubmit(submitData);
       } else {
         // Default submission to Formspree or similar service
-        const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+        const formspreeFormId = import.meta.env.VITE_FORMSPREE_FORM_ID || 'YOUR_FORM_ID';
+        const formspreeEndpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT || 'https://formspree.io/f';
+        const response = await fetch(`${formspreeEndpoint}/${formspreeFormId}`, {
           method: 'POST',
           body: submitData
         });
@@ -256,7 +259,7 @@ const AdvancedContactForm = ({ onSubmit, className = '' }) => {
         }
       }
     } catch (error) {
-      console.error('Form submission error:', error);
+      logger.error('Form submission error:', error);
       alert('Failed to send message. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -292,21 +295,48 @@ const AdvancedContactForm = ({ onSubmit, className = '' }) => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className={`w-full ${errors.firstName ? 'border-red-500' : ''}`}
+                  className={`w-full transition-all duration-200 ${
+                    errors.firstName 
+                      ? 'border-accent/50 focus:border-accent' 
+                      : validationResults.firstName?.valid 
+                        ? 'border-accent/30 focus:border-accent/50' 
+                        : 'border-accent/20 focus:border-accent/40'
+                  }`}
                   placeholder="Enter your first name"
+                  style={{
+                    borderColor: errors.firstName 
+                      ? 'rgba(138,234,146,0.5)' 
+                      : validationResults.firstName?.valid 
+                        ? 'rgba(138,234,146,0.3)' 
+                        : 'rgba(138,234,146,0.2)',
+                  }}
                 />
                 {validationResults.firstName && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     {validationResults.firstName.valid ? (
-                      <Check className="w-4 h-4 text-green-500" />
+                      <Check className="w-4 h-4" style={{ color: '#8AEA92' }} />
                     ) : (
-                      <X className="w-4 h-4 text-red-500" />
+                      <X className="w-4 h-4" style={{ color: '#8AEA92', opacity: 0.6 }} />
                     )}
+                  </div>
+                )}
+                {isValidating && !validationResults.firstName && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#8AEA92', opacity: 0.5 }} />
                   </div>
                 )}
               </div>
               {errors.firstName && (
-                <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92' }}>
+                  <AlertCircle className="w-3 h-3" />
+                  {errors.firstName}
+                </p>
+              )}
+              {validationResults.firstName?.valid && !errors.firstName && (
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92', opacity: 0.7 }}>
+                  <Check className="w-3 h-3" />
+                  {validationResults.firstName.message}
+                </p>
               )}
             </div>
 
@@ -319,21 +349,48 @@ const AdvancedContactForm = ({ onSubmit, className = '' }) => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className={`w-full ${errors.lastName ? 'border-red-500' : ''}`}
+                  className={`w-full transition-all duration-200 ${
+                    errors.lastName 
+                      ? 'border-accent/50 focus:border-accent' 
+                      : validationResults.lastName?.valid 
+                        ? 'border-accent/30 focus:border-accent/50' 
+                        : 'border-accent/20 focus:border-accent/40'
+                  }`}
                   placeholder="Enter your last name"
+                  style={{
+                    borderColor: errors.lastName 
+                      ? 'rgba(138,234,146,0.5)' 
+                      : validationResults.lastName?.valid 
+                        ? 'rgba(138,234,146,0.3)' 
+                        : 'rgba(138,234,146,0.2)',
+                  }}
                 />
                 {validationResults.lastName && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     {validationResults.lastName.valid ? (
-                      <Check className="w-4 h-4 text-green-500" />
+                      <Check className="w-4 h-4" style={{ color: '#8AEA92' }} />
                     ) : (
-                      <X className="w-4 h-4 text-red-500" />
+                      <X className="w-4 h-4" style={{ color: '#8AEA92', opacity: 0.6 }} />
                     )}
+                  </div>
+                )}
+                {isValidating && !validationResults.lastName && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#8AEA92', opacity: 0.5 }} />
                   </div>
                 )}
               </div>
               {errors.lastName && (
-                <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92' }}>
+                  <AlertCircle className="w-3 h-3" />
+                  {errors.lastName}
+                </p>
+              )}
+              {validationResults.lastName?.valid && !errors.lastName && (
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92', opacity: 0.7 }}>
+                  <Check className="w-3 h-3" />
+                  {validationResults.lastName.message}
+                </p>
               )}
             </div>
           </div>
@@ -350,21 +407,48 @@ const AdvancedContactForm = ({ onSubmit, className = '' }) => {
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full ${errors.email ? 'border-red-500' : ''}`}
+                  className={`w-full transition-all duration-200 ${
+                    errors.email 
+                      ? 'border-accent/50 focus:border-accent' 
+                      : validationResults.email?.valid 
+                        ? 'border-accent/30 focus:border-accent/50' 
+                        : 'border-accent/20 focus:border-accent/40'
+                  }`}
                   placeholder="your@email.com"
+                  style={{
+                    borderColor: errors.email 
+                      ? 'rgba(138,234,146,0.5)' 
+                      : validationResults.email?.valid 
+                        ? 'rgba(138,234,146,0.3)' 
+                        : 'rgba(138,234,146,0.2)',
+                  }}
                 />
                 {validationResults.email && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     {validationResults.email.valid ? (
-                      <Check className="w-4 h-4 text-green-500" />
+                      <Check className="w-4 h-4" style={{ color: '#8AEA92' }} />
                     ) : (
-                      <X className="w-4 h-4 text-red-500" />
+                      <X className="w-4 h-4" style={{ color: '#8AEA92', opacity: 0.6 }} />
                     )}
+                  </div>
+                )}
+                {isValidating && !validationResults.email && formData.email && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#8AEA92', opacity: 0.5 }} />
                   </div>
                 )}
               </div>
               {errors.email && (
-                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92' }}>
+                  <AlertCircle className="w-3 h-3" />
+                  {errors.email}
+                </p>
+              )}
+              {validationResults.email?.valid && !errors.email && (
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92', opacity: 0.7 }}>
+                  <Check className="w-3 h-3" />
+                  {validationResults.email.message}
+                </p>
               )}
             </div>
 
@@ -378,21 +462,48 @@ const AdvancedContactForm = ({ onSubmit, className = '' }) => {
                   type="tel"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className={`w-full ${errors.phone ? 'border-red-500' : ''}`}
+                  className={`w-full transition-all duration-200 ${
+                    errors.phone 
+                      ? 'border-accent/50 focus:border-accent' 
+                      : validationResults.phone?.valid 
+                        ? 'border-accent/30 focus:border-accent/50' 
+                        : 'border-accent/20 focus:border-accent/40'
+                  }`}
                   placeholder="+1 (555) 123-4567"
+                  style={{
+                    borderColor: errors.phone 
+                      ? 'rgba(138,234,146,0.5)' 
+                      : validationResults.phone?.valid 
+                        ? 'rgba(138,234,146,0.3)' 
+                        : 'rgba(138,234,146,0.2)',
+                  }}
                 />
                 {validationResults.phone && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     {validationResults.phone.valid ? (
-                      <Check className="w-4 h-4 text-green-500" />
+                      <Check className="w-4 h-4" style={{ color: '#8AEA92' }} />
                     ) : (
-                      <X className="w-4 h-4 text-red-500" />
+                      <X className="w-4 h-4" style={{ color: '#8AEA92', opacity: 0.6 }} />
                     )}
+                  </div>
+                )}
+                {isValidating && !validationResults.phone && formData.phone && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#8AEA92', opacity: 0.5 }} />
                   </div>
                 )}
               </div>
               {errors.phone && (
-                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92' }}>
+                  <AlertCircle className="w-3 h-3" />
+                  {errors.phone}
+                </p>
+              )}
+              {validationResults.phone?.valid && !errors.phone && (
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92', opacity: 0.7 }}>
+                  <Check className="w-3 h-3" />
+                  {validationResults.phone.message}
+                </p>
               )}
             </div>
           </div>
@@ -494,21 +605,48 @@ const AdvancedContactForm = ({ onSubmit, className = '' }) => {
                 name="message"
                 value={formData.message}
                 onChange={handleInputChange}
-                className={`w-full min-h-[120px] ${errors.message ? 'border-red-500' : ''}`}
+                className={`w-full min-h-[120px] transition-all duration-200 ${
+                  errors.message 
+                    ? 'border-accent/50 focus:border-accent' 
+                    : validationResults.message?.valid 
+                      ? 'border-accent/30 focus:border-accent/50' 
+                      : 'border-accent/20 focus:border-accent/40'
+                }`}
                 placeholder="Tell me about your project, goals, and any specific requirements..."
+                style={{
+                  borderColor: errors.message 
+                    ? 'rgba(138,234,146,0.5)' 
+                    : validationResults.message?.valid 
+                      ? 'rgba(138,234,146,0.3)' 
+                      : 'rgba(138,234,146,0.2)',
+                }}
               />
               {validationResults.message && (
                 <div className="absolute right-3 top-3">
                   {validationResults.message.valid ? (
-                    <Check className="w-4 h-4 text-green-500" />
+                    <Check className="w-4 h-4" style={{ color: '#8AEA92' }} />
                   ) : (
-                    <X className="w-4 h-4 text-red-500" />
+                    <X className="w-4 h-4" style={{ color: '#8AEA92', opacity: 0.6 }} />
                   )}
+                </div>
+              )}
+              {isValidating && !validationResults.message && formData.message && (
+                <div className="absolute right-3 top-3">
+                  <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#8AEA92', opacity: 0.5 }} />
                 </div>
               )}
             </div>
             {errors.message && (
-              <p className="text-red-500 text-xs mt-1">{errors.message}</p>
+              <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92' }}>
+                <AlertCircle className="w-3 h-3" />
+                {errors.message}
+              </p>
+            )}
+            {validationResults.message?.valid && !errors.message && (
+              <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#8AEA92', opacity: 0.7 }}>
+                <Check className="w-3 h-3" />
+                {validationResults.message.message}
+              </p>
             )}
             <p className="text-xs text-accent/60 mt-1">
               {formData.message.length}/500 characters
@@ -608,3 +746,4 @@ const AdvancedContactForm = ({ onSubmit, className = '' }) => {
 };
 
 export default AdvancedContactForm;
+

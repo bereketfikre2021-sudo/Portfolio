@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Bell, BellOff, Download, Share, Wifi, WifiOff, Settings, CheckCircle, AlertCircle, Info, X, RefreshCw } from 'lucide-react';
+import logger from '../utils/logger';
 
 const AdvancedPWA = ({ isOpen, onClose }) => {
   const [isInstalled, setIsInstalled] = useState(false);
@@ -59,7 +60,7 @@ const AdvancedPWA = ({ isOpen, onClose }) => {
         setShowNotificationPrompt(false);
       }
     } catch (error) {
-      console.error('Error requesting notification permission:', error);
+      logger.error('Error requesting notification permission:', error);
     }
   };
 
@@ -68,7 +69,7 @@ const AdvancedPWA = ({ isOpen, onClose }) => {
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: 'YOUR_VAPID_PUBLIC_KEY' // Replace with your VAPID key
+        applicationServerKey: import.meta.env.VITE_VAPID_PUBLIC_KEY || null // VAPID key from environment variables
       });
       
       setPushSubscription(subscription);
@@ -82,7 +83,7 @@ const AdvancedPWA = ({ isOpen, onClose }) => {
         body: JSON.stringify(subscription),
       });
     } catch (error) {
-      console.error('Error subscribing to push notifications:', error);
+      logger.error('Error subscribing to push notifications:', error);
     }
   };
 
@@ -117,7 +118,7 @@ const AdvancedPWA = ({ isOpen, onClose }) => {
           url: window.location.href
         });
       } catch (error) {
-        console.log('Error sharing:', error);
+        logger.log('Error sharing:', error);
       }
     } else {
       // Fallback to clipboard
@@ -144,9 +145,9 @@ const AdvancedPWA = ({ isOpen, onClose }) => {
       try {
         const registration = await navigator.serviceWorker.ready;
         await registration.sync.register('offline-data-sync');
-        console.log('Background sync registered');
+        logger.log('Background sync registered');
       } catch (error) {
-        console.error('Background sync failed:', error);
+        logger.error('Background sync failed:', error);
       }
     }
   };
@@ -347,7 +348,7 @@ export const registerAdvancedServiceWorker = () => {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw-advanced.js')
         .then((registration) => {
-          console.log('Advanced SW registered: ', registration);
+          logger.log('Advanced SW registered: ', registration);
           
           // Listen for updates
           registration.addEventListener('updatefound', () => {
@@ -361,7 +362,7 @@ export const registerAdvancedServiceWorker = () => {
           });
         })
         .catch((registrationError) => {
-          console.log('Advanced SW registration failed: ', registrationError);
+          logger.log('Advanced SW registration failed: ', registrationError);
         });
     });
   }
@@ -389,3 +390,4 @@ const showUpdateNotification = () => {
 };
 
 export default AdvancedPWA;
+

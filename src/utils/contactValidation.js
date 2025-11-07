@@ -1,4 +1,6 @@
 // Advanced contact form validation utilities
+import logger from './logger.js';
+
 class ContactValidation {
   constructor() {
     this.validationRules = {
@@ -175,8 +177,16 @@ class ContactValidation {
   // Email domain validation
   async validateEmailDomain(email) {
     try {
+      const emailValidationApiKey = import.meta.env.VITE_EMAIL_VALIDATION_API_KEY;
+      const emailValidationEndpoint = import.meta.env.VITE_EMAIL_VALIDATION_ENDPOINT || 'https://api.email-validator.net/api/verify';
+      
+      if (!emailValidationApiKey) {
+        // Skip email validation if API key is not configured
+        return { valid: true };
+      }
+      
       const domain = email.split('@')[1];
-      const response = await fetch(`https://api.email-validator.net/api/verify?Email=${email}&APIKey=YOUR_API_KEY`);
+      const response = await fetch(`${emailValidationEndpoint}?Email=${email}&APIKey=${emailValidationApiKey}`);
       const data = await response.json();
       
       return {
@@ -184,7 +194,7 @@ class ContactValidation {
         message: data.status === 'Valid' ? 'Email domain is valid' : 'Email domain appears to be invalid'
       };
     } catch (error) {
-      console.warn('Email domain validation failed:', error);
+      logger.warn('Email domain validation failed:', error);
       return { valid: true, message: 'Could not validate email domain' };
     }
   }
@@ -369,4 +379,6 @@ class ContactValidation {
 const contactValidation = new ContactValidation();
 
 export default contactValidation;
+export { ContactValidation };
+
 export { ContactValidation };

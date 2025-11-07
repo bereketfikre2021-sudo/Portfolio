@@ -96,11 +96,9 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=optional" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"></noscript>
     
-    <!-- Preload hero image for LCP optimization - Critical resource -->
-    <link rel="preload" as="image" href="/img/hero image.webp" type="image/webp" fetchpriority="high">
+    <!-- Hero image preload removed - image is hidden on mobile, causing unused preload warning -->
     
-    <!-- Preload logo for header -->
-    <link rel="preload" as="image" href="/img/Logo.svg" type="image/svg+xml" fetchpriority="high">
+    <!-- Logo preload removed - logo is loaded dynamically with fallback paths, causing unused preload warning -->
     
     <!-- Preconnect to image CDN for faster LCP -->
     <link rel="preconnect" href="https://bereketfikre.com" crossorigin>
@@ -108,14 +106,15 @@
     <!-- Critical CSS - Load asynchronously to prevent render blocking -->
     
     <noscript></noscript>
-    <script async type="module" crossorigin src="/assets/index-c36aec3a.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/vendor-c16d9220.js">
+    <script async type="module" crossorigin src="/assets/index-ac045e0e.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-1bae6d6c.js">
     <link rel="modulepreload" crossorigin href="/assets/formspree-24961c33.js">
-    <link rel="modulepreload" crossorigin href="/assets/react-vendor-bf983f85.js">
-    <link rel="modulepreload" crossorigin href="/assets/framer-motion-8461523d.js">
-    <link rel="modulepreload" crossorigin href="/assets/lazy-components-5cb15eaf.js">
-    <link rel="modulepreload" crossorigin href="/assets/core-components-fd204936.js">
-    <link rel="stylesheet" href="/assets/style-ba6efcb8.css">
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-8ef9183c.js">
+    <link rel="modulepreload" crossorigin href="/assets/framer-motion-5c1cb2bb.js">
+    <link rel="modulepreload" crossorigin href="/assets/utils-vendor-bd46fc6a.js">
+    <link rel="modulepreload" crossorigin href="/assets/lazy-components-ec019479.js">
+    <link rel="modulepreload" crossorigin href="/assets/core-components-68b4db81.js">
+    <link rel="stylesheet" href="/assets/style-478d7382.css">
   </head>
   <body>
     <div id="root"></div>

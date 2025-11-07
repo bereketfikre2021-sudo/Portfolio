@@ -1,4 +1,6 @@
 // Advanced caching strategies for improved performance
+import logger from './logger.js';
+
 class AdvancedCache {
   constructor() {
     this.cache = new Map();
@@ -176,7 +178,7 @@ class AdvancedCache {
     try {
       await this.setPersistentCache('apiResponses', key, response, ttl);
     } catch (error) {
-      console.warn('Failed to cache API response:', error);
+      logger.warn('Failed to cache API response:', error);
     }
   }
 
@@ -199,7 +201,7 @@ class AdvancedCache {
         return response;
       }
     } catch (error) {
-      console.warn('Failed to get cached API response:', error);
+      logger.warn('Failed to get cached API response:', error);
     }
     
     return null;
@@ -216,7 +218,7 @@ class AdvancedCache {
     try {
       await this.setPersistentCache('images', key, blob);
     } catch (error) {
-      console.warn('Failed to cache image:', error);
+      logger.warn('Failed to cache image:', error);
     }
   }
 
@@ -239,7 +241,7 @@ class AdvancedCache {
         return blob;
       }
     } catch (error) {
-      console.warn('Failed to get cached image:', error);
+      logger.warn('Failed to get cached image:', error);
     }
     
     return null;
@@ -256,7 +258,7 @@ class AdvancedCache {
     try {
       await this.setPersistentCache('components', key, data, ttl);
     } catch (error) {
-      console.warn('Failed to cache component data:', error);
+      logger.warn('Failed to cache component data:', error);
     }
   }
 
@@ -279,7 +281,7 @@ class AdvancedCache {
         return data;
       }
     } catch (error) {
-      console.warn('Failed to get cached component data:', error);
+      logger.warn('Failed to get cached component data:', error);
     }
     
     return null;
@@ -378,9 +380,9 @@ class AdvancedCache {
         this.clearExpiredCache();
       }, 60 * 60 * 1000); // Every hour
       
-      console.log('🗄️ Advanced cache initialized');
+      logger.log('🗄️ Advanced cache initialized');
     } catch (error) {
-      console.error('Failed to initialize cache:', error);
+      logger.error('Failed to initialize cache:', error);
     }
   }
 }
@@ -394,4 +396,6 @@ if (typeof window !== 'undefined') {
 }
 
 export default advancedCache;
+export { AdvancedCache };
+
 export { AdvancedCache };

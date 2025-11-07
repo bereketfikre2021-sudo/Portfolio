@@ -23,17 +23,12 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     const root = window.document.documentElement;
     
-    console.log('ThemeProvider: Setting theme to', theme);
-    
     // Remove previous theme classes
     root.classList.remove('light', 'dark');
     
     // Set the theme (only dark or light)
     setResolvedTheme(theme);
     root.classList.add(theme);
-    
-    console.log('ThemeProvider: Added class', theme, 'to document element');
-    console.log('ThemeProvider: Document classes:', root.classList.toString());
     
     // Save theme preference
     localStorage.setItem('theme', theme);

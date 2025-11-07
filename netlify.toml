@@ -13,21 +13,42 @@
   [headers.values]
     # Cache HTML for short period (5 minutes) to allow updates
     Cache-Control = "public, max-age=300, must-revalidate"
-    # Security headers
+    
+    # Security headers - Enhanced
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    
     # Force HTTPS (Strict-Transport-Security)
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    
+    # Content Security Policy - Enhanced
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://formspree.io https://www.google-analytics.com https://www.googletagmanager.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; upgrade-insecure-requests;"
+    
+    # Permissions Policy (formerly Feature-Policy)
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+    
+    # Cross-Origin Policies
+    Cross-Origin-Embedder-Policy = "require-corp"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Resource-Policy = "same-origin"
+    
     # Optimize TTFB
     X-DNS-Prefetch-Control = "on"
+    
+    # Remove server information
+    X-Powered-By = ""
 
 [[headers]]
   for = "/index.html"
   [headers.values]
     Cache-Control = "public, max-age=300, must-revalidate"
     X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
 
 [[headers]]
   for = "/img/*"

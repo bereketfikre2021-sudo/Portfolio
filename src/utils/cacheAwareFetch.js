@@ -1,5 +1,6 @@
 // Cache-aware fetch utility with advanced caching strategies
 import advancedCache from './advancedCache';
+import logger from './logger.js';
 
 class CacheAwareFetch {
   constructor() {
@@ -142,7 +143,7 @@ class CacheAwareFetch {
         // Try immediate fetch
         return await this.fetch(url, options);
       } catch (error) {
-        console.warn('Background sync failed, falling back to regular fetch:', error);
+        logger.warn('Background sync failed, falling back to regular fetch:', error);
         return await this.fetch(url, options);
       }
     }
@@ -163,7 +164,7 @@ class CacheAwareFetch {
     try {
       await advancedCache.setPersistentCache('backgroundRequests', url, request);
     } catch (error) {
-      console.warn('Failed to store background request:', error);
+      logger.warn('Failed to store background request:', error);
     }
   }
 
@@ -185,7 +186,7 @@ class CacheAwareFetch {
       
       return URL.createObjectURL(blob);
     } catch (error) {
-      console.error('Failed to fetch image:', error);
+      logger.error('Failed to fetch image:', error);
       return null;
     }
   }
@@ -201,7 +202,7 @@ class CacheAwareFetch {
     try {
       await advancedCache.deletePersistentCache('apiResponses', key);
     } catch (error) {
-      console.warn('Failed to clear persistent cache:', error);
+      logger.warn('Failed to clear persistent cache:', error);
     }
   }
 
@@ -217,3 +218,4 @@ const cacheAwareFetch = new CacheAwareFetch();
 // Export both class and instance
 export default cacheAwareFetch;
 export { CacheAwareFetch };
+

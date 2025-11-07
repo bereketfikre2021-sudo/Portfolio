@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Smartphone, Monitor, Wifi, WifiOff } from 'lucide-react';
+import logger from '../utils/logger';
 
 const PWAInstaller = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -66,10 +67,10 @@ const PWAInstaller = () => {
         const { outcome } = await deferredPrompt.userChoice;
         
         if (outcome === 'accepted') {
-          console.log('PWA installation accepted');
+          logger.log('PWA installation accepted');
           setIsInstalled(true);
         } else {
-          console.log('PWA installation dismissed');
+          logger.log('PWA installation dismissed');
         }
         
         setDeferredPrompt(null);
@@ -92,7 +93,7 @@ const PWAInstaller = () => {
         }
       }
     } catch (error) {
-      console.error('Install error:', error);
+      logger.error('Install error:', error);
       showInstallInstructions();
     }
   };
@@ -213,13 +214,14 @@ export const registerServiceWorker = () => {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
-          console.log('SW registered: ', registration);
+          logger.log('SW registered: ', registration);
         })
         .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
+          logger.log('SW registration failed: ', registrationError);
         });
     });
   }
 };
 
 export default PWAInstaller;
+

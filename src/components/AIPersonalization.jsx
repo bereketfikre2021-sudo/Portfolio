@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Brain, Sparkles, Target, TrendingUp, Users, Clock, Star, Zap, Lightbulb, ArrowRight, X } from 'lucide-react';
+import logger from '../utils/logger';
 
 const AIPersonalization = ({ isOpen, onClose }) => {
   const [userProfile, setUserProfile] = useState(null);
@@ -13,18 +14,18 @@ const AIPersonalization = ({ isOpen, onClose }) => {
   // Only log when isOpen changes to reduce console spam
   useEffect(() => {
     if (isOpen) {
-      console.log('AIPersonalization component opened');
+      logger.log('AIPersonalization component opened');
     }
   }, [isOpen]);
 
   // Mock AI analysis - in real implementation, this would use actual AI/ML services
   const analyzeUserBehavior = useCallback(() => {
-    console.log('Starting AI analysis...');
+    logger.log('Starting AI analysis...');
     setIsAnalyzing(true);
     
     // Simulate AI analysis
     setTimeout(() => {
-      console.log('AI analysis completed, setting user profile');
+      logger.log('AI analysis completed, setting user profile');
       const mockProfile = {
         userType: 'Creative Professional',
         interests: ['UI/UX Design', 'Brand Identity', 'Web Development'],
@@ -298,3 +299,4 @@ const generatePersonalizedContent = (behavior) => {
 };
 
 export default React.memo(AIPersonalization);
+
