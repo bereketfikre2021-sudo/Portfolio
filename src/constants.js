@@ -1,5 +1,36 @@
 // Shared constants used across components
-import { ArrowRight, Mail, Phone, ExternalLink, Palette, Instagram, Linkedin, Github, Dribbble, ChevronUp, ChevronDown, Eye, X, Send, MapPin, Monitor, Smartphone, Megaphone, Paintbrush, FileText, Layers, Target, Building, LayoutGrid, Quote, Settings, PenTool, Play, MessageSquare, Rocket, MessageCircle } from "lucide-react";
+import { ArrowRight, Mail, Phone, ExternalLink, Palette, Linkedin, Github, Dribbble, ChevronUp, ChevronDown, Eye, X, Send, MapPin, Monitor, Smartphone, Megaphone, Paintbrush, FileText, Layers, Target, Building, LayoutGrid, Quote, Settings, PenTool, Play, MessageSquare, Rocket, MessageCircle } from "lucide-react";
+import React from "react";
+
+// Custom Behance Logo Icon Component
+const BehanceIcon = React.forwardRef(({ className, ...props }, ref) => (
+  <svg
+    ref={ref}
+    className={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14h-8.027c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.859h-6.465v-14.859h6.465c3.752 0 5.738 2.739 5.738 7.497 0 4.76-1.98 7.362-5.738 7.362zm-3.008-13.03h1.953c2.06 0 3.291.861 3.291 3.138 0 2.52-1.241 3.097-3.281 3.097h-1.963v-6.235z"/>
+  </svg>
+));
+BehanceIcon.displayName = "BehanceIcon";
+
+// Custom Upwork Logo Icon Component
+const UpworkIcon = React.forwardRef(({ className, ...props }, ref) => (
+  <svg
+    ref={ref}
+    className={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c0 1.406-1.14 2.546-2.547 2.546-1.405 0-2.543-1.14-2.543-2.546V3.392H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/>
+  </svg>
+));
+UpworkIcon.displayName = "UpworkIcon";
 
 // Logo image path
 export const logoImg = '/img/Logo.webp';
@@ -38,10 +69,12 @@ export const PROFILE = {
   phone: "+251 923 988 838",
   location: "Addis Ababa, Ethiopia",
   socials: [
-    { label: "Instagram", href: "https://instagram.com/bereketfikre.ig", icon: Instagram },
+    { label: "Behance", href: "https://www.behance.net/bereketfikre", icon: BehanceIcon },
     { label: "Dribbble", href: "https://dribbble.com/bereket-fikre", icon: Dribbble },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/bereket-fikre-graphic-designer", icon: Linkedin },
     { label: "GitHub", href: "https://github.com/bereketfikre2021-sudo", icon: Github },
+    { label: "Freelancer", href: "https://www.freelancer.com/u/bereketfikre", icon: ExternalLink },
+    { label: "Upwork", href: "https://www.upwork.com/freelancers/~019189891a0638d811?mp_source=share", icon: UpworkIcon },
   ],
 };
 

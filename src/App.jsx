@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from "react";
-import { motion } from "framer-motion";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -33,7 +34,6 @@ import {
   ArrowRight, 
   ChevronDown, 
   // Constants (PROFILE, SERVICES) - needed for constant definitions
-  Instagram, 
   Dribbble, 
   Linkedin, 
   Github,
@@ -106,10 +106,12 @@ const PROFILE = {
   phone: "+251 923 988 838",
   location: "Addis Ababa, Ethiopia",
   socials: [
-    { label: "Instagram", href: "https://instagram.com/bereketfikre.ig", icon: Instagram },
+    { label: "Behance", href: "https://www.behance.net/bereketfikre", icon: ExternalLink },
     { label: "Dribbble", href: "https://dribbble.com/bereket-fikre", icon: Dribbble },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/bereket-fikre-graphic-designer", icon: Linkedin },
     { label: "GitHub", href: "https://github.com/bereketfikre2021-sudo", icon: Github },
+    { label: "Freelancer", href: "https://www.freelancer.com/u/bereketfikre", icon: ExternalLink },
+    { label: "Upwork", href: "https://www.upwork.com/freelancers/~019189891a0638d811?mp_source=share", icon: ExternalLink },
   ],
 };
 
@@ -577,78 +579,108 @@ const PrivacyPolicy = ({ isOpen, onClose }) => {
   );
 };
 
-// Project Detail Modal Component
+// Project Detail Modal Component - New Implementation with Portal
 const ProjectModal = ({ project, isOpen, onClose }) => {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
-    const handleEscKey = (event) => {
-      if (event.key === 'Escape') {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
+      
+      // Handle ESC key
+      const handleEsc = (e) => {
+        if (e.key === 'Escape') {
         onClose();
       }
     };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscKey);
-    }
+      document.addEventListener('keydown', handleEsc);
 
     return () => {
-      document.removeEventListener('keydown', handleEscKey);
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', handleEsc);
     };
+    }
   }, [isOpen, onClose]);
 
-  if (!isOpen || !project) return null;
+  if (!mounted || !isOpen || !project) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+  const modalContent = (
+    <AnimatePresence mode="wait">
+      {isOpen && (
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-accent border border-primary/20 rounded-2xl shadow-2xl"
-      >
-        {/* Header */}
-        <div className="sticky top-0 bg-accent border-b border-primary/20 p-6 flex justify-between items-start">
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed top-0 left-0 right-0 bottom-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={onClose}
+          style={{ position: 'fixed', zIndex: 99999 }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-5xl bg-accent rounded-2xl shadow-2xl overflow-hidden"
+            style={{ 
+              maxHeight: '90vh',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative'
+            }}
+          >
+            {/* Header - Fixed */}
+            <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-primary/20 bg-accent">
           <div className="flex-1">
-            <h2 className="text-3xl font-bold text-primary mb-2">{project.title}</h2>
-            <p className="text-primary/70 text-lg">{project.role}</p>
+                <h2 className="text-3xl font-bold text-primary mb-1">{project.title}</h2>
+                <p className="text-primary/70">{project.role}</p>
           </div>
           <button
             onClick={onClose}
-            className="p-3 hover:bg-primary/10 rounded-full transition-colors ml-4 min-h-[48px] min-w-[48px] flex items-center justify-center"
+                className="ml-4 p-2 hover:bg-primary/10 rounded-full transition-colors"
+                aria-label="Close modal"
           >
             <X className="w-6 h-6 text-primary" />
           </button>
         </div>
         
-        <div className="p-6 space-y-8">
+            {/* Scrollable Content */}
+            <div 
+              className="flex-1 overflow-y-auto"
+              style={{ maxHeight: 'calc(90vh - 100px)' }}
+            >
+              <div className="p-6 space-y-6">
           {/* Project Image */}
-          <div className="relative">
-            <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary-600/10 rounded-2xl overflow-hidden" style={{ minHeight: '200px' }}>
+                <div className="w-full rounded-xl overflow-hidden">
               <img
                 src={project.thumb}
-                alt={`${project.title} project thumbnail`}
-                width="1280"
-                height="720"
-                className="w-full h-full object-cover"
-                style={{ aspectRatio: '16 / 9', minHeight: '200px' }}
+                    alt={project.title}
+                    className="w-full h-auto object-cover"
                 loading="lazy"
               />
-            </div>
           </div>
 
-          {/* Project Details Grid */}
-          <div className="grid lg:grid-cols-3 gap-8">
+                {/* Project Details */}
+                <div className="grid lg:grid-cols-3 gap-6">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-6">
               <div>
-                <h3 className="text-2xl font-bold text-primary mb-4">Project Overview</h3>
-                <p className="text-primary leading-relaxed text-lg">
+                      <h3 className="text-2xl font-bold text-primary mb-3">Project Overview</h3>
+                      <p className="text-primary leading-relaxed">
                   {project.description || project.summary}
                 </p>
               </div>
 
               {project.challenges && (
                 <div>
-                  <h3 className="text-2xl font-bold text-primary mb-4">Challenges</h3>
+                        <h3 className="text-2xl font-bold text-primary mb-3">Challenges</h3>
                   <p className="text-primary leading-relaxed">
                     {project.challenges}
                   </p>
@@ -657,7 +689,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
 
               {project.solutions && (
                 <div>
-                  <h3 className="text-2xl font-bold text-primary mb-4">Solutions</h3>
+                        <h3 className="text-2xl font-bold text-primary mb-3">Solutions</h3>
                   <p className="text-primary leading-relaxed">
                     {project.solutions}
                   </p>
@@ -666,7 +698,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
 
               {project.results && (
                 <div>
-                  <h3 className="text-2xl font-bold text-primary mb-4">Results</h3>
+                        <h3 className="text-2xl font-bold text-primary mb-3">Results</h3>
                   <p className="text-primary leading-relaxed">
                     {project.results}
                   </p>
@@ -677,27 +709,29 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
             {/* Sidebar */}
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-bold text-primary mb-4">Project Details</h3>
+                      <h3 className="text-xl font-bold text-primary mb-3">Project Details</h3>
                 <div className="space-y-3">
                   <div>
-                    <span className="text-primary/70 text-sm">Category</span>
+                          <span className="text-primary/70 text-sm block mb-1">Category</span>
                     <p className="text-primary font-medium">{project.role}</p>
                   </div>
+                        {project.tags[0] && (
                   <div>
-                    <span className="text-primary/70 text-sm">Project Type</span>
+                            <span className="text-primary/70 text-sm block mb-1">Project Type</span>
                     <p className="text-primary font-medium">{project.tags[0]}</p>
                   </div>
+                        )}
                 </div>
               </div>
 
               <div>
-                <h3 className="text-xl font-bold text-primary mb-4">Technologies & Skills</h3>
+                      <h3 className="text-xl font-bold text-primary mb-3">Technologies & Skills</h3>
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
                     <Badge 
                       key={tag} 
                       variant="outline" 
-                      className="text-xs border-primary/30 text-primary hover:bg-primary/10 transition-colors"
+                            className="text-xs border-primary/30 text-primary"
                     >
                       {tag}
                     </Badge>
@@ -706,7 +740,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
               </div>
 
               <div>
-                <h3 className="text-xl font-bold text-primary mb-4">Get In Touch</h3>
+                      <h3 className="text-xl font-bold text-primary mb-3">Get In Touch</h3>
                 <p className="text-primary/70 text-sm mb-4">
                   Interested in similar work? Let's discuss your project.
                 </p>
@@ -715,7 +749,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                   onClick={onClose}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-accent hover:bg-primary/80 transition-colors font-semibold shadow-lg hover:shadow-xl"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-accent hover:bg-primary/80 transition-colors font-semibold"
                 >
                   Start a Project
                   <ArrowRight className="w-4 h-4" />
@@ -724,9 +758,14 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
             </div>
           </div>
         </div>
-      </motion.div>
     </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
+
+  return createPortal(modalContent, document.body);
 };
 
 // Terms of Service Component
@@ -882,6 +921,8 @@ const HeaderWithContext = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [activeMobileDropdown, setActiveMobileDropdown] = useState(null);
+  const [logoError, setLogoError] = useState(false);
+  const [logoSrc, setLogoSrc] = useState(logoImg);
   
   // Handle install app functionality
   const handleInstallApp = async () => {
@@ -1022,6 +1063,7 @@ const HeaderWithContext = ({
       dropdown: [
     { label: t('nav.work'), href: "#work" },
         { label: t('nav.testimonials'), href: "#testimonials" },
+        { label: "Trusted By", href: "#trusted-by" },
         { label: t('nav.caseStudies'), href: "#case-studies" }
       ]
     },
@@ -1118,20 +1160,37 @@ const HeaderWithContext = ({
     }`}>
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
         <a href="#home" className="flex items-center hover:opacity-80 transition-opacity">
-          <img 
-            src={logoImg} 
-            alt="Logo" 
-            width="180"
-            height="60"
-            className="h-12 sm:h-14 md:h-16 w-auto object-contain" 
-            style={{ minHeight: '48px' }}
-            loading="eager"
-            fetchpriority="high"
-          />
+          {!logoError ? (
+            <img 
+              src={logoSrc} 
+              alt="Logo" 
+              width="180"
+              height="60"
+              className="h-12 sm:h-14 md:h-16 w-auto object-contain" 
+              style={{ minHeight: '48px' }}
+              loading="eager"
+              fetchpriority="high"
+              onError={() => {
+                // Try alternative paths
+                if (logoSrc.includes('/img/Logo.svg')) {
+                  setLogoSrc('/SVG/Logo.svg');
+                } else if (logoSrc.includes('/SVG/Logo.svg')) {
+                  setLogoSrc('/img/Logo.svg');
+                } else {
+                  // Final fallback: show text logo
+                  setLogoError(true);
+                }
+              }}
+            />
+          ) : (
+            <div className="text-accent font-bold text-xl md:text-2xl">
+              Bereket Fikre
+            </div>
+          )}
         </a>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav id="navigation" className="hidden md:flex items-center gap-6" role="navigation" aria-label="Main navigation">
           {NAV.map((item, index) => (
             <div key={index} className="relative">
               {item.dropdown ? (
@@ -1221,12 +1280,23 @@ const HeaderWithContext = ({
               setActiveMobileDropdown(null); // Close dropdowns when closing mobile menu
             }
           }}
-          className={`md:hidden p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center ${
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+              if (isMobileMenuOpen) {
+                setActiveMobileDropdown(null);
+              }
+            }
+          }}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-navigation"
+          aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+          className={`md:hidden p-3 rounded-md focus:outline-2 focus:outline-accent focus:outline-offset-2 transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center ${
             resolvedTheme === 'light'
               ? 'text-primary hover:text-white focus:ring-white/20 focus:ring-offset-accent'
               : 'text-accent hover:text-light focus:ring-accent/20 focus:ring-offset-primary'
           }`}
-          aria-label="Toggle mobile menu"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             {isMobileMenuOpen ? (
@@ -1241,6 +1311,7 @@ const HeaderWithContext = ({
       {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
         <motion.div
+          id="mobile-navigation"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -1249,6 +1320,8 @@ const HeaderWithContext = ({
               ? 'bg-accent/95' 
               : 'bg-primary/95'
           }`}
+          role="navigation"
+          aria-label="Mobile navigation"
         >
           <nav className="px-4 py-4 space-y-2">
             {NAV.map((item, index) => (
@@ -1335,199 +1408,165 @@ const Hero = () => {
   
   return (
     <div id="home" className="relative h-screen overflow-hidden bg-primary">
-      {/* Hero Background Image with reduced opacity */}
+      {/* Hero Background Image with reduced opacity - Hidden on mobile */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="hidden md:block absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: 'url(/img/hero%20image.webp)',
           opacity: 0.3,
           zIndex: 0
         }}
       ></div>
-      
-      {/* Subtle brand accent overlay */}
-      <div className="absolute inset-0 bg-accent/5 z-[1]"></div>
 
-      {/* Floating Background Elements */}
-      <div className="absolute inset-0 pointer-events-none z-[1]">
-        {/* Large floating circles */}
-        <motion.div
-          className="absolute w-32 h-32 border-2 border-accent/30 rounded-full"
+      {/* Mobile: Grid Pattern Background */}
+      <div 
+        className="md:hidden absolute inset-0 pointer-events-none z-[1]"
+        style={{
+          backgroundImage: `
+            linear-gradient(${resolvedTheme === 'light' ? 'rgba(0,0,0,0.03)' : 'rgba(138,234,146,0.08)'} 1px, transparent 1px),
+            linear-gradient(90deg, ${resolvedTheme === 'light' ? 'rgba(0,0,0,0.03)' : 'rgba(138,234,146,0.08)'} 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+          opacity: 0.6
+        }}
+      ></div>
+
+      {/* Floating Background Elements - Hidden on mobile */}
+      <div className="absolute inset-0 pointer-events-none z-[1] hidden md:block">
+        {/* Static decorative elements - Performance optimized (removed infinite animations) */}
+        <div
+          className="absolute w-32 h-32 border-2 border-accent/20 rounded-full"
           style={{ top: '10%', left: '5%' }}
-          animate={{
-            rotate: 360,
-            scale: [1, 1.1, 1],
-            y: [0, -20, 0],
-          }}
-          transition={{
-            rotate: { duration: 30, repeat: Infinity, ease: "linear" },
-            scale: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-            y: { duration: 10, repeat: Infinity, ease: "easeInOut" }
-          }}
         />
         
-        <motion.div
-          className="absolute w-24 h-24 bg-accent/20 rounded-full blur-sm"
+        <div
+          className="absolute w-24 h-24 bg-accent/15 rounded-full blur-sm"
           style={{ top: '20%', right: '10%' }}
-          animate={{
-            y: [0, -30, 0],
-            x: [0, 15, 0],
-            rotate: -360,
-          }}
-          transition={{
-            y: { duration: 12, repeat: Infinity, ease: "easeInOut" },
-            x: { duration: 15, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 25, repeat: Infinity, ease: "linear" }
-          }}
         />
 
-        {/* Floating squares */}
-        <motion.div
-          className="absolute w-16 h-16 border border-accent/40 rotate-45"
+        {/* Static squares */}
+        <div
+          className="absolute w-16 h-16 border border-accent/30 rotate-45"
           style={{ bottom: '20%', left: '8%' }}
-          animate={{
-            rotate: [45, 405, 45],
-            scale: [1, 1.3, 1],
-            y: [0, -25, 0],
-          }}
-          transition={{
-            rotate: { duration: 8, repeat: Infinity, ease: "easeInOut" },
-            scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-            y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-          }}
         />
 
-        <motion.div
-          className="absolute w-12 h-12 bg-accent/30 rounded-lg"
+        <div
+          className="absolute w-12 h-12 bg-accent/25 rounded-lg"
           style={{ bottom: '30%', right: '15%' }}
-          animate={{
-            rotate: [0, 180, 360],
-            y: [0, -20, 0],
-            x: [0, 15, 0],
-          }}
-          transition={{
-            rotate: { duration: 10, repeat: Infinity, ease: "linear" },
-            y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-            x: { duration: 5, repeat: Infinity, ease: "easeInOut" }
-          }}
         />
 
-        {/* Floating particles */}
-        <motion.div
-          className="absolute w-3 h-3 bg-accent/60 rounded-full"
+        {/* Static particles */}
+        <div
+          className="absolute w-3 h-3 bg-accent/40 rounded-full"
           style={{ top: '15%', left: '20%' }}
-          animate={{
-            y: [0, -50, 0],
-            opacity: [0.4, 1, 0.4],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
         />
 
-        <motion.div
-          className="absolute w-2 h-2 bg-accent/70 rounded-full"
+        <div
+          className="absolute w-2 h-2 bg-accent/50 rounded-full"
           style={{ top: '60%', left: '15%' }}
-          animate={{
-            y: [0, -40, 0],
-            opacity: [0.3, 0.8, 0.3],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
         />
 
-        <motion.div
-          className="absolute w-4 h-4 bg-accent/50 rounded-full"
+        <div
+          className="absolute w-4 h-4 bg-accent/35 rounded-full"
           style={{ top: '40%', right: '20%' }}
-          animate={{
-            y: [0, -35, 0],
-            opacity: [0.2, 0.7, 0.2],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5
-          }}
         />
 
-        {/* Gradient orbs */}
-          <motion.div
-          className="absolute w-64 h-64 bg-accent/10 rounded-full blur-3xl"
+        {/* Static gradient orbs */}
+        <div
+          className="absolute w-64 h-64 bg-accent/8 rounded-full blur-3xl"
           style={{ top: '-10%', left: '-10%' }}
-            animate={{ 
-            scale: [1, 1.3, 1],
-            opacity: [0.3, 0.6, 0.3],
-            rotate: [0, 180, 360],
-            }}
-            transition={{ 
-            duration: 12,
-            repeat: Infinity,
-              ease: "easeInOut" 
-            }}
         />
 
-        <motion.div
-          className="absolute w-48 h-48 bg-accent/15 rounded-full blur-2xl"
+        <div
+          className="absolute w-48 h-48 bg-accent/12 rounded-full blur-2xl"
           style={{ bottom: '-5%', right: '-5%' }}
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.4, 0.7, 0.4],
-            rotate: [360, 180, 0],
-          }}
-          transition={{ 
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
         />
 
-        {/* Animated lines */}
-        <motion.div
-          className="absolute w-1 h-32 bg-gradient-to-b from-transparent via-accent/40 to-transparent"
+        {/* Static lines */}
+        <div
+          className="absolute w-1 h-32 bg-gradient-to-b from-transparent via-accent/30 to-transparent"
           style={{ top: '25%', left: '12%' }}
-          animate={{
-            scaleY: [0.5, 1.5, 0.5],
-            opacity: [0.3, 0.8, 0.3],
-          }}
-          transition={{ 
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1.5
-          }}
         />
 
-          <motion.div
-          className="absolute w-1 h-24 bg-gradient-to-b from-transparent via-accent/50 to-transparent"
+        <div
+          className="absolute w-1 h-24 bg-gradient-to-b from-transparent via-accent/35 to-transparent"
           style={{ bottom: '35%', right: '25%' }}
-            animate={{
-            scaleY: [1, 0.3, 1],
-            opacity: [0.4, 0.9, 0.4],
-            }}
-            transition={{
-            duration: 5,
-              repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2.5
-            }}
           />
       </div>
 
       {/* Content Overlay - Optimized for LCP */}
-      <div className="relative z-[2] h-full flex flex-col items-center justify-center text-center px-6">
+      <div className="relative z-[2] h-full flex flex-col items-center justify-center text-center px-4 md:px-6">
+        {/* Mobile: Fresh New Hero Design */}
+        <div className="md:hidden w-full px-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center justify-center min-h-[70vh] space-y-6"
+          >
+            {/* Greeting - Minimalist */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-xs text-accent/70 font-medium uppercase tracking-wider"
+            >
+              {t('hero.greeting')}
+            </motion.div>
+
+            {/* Name - Bold and Prominent */}
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className={`text-5xl font-bold leading-none tracking-tight ${
+                resolvedTheme === 'light'
+                  ? 'text-black'
+                  : 'text-light'
+              }`}
+            >
+              {t('hero.name')}
+            </motion.h1>
+            
+            {/* Title - Elegant and Clean */}
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-sm text-accent/80 font-normal leading-relaxed max-w-xs text-center"
+            >
+              {t('hero.title')}
+            </motion.p>
+
+            {/* CTA Button - Full Width Modern */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="w-full max-w-xs pt-2"
+            >
+              <motion.a
+                href="#work"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="block w-full"
+              >
+                <Button
+                  className="w-full px-6 py-4 rounded-2xl bg-accent text-primary hover:bg-accent/90 font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  {t('hero.cta1')}
+                </Button>
+              </motion.a>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Desktop: Full Hero */}
       <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="max-w-4xl mx-auto space-y-8"
+          className="hidden md:block max-w-4xl mx-auto space-y-8"
           style={{ 
             willChange: 'opacity, transform',
             contentVisibility: 'auto'
@@ -1540,7 +1579,7 @@ const Hero = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 backdrop-blur-sm border border-secondary/30"
           >
-            <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-accent rounded-full"></div>
             <span className="text-accent text-sm font-medium">{t('hero.greeting')} {t('hero.name')}</span>
         </motion.div>
 
@@ -1549,7 +1588,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight px-4 ${
+            className={`text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight px-4 ${
               resolvedTheme === 'light'
                 ? 'text-black'
                 : 'text-light'
@@ -1557,7 +1596,7 @@ const Hero = () => {
             style={{ 
               willChange: 'opacity, transform',
               contentVisibility: 'auto',
-              minHeight: '1.2em', // Reserve space to prevent layout shift
+              minHeight: '1.2em',
               lineHeight: '1.2'
             }}
           >
@@ -1569,7 +1608,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg sm:text-xl md:text-2xl text-accent font-semibold max-w-2xl mx-auto px-4"
+            className="text-xl md:text-2xl text-accent font-semibold max-w-2xl mx-auto px-4"
             style={{ minHeight: '1.5em', lineHeight: '1.5' }}
           >
 {t('hero.title')}
@@ -1621,12 +1660,12 @@ const Hero = () => {
           </motion.div>
         </motion.div>
 
-        {/* Scroll Indicator - Reduced delay (non-critical for LCP) */}
+        {/* Scroll Indicator - Hidden on mobile */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.8 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="hidden md:block absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}
@@ -1698,11 +1737,11 @@ const CountUpNumber = ({ target }) => {
   );
 };
 
-const About = () => {
+const About = React.memo(() => {
   const { resolvedTheme } = useTheme();
   
   return (
-  <Section id="about" className="relative py-24 bg-primary overflow-hidden">
+  <Section id="about" className="relative py-12 bg-primary overflow-hidden">
     <div className="mx-auto max-w-6xl px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -1721,7 +1760,7 @@ const About = () => {
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent/20 border border-accent/30 shadow-lg"
           >
             <div className="w-2 h-2 bg-accent rounded-full"></div>
-            <span className={`font-semibold text-lg drop-shadow-2xl animate-pulse ${
+            <span className={`font-semibold text-lg drop-shadow-2xl ${
               resolvedTheme === 'light'
                 ? 'text-black'
                 : 'text-accent'
@@ -1793,14 +1832,14 @@ const About = () => {
               className="space-y-4 pt-8"
             >
               <h4 className="text-lg font-semibold text-light">Connect With Me</h4>
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-2 gap-2 md:flex md:flex-row md:flex-wrap md:gap-3 md:justify-center md:items-center">
                 {PROFILE.socials.map((social, index) => (
                   <motion.a
                     key={social.label}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-2 px-4 py-2 rounded-full bg-accent hover:bg-accent/80 border border-accent/20 hover:border-accent/40 transition-all duration-300"
+                    className="group flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-lg bg-accent hover:bg-accent/80 border border-accent/20 hover:border-accent/40 transition-all duration-300 md:rounded-full md:px-4 md:py-2 md:gap-2 md:w-auto"
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     initial={{ opacity: 0, y: 20 }}
@@ -1808,12 +1847,37 @@ const About = () => {
                     viewport={{ once: true }}
                     transition={{ delay: 0.6 + index * 0.1, duration: 0.6 }}
                   >
-                    <social.icon className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
-                    <span className="text-sm font-medium text-primary">{social.label}</span>
+                    <social.icon className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary group-hover:scale-110 transition-transform" />
+                    <span className="text-xs md:text-sm font-medium text-primary">{social.label}</span>
                   </motion.a>
                 ))}
               </div>
             </motion.div>
+            </motion.div>
+
+          {/* Right Column - Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="space-y-8"
+          >
+            {/* Main Description */}
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-light">Design Philosophy</h3>
+              <div className="space-y-4 text-accent/80 leading-relaxed">
+                <p>
+                  I believe great design is more than just aesthetics—it's about creating meaningful connections between brands and their audiences. Every project I work on is approached with strategic thinking and creative excellence.
+                </p>
+                <p className="hidden md:block">
+                  My process combines deep understanding of your business goals with innovative design solutions. Whether it's a complete brand identity, digital marketing materials, or print design, I ensure every element serves a purpose and tells your story effectively.
+                </p>
+                <p className="hidden md:block">
+                  I work closely with clients to understand their vision, then translate that into compelling visual experiences that resonate with their target audience and drive real business results.
+                </p>
+              </div>
+            </div>
 
             {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -1862,345 +1926,258 @@ const About = () => {
               </motion.a>
             </motion.div>
           </motion.div>
-
-          {/* Right Column - Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-y-8"
-          >
-            {/* Main Description */}
-              <div className="space-y-6 hidden lg:block">
-              <h3 className="text-2xl font-bold text-light">Design Philosophy</h3>
-              <div className="space-y-4 text-accent/80 leading-relaxed">
-                <p>
-                  I believe great design is more than just aesthetics—it's about creating meaningful connections between brands and their audiences. Every project I work on is approached with strategic thinking and creative excellence.
-                </p>
-                <p>
-                  My process combines deep understanding of your business goals with innovative design solutions. Whether it's a complete brand identity, digital marketing materials, or print design, I ensure every element serves a purpose and tells your story effectively.
-                </p>
-                <p>
-                  I work closely with clients to understand their vision, then translate that into compelling visual experiences that resonate with their target audience and drive real business results.
-                </p>
-                  </div>
-                </div>
-                
-            {/* Skills & Services */}
-              <div id="what-i-do" className="space-y-6 pt-16">
-              <h3 className="text-2xl font-bold text-light">What I Do</h3>
-              {/* Mobile: Show SERVICES array */}
-              <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                {SERVICES.map((service, index) => {
-                  const IconComponent = service.icon;
-                  return (
-                    <div key={index} className={`flex items-center gap-3 p-4 rounded-xl ${
-                      resolvedTheme === 'light'
-                        ? 'bg-accent border border-accent/30'
-                        : 'bg-accent/10'
-                    }`}>
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        resolvedTheme === 'light'
-                          ? 'bg-primary'
-                          : 'bg-primary'
-                      }`}>
-                        <IconComponent className={`w-4 h-4 ${
-                          resolvedTheme === 'light'
-                            ? 'text-primary'
-                            : 'text-accent'
-                        }`} />
-                      </div>
-                      <span className={`font-medium ${
-                        resolvedTheme === 'light'
-                          ? 'text-primary'
-                          : 'text-accent'
-                      }`}>{service.title}</span>
-                    </div>
-                  );
-                })}
-              </div>
-              {/* Desktop: Show original hardcoded list */}
-              <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div className={`flex items-center gap-3 p-4 rounded-xl ${
-                  resolvedTheme === 'light'
-                    ? 'bg-accent border border-accent/30'
-                    : 'bg-accent/10'
-                }`}>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    resolvedTheme === 'light'
-                      ? 'bg-primary'
-                      : 'bg-primary'
-                  }`}>
-                    <Palette className={`w-4 h-4 ${
-                      resolvedTheme === 'light'
-                        ? 'text-primary'
-                        : 'text-accent'
-                    }`} />
-                  </div>
-                  <span className={`font-medium ${
-                    resolvedTheme === 'light'
-                      ? 'text-primary'
-                      : 'text-accent'
-                  }`}>Branding & Identity</span>
-                  </div>
-                <div className={`flex items-center gap-3 p-4 rounded-xl ${
-                  resolvedTheme === 'light'
-                    ? 'bg-accent border border-accent/30'
-                    : 'bg-accent/10'
-                }`}>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    resolvedTheme === 'light'
-                      ? 'bg-primary'
-                      : 'bg-primary'
-                  }`}>
-                    <LayoutGrid className={`w-4 h-4 ${
-                      resolvedTheme === 'light'
-                        ? 'text-primary'
-                        : 'text-accent'
-                    }`} />
-                </div>
-                  <span className={`font-medium ${
-                    resolvedTheme === 'light'
-                      ? 'text-primary'
-                      : 'text-accent'
-                  }`}>Marketing & Social Media</span>
-                  </div>
-                <div className={`flex items-center gap-3 p-4 rounded-xl ${
-                  resolvedTheme === 'light'
-                    ? 'bg-accent border border-accent/30'
-                    : 'bg-accent/10'
-                }`}>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    resolvedTheme === 'light'
-                      ? 'bg-primary'
-                      : 'bg-primary'
-                  }`}>
-                    <PenTool className={`w-4 h-4 ${
-                      resolvedTheme === 'light'
-                        ? 'text-primary'
-                        : 'text-accent'
-                    }`} />
-                  </div>
-                  <span className={`font-medium ${
-                    resolvedTheme === 'light'
-                      ? 'text-primary'
-                      : 'text-accent'
-                  }`}>Web & UI/UX Design</span>
-                  </div>
-                <div className={`flex items-center gap-3 p-4 rounded-xl ${
-                  resolvedTheme === 'light'
-                    ? 'bg-accent border border-accent/30'
-                    : 'bg-accent/10'
-                }`}>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    resolvedTheme === 'light'
-                      ? 'bg-primary'
-                      : 'bg-primary'
-                  }`}>
-                    <Rocket className={`w-4 h-4 ${
-                      resolvedTheme === 'light'
-                        ? 'text-primary'
-                        : 'text-accent'
-                    }`} />
-                  </div>
-                  <span className={`font-medium ${
-                    resolvedTheme === 'light'
-                      ? 'text-primary'
-                      : 'text-accent'
-                  }`}>Packaging & Labels</span>
-                </div>
-                <div className={`flex items-center gap-3 p-4 rounded-xl ${
-                  resolvedTheme === 'light'
-                    ? 'bg-accent border border-accent/30'
-                    : 'bg-accent/10'
-                }`}>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    resolvedTheme === 'light'
-                      ? 'bg-primary'
-                      : 'bg-primary'
-                  }`}>
-                    <MessageCircle className={`w-4 h-4 ${
-                      resolvedTheme === 'light'
-                        ? 'text-primary'
-                        : 'text-accent'
-                    }`} />
-                  </div>
-                  <span className={`font-medium ${
-                    resolvedTheme === 'light'
-                      ? 'text-primary'
-                      : 'text-accent'
-                  }`}>Motion & Multimedia</span>
-                </div>
-                <div className={`flex items-center gap-3 p-4 rounded-xl ${
-                  resolvedTheme === 'light'
-                    ? 'bg-accent border border-accent/30'
-                    : 'bg-accent/10'
-                }`}>
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    resolvedTheme === 'light'
-                      ? 'bg-primary'
-                      : 'bg-primary'
-                  }`}>
-                    <Eye className={`w-4 h-4 ${
-                      resolvedTheme === 'light'
-                        ? 'text-primary'
-                        : 'text-accent'
-                    }`} />
-                  </div>
-                  <span className={`font-medium ${
-                    resolvedTheme === 'light'
-                      ? 'text-primary'
-                      : 'text-accent'
-                  }`}>Custom Graphic Design</span>
-                </div>
-              </div>
-            </div>
-
-
-          </motion.div>
         </div>
 
       </motion.div>
     </div>
   </Section>
 );
-};
+});
 
-const Services = () => {
+About.displayName = 'About';
+
+// What I Do Section - Extracted from About
+const WhatIDo = React.memo(() => {
   const { resolvedTheme } = useTheme();
+  const [expandedService, setExpandedService] = useState(null);
   
   return (
-  <Section id="services" className="hidden md:block relative py-24 bg-primary overflow-hidden">
-    {/* Background Elements */}
-    <div className="absolute inset-0">
-      <div className="absolute top-20 left-10 w-32 h-32 bg-accent/10 rounded-full blur-2xl"></div>
-      <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent/10 rounded-full blur-2xl"></div>
-    </div>
-
-    <div className="mx-auto max-w-6xl px-4 relative z-10">
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true }}
-        variants={fadeInUp}
-        className="text-center space-y-16"
-      >
-        <motion.div
+    <Section id="what-i-do" className="relative py-12 bg-primary overflow-hidden">
+      <div className="mx-auto max-w-6xl px-4">
+          <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="space-y-4"
+          className="space-y-16"
         >
-          <div className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent/40 text-primary text-lg font-semibold shadow-2xl border-2 border-accent/60 animate-bounce">
-            <div className="w-4 h-4 bg-primary rounded-full shadow-lg animate-ping"></div>
-            What I Do
-          </div>
-          <h2 className="text-5xl md:text-6xl font-bold text-accent">Services</h2>
-          <p className="text-xl text-light max-w-2xl mx-auto">
-            Comprehensive design solutions tailored to your unique needs
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {SERVICES.map((service, index) => (
+          {/* Header */}
+          <div className="text-center space-y-6">
             <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent/20 border border-accent/30 shadow-lg"
+            >
+              <div className="w-2 h-2 bg-accent rounded-full"></div>
+              <span className={`font-semibold text-lg drop-shadow-2xl ${
+                resolvedTheme === 'light'
+                  ? 'text-black'
+                  : 'text-accent'
+              }`}>Services</span>
+            </motion.div>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              whileHover={{ y: -5 }}
-              className="group"
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-5xl md:text-6xl font-bold text-light"
             >
-              <Card className={`h-full transition-all duration-300 group-hover:shadow-xl backdrop-blur-sm ${
-                resolvedTheme === 'light'
-                  ? 'border-accent/30 hover:border-accent/50 bg-accent'
-                  : 'border-accent/20 hover:border-accent/40 bg-primary/90'
-              }`}>
-                <CardHeader className="pb-4">
+              What I Do
+            </motion.h2>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-lg text-accent/80 max-w-3xl mx-auto"
+            >
+              Comprehensive design solutions tailored to your unique needs
+            </motion.p>
+                </div>
+                
+          {/* Services Grid */}
+          <div className="space-y-6">
+            {/* Mobile: Show SERVICES array with expandable cards */}
+              <div className="md:hidden space-y-3">
+                {SERVICES.map((service, index) => {
+                  const IconComponent = service.icon;
+                  const isExpanded = expandedService === index;
+                  return (
                   <motion.div
-                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform duration-300 ${
-                      resolvedTheme === 'light'
-                        ? 'bg-primary'
-                        : 'bg-gradient-to-br from-accent to-accent-600'
-                    }`}
-                    whileHover={{ rotate: 5 }}
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1, duration: 0.6 }}
+                    className="space-y-0"
                   >
-                    <service.icon className={`w-8 h-8 ${
-                      resolvedTheme === 'light'
-                        ? 'text-primary'
-                        : 'text-primary'
-                    }`} />
-                  </motion.div>
-                  <CardTitle className={`text-xl transition-colors ${
-                    resolvedTheme === 'light'
-                      ? 'text-primary group-hover:text-primary'
-                      : 'text-light group-hover:text-accent'
-                  }`}>
-                    {service.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className={`mb-6 leading-relaxed ${
-                    resolvedTheme === 'light'
-                      ? 'text-primary/80'
-                      : 'text-neutral-300'
-                  }`}>{service.desc}</p>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {service.tags.map((tag) => (
-                      <Badge 
-                        key={tag} 
-                        variant="outline" 
-                        className={`text-xs transition-colors ${
+                      <button
+                        onClick={() => setExpandedService(isExpanded ? null : index)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setExpandedService(isExpanded ? null : index);
+                        }
+                      }}
+                      aria-expanded={isExpanded}
+                      aria-controls={`service-description-${index}`}
+                      aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${service.title} description`}
+                      className={`w-full flex items-center justify-between gap-3 p-4 rounded-xl transition-all duration-300 focus:outline-2 focus:outline-accent focus:outline-offset-2 ${
                           resolvedTheme === 'light'
-                            ? 'border-primary/40 text-primary hover:bg-primary/10'
-                            : 'border-accent/30 text-accent hover:bg-accent/10'
+                            ? 'bg-accent border border-accent/30 hover:bg-accent/90'
+                            : 'bg-accent/10 hover:bg-accent/20'
                         }`}
                       >
-                        {tag}
-                      </Badge>
-                    ))}
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                            resolvedTheme === 'light'
+                              ? 'bg-primary'
+                              : 'bg-primary'
+                          }`}>
+                            <IconComponent className={`w-4 h-4 ${
+                              resolvedTheme === 'light'
+                                ? 'text-primary'
+                                : 'text-accent'
+                            }`} />
+                          </div>
+                          <span className={`font-medium text-left ${
+                            resolvedTheme === 'light'
+                              ? 'text-primary'
+                              : 'text-accent'
+                          }`}>{service.title}</span>
+                        </div>
+                        <motion.div
+                          animate={{ rotate: isExpanded ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ChevronDown className={`w-5 h-5 ${
+                            resolvedTheme === 'light'
+                              ? 'text-primary'
+                              : 'text-accent'
+                          }`} />
+                        </motion.div>
+                      </button>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className={`overflow-hidden rounded-b-xl p-4 ${
+                            resolvedTheme === 'light'
+                              ? 'bg-accent/50 border border-t-0 border-accent/30'
+                              : 'bg-accent/5'
+                          }`}
+                        >
+                          <p className={`text-sm leading-relaxed ${
+                            resolvedTheme === 'light'
+                              ? 'text-primary/90'
+                              : 'text-accent/80'
+                          }`}>
+                            {service.desc}
+                          </p>
+                        </motion.div>
+                      )}
+                  </motion.div>
+                  );
+                })}
+              </div>
+            
+            {/* Desktop: Show SERVICES array as grid with expandable descriptions */}
+            <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {SERVICES.map((service, index) => {
+                const IconComponent = service.icon;
+                const isExpanded = expandedService === index;
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1, duration: 0.6 }}
+                    className="space-y-0"
+                  >
+                    <button
+                      onClick={() => setExpandedService(isExpanded ? null : index)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setExpandedService(isExpanded ? null : index);
+                        }
+                      }}
+                      aria-expanded={isExpanded}
+                      aria-controls={`service-description-desktop-${index}`}
+                      aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${service.title} description`}
+                      id={`service-button-desktop-${index}`}
+                      className={`w-full flex items-center justify-between gap-3 p-4 rounded-xl transition-all duration-300 focus:outline-2 focus:outline-accent focus:outline-offset-2 ${
+                  resolvedTheme === 'light'
+                          ? 'bg-accent border border-accent/30 hover:bg-accent/90 hover:shadow-lg'
+                          : 'bg-accent/10 hover:bg-accent/20 hover:shadow-lg'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                    resolvedTheme === 'light'
+                      ? 'bg-primary'
+                      : 'bg-primary'
+                  }`}>
+                          <IconComponent className={`w-5 h-5 ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary'
+                        : 'text-accent'
+                          }`} aria-hidden="true" />
                   </div>
-                </CardContent>
-              </Card>
+                        <span className={`font-medium text-left ${
+                    resolvedTheme === 'light'
+                      ? 'text-primary'
+                      : 'text-accent'
+                        }`}>{service.title}</span>
+                  </div>
+                      <motion.div
+                        animate={{ rotate: isExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex-shrink-0"
+                        aria-hidden="true"
+                      >
+                        <ChevronDown className={`w-5 h-5 ${
+                      resolvedTheme === 'light'
+                        ? 'text-primary'
+                        : 'text-accent'
+                    }`} />
+          </motion.div>
+                    </button>
+                    {isExpanded && (
+      <motion.div
+                        id={`service-description-desktop-${index}`}
+                        role="region"
+                        aria-labelledby={`service-button-desktop-${index}`}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className={`overflow-hidden rounded-b-xl p-4 ${
+                resolvedTheme === 'light'
+                            ? 'bg-accent/50 border border-t-0 border-accent/30'
+                            : 'bg-accent/5'
+                        }`}
+                      >
+                        <p className={`text-sm leading-relaxed ${
+                      resolvedTheme === 'light'
+                            ? 'text-primary/90'
+                            : 'text-accent/80'
+                        }`}>
+                          {service.desc}
+                        </p>
             </motion.div>
-          ))}
+                    )}
+                  </motion.div>
+                );
+              })}
         </div>
-
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="pt-6"
-        >
-          <div className="bg-primary rounded-3xl p-6 text-center text-accent">
-            <h3 className="text-2xl font-bold mb-3">Ready to Start Your Project?</h3>
-            <p className="text-neutral-300 mb-4 max-w-2xl mx-auto">
-              Let's discuss how I can help bring your vision to life with exceptional design solutions.
-            </p>
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button size="lg" className="bg-gradient-to-r from-accent via-accent-600 to-accent text-primary hover:from-accent-600 hover:via-accent hover:to-accent-600 px-8 py-3 rounded-2xl font-semibold shadow-2xl hover:shadow-3xl focus:outline-none focus:ring-4 focus:ring-accent/20 focus:ring-offset-2 focus:ring-offset-neutral transition-all duration-300">
-                Get Started Today
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </motion.a>
           </div>
-        </motion.div>
       </motion.div>
     </div>
   </Section>
 );
-};
+});
 
-const Work = () => {
+WhatIDo.displayName = 'WhatIDo';
+
+const Work = React.memo(() => {
   const { resolvedTheme } = useTheme();
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -2263,7 +2240,7 @@ const Work = () => {
   };
 
   return (
-  <Section id="work" className="relative py-32 bg-primary overflow-hidden">
+  <Section id="work" className="relative py-12 bg-primary overflow-hidden">
     {/* Extraordinary Background Elements */}
     <div className="absolute inset-0 pointer-events-none">
       {/* Animated Grid Pattern */}
@@ -2381,49 +2358,21 @@ const Work = () => {
               className="relative px-8 py-4 rounded-full overflow-hidden"
               whileHover={{ scale: 1.05 }}
             >
-              <motion.div
+              <div
                 className="absolute inset-0"
                 style={{
                   background: 'linear-gradient(to right, #8AEA92, #8AEA92, #8AEA92)',
-                  backgroundSize: '200% 200%',
-                }}
-                animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "linear"
                 }}
               />
               <div className="relative flex items-center gap-3">
-                <motion.div
+                <div
                   className="w-2 h-2 rounded-full"
                   style={{ backgroundColor: '#000000' }}
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.8, 1, 0.8],
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
                 />
                 <span className="font-bold text-lg tracking-wide" style={{ color: '#000000' }}>PORTFOLIO</span>
-                <motion.div
+                <div
                   className="w-2 h-2 rounded-full"
                   style={{ backgroundColor: '#000000' }}
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.8, 1, 0.8],
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    delay: 0.5,
-                    ease: "easeInOut"
-                  }}
                 />
               </div>
             </motion.div>
@@ -2469,14 +2418,20 @@ const Work = () => {
           </motion.p>
         </motion.div>
 
-        {/* Filter Tabs - Mobile Optimized - Based on Services */}
+        {/* Filter Tabs - Extraordinary Design */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="sticky top-16 md:top-20 z-40 bg-primary/95 backdrop-blur-sm border-b border-accent/10 mb-8 -mx-4 px-4 md:mx-0 md:px-0 md:static md:bg-transparent md:border-0"
+          role="tablist"
+          aria-label="Portfolio filter categories"
         >
+          {/* Live region for filter changes */}
+          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+            {activeFilter && `Filtered by ${activeFilter}`}
+          </div>
           <div className="relative">
             {/* Scroll Fade Indicators - Mobile Only */}
             <div className="md:hidden absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-primary to-transparent pointer-events-none z-10"></div>
@@ -2487,25 +2442,109 @@ const Work = () => {
               msOverflowStyle: 'none',
               WebkitOverflowScrolling: 'touch'
             }}>
-              <div className="flex gap-2 md:gap-3 md:justify-center md:flex-wrap min-w-max md:min-w-0 pb-1 md:pb-0">
-                {filterCategories.map((category) => {
+              <div className="relative flex gap-2 md:gap-4 md:justify-center md:flex-wrap min-w-max md:min-w-0 pb-1 md:pb-0 py-2 md:py-4">
+                {filterCategories.map((category, index) => {
                   const IconComponent = category.icon;
+                  const isActive = activeFilter === category.title;
+                  
                   return (
                     <motion.button
                       key={category.title}
                       onClick={() => setActiveFilter(category.title)}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`px-3 py-1.5 md:px-5 md:py-2.5 rounded-full text-xs md:text-base font-medium transition-all duration-200 whitespace-nowrap flex-shrink-0 flex items-center gap-1.5 md:gap-2 ${
-                        activeFilter === category.title
-                          ? 'bg-accent text-primary shadow-lg shadow-accent/30'
-                          : 'bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20'
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setActiveFilter(category.title);
+                        }
+                      }}
+                      whileHover={{ 
+                        scale: 1.08,
+                        y: -2,
+                        transition: { duration: 0.2 }
+                      }}
+                      whileTap={{ scale: 0.96 }}
+                      className={`relative px-4 py-2.5 md:px-6 md:py-3 rounded-2xl text-xs md:text-base font-semibold whitespace-nowrap flex-shrink-0 flex items-center gap-2 md:gap-3 transition-all duration-300 overflow-hidden group focus:outline-2 focus:outline-accent focus:outline-offset-2 ${
+                        isActive
+                          ? 'text-primary shadow-2xl'
+                          : 'text-accent/70 hover:text-accent border border-accent/20 hover:border-accent/40'
                       }`}
                       aria-label={`Filter by ${category.title}`}
-                      aria-pressed={activeFilter === category.title}
+                      aria-pressed={isActive}
+                      role="tab"
+                      aria-selected={isActive}
                     >
-                      {IconComponent && <IconComponent className="w-3.5 h-3.5 md:w-5 md:h-5 flex-shrink-0" />}
-                      <span className="text-xs md:text-base">{category.title}</span>
+                      {/* Animated Background for Active Tab */}
+                      {isActive && (
+                        <>
+                          <motion.div
+                            layoutId="activeFilter"
+                            className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent via-accent to-accent-600"
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                            style={{ zIndex: -1 }}
+                          />
+                          {/* Static Glow Effect - Performance optimized */}
+                          <div
+                            className="absolute inset-0 rounded-2xl bg-accent/40 blur-md"
+                            style={{ zIndex: -2 }}
+                          />
+                        </>
+                      )}
+                      
+                      {/* Hover Background for Inactive Tabs */}
+                      {!isActive && (
+                        <motion.div
+                          className="absolute inset-0 rounded-2xl bg-accent/5 group-hover:bg-accent/10"
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 1 }}
+                          transition={{ duration: 0.2 }}
+                          style={{ zIndex: -1 }}
+                        />
+                      )}
+                      
+                      {/* Icon with Animation */}
+                      {IconComponent && (
+                        <motion.div
+                          animate={isActive ? { 
+                            rotate: [0, 10, -10, 0],
+                            scale: [1, 1.2, 1]
+                          } : {}}
+                          transition={{ duration: 0.5 }}
+                        >
+                          <IconComponent className={`w-4 h-4 md:w-5 md:h-5 flex-shrink-0 relative z-10 ${
+                            isActive ? 'text-primary' : 'text-accent group-hover:text-accent'
+                          }`} />
+                        </motion.div>
+                      )}
+                      
+                      {/* Text with Gradient for Active */}
+                      <span className={`relative z-10 text-xs md:text-base font-semibold ${
+                        isActive 
+                          ? 'text-primary drop-shadow-lg' 
+                          : 'text-accent/70 group-hover:text-accent'
+                      }`}>
+                        {category.title}
+                      </span>
+                      
+                      {/* Active Indicator Dot */}
+                      {isActive && (
+                        <motion.div
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-primary rounded-full shadow-lg shadow-accent/50"
+                          style={{ zIndex: 10 }}
+                        />
+                      )}
+                      
+                      {/* Ripple Effect on Click */}
+                      {isActive && (
+                        <motion.div
+                          className="absolute inset-0 rounded-2xl bg-white/20"
+                          initial={{ scale: 0, opacity: 1 }}
+                          animate={{ scale: 2, opacity: 0 }}
+                          transition={{ duration: 0.6 }}
+                          style={{ zIndex: 1 }}
+                        />
+                      )}
                     </motion.button>
                   );
                 })}
@@ -2538,27 +2577,17 @@ const Work = () => {
                 stiffness: 100
               }}
               whileHover={{ 
-                y: -15, 
-                scale: 1.03,
-                rotateY: 5,
+                y: -5,
                 transition: { duration: 0.3 }
               }}
               className={`group relative ${isLarge ? 'md:col-span-2 lg:col-span-1' : ''}`}
               style={{ perspective: '1000px' }}
             >
-              {/* 3D Glow Effect - Lime green only */}
-              <motion.div
-                className="absolute -inset-1 rounded-3xl blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 -z-10"
+              {/* Static Glow Effect - Performance optimized */}
+              <div
+                className="absolute -inset-1 rounded-3xl blur-2xl opacity-0 group-hover:opacity-40 transition-opacity duration-500 -z-10"
                 style={{
-                  background: 'linear-gradient(to right, rgba(138,234,146,0.3), rgba(138,234,146,0.2), rgba(138,234,146,0.3))',
-                }}
-                animate={{
-                  opacity: [0, 0.3, 0],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  delay: index * 0.2,
+                  background: 'rgba(138,234,146,0.2)',
                 }}
               />
               
@@ -2590,19 +2619,14 @@ const Work = () => {
 
                 {/* Image Container with 3D Effect */}
                 <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20" style={{ minHeight: '200px' }}>
-                  <motion.img
+                  <img
                     src={project.thumb}
-                    alt=""
+                    alt={`${project.title} project thumbnail - ${project.role}`}
                     width="1280"
                     height="720"
                     className="w-full h-full object-cover"
                     style={{ aspectRatio: '16 / 9', minHeight: '200px' }}
                     loading="lazy"
-                    whileHover={{ 
-                      scale: 1.15,
-                      rotate: 2,
-                    }}
-                    transition={{ duration: 0.6 }}
                   />
                   
                   {/* Dynamic Gradient Overlay - Lime green only */}
@@ -2693,12 +2717,6 @@ const Work = () => {
                       }`}>{project.role}</p>
                     </div>
                     
-                    <p className={`leading-relaxed ${
-                      resolvedTheme === 'light'
-                        ? 'text-primary/80'
-                        : 'text-light/80'
-                    }`}>{project.summary}</p>
-                    
                     {/* Enhanced Tags */}
                     <div className="flex flex-wrap gap-2 pt-2">
                       {project.tags.map((tag, tagIndex) => (
@@ -2732,37 +2750,31 @@ const Work = () => {
                         });
                       }
                     }}
-                    className="group/btn relative mt-6 w-full inline-flex items-center justify-center gap-3 px-6 py-3 rounded-xl font-semibold overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl text-center"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openProjectModal(project);
+                      }
+                    }}
+                    className="group/btn relative mt-6 w-full inline-flex items-center justify-center gap-3 px-6 py-3 rounded-xl font-semibold overflow-hidden transition-all duration-300 shadow-lg hover:shadow-2xl text-center focus:outline-2 focus:outline-accent focus:outline-offset-2"
                     style={{
                       backgroundColor: '#8AEA92',
                       color: '#000000',
                     }}
                     whileHover={{ scale: 1.05, x: 5 }}
                     whileTap={{ scale: 0.95 }}
-                    aria-label={`Explore ${project.title} project`}
+                    aria-label={`Explore ${project.title} project - ${project.role}`}
                   >
-                    <motion.div
-                      className="absolute inset-0 opacity-0 group-hover/btn:opacity-100"
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"
                       style={{
-                        background: 'linear-gradient(to right, rgba(138,234,146,0.2), rgba(138,234,146,0.3), rgba(138,234,146,0.2))',
-                      }}
-                      animate={{
-                        x: ['-100%', '100%'],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "linear"
+                        background: 'rgba(138,234,146,0.2)',
                       }}
                     />
                     <span className="relative z-10 text-center" style={{ color: '#000000' }}>Explore Project</span>
-                    <motion.div
-                      className="relative z-10"
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
+                    <div className="relative z-10">
                       <Eye className="w-5 h-5" style={{ color: '#000000' }} />
-                    </motion.div>
+                    </div>
                   </motion.button>
                 </CardContent>
               </Card>
@@ -2795,68 +2807,30 @@ const Work = () => {
             href="https://heyzine.com/flip-book/2e51bd7d15.html"
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ scale: 1.08, y: -5 }}
+            whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            className="group relative inline-flex items-center gap-4 px-12 py-6 rounded-2xl overflow-hidden"
+            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl overflow-hidden"
             style={{
               backgroundColor: '#8AEA92',
-              boxShadow: '0 10px 40px rgba(138,234,146,0.4), 0 0 0 1px rgba(138,234,146,0.2)',
+              boxShadow: '0 4px 20px rgba(138,234,146,0.3), 0 0 0 1px rgba(138,234,146,0.2)',
             }}
           >
-            {/* Animated Background - Lime green only */}
-            <motion.div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100"
+            {/* Static Background - Performance optimized */}
+            <div
+              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               style={{
-                background: 'linear-gradient(to right, rgba(138,234,146,0.3), rgba(138,234,146,0.4), rgba(138,234,146,0.3))',
-              }}
-              animate={{
-                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "linear"
+                background: 'rgba(138,234,146,0.2)',
               }}
             />
             
-            <motion.span
-              className="relative z-10 font-bold text-lg tracking-wide"
+            <span
+              className="relative z-10 font-semibold text-sm tracking-wide"
               style={{ color: '#000000' }}
-              whileHover={{ letterSpacing: '0.1em' }}
             >
               View Complete Portfolio
-            </motion.span>
-            <motion.div
-              className="relative z-10"
-              animate={{ x: [0, 8, 0], rotate: [0, 10, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              <ArrowRight className="w-6 h-6" style={{ color: '#000000' }} />
-            </motion.div>
-            
-            {/* Sparkle Effect - Reduced from 6 to 3 for better performance */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
-              {[...Array(3)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-1 h-1 rounded-full"
-                  style={{
-                    left: `${30 + i * 20}%`,
-                    top: '50%',
-                    backgroundColor: '#8AEA92',
-                  }}
-                  animate={{
-                    y: [-20, -40],
-                    opacity: [0, 1, 0],
-                    scale: [0, 1, 0],
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    delay: i * 0.3,
-                  }}
-                />
-              ))}
+            </span>
+            <div className="relative z-10">
+              <ArrowRight className="w-4 h-4" style={{ color: '#000000' }} />
             </div>
           </motion.a>
         </motion.div>
@@ -2871,9 +2845,11 @@ const Work = () => {
     />
   </Section>
 );
-};
+});
 
-const Testimonials = () => {
+Work.displayName = 'Work';
+
+const Testimonials = React.memo(() => {
   const { resolvedTheme } = useTheme();
   const [currentPage, setCurrentPage] = React.useState(0);
   const [activeTab, setActiveTab] = React.useState('written');
@@ -2986,9 +2962,62 @@ const Testimonials = () => {
     setIsVideoModalOpen(false);
   };
 
+  // Auto-play functionality for testimonials
+  const [isAutoPlayPaused, setIsAutoPlayPaused] = React.useState(false);
+  const autoPlayIntervalRef = React.useRef(null);
+
+  // Auto-play effect - cycles through pages every 5 seconds
+  useEffect(() => {
+    // Only auto-play when written testimonials tab is active
+    if (activeTab !== 'written' || isAutoPlayPaused) {
+      if (autoPlayIntervalRef.current) {
+        clearInterval(autoPlayIntervalRef.current);
+        autoPlayIntervalRef.current = null;
+      }
+      return;
+    }
+
+    // Set up interval to auto-advance pages
+    autoPlayIntervalRef.current = setInterval(() => {
+      setCurrentPage((prev) => (prev + 1) % totalPages);
+    }, 5000); // Change page every 5 seconds
+
+    // Cleanup on unmount or when dependencies change
+    return () => {
+      if (autoPlayIntervalRef.current) {
+        clearInterval(autoPlayIntervalRef.current);
+        autoPlayIntervalRef.current = null;
+      }
+    };
+  }, [activeTab, isAutoPlayPaused, totalPages]);
+
+  // Pause auto-play when user interacts with navigation
+  const handleUserInteraction = () => {
+    setIsAutoPlayPaused(true);
+    // Resume auto-play after 10 seconds of no interaction
+    setTimeout(() => {
+      setIsAutoPlayPaused(false);
+    }, 10000);
+  };
+
+  // Update nextPage and prevPage to pause auto-play on user interaction
+  const handleNextPage = () => {
+    handleUserInteraction();
+    nextPage();
+  };
+
+  const handlePrevPage = () => {
+    handleUserInteraction();
+    prevPage();
+  };
+
+  const handlePageClick = (pageIndex) => {
+    handleUserInteraction();
+    setCurrentPage(pageIndex);
+  };
 
   return (
-  <Section id="testimonials" className="relative py-24 bg-primary overflow-hidden">
+  <Section id="testimonials" className="relative py-12 bg-primary overflow-hidden">
     {/* Background Elements */}
     <div className="absolute inset-0">
       <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-accent/10 rounded-full blur-2xl"></div>
@@ -3010,8 +3039,8 @@ const Testimonials = () => {
           transition={{ duration: 0.8 }}
           className="text-center space-y-4"
         >
-          <div className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent/40 text-primary text-lg font-semibold shadow-2xl border-2 border-accent/60 animate-bounce">
-            <div className="w-4 h-4 bg-primary rounded-full shadow-lg animate-ping"></div>
+          <div className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-accent/40 text-primary text-lg font-semibold shadow-2xl border-2 border-accent/60">
+            <div className="w-4 h-4 bg-primary rounded-full shadow-lg"></div>
             Testimonials
           </div>
           <h2 className="text-5xl md:text-6xl font-bold text-accent">What Clients Say</h2>
@@ -3218,7 +3247,7 @@ const Testimonials = () => {
                 <motion.button
                   key={index}
                   onClick={() => {
-                    setCurrentPage(index);
+                    handlePageClick(index);
                   }}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
@@ -3239,7 +3268,7 @@ const Testimonials = () => {
             <motion.button
               onClick={() => {
                 if (currentPage > 0) {
-                  setCurrentPage(currentPage - 1);
+                  handlePrevPage();
                 }
               }}
               whileHover={{ scale: 1.05 }}
@@ -3263,7 +3292,7 @@ const Testimonials = () => {
                 <motion.button
                   key={index}
                   onClick={() => {
-                    setCurrentPage(index);
+                    handlePageClick(index);
                   }}
                   whileHover={{ scale: 1.4 }}
                   whileTap={{ scale: 0.7 }}
@@ -3281,7 +3310,7 @@ const Testimonials = () => {
             <motion.button
               onClick={() => {
                 if (currentPage < totalPages - 1) {
-                  setCurrentPage(currentPage + 1);
+                  handleNextPage();
                 }
               }}
               whileHover={{ scale: 1.05 }}
@@ -3355,7 +3384,7 @@ const Testimonials = () => {
                         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-accent flex-shrink-0" style={{ minWidth: '40px', minHeight: '40px' }}>
                           <img 
                             src={video.thumbnail} 
-                            alt=""
+                            alt={`${video.title} video thumbnail`}
                             width="40"
                             height="40"
                             className="w-full h-full object-cover"
@@ -3388,782 +3417,7 @@ const Testimonials = () => {
             ))}
           </div>
         )}
-
-        {/* Trust Indicators */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-center pt-12"
-        >
-          <div className={`relative ${
-            resolvedTheme === 'light'
-              ? 'p-0'
-              : 'overflow-hidden rounded-3xl p-8 border border-primary/20 bg-gradient-to-br from-primary via-primary-600 to-primary-800 shadow-2xl'
-          }`}>
-            {/* Animated background elements - only for dark mode */}
-            {resolvedTheme === 'dark' && (
-            <div className="absolute inset-0">
-              {/* Floating geometric shapes */}
-              <motion.div
-                className="absolute w-32 h-32 border-2 border-accent/20 rounded-full"
-                style={{ top: '10%', left: '5%' }}
-                animate={{
-                  rotate: 360,
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.6, 0.3],
-                }}
-                transition={{
-                  rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-                  scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-                  opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                }}
-              />
-              
-              <motion.div
-                className="absolute w-24 h-24 bg-accent/10 rounded-lg rotate-45"
-                style={{ top: '20%', right: '10%' }}
-                animate={{
-                  rotate: [45, 405, 45],
-                  scale: [1, 1.3, 1],
-                  opacity: [0.2, 0.5, 0.2],
-                }}
-                transition={{
-                  rotate: { duration: 15, repeat: Infinity, ease: "easeInOut" },
-                  scale: { duration: 5, repeat: Infinity, ease: "easeInOut" },
-                  opacity: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-                }}
-              />
-
-              <motion.div
-                className="absolute w-16 h-16 border border-accent/30 rounded-full"
-                style={{ bottom: '15%', left: '8%' }}
-                animate={{
-                  scale: [1, 1.4, 1],
-                  opacity: [0.4, 0.7, 0.4],
-                }}
-                transition={{
-                  scale: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-                  opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                }}
-              />
-
-              {/* Gradient orbs */}
-              <motion.div
-                className="absolute w-64 h-64 bg-accent/5 rounded-full blur-3xl"
-                style={{ top: '-20%', right: '-20%' }}
-                animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: [0.3, 0.6, 0.3],
-                  rotate: [0, 180, 360],
-                }}
-                transition={{
-                  duration: 12,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-
-              <motion.div
-                className="absolute w-48 h-48 bg-accent/8 rounded-full blur-2xl"
-                style={{ bottom: '-10%', left: '-10%' }}
-                animate={{
-                  scale: [1.2, 1, 1.2],
-                  opacity: [0.4, 0.7, 0.4],
-                  rotate: [360, 180, 0],
-                }}
-                transition={{
-                  duration: 10,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-
-              {/* Animated lines */}
-              <motion.div
-                className="absolute w-1 h-32 bg-gradient-to-b from-transparent via-accent/30 to-transparent"
-                style={{ top: '25%', left: '15%' }}
-                animate={{
-                  scaleY: [0.5, 1.5, 0.5],
-                  opacity: [0.3, 0.8, 0.3],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1.5
-                }}
-              />
-
-              <motion.div
-                className="absolute w-1 h-24 bg-gradient-to-b from-transparent via-accent/40 to-transparent"
-                style={{ bottom: '30%', right: '20%' }}
-                animate={{
-                  scaleY: [1, 0.3, 1],
-                  opacity: [0.4, 0.9, 0.4],
-                }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 2.5
-                }}
-              />
-
-              {/* Subtle grid pattern */}
-              <div className="absolute inset-0 opacity-5">
-                <div className="w-full h-full" style={{
-                  backgroundImage: `
-                    linear-gradient(rgba(138,234,146, 0.1) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(138,234,146, 0.1) 1px, transparent 1px)
-                  `,
-                  backgroundSize: '50px 50px'
-                }}></div>
-              </div>
-            </div>
-            )}
-            
-            {/* Content */}
-            <div className={`${resolvedTheme === 'light' ? '' : 'relative z-10'}`}>
-              <h3 className={`text-4xl font-bold mb-6 ${
-                resolvedTheme === 'light'
-                  ? 'text-gray-800'
-                  : 'text-primary'
-              }`}>Trusted By</h3>
-              
-              {/* Scrolling Logos Container */}
-              <div className="relative overflow-hidden">
-                {/* Gradient overlays for smooth fade effect - only for dark mode */}
-                {resolvedTheme === 'dark' && (
-                  <>
-                <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-primary to-transparent z-10 pointer-events-none" />
-                <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-primary to-transparent z-10 pointer-events-none" />
-                  </>
-                )}
-                
-                {/* Scrolling logos */}
-                <motion.div
-                  className="flex items-center gap-12 py-8"
-                  animate={{
-                    x: [0, -800]
-                  }}
-                  transition={{
-                    x: {
-                      repeat: Infinity,
-                      repeatType: "loop",
-                      duration: 30,
-                      ease: "linear",
-                    },
-                  }}
-                  style={{ width: '1600px' }}
-                >
-                  {/* First set of logos */}
-                  {/* Andegna Furniture */}
-                  <motion.a 
-                    href="https://andegnafurniture.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.andegnaLogo} 
-                        alt="Andegna Furniture client logo"
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ 
-                          filter: 'drop-shadow(0 0 4px #8AEA92) drop-shadow(0 0 8px #8AEA92)',
-                          border: '2px solid #8AEA92',
-                          borderRadius: '50%',
-                          aspectRatio: '1 / 1',
-                          minWidth: '64px',
-                          minHeight: '64px'
-                        }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-primary/20 flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-primary font-bold text-lg">A</span>
-                      </div>
                     </motion.div>
-                    <p className="text-sm text-accent/80">Andegna Furniture</p>
-                  </motion.a>
-                  {/* Niqat Coffee */}
-                  <motion.a 
-                    href="https://linktr.ee/Niqatcoffee"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.niqat} 
-                        alt="Niqat Coffee client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">N</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">Niqat Coffee</p>
-                  </motion.a>
-                  {/* Prime All Trading */}
-                  <motion.a 
-                    href="https://primesoftwaresolution.net/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.primeAll} 
-                        alt="Prime All client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-primary-dark to-neutral-700 flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">P</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">Prime All Trading</p>
-                  </motion.a>
-                  {/* Medavail Pharmaceutical */}
-                  <motion.div 
-                    className="flex-shrink-0 text-center"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.medavailLogo} 
-                        alt="Medavail Pharmaceuticals client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-accent to-primary-dark flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">M</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">Medavail Pharmaceutical</p>
-                  </motion.div>
-                  {/* GEDY-LAW */}
-                  <motion.a 
-                    href="https://gedy-law.com/welcome"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.gedylaw} 
-                        alt="Gedy Law client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-primary-dark to-accent flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">G</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">GEDY-LAW</p>
-                  </motion.a>
-                  {/* Pioneer Diagnostic Center */}
-                  <motion.a 
-                    href="https://pdc-et.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.pdcLogo} 
-                        alt="PDC client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-primary-dark to-accent flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">P</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">Pioneer Diagnostic Center</p>
-                  </motion.a>
-
-                  {/* Duplicate set for seamless loop */}
-                  {/* Andegna Furniture */}
-                  <motion.a 
-                    href="https://andegnafurniture.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.andegnaLogo} 
-                        alt="Andegna Furniture client logo"
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ 
-                          filter: 'drop-shadow(0 0 4px #8AEA92) drop-shadow(0 0 8px #8AEA92)',
-                          border: '2px solid #8AEA92',
-                          borderRadius: '50%',
-                          aspectRatio: '1 / 1',
-                          minWidth: '64px',
-                          minHeight: '64px'
-                        }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-primary/20 flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-primary font-bold text-lg">A</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">Andegna Furniture</p>
-                  </motion.a>
-                  {/* Niqat Coffee */}
-                  <motion.a 
-                    href="https://linktr.ee/Niqatcoffee"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.niqat} 
-                        alt="Niqat Coffee client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">N</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">Niqat Coffee</p>
-                  </motion.a>
-                  {/* Prime All Trading */}
-                  <motion.a 
-                    href="https://primesoftwaresolution.net/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.primeAll} 
-                        alt="Prime All client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-primary-dark to-neutral-700 flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">P</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">Prime All Trading</p>
-                  </motion.a>
-                  {/* Medavail Pharmaceutical */}
-                  <motion.div 
-                    className="flex-shrink-0 text-center"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.medavailLogo} 
-                        alt="Medavail Pharmaceuticals client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-accent to-primary-dark flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">M</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">Medavail Pharmaceutical</p>
-                  </motion.div>
-                  {/* GEDY-LAW */}
-                  <motion.a 
-                    href="https://gedy-law.com/welcome"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.gedylaw} 
-                        alt="Gedy Law client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-primary-dark to-accent flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">G</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">GEDY-LAW</p>
-                  </motion.a>
-                  {/* Pioneer Diagnostic Center */}
-                  <motion.a 
-                    href="https://pdc-et.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 text-center block"
-                    whileHover={{ 
-                      scale: 1.1, 
-                      y: -10,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <motion.div 
-                      className={`w-16 h-16 rounded-full mx-auto mb-2 overflow-hidden transition-all duration-300 ${
-                        resolvedTheme === 'light'
-                          ? 'bg-white shadow-2xl shadow-gray-300/50 hover:shadow-3xl hover:shadow-gray-400/60 border-2 border-gray-100'
-                          : 'bg-primary-600 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30'
-                      }`}
-                      style={{ minWidth: '64px', minHeight: '64px' }}
-                      whileHover={{
-                        boxShadow: resolvedTheme === 'light' 
-                          ? "0 25px 50px rgba(0, 0, 0, 0.15)"
-                          : "0 20px 40px rgba(138,234,146, 0.4)",
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <img 
-                        src={IMAGES.pdcLogo} 
-                        alt="PDC client logo" 
-                        width="200"
-                        height="200"
-                        className="w-full h-full object-cover"
-                        style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div 
-                        className="w-full h-full bg-gradient-to-br from-primary-dark to-accent flex items-center justify-center"
-                        style={{ display: 'none' }}
-                      >
-                        <span className="text-white font-bold text-lg">P</span>
-                      </div>
-                    </motion.div>
-                    <p className="text-sm text-accent/80">Pioneer Diagnostic Center</p>
-                  </motion.a>
-
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
     </div>
 
     {/* Video Modal */}
@@ -4237,7 +3491,224 @@ const Testimonials = () => {
     )}
   </Section>
 );
-};
+});
+
+Testimonials.displayName = 'Testimonials';
+
+// TrustedBy Component - Separate section for company logos
+const TrustedBy = React.memo(() => {
+  const { resolvedTheme } = useTheme();
+
+  const clients = [
+    { name: 'Andegna Furniture', logo: IMAGES.andegnaLogo, href: 'https://andegnafurniture.com/' },
+    { name: 'Niqat Coffee', logo: IMAGES.niqat, href: 'https://linktr.ee/Niqatcoffee' },
+    { name: 'Prime All Trading', logo: IMAGES.primeAll, href: 'https://primesoftwaresolution.net/' },
+    { name: 'Medavail Pharmaceutical', logo: IMAGES.medavailLogo, href: null },
+    { name: 'GEDY-LAW', logo: IMAGES.gedylaw, href: 'https://gedy-law.com/welcome' },
+    { name: 'Pioneer Diagnostic Center', logo: IMAGES.pdcLogo, href: 'https://pdc-et.com' },
+  ];
+
+  return (
+    <Section id="trusted-by" className="relative py-12 bg-primary overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="space-y-12"
+        >
+          {/* Header */}
+          <div className="text-center space-y-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent/20 border border-accent/30 shadow-lg"
+            >
+              <div className="w-2 h-2 bg-accent rounded-full"></div>
+              <span className={`font-semibold text-lg drop-shadow-2xl ${resolvedTheme === 'light' ? 'text-black' : 'text-accent'}`}>
+                Trusted By
+              </span>
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-4xl md:text-5xl font-bold text-light"
+            >
+              Trusted By Leading Brands
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-lg text-accent/80 max-w-2xl mx-auto"
+            >
+              Partnering with innovative companies to create exceptional brand experiences
+            </motion.p>
+          </div>
+
+          {/* Logos Scrolling Container - Continuous Right to Left */}
+          <div className="relative overflow-hidden">
+            {/* Gradient overlays for smooth fade effect */}
+            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-primary to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-primary to-transparent z-10 pointer-events-none" />
+
+            {/* Scrolling Logos */}
+            <motion.div
+              className="flex items-center gap-8 md:gap-12 py-8"
+              animate={{
+                x: ['0%', '-50%'],
+              }}
+              transition={{
+                x: {
+                  repeat: Infinity,
+                  repeatType: 'loop',
+                  duration: 30,
+                  ease: 'linear',
+                },
+              }}
+              style={{ width: 'max-content' }}
+            >
+              {/* First set of logos */}
+              {clients.map((client, index) => {
+                const LogoWrapper = client.href ? motion.a : motion.div;
+                const wrapperProps = client.href
+                  ? {
+                      href: client.href,
+                      target: '_blank',
+                      rel: 'noopener noreferrer',
+                    }
+                  : {};
+
+                return (
+                  <LogoWrapper
+                    key={`first-${index}`}
+                    {...wrapperProps}
+                    className="group relative flex-shrink-0 w-32 h-32 md:w-40 md:h-40 flex items-center justify-center rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden"
+                    style={{
+                      background: resolvedTheme === 'light'
+                        ? 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%)'
+                        : 'linear-gradient(135deg, rgba(138,234,146,0.12) 0%, rgba(138,234,146,0.05) 100%)',
+                      border: `1px solid ${resolvedTheme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(138,234,146,0.25)'}`,
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: resolvedTheme === 'light'
+                        ? '0 4px 12px rgba(0,0,0,0.05)'
+                        : '0 4px 12px rgba(138,234,146,0.1)',
+                    }}
+                    whileHover={{
+                      scale: 1.05,
+                      transition: { duration: 0.3, ease: 'easeOut' },
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {/* Logo Image - Fills the frame */}
+                    <img
+                      src={client.logo}
+                      alt={`${client.name} logo`}
+                      className="w-full h-full object-cover transition-all duration-300 opacity-70 group-hover:opacity-100"
+                      style={{
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                      }}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        if (e.target.nextSibling) {
+                          e.target.nextSibling.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    
+                    {/* Fallback */}
+                    <div
+                      className="w-full h-full bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center rounded-xl"
+                      style={{ display: 'none' }}
+                    >
+                      <span className={`font-bold text-2xl ${resolvedTheme === 'light' ? 'text-primary' : 'text-accent'}`}>
+                        {client.name.charAt(0)}
+                      </span>
+                    </div>
+                  </LogoWrapper>
+                );
+              })}
+
+              {/* Duplicate set of logos for seamless loop */}
+              {clients.map((client, index) => {
+                const LogoWrapper = client.href ? motion.a : motion.div;
+                const wrapperProps = client.href
+                  ? {
+                      href: client.href,
+                      target: '_blank',
+                      rel: 'noopener noreferrer',
+                    }
+                  : {};
+
+                return (
+                  <LogoWrapper
+                    key={`second-${index}`}
+                    {...wrapperProps}
+                    className="group relative flex-shrink-0 w-32 h-32 md:w-40 md:h-40 flex items-center justify-center rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden"
+                    style={{
+                      background: resolvedTheme === 'light'
+                        ? 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%)'
+                        : 'linear-gradient(135deg, rgba(138,234,146,0.12) 0%, rgba(138,234,146,0.05) 100%)',
+                      border: `1px solid ${resolvedTheme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(138,234,146,0.25)'}`,
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: resolvedTheme === 'light'
+                        ? '0 4px 12px rgba(0,0,0,0.05)'
+                        : '0 4px 12px rgba(138,234,146,0.1)',
+                    }}
+                    whileHover={{
+                      scale: 1.05,
+                      transition: { duration: 0.3, ease: 'easeOut' },
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {/* Logo Image - Fills the frame */}
+                    <img
+                      src={client.logo}
+                      alt={`${client.name} logo`}
+                      className="w-full h-full object-cover transition-all duration-300 opacity-70 group-hover:opacity-100"
+                      style={{
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                      }}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        if (e.target.nextSibling) {
+                          e.target.nextSibling.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    
+                    {/* Fallback */}
+                    <div
+                      className="w-full h-full bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center rounded-xl"
+                      style={{ display: 'none' }}
+                    >
+                      <span className={`font-bold text-2xl ${resolvedTheme === 'light' ? 'text-primary' : 'text-accent'}`}>
+                        {client.name.charAt(0)}
+                      </span>
+                    </div>
+                  </LogoWrapper>
+                );
+              })}
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+    </Section>
+  );
+});
+
+TrustedBy.displayName = 'TrustedBy';
 
 // SocialProof section removed - was duplicate content
 
@@ -4513,7 +3984,14 @@ const ContactForm = () => {
               <p className="text-accent/70">Share your vision and let's bring it to life together</p>
             </motion.div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Live region for form status announcements */}
+        <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+          {state.submitting && "Submitting form, please wait"}
+          {state.succeeded && "Form submitted successfully"}
+          {state.errors && Object.keys(state.errors).length > 0 && "Please correct the errors in the form"}
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6" aria-label="Contact form">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
@@ -4525,10 +4003,13 @@ const ContactForm = () => {
               <Input 
                 id="firstName"
                 name="firstName"
+                type="text"
                 value={formData.firstName}
                 onChange={(e) => setFormData({...formData, firstName: e.target.value})}
                       placeholder=""
-                      className="peer border-2 border-primary/20 bg-primary/5 text-accent placeholder:text-transparent focus:border-primary/60 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-300 rounded-xl py-4 pl-4 pr-4"
+                      aria-label="First Name"
+                      aria-required="true"
+                      className="peer border-2 border-primary/20 bg-primary/5 text-accent placeholder:text-transparent focus:border-primary/60 focus:outline-2 focus:outline-accent focus:outline-offset-2 focus:ring-4 focus:ring-primary/20 transition-all duration-300 rounded-xl py-4 pl-4 pr-4"
                       onFocus={() => setFocusedField('firstName')}
                       onBlur={() => setFocusedField(null)}
                 required
@@ -4541,7 +4022,7 @@ const ContactForm = () => {
                           : 'top-4 text-accent/60'
                       }`}
                     >
-                      First Name
+                      First Name <span className="text-red-400" aria-label="required">*</span>
                     </label>
                     <motion.div
                       className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-primary to-secondary"
@@ -4568,10 +4049,13 @@ const ContactForm = () => {
               <Input 
                 id="lastName"
                 name="lastName"
+                type="text"
                 value={formData.lastName}
                 onChange={(e) => setFormData({...formData, lastName: e.target.value})}
                       placeholder=""
-                      className="peer border-2 border-primary/20 bg-primary/5 text-accent placeholder:text-transparent focus:border-primary/60 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-300 rounded-xl py-4 pl-4 pr-4"
+                      aria-label="Last Name"
+                      aria-required="true"
+                      className="peer border-2 border-primary/20 bg-primary/5 text-accent placeholder:text-transparent focus:border-primary/60 focus:outline-2 focus:outline-accent focus:outline-offset-2 focus:ring-4 focus:ring-primary/20 transition-all duration-300 rounded-xl py-4 pl-4 pr-4"
                       onFocus={() => setFocusedField('lastName')}
                       onBlur={() => setFocusedField(null)}
                 required
@@ -4616,7 +4100,10 @@ const ContactForm = () => {
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
                     placeholder=""
-                    className="peer border-2 border-primary/20 bg-primary/5 text-accent placeholder:text-transparent focus:border-primary/60 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-300 rounded-xl py-4 pl-4 pr-4"
+                    aria-label="Email Address"
+                    aria-required="true"
+                    autoComplete="email"
+                    className="peer border-2 border-primary/20 bg-primary/5 text-accent placeholder:text-transparent focus:border-primary/60 focus:outline-2 focus:outline-accent focus:outline-offset-2 focus:ring-4 focus:ring-primary/20 transition-all duration-300 rounded-xl py-4 pl-4 pr-4"
                     onFocus={() => setFocusedField('email')}
                     onBlur={() => setFocusedField(null)}
               required
@@ -4702,7 +4189,9 @@ const ContactForm = () => {
               value={formData.message}
               onChange={(e) => setFormData({...formData, message: e.target.value})}
                     placeholder=""
-                    className="peer min-h-[140px] border-2 border-primary/20 bg-primary/5 text-accent placeholder:text-transparent focus:border-primary/60 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-300 rounded-xl py-4 pl-4 pr-4 resize-none"
+                    aria-label="Project Message"
+                    aria-required="true"
+                    className="peer min-h-[140px] border-2 border-primary/20 bg-primary/5 text-accent placeholder:text-transparent focus:border-primary/60 focus:outline-2 focus:outline-accent focus:outline-offset-2 focus:ring-4 focus:ring-primary/20 transition-all duration-300 rounded-xl py-4 pl-4 pr-4 resize-none"
                     onFocus={() => setFocusedField('message')}
                     onBlur={() => setFocusedField(null)}
               required
@@ -4741,7 +4230,9 @@ const ContactForm = () => {
                 <motion.button
             type="submit" 
             disabled={state.submitting}
-                  className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-primary via-primary-600 to-primary py-4 text-lg font-semibold text-accent shadow-lg hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/20 focus:ring-offset-2 focus:ring-offset-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label={state.submitting ? "Submitting form, please wait" : "Submit contact form"}
+                  aria-busy={state.submitting}
+                  className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-primary via-primary-600 to-primary py-4 text-lg font-semibold text-accent shadow-lg hover:shadow-2xl transition-all duration-300 focus:outline-2 focus:outline-accent focus:outline-offset-2 focus:ring-4 focus:ring-primary/20 focus:ring-offset-2 focus:ring-offset-primary disabled:opacity-50 disabled:cursor-not-allowed"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onMouseEnter={() => setIsSubmitting(false)}
@@ -4798,7 +4289,7 @@ const ContactForm = () => {
 };
 
 const Contact = () => (
-  <Section id="contact" className="relative py-24 bg-primary overflow-hidden">
+  <Section id="contact" className="relative py-12 bg-primary overflow-hidden">
     {/* Background Elements */}
     <div className="absolute inset-0">
       <div className="absolute top-20 left-10 w-40 h-40 bg-accent/10 rounded-full blur-2xl"></div>
@@ -4852,7 +4343,11 @@ const Contact = () => (
   </Section>
 );
 
-const Footer = ({ onPrivacyClick, onTermsClick }) => {
+Contact.displayName = 'Contact';
+
+const Footer = React.memo(({ onPrivacyClick, onTermsClick }) => {
+  const [footerLogoError, setFooterLogoError] = useState(false);
+  const [footerLogoSrc, setFooterLogoSrc] = useState(logoImg);
   const { resolvedTheme } = useTheme();
   
   return (
@@ -4875,7 +4370,7 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => {
          >
            {/* Brand & Social */}
            <div className="flex flex-col items-center gap-4">
-             <h3 className="text-lg font-bold text-light">{PROFILE.name}</h3>
+             <h3 className="text-base font-bold text-light">{PROFILE.name}</h3>
              
              {/* Social Icons - Compact */}
              <div className="flex items-center gap-3">
@@ -4909,7 +4404,7 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => {
 
            {/* Copyright */}
            <div className="flex flex-col items-center">
-             <p className="text-xs text-accent/50">
+             <p className="text-[10px] text-accent/50">
                © 2025 {PROFILE.name}
              </p>
            </div>
@@ -4964,13 +4459,30 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => {
                transition={{ duration: 0.6, delay: 0.2 }}
                className="flex items-center"
              >
-               <img 
-                 src={logoImg} 
-                 alt="Logo"
-                 width="200"
-                 height="67"
-                 className="h-16 md:h-20 w-auto object-contain"
-               />
+               {!footerLogoError ? (
+                 <img 
+                   src={footerLogoSrc} 
+                   alt="Logo"
+                   width="200"
+                   height="67"
+                   className="h-16 md:h-20 w-auto object-contain"
+                   onError={() => {
+                     // Try alternative paths
+                     if (footerLogoSrc.includes('/img/Logo.svg')) {
+                       setFooterLogoSrc('/SVG/Logo.svg');
+                     } else if (footerLogoSrc.includes('/SVG/Logo.svg')) {
+                       setFooterLogoSrc('/img/Logo.svg');
+                     } else {
+                       // Final fallback: show text logo
+                       setFooterLogoError(true);
+                     }
+                   }}
+                 />
+               ) : (
+                 <div className="text-accent font-bold text-xl md:text-2xl">
+                   Bereket Fikre
+                 </div>
+               )}
              </motion.div>
           </motion.div>
 
@@ -4983,26 +4495,26 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => {
             className="space-y-6 text-center md:text-center text-left ml-0 md:ml-8"
           >
              <h4 className="text-lg font-semibold text-light">Let's Connect</h4>
-             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-items-start md:justify-items-center">
+             <div className="grid grid-cols-3 gap-3 justify-items-center">
                {PROFILE.socials.map((social, index) => (
                 <motion.a
                    key={social.label}
                    href={social.href}
                    target="_blank"
                    rel="noopener noreferrer"
-                   className={`group flex items-center justify-center gap-3 p-3 rounded-xl transition-all duration-300 border border-accent/20 hover:border-accent/40 w-full h-16 ${
+                   className={`group flex flex-col items-center justify-center gap-2 p-3 rounded-lg transition-all duration-300 border border-accent/20 hover:border-accent/40 w-full h-16 ${
                      resolvedTheme === 'light'
                        ? 'bg-accent hover:bg-accent/80'
                        : 'bg-accent/10 hover:bg-accent/20'
                    }`}
-                   whileHover={{ scale: 1.02, y: -2 }}
-                   whileTap={{ scale: 0.98 }}
+                   whileHover={{ scale: 1.05, y: -2 }}
+                   whileTap={{ scale: 0.95 }}
                    initial={{ opacity: 0, y: 20 }}
                    whileInView={{ opacity: 1, y: 0 }}
                    viewport={{ once: true }}
                    transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
                  >
-                   <social.icon className={`w-5 h-5 group-hover:scale-110 transition-transform ${
+                   <social.icon className={`w-6 h-6 group-hover:scale-110 transition-transform ${
                      resolvedTheme === 'light'
                        ? 'text-primary group-hover:text-primary'
                        : 'text-accent group-hover:text-accent'
@@ -5101,7 +4613,9 @@ const Footer = ({ onPrivacyClick, onTermsClick }) => {
     </div>
   </footer>
 );
-};
+});
+
+Footer.displayName = 'Footer';
 
 export default function CreativeDesignerPortfolio() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
@@ -5271,7 +4785,23 @@ export default function CreativeDesignerPortfolio() {
           isOpen={isPerformanceOpen} 
           onClose={() => setIsPerformanceOpen(false)} 
         />
-      <main className="antialiased text-light bg-primary selection:bg-accent selection:text-primary">
+      {/* Skip Links for Keyboard Navigation */}
+      <div className="sr-only focus-within:not-sr-only focus-within:absolute focus-within:top-4 focus-within:left-4 focus-within:z-[10000] focus-within:p-4 focus-within:bg-accent focus-within:text-primary focus-within:rounded-lg focus-within:shadow-lg">
+        <a href="#main-content" className="block mb-2 focus:outline-2 focus:outline-primary focus:outline-offset-2">
+          Skip to main content
+        </a>
+        <a href="#navigation" className="block mb-2 focus:outline-2 focus:outline-primary focus:outline-offset-2">
+          Skip to navigation
+        </a>
+        <a href="#work" className="block mb-2 focus:outline-2 focus:outline-primary focus:outline-offset-2">
+          Skip to portfolio
+        </a>
+        <a href="#contact" className="block focus:outline-2 focus:outline-primary focus:outline-offset-2">
+          Skip to contact
+        </a>
+      </div>
+
+      <main id="main-content" className="antialiased text-light bg-primary selection:bg-accent selection:text-primary" role="main">
         <HeaderWithContext 
           isAnalyticsOpen={isAnalyticsOpen} setIsAnalyticsOpen={setIsAnalyticsOpen}
           isAIOpen={isAIOpen} setIsAIOpen={setIsAIOpen}
@@ -5294,13 +4824,16 @@ export default function CreativeDesignerPortfolio() {
       <About />
       </Suspense>
       <Suspense fallback={<div className="min-h-screen bg-primary" />}>
-      <Services />
+      <WhatIDo />
       </Suspense>
       <Suspense fallback={<div className="min-h-screen bg-primary" />}>
       <Work />
       </Suspense>
       <Suspense fallback={<div className="min-h-screen bg-primary" />}>
       <Testimonials />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-[400px] bg-primary" />}>
+      <TrustedBy />
       </Suspense>
       <LazyCaseStudy />
       <LazyBlog />
