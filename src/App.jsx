@@ -661,9 +661,12 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                 <div className="w-full rounded-xl overflow-hidden">
               <img
                 src={project.thumb}
-                    alt={project.title}
+                    alt={`${project.title} - ${project.role}`}
+                    width="800"
+                    height="600"
                     className="w-full h-auto object-cover"
                 loading="lazy"
+                decoding="async"
               />
           </div>
 
@@ -1190,7 +1193,7 @@ const HeaderWithContext = ({
         </a>
         
         {/* Desktop Navigation */}
-        <nav id="navigation" className="hidden md:flex items-center gap-6" role="navigation" aria-label="Main navigation">
+        <nav id="navigation" className="hidden md:flex items-center gap-6" aria-label="Main navigation">
           {NAV.map((item, index) => (
             <div key={index} className="relative">
               {item.dropdown ? (
@@ -1320,7 +1323,6 @@ const HeaderWithContext = ({
               ? 'bg-accent/95' 
               : 'bg-primary/95'
           }`}
-          role="navigation"
           aria-label="Mobile navigation"
         >
           <nav className="px-4 py-4 space-y-2">
@@ -1813,6 +1815,7 @@ const About = React.memo(() => {
                     height="500"
                     className="w-full h-auto object-contain rounded-xl"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 {/* Decorative corner accents */}
@@ -2016,6 +2019,7 @@ const WhatIDo = React.memo(() => {
                       aria-expanded={isExpanded}
                       aria-controls={`service-description-${index}`}
                       aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${service.title} description`}
+                      id={`service-button-${index}`}
                       className={`w-full flex items-center justify-between gap-3 p-4 rounded-xl transition-all duration-300 focus:outline-2 focus:outline-accent focus:outline-offset-2 ${
                           resolvedTheme === 'light'
                             ? 'bg-accent border border-accent/30 hover:bg-accent/90'
@@ -2057,6 +2061,9 @@ const WhatIDo = React.memo(() => {
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.3 }}
+                          id={`service-description-${index}`}
+                          role="region"
+                          aria-labelledby={`service-button-${index}`}
                           className={`overflow-hidden rounded-b-xl p-4 ${
                             resolvedTheme === 'light'
                               ? 'bg-accent/50 border border-t-0 border-accent/30'
@@ -2469,9 +2476,9 @@ const Work = React.memo(() => {
                           : 'text-accent/70 hover:text-accent border border-accent/20 hover:border-accent/40'
                       }`}
                       aria-label={`Filter by ${category.title}`}
-                      aria-pressed={isActive}
                       role="tab"
                       aria-selected={isActive}
+                      aria-controls={`tabpanel-${category.title}`}
                     >
                       {/* Animated Background for Active Tab */}
                       {isActive && (
@@ -2627,50 +2634,18 @@ const Work = React.memo(() => {
                     className="w-full h-full object-cover"
                     style={{ aspectRatio: '16 / 9', minHeight: '200px' }}
                     loading="lazy"
+                    decoding="async"
                   />
                   
-                  {/* Dynamic Gradient Overlay - Lime green only */}
-                  <motion.div
+                  {/* Dynamic Gradient Overlay - Static for performance */}
+                  <div
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
                       background: 'linear-gradient(to top, rgba(138,234,146,0.6), rgba(138,234,146,0.2), transparent)',
                     }}
-                    animate={{
-                      opacity: [0.6, 0.8, 0.6],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
                   />
                   
-                  {/* Floating Icons - Reduced from 12 to 6 for better performance */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    {[...Array(6)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute w-2 h-2 rounded-full"
-                        style={{
-                          left: `${20 + (i * 15)}%`,
-                          top: `${25 + (i % 3) * 25}%`,
-                          backgroundColor: '#8AEA92',
-                        }}
-                        animate={{
-                          opacity: [0, 1, 0],
-                          scale: [0, 1.5, 0],
-                          y: [0, -30, -60],
-                          x: [0, (Math.random() - 0.5) * 40],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          delay: i * 0.25,
-                          ease: "easeOut"
-                        }}
-                      />
-                    ))}
-                  </div>
+                  {/* Floating Icons - Removed infinite animations for performance */}
                   
                   {/* View Button - Brand colors only */}
                   <motion.div
@@ -3133,6 +3108,7 @@ const Testimonials = React.memo(() => {
                                 height="40"
                                 className="w-full h-full object-cover"
                                 loading="lazy"
+                                decoding="async"
                               />
                             </div>
                             
@@ -3189,6 +3165,7 @@ const Testimonials = React.memo(() => {
                             className="w-full h-full object-cover"
                               style={{ aspectRatio: '1 / 1', minWidth: '48px', minHeight: '48px' }}
                               loading="lazy"
+                              decoding="async"
                           />
                           <div 
                             className="w-full h-full bg-gradient-to-br from-accent to-accent-600 flex items-center justify-center text-primary font-semibold text-sm"
@@ -3582,6 +3559,7 @@ const TrustedBy = React.memo(() => {
                       href: client.href,
                       target: '_blank',
                       rel: 'noopener noreferrer',
+                      'aria-label': `Visit ${client.name} website`
                     }
                   : {};
 
@@ -3589,7 +3567,7 @@ const TrustedBy = React.memo(() => {
                   <LogoWrapper
                     key={`first-${index}`}
                     {...wrapperProps}
-                    className="group relative flex-shrink-0 w-32 h-32 md:w-40 md:h-40 flex items-center justify-center rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden"
+                    className="group relative flex-shrink-0 w-32 h-32 md:w-40 md:h-40 flex items-center justify-center rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden focus:outline-2 focus:outline-accent focus:outline-offset-2"
                     style={{
                       background: resolvedTheme === 'light'
                         ? 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%)'
@@ -3609,13 +3587,16 @@ const TrustedBy = React.memo(() => {
                     {/* Logo Image - Fills the frame */}
                     <img
                       src={client.logo}
-                      alt={`${client.name} logo`}
+                      alt={`${client.name} company logo`}
+                      width="160"
+                      height="160"
                       className="w-full h-full object-cover transition-all duration-300 opacity-70 group-hover:opacity-100"
                       style={{
                         objectFit: 'cover',
                         objectPosition: 'center',
                       }}
                       loading="lazy"
+                      decoding="async"
                       onError={(e) => {
                         e.target.style.display = 'none';
                         if (e.target.nextSibling) {
@@ -3645,6 +3626,7 @@ const TrustedBy = React.memo(() => {
                       href: client.href,
                       target: '_blank',
                       rel: 'noopener noreferrer',
+                      'aria-label': `Visit ${client.name} website`
                     }
                   : {};
 
@@ -3652,7 +3634,7 @@ const TrustedBy = React.memo(() => {
                   <LogoWrapper
                     key={`second-${index}`}
                     {...wrapperProps}
-                    className="group relative flex-shrink-0 w-32 h-32 md:w-40 md:h-40 flex items-center justify-center rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden"
+                    className="group relative flex-shrink-0 w-32 h-32 md:w-40 md:h-40 flex items-center justify-center rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden focus:outline-2 focus:outline-accent focus:outline-offset-2"
                     style={{
                       background: resolvedTheme === 'light'
                         ? 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%)'
@@ -3672,13 +3654,16 @@ const TrustedBy = React.memo(() => {
                     {/* Logo Image - Fills the frame */}
                     <img
                       src={client.logo}
-                      alt={`${client.name} logo`}
+                      alt={`${client.name} company logo`}
+                      width="160"
+                      height="160"
                       className="w-full h-full object-cover transition-all duration-300 opacity-70 group-hover:opacity-100"
                       style={{
                         objectFit: 'cover',
                         objectPosition: 'center',
                       }}
                       loading="lazy"
+                      decoding="async"
                       onError={(e) => {
                         e.target.style.display = 'none';
                         if (e.target.nextSibling) {
@@ -4801,7 +4786,7 @@ export default function CreativeDesignerPortfolio() {
         </a>
       </div>
 
-      <main id="main-content" className="antialiased text-light bg-primary selection:bg-accent selection:text-primary" role="main">
+      <main id="main-content" className="antialiased text-light bg-primary selection:bg-accent selection:text-primary">
         <HeaderWithContext 
           isAnalyticsOpen={isAnalyticsOpen} setIsAnalyticsOpen={setIsAnalyticsOpen}
           isAIOpen={isAIOpen} setIsAIOpen={setIsAIOpen}
