@@ -9,7 +9,8 @@ const CriticalResourceHints = () => {
       if (existing) return;
       
       // Skip hero image preloads - hero image was removed
-      if (href && href.includes('hero') && href.includes('image')) {
+      // Check for both 'hero image' and 'hero%20image' (URL encoded)
+      if (href && (href.includes('hero') && href.includes('image') || href.includes('hero%20image') || href.includes('hero image'))) {
         return;
       }
 

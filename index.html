@@ -139,6 +139,16 @@
     <!-- Service workers and caches cleared - Deferred -->
     <script defer>
       console.log('Main page loaded - service workers disabled');
+      
+      // Remove any existing hero image preloads from DOM
+      (function() {
+        const heroImagePreloads = document.querySelectorAll('link[rel="preload"][href*="hero"], link[rel="preload"][href*="hero%20image"], link[rel="preload"][href*="hero image"]');
+        heroImagePreloads.forEach(link => {
+          if (link.parentNode) {
+            link.parentNode.removeChild(link);
+          }
+        });
+      })();
     </script>
     
     <!-- JSON-LD Structured Data - Minified to reduce HTML size -->

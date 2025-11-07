@@ -38,7 +38,8 @@ export const useImageOptimization = (src, options = {}) => {
   useEffect(() => {
     if (priority && src) {
       // Skip hero image preloads - hero image was removed
-      if (src.includes('hero') && src.includes('image')) {
+      // Check for both 'hero image' and 'hero%20image' (URL encoded)
+      if (src.includes('hero') && (src.includes('image') || src.includes('hero%20image') || src.includes('hero image'))) {
         return;
       }
       
