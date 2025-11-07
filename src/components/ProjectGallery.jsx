@@ -10,13 +10,19 @@ const ProjectGallery = ({ projects, className = '' }) => {
   const openLightbox = (project, imageIndex = 0) => {
     setSelectedProject(project);
     setCurrentImageIndex(imageIndex);
-    document.body.style.overflow = 'hidden';
+    // Batch style write in requestAnimationFrame to prevent forced reflow
+    requestAnimationFrame(() => {
+      document.body.style.overflow = 'hidden';
+    });
   };
 
   const closeLightbox = () => {
     setSelectedProject(null);
     setCurrentImageIndex(0);
-    document.body.style.overflow = 'unset';
+    // Batch style write in requestAnimationFrame to prevent forced reflow
+    requestAnimationFrame(() => {
+      document.body.style.overflow = 'unset';
+    });
   };
 
   const nextImage = () => {

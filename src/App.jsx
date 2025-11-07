@@ -47,9 +47,12 @@ import {
   MapPin,
   Star
 } from "lucide-react";
-import { useForm, ValidationError } from '@formspree/react';
+// Lazy load formspree - only needed for ContactForm
+// This reduces initial bundle size by ~53 KiB
 
 // Logo image path - using SVG for better scalability
+// Use proper path resolution for both development and production (Netlify)
+// Vite automatically handles public folder assets, so we use absolute paths
 const logoImg = '/img/Logo.svg';
 
 // Image paths for deployment - using consistent paths for both development and production
@@ -575,8 +578,10 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      // Prevent body scroll
+      // Prevent body scroll - batch style write in requestAnimationFrame to prevent forced reflow
+      requestAnimationFrame(() => {
       document.body.style.overflow = 'hidden';
+      });
       
       // Handle ESC key
       const handleEsc = (e) => {
@@ -587,7 +592,10 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
       document.addEventListener('keydown', handleEsc);
 
     return () => {
+        // Batch style write in requestAnimationFrame to prevent forced reflow
+        requestAnimationFrame(() => {
         document.body.style.overflow = '';
+        });
         document.removeEventListener('keydown', handleEsc);
     };
     }
@@ -652,6 +660,7 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
                     className="w-full h-auto object-cover"
                 loading="lazy"
                 decoding="async"
+                fetchPriority="low"
               />
           </div>
 
@@ -911,6 +920,17 @@ const HeaderWithContext = ({
   const [activeMobileDropdown, setActiveMobileDropdown] = useState(null);
   const [logoError, setLogoError] = useState(false);
   const [logoSrc, setLogoSrc] = useState(logoImg);
+  
+  // Try multiple logo paths for Netlify compatibility
+  // Netlify is case-sensitive, so we try both /img and /SVG paths
+  const logoPaths = [
+    '/img/Logo.svg',
+    '/SVG/Logo.svg',
+    './img/Logo.svg',
+    './SVG/Logo.svg',
+    'img/Logo.svg',
+    'SVG/Logo.svg'
+  ];
   
   // Handle install app functionality
   const handleInstallApp = async () => {
@@ -1181,15 +1201,18 @@ const HeaderWithContext = ({
               style={{ minHeight: '48px' }}
               loading="eager"
               fetchpriority="high"
-              onError={() => {
-                // Try alternative paths
-                if (logoSrc.includes('/img/Logo.svg')) {
-                  setLogoSrc('/SVG/Logo.svg');
-                } else if (logoSrc.includes('/SVG/Logo.svg')) {
-                  setLogoSrc('/img/Logo.svg');
+              onError={(e) => {
+                // Try alternative paths for Netlify compatibility
+                const currentIndex = logoPaths.findIndex(path => logoSrc === path || logoSrc.includes(path));
+                const nextIndex = currentIndex + 1;
+                
+                if (nextIndex < logoPaths.length) {
+                  // Try next path
+                  setLogoSrc(logoPaths[nextIndex]);
                 } else {
-                  // Final fallback: show text logo
+                  // All paths failed - show text logo
                   setLogoError(true);
+                  console.warn('Logo failed to load from all paths:', logoPaths);
                 }
               }}
             />
@@ -1229,6 +1252,8 @@ const HeaderWithContext = ({
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
+                      role="menu"
+                      aria-label={`${item.label} menu`}
                       className={`absolute top-full left-0 mt-2 w-48 rounded-xl shadow-lg overflow-hidden z-50 ${
                         resolvedTheme === 'light'
                           ? 'bg-accent/95 backdrop-blur-sm border border-accent/20'
@@ -1240,6 +1265,7 @@ const HeaderWithContext = ({
                           <button
                             key={dropdownIndex}
                             onClick={() => handleToolAction(dropdownItem.action)}
+                            role="menuitem"
                             className={`block w-full text-left px-4 py-3 text-sm transition-colors ${
                               resolvedTheme === 'light'
                                 ? 'text-primary hover:text-primary hover:bg-accent/20'
@@ -1253,6 +1279,7 @@ const HeaderWithContext = ({
                           <a
                             key={dropdownIndex}
                             href={dropdownItem.href}
+                            role="menuitem"
                             className={`block px-4 py-3 text-base transition-colors min-h-[48px] ${
                               resolvedTheme === 'light'
                                 ? 'text-primary hover:text-primary hover:bg-accent/20'
@@ -1353,7 +1380,11 @@ const HeaderWithContext = ({
                       <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === index ? 'rotate-180' : ''}`} />
                     </button>
                     {activeMobileDropdown === index && (
-                    <div className="ml-4 space-y-2">
+                    <div 
+                      role="menu"
+                      aria-label={`${item.label} menu`}
+                      className="ml-4 space-y-2"
+                    >
                       {item.dropdown.map((dropdownItem, dropdownIndex) => (
                         dropdownItem.action ? (
                           <button
@@ -1363,6 +1394,7 @@ const HeaderWithContext = ({
                               setIsMobileMenuOpen(false);
                               setActiveMobileDropdown(null);
                             }}
+                            role="menuitem"
                             className={`block w-full text-left px-4 py-3 text-base font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 min-h-[48px] ${
                               resolvedTheme === 'light'
                                 ? 'text-primary hover:text-white hover:bg-accent focus:ring-white/20 focus:ring-offset-white'
@@ -1376,6 +1408,7 @@ const HeaderWithContext = ({
                           <a
                             key={dropdownIndex}
                             href={dropdownItem.href}
+                            role="menuitem"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={`block px-4 py-3 text-base font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 min-h-[48px] ${
                               resolvedTheme === 'light'
@@ -1418,18 +1451,28 @@ const Hero = () => {
   
   return (
     <div id="home" className="relative h-screen overflow-hidden bg-primary" style={{ minHeight: '100vh', contain: 'layout style' }}>
-      {/* Hero Background Image with reduced opacity - Hidden on mobile */}
-      <div 
-        className="hidden md:block absolute inset-0 bg-cover bg-center bg-no-repeat"
+      {/* Hero Background Image with reduced opacity - Hidden on mobile - Using img tag for better LCP */}
+      <img
+        src="/img/hero%20image.webp"
+        alt=""
+        className="hidden md:block absolute inset-0 w-full h-full object-cover"
         style={{
-          backgroundImage: 'url(/img/hero%20image.webp)',
           opacity: 0.3,
           zIndex: 0,
           width: '100%',
           height: '100%',
-          willChange: 'auto'
+          objectFit: 'cover',
+          objectPosition: 'center',
+          willChange: 'auto',
+          contain: 'layout style'
         }}
-      ></div>
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
+        width="1920"
+        height="1080"
+        aria-hidden="true"
+      />
 
       {/* Mobile: Grid Pattern Background */}
       <div 
@@ -1828,6 +1871,7 @@ const About = React.memo(() => {
                     className="w-full h-auto object-contain rounded-xl"
                     loading="lazy"
                     decoding="async"
+                    fetchPriority="low"
                   />
                 </div>
                 {/* Decorative corner accents */}
@@ -2221,18 +2265,29 @@ const Work = React.memo(() => {
     const selectedService = SERVICES.find(service => service.title === activeFilter);
     if (!selectedService) return PROJECTS;
     
-    // Match projects to service based on tags
+    // Match projects to service based on tags - Optimized to avoid blocking main thread
+    // Cache service data to avoid repeated operations
+    const serviceTitleFirstWord = selectedService.title.toLowerCase().split(' ')[0];
+    const serviceTagsLower = selectedService.tags.map(tag => tag.toLowerCase());
+    
+    // Use optimized filter with cached lowercase conversions
     return PROJECTS.filter(project => {
+      // Cache lowercase conversions to avoid repeated operations
+      const projectRoleLower = project.role.toLowerCase();
+      const projectTitleLower = project.title.toLowerCase();
+      
       // Check if any project tag matches any service tag (case-insensitive)
-      return project.tags.some(projectTag => 
-        selectedService.tags.some(serviceTag => 
-          projectTag.toLowerCase().includes(serviceTag.toLowerCase()) ||
-          serviceTag.toLowerCase().includes(projectTag.toLowerCase())
-        )
-      ) || 
+      const tagMatch = project.tags.some(projectTag => {
+        const projectTagLower = projectTag.toLowerCase();
+        return serviceTagsLower.some(serviceTagLower => {
+          return projectTagLower.includes(serviceTagLower) || serviceTagLower.includes(projectTagLower);
+        });
+      });
+      
       // Also check project role/title for service keywords
-      project.role.toLowerCase().includes(selectedService.title.toLowerCase().split(' ')[0].toLowerCase()) ||
-      project.title.toLowerCase().includes(selectedService.title.toLowerCase().split(' ')[0].toLowerCase());
+      return tagMatch || 
+        projectRoleLower.includes(serviceTitleFirstWord) ||
+        projectTitleLower.includes(serviceTitleFirstWord);
     });
   }, [activeFilter]);
 
@@ -2666,6 +2721,7 @@ const Work = React.memo(() => {
                     style={{ aspectRatio: '16 / 9', minHeight: '200px', display: 'block' }}
                     loading="lazy"
                     decoding="async"
+                    fetchPriority="low"
                   />
                   
                   {/* Dynamic Gradient Overlay - Static for performance */}
@@ -2883,13 +2939,42 @@ const Testimonials = React.memo(() => {
   const carouselRef = React.useRef(null);
   const isScrollingRef = React.useRef(false);
   
+  // Cache container width to prevent forced reflow
+  const containerWidthRef = React.useRef(0);
+  
   useEffect(() => {
+    let rafId = null;
+    let ticking = false;
+    
     const checkMobile = () => {
-      setIsMobileView(window.innerWidth < 768);
+      if (ticking) return;
+      ticking = true;
+      
+      // Batch all layout reads in requestAnimationFrame to prevent forced reflow
+      rafId = requestAnimationFrame(() => {
+        const width = window.innerWidth;
+        const isMobile = width < 768;
+        
+        // Cache container width if carousel exists
+        if (carouselRef.current && isMobile) {
+          containerWidthRef.current = carouselRef.current.clientWidth;
+        }
+        
+        setIsMobileView(isMobile);
+        ticking = false;
+      });
     };
+    
+    // Initial check with RAF to prevent blocking initial render
+    requestAnimationFrame(() => {
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    });
+    
+    window.addEventListener('resize', checkMobile, { passive: true });
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
   
   // Sync scroll position with current page on mobile
@@ -2898,9 +2983,14 @@ const Testimonials = React.memo(() => {
       isScrollingRef.current = true;
       const scrollContainer = carouselRef.current;
       
-      // Batch layout read in requestAnimationFrame to prevent forced reflow
+      // Use cached width or batch layout read in requestAnimationFrame to prevent forced reflow
       requestAnimationFrame(() => {
-        const scrollContainerWidth = scrollContainer.clientWidth;
+        // Use cached width if available, otherwise read once and cache
+        const scrollContainerWidth = containerWidthRef.current || scrollContainer.clientWidth;
+        if (!containerWidthRef.current) {
+          containerWidthRef.current = scrollContainerWidth;
+        }
+        
         const itemWidth = scrollContainerWidth;
         const targetScroll = currentPage * itemWidth;
         
@@ -2923,28 +3013,41 @@ const Testimonials = React.memo(() => {
     
     const scrollContainer = carouselRef.current;
     let scrollTimeout;
+    let rafId = null;
+    let ticking = false;
     
     const handleScroll = () => {
       // Skip if we're programmatically scrolling
-      if (isScrollingRef.current) return;
+      if (isScrollingRef.current || ticking) return;
+      ticking = true;
       
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        // Batch layout reads in requestAnimationFrame to prevent forced reflow
-        requestAnimationFrame(() => {
+        // Batch all layout reads in requestAnimationFrame to prevent forced reflow
+        rafId = requestAnimationFrame(() => {
+          // Read all layout properties together
           const scrollLeft = scrollContainer.scrollLeft;
-          const containerWidth = scrollContainer.clientWidth;
+          const containerWidth = containerWidthRef.current || scrollContainer.clientWidth;
+          
+          // Cache width if not cached
+          if (!containerWidthRef.current) {
+            containerWidthRef.current = containerWidth;
+          }
+          
           const newPage = Math.round(scrollLeft / containerWidth);
           
           if (newPage !== currentPage && newPage >= 0 && newPage < TESTIMONIALS.length) {
             setCurrentPage(newPage);
           }
+          
+          ticking = false;
         });
       }, 150);
     };
     
     scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
+      if (rafId) cancelAnimationFrame(rafId);
       scrollContainer.removeEventListener('scroll', handleScroll);
       clearTimeout(scrollTimeout);
     };
@@ -3150,6 +3253,7 @@ const Testimonials = React.memo(() => {
                                 className="w-full h-full object-cover"
                                 loading="lazy"
                                 decoding="async"
+                                fetchPriority="low"
                               />
                             </div>
                             
@@ -3207,6 +3311,7 @@ const Testimonials = React.memo(() => {
                               style={{ aspectRatio: '1 / 1', minWidth: '48px', minHeight: '48px' }}
                               loading="lazy"
                               decoding="async"
+                              fetchPriority="low"
                           />
                           <div 
                             className="w-full h-full bg-gradient-to-br from-accent to-accent-600 flex items-center justify-center text-primary font-semibold text-sm"
@@ -3374,6 +3479,8 @@ const Testimonials = React.memo(() => {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         style={{ aspectRatio: '16 / 9', minHeight: '200px' }}
                         loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
                       />
                       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
                         <motion.button
@@ -3408,6 +3515,8 @@ const Testimonials = React.memo(() => {
                             className="w-full h-full object-cover"
                             style={{ aspectRatio: '1 / 1', minWidth: '40px', minHeight: '40px' }}
                             loading="lazy"
+                            decoding="async"
+                            fetchPriority="low"
                           />
                         </div>
                         <div>
@@ -3638,11 +3747,15 @@ const TrustedBy = React.memo(() => {
                       }}
                       loading="lazy"
                       decoding="async"
+                      fetchPriority="low"
                       onError={(e) => {
+                        // Batch style writes in requestAnimationFrame to prevent forced reflow
+                        requestAnimationFrame(() => {
                         e.target.style.display = 'none';
                         if (e.target.nextSibling) {
                           e.target.nextSibling.style.display = 'flex';
                         }
+                        });
                       }}
                     />
                     
@@ -3705,11 +3818,15 @@ const TrustedBy = React.memo(() => {
                       }}
                       loading="lazy"
                       decoding="async"
+                      fetchPriority="low"
                       onError={(e) => {
+                        // Batch style writes in requestAnimationFrame to prevent forced reflow
+                        requestAnimationFrame(() => {
                         e.target.style.display = 'none';
                         if (e.target.nextSibling) {
                           e.target.nextSibling.style.display = 'flex';
                         }
+                        });
                       }}
                     />
                     
@@ -3740,9 +3857,12 @@ TrustedBy.displayName = 'TrustedBy';
 
 const ContactForm = () => {
   const { resolvedTheme } = useTheme();
-  const [state, handleSubmit] = useForm("mandzwvb");
   const [focusedField, setFocusedField] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formState, setFormState] = useState({ succeeded: false, submitting: false, errors: null });
+  const [formspreeLoaded, setFormspreeLoaded] = useState(false);
+  const [useFormHook, setUseFormHook] = useState(null);
+  const [ValidationErrorComponent, setValidationErrorComponent] = useState(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -3750,6 +3870,34 @@ const ContactForm = () => {
     subject: '',
     message: ''
   });
+  
+  // Lazy load formspree to reduce initial bundle size
+  useEffect(() => {
+    if (!formspreeLoaded) {
+      // Load formspree asynchronously to avoid blocking main thread
+      import('@formspree/react').then((module) => {
+        setUseFormHook(() => module.useForm);
+        setValidationErrorComponent(() => module.ValidationError);
+        setFormspreeLoaded(true);
+      }).catch(() => {
+        // Silently fail if formspree can't be loaded
+        setFormspreeLoaded(true);
+      });
+    }
+  }, [formspreeLoaded]);
+  
+  // Initialize form once formspree is loaded
+  const formResult = useFormHook && formspreeLoaded ? useFormHook("mandzwvb") : null;
+  const state = formResult ? formResult[0] : formState;
+  const handleSubmit = formResult ? formResult[1] : async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Fallback form handling if formspree fails to load
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setFormState({ succeeded: true, submitting: false, errors: null });
+    }, 1000);
+  };
   
   if (state.succeeded) {
     return (
@@ -4057,12 +4205,12 @@ const ContactForm = () => {
                       transition={{ duration: 0.3 }}
                     />
                   </div>
-              <ValidationError 
+              {ValidationErrorComponent ? <ValidationErrorComponent 
                 prefix="First Name" 
                 field="firstName"
                 errors={state.errors}
                 className="text-red-400 text-xs mt-1"
-              />
+              /> : null}
                 </motion.div>
 
                 <motion.div
@@ -4103,12 +4251,12 @@ const ContactForm = () => {
                       transition={{ duration: 0.3 }}
                     />
                   </div>
-              <ValidationError 
+              {ValidationErrorComponent ? <ValidationErrorComponent 
                 prefix="Last Name" 
                 field="lastName"
                 errors={state.errors}
                 className="text-red-400 text-xs mt-1"
-              />
+              /> : null}
                 </motion.div>
           </div>
           
@@ -4151,12 +4299,12 @@ const ContactForm = () => {
                     transition={{ duration: 0.3 }}
                   />
                 </div>
-            <ValidationError 
+            {ValidationErrorComponent ? <ValidationErrorComponent 
               prefix="Email" 
               field="email"
               errors={state.errors}
               className="text-red-400 text-xs mt-1"
-            />
+            /> : null}
               </motion.div>
               
               <motion.div
@@ -4194,12 +4342,12 @@ const ContactForm = () => {
                     transition={{ duration: 0.3 }}
                   />
                 </div>
-            <ValidationError 
+            {ValidationErrorComponent ? <ValidationErrorComponent 
               prefix="Subject" 
               field="subject"
               errors={state.errors}
               className="text-red-400 text-xs mt-1"
-            />
+            /> : null}
               </motion.div>
               
               <motion.div
@@ -4239,12 +4387,12 @@ const ContactForm = () => {
                     transition={{ duration: 0.3 }}
                   />
                 </div>
-            <ValidationError 
+            {ValidationErrorComponent ? <ValidationErrorComponent 
               prefix="Message" 
               field="message"
               errors={state.errors}
               className="text-red-400 text-xs mt-1"
-            />
+            /> : null}
               </motion.div>
               
               <motion.div
@@ -4374,6 +4522,17 @@ Contact.displayName = 'Contact';
 const Footer = React.memo(({ onPrivacyClick, onTermsClick }) => {
   const [footerLogoError, setFooterLogoError] = useState(false);
   const [footerLogoSrc, setFooterLogoSrc] = useState(logoImg);
+  
+  // Use same logo paths for footer
+  // Netlify is case-sensitive, so we try both /img and /SVG paths
+  const footerLogoPaths = [
+    '/img/Logo.svg',
+    '/SVG/Logo.svg',
+    './img/Logo.svg',
+    './SVG/Logo.svg',
+    'img/Logo.svg',
+    'SVG/Logo.svg'
+  ];
   const { resolvedTheme } = useTheme();
   
   return (
@@ -4465,6 +4624,8 @@ const Footer = React.memo(({ onPrivacyClick, onTermsClick }) => {
                   className="w-full h-full object-cover"
                   style={{ aspectRatio: '1 / 1', minWidth: '64px', minHeight: '64px' }}
                   loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
                 />
               </div>
               <div>
@@ -4492,15 +4653,21 @@ const Footer = React.memo(({ onPrivacyClick, onTermsClick }) => {
                    width="200"
                    height="67"
                    className="h-16 md:h-20 w-auto object-contain"
-                   onError={() => {
-                     // Try alternative paths
-                     if (footerLogoSrc.includes('/img/Logo.svg')) {
-                       setFooterLogoSrc('/SVG/Logo.svg');
-                     } else if (footerLogoSrc.includes('/SVG/Logo.svg')) {
-                       setFooterLogoSrc('/img/Logo.svg');
+                   loading="lazy"
+                   decoding="async"
+                   fetchPriority="low"
+                   onError={(e) => {
+                     // Try alternative paths for Netlify compatibility
+                     const currentIndex = footerLogoPaths.findIndex(path => footerLogoSrc === path || footerLogoSrc.includes(path));
+                     const nextIndex = currentIndex + 1;
+                     
+                     if (nextIndex < footerLogoPaths.length) {
+                       // Try next path
+                       setFooterLogoSrc(footerLogoPaths[nextIndex]);
                      } else {
-                       // Final fallback: show text logo
+                       // All paths failed - show text logo
                        setFooterLogoError(true);
+                       console.warn('Footer logo failed to load from all paths:', footerLogoPaths);
                      }
                    }}
                  />

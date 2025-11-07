@@ -86,65 +86,75 @@ export default defineConfig({
         assetFileNames: 'assets/[name]-[hash][extname]',
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
-        // Optimize chunk splitting for better caching and parallel loading
+        // Optimize chunk splitting for better caching, parallel loading, and reduced network dependencies
         manualChunks: (id) => {
           // Vendor chunks for better caching and parallel loading
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
+            // Core React - critical, load first
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react/jsx-runtime')) {
               return 'react-vendor';
             }
-            // Split framer-motion into separate chunk (can be lazy loaded)
-            // Framer Motion is large, so lazy load it for better initial load
+            // Framer Motion - large, lazy load to reduce initial bundle
             if (id.includes('framer-motion')) {
               return 'framer-motion';
             }
-            // Split lucide-react icons into separate chunk (large library)
-            // Tree-shaking will remove unused icons
+            // Lucide React icons - large library, separate chunk
             if (id.includes('lucide-react')) {
               return 'lucide-icons';
             }
-            // Split react-helmet-async into separate chunk
+            // React Helmet - SEO, can be lazy loaded
             if (id.includes('react-helmet-async')) {
               return 'helmet';
             }
-            // Split formspree into separate chunk
+            // Formspree - only needed for contact form, lazy load
             if (id.includes('@formspree')) {
               return 'formspree';
             }
-            // Other vendor libraries
+            // Other vendor libraries - group together
             return 'vendor';
           }
-          // Feature-based chunks for better code splitting
-          if (id.includes('components/AdvancedSEO') || 
-              id.includes('components/ThemeProvider') || 
+          // Core components - critical, load early
+          if (id.includes('components/ThemeProvider') || 
               id.includes('components/LanguageProvider')) {
             return 'core-components';
           }
+          // SEO component - can be lazy loaded
+          if (id.includes('components/AdvancedSEO')) {
+            return 'seo';
+          }
+          // Tools - lazy load on demand
           if (id.includes('components/AnalyticsDashboard') || 
               id.includes('components/AIPersonalization') || 
               id.includes('components/AdvancedPWA') || 
               id.includes('components/PerformanceMonitor')) {
             return 'tools';
           }
+          // Image optimization - lazy load
           if (id.includes('components/OptimizedImage') || 
               id.includes('hooks/useImageOptimization')) {
             return 'optimization';
           }
-          // Lazy-loaded components
+          // Lazy-loaded components - already lazy, separate chunk
           if (id.includes('components/LazyWrapper') ||
               id.includes('components/AIContentGenerator') ||
               id.includes('components/CRMIntegration') ||
-              id.includes('components/EmailMarketing')) {
+              id.includes('components/EmailMarketing') ||
+              id.includes('components/SmartRecommendations') ||
+              id.includes('components/SecurityDashboard') ||
+              id.includes('components/SEOManager')) {
             return 'lazy-components';
           }
-          // Split ScrollProgress into separate chunk (non-critical)
+          // ScrollProgress - non-critical, lazy load
           if (id.includes('components/ScrollProgress')) {
             return 'scroll-progress';
           }
-          // Split utility modules into separate chunks (loaded on demand)
+          // Utility modules - lazy load on demand
           if (id.includes('utils/scrollAnimations') ||
               id.includes('utils/accessibility') ||
-              id.includes('utils/pageTransitions')) {
+              id.includes('utils/pageTransitions') ||
+              id.includes('utils/scrollOptimizer') ||
+              id.includes('utils/layoutOptimizer') ||
+              id.includes('utils/resourceOptimizer')) {
             return 'utils';
           }
         },
@@ -172,18 +182,18 @@ export default defineConfig({
   // Optimize dependencies - reduce network requests and bundle size
   optimizeDeps: {
     include: [
+      // Only include critical dependencies for initial load
       'react',
       'react-dom',
       'react/jsx-runtime',
-      'react-helmet-async',
-      // Include commonly used dependencies to prevent frequent re-optimization
-      // framer-motion is in separate chunk and can be lazy loaded
-      'lucide-react',
-      '@formspree/react'
+      // Exclude non-critical dependencies to reduce initial bundle
     ],
     exclude: [
-      // Exclude large dependencies that are lazy loaded to reduce initial bundle
-      'framer-motion'
+      // Exclude large dependencies that are lazy loaded to reduce initial bundle and network dependencies
+      'framer-motion',
+      'react-helmet-async',
+      '@formspree/react',
+      'lucide-react'
     ],
     // Don't force optimization on every restart - only when needed
     force: false,

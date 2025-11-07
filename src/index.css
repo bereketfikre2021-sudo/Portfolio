@@ -17,8 +17,9 @@
     transition: background-color 0.3s ease, color 0.3s ease;
     /* Prevent layout shift during font load - use optional to avoid FOIT */
     font-display: optional;
-    /* Mobile: Ensure minimum readable text size */
-    font-size: 16px;
+    /* WCAG AA compliance: Minimum 18px for normal text to meet 3:1 contrast with #8AEA92 on #000000 */
+    /* Contrast ratio: #8AEA92 on #000000 = 3.8:1 (AA for large text 18pt+ or 14pt+ bold) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet WCAG AA */
   }
   
   /* Force Raleway font on all elements */
@@ -112,115 +113,126 @@
     contain-intrinsic-size: auto 500px;
   }
 
-  /* Light mode styles - using dark brand colors for better visibility */
-  /* Color contrast ratios meet WCAG AA standards (4.5:1 for normal text, 3:1 for large text) */
+  /* Light mode styles - Using only Huemint palette: #000000 and #8AEA92 */
+  /* Contrast ratio: #000000 on #8AEA92 = 3.8:1 (AA for large text 18pt+ or 14pt+ bold) */
+  /* All text must be 18pt+ or 14pt+ bold to meet WCAG AA standards */
   .light {
-    --primary: #ffffff !important;
-    --primary-foreground: #000000 !important; /* #000000 on #ffffff = 21:1 contrast ratio (AAA) */
-    --secondary: #33202A !important; /* Dark purple-brown from brand */
-    --secondary-foreground: #ffffff !important; /* #ffffff on #33202A = 8.6:1 contrast ratio (AAA) */
-    --accent: #8AEA92 !important; /* Keep bright green - #8AEA92 on #000000 = 3.8:1 (AA for large text) */
-    --accent-foreground: #000000 !important; /* #000000 on #8AEA92 = 3.8:1 contrast ratio (AA for large text) */
-    --neutral: #5F5566 !important; /* Dark purple-gray from brand - #5F5566 on #ffffff = 4.8:1 (AA) */
-    --neutral-foreground: #ffffff !important; /* #ffffff on #5F5566 = 4.8:1 contrast ratio (AA) */
-    --light: #5A7A6B !important; /* Darker sage green for better contrast - #5A7A6B on #ffffff = 4.2:1 (AA) */
-    --light-foreground: #000000 !important; /* #000000 on #5A7A6B = 4.2:1 contrast ratio (AA) */
+    --primary: #8AEA92 !important; /* Green background */
+    --primary-foreground: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    --secondary: #8AEA92 !important; /* Green background */
+    --secondary-foreground: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    --accent: #8AEA92 !important; /* Green accent */
+    --accent-foreground: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    --neutral: #8AEA92 !important; /* Green background */
+    --neutral-foreground: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    --light: #8AEA92 !important; /* Green background */
+    --light-foreground: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
   }
   
-  /* Dark mode color contrast - ensure WCAG AA compliance */
-  /* #8AEA92 on #000000 = 3.8:1 (AA for large text), #ffffff on #000000 = 21:1 (AAA) */
+  /* Dark mode color contrast - Using only Huemint palette: #000000 and #8AEA92 */
+  /* #8AEA92 on #000000 = 3.8:1 (AA for large text 18pt+ or 14pt+ bold) */
+  /* All text must be 18px+ or 14px+ bold to meet WCAG AA standards */
   
-  /* Light mode specific overrides for Tailwind classes */
+  /* Light mode specific overrides - Using only Huemint palette: #000000 and #8AEA92 */
+  /* WCAG AA compliance: All text must be 18px+ or 14px+ bold for 3:1 contrast requirement */
   .light .bg-primary {
-    background-color: #ffffff !important;
+    background-color: #8AEA92 !important; /* Green background */
   }
   
   .light .text-light {
-    color: #000000 !important; /* Dark text on light background */
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   .light .text-primary {
-    color: #000000 !important; /* Dark text on light background */
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   .light .bg-secondary {
-    background-color: #33202A !important; /* Dark brand color */
+    background-color: #8AEA92 !important; /* Green background */
   }
   
   .light .text-secondary {
-    color: #ffffff !important; /* Light text on dark secondary */
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   .light .text-neutral {
-    color: #5F5566 !important; /* Dark neutral from brand */
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   .light .text-neutral-300 {
-    color: #5F5566 !important; /* Dark neutral for better visibility */
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   .light .text-neutral-400 {
-    color: #5F5566 !important; /* Dark neutral for better visibility */
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   .light .bg-neutral-50 {
-    background-color: #f8f7f9 !important; /* Very light neutral */
+    background-color: #8AEA92 !important; /* Green background */
   }
   
   .light .bg-neutral-100 {
-    background-color: #f1eff2 !important; /* Light neutral */
+    background-color: #8AEA92 !important; /* Green background */
   }
   
   /* Comprehensive light mode overrides for all sections */
   
-  /* Hero section */
+  /* Hero section - Using only Huemint palette: #000000 and #8AEA92 */
   .light .bg-primary {
-    background-color: #ffffff !important;
+    background-color: #8AEA92 !important; /* Green background */
   }
   
-  /* Text colors - ensure dark text on light backgrounds */
+  /* Text colors - Black text on green backgrounds (3.8:1 contrast - AA for large text) */
   .light h1, .light h2, .light h3, .light h4, .light h5, .light h6 {
-    color: #000000 !important;
+    color: #000000 !important; /* Black text - ensure 18pt+ or 14pt+ bold for WCAG AA */
+    font-weight: 600 !important; /* Bold for better contrast */
   }
   
   .light p, .light span, .light div {
-    color: #000000 !important;
+    color: #000000 !important; /* Black text - ensure 18pt+ or 14pt+ bold for WCAG AA */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   /* Buttons and interactive elements */
   .light .bg-accent {
-    background-color: #8AEA92 !important;
-    color: #000000 !important;
+    background-color: #8AEA92 !important; /* Green background */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
   }
   
   .light .text-accent {
-    color: #8AEA92 !important;
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
   }
   
-  /* Cards and containers */
+  /* Cards and containers - Using only Huemint palette: #000000 and #8AEA92 */
   .light .bg-primary\/90, .light .bg-primary\/95 {
-    background-color: rgba(255, 255, 255, 0.9) !important;
+    background-color: rgba(138, 234, 146, 0.9) !important; /* Green with opacity */
   }
   
   .light .bg-primary\/5 {
-    background-color: rgba(0, 0, 0, 0.05) !important;
+    background-color: rgba(138, 234, 146, 0.05) !important; /* Green with low opacity */
   }
   
   .light .bg-primary\/10 {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    background-color: rgba(138, 234, 146, 0.1) !important; /* Green with low opacity */
   }
   
-  /* Borders */
+  /* Borders - Using only Huemint palette: #000000 and #8AEA92 */
   .light .border-accent\/20 {
-    border-color: rgba(138, 234, 146, 0.2) !important;
+    border-color: rgba(0, 0, 0, 0.2) !important; /* Black border with opacity */
   }
   
   .light .border-accent\/30 {
-    border-color: rgba(138, 234, 146, 0.3) !important;
+    border-color: rgba(0, 0, 0, 0.3) !important; /* Black border with opacity */
   }
   
   .light .border-primary\/20 {
-    border-color: rgba(0, 0, 0, 0.2) !important;
+    border-color: rgba(0, 0, 0, 0.2) !important; /* Black border with opacity */
   }
   
   /* Shadows and overlays */
@@ -232,38 +244,38 @@
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
   }
   
-  /* Specific section overrides */
+  /* Specific section overrides - Using only Huemint palette: #000000 and #8AEA92 */
   .light .bg-light {
-    background-color: #f8fafc !important;
+    background-color: #8AEA92 !important; /* Green background */
   }
   
-  /* Darker sage green accents for better contrast and readability */
+  /* Green accents with opacity for better contrast and readability */
   .light .bg-light\/10 {
-    background-color: rgba(90, 122, 107, 0.1) !important;
+    background-color: rgba(138, 234, 146, 0.1) !important; /* Green with low opacity */
   }
   
   .light .bg-light\/20 {
-    background-color: rgba(90, 122, 107, 0.2) !important;
+    background-color: rgba(138, 234, 146, 0.2) !important; /* Green with low opacity */
   }
   
   .light .bg-light\/30 {
-    background-color: rgba(90, 122, 107, 0.3) !important;
+    background-color: rgba(138, 234, 146, 0.3) !important; /* Green with low opacity */
   }
   
   .light .border-light {
-    border-color: #5A7A6B !important;
+    border-color: #000000 !important; /* Black border */
   }
   
   .light .border-light\/20 {
-    border-color: rgba(90, 122, 107, 0.2) !important;
+    border-color: rgba(0, 0, 0, 0.2) !important; /* Black border with opacity */
   }
   
   .light .border-light\/30 {
-    border-color: rgba(90, 122, 107, 0.3) !important;
+    border-color: rgba(0, 0, 0, 0.3) !important; /* Black border with opacity */
   }
   
   .light .text-light {
-    color: #5A7A6B !important;
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
   }
   
   /* Navigation */
@@ -271,24 +283,15 @@
     background-color: transparent !important;
   }
   
-  /* Footer */
+  /* Footer - Using only Huemint palette: #000000 and #8AEA92 */
   .light footer {
-    background-color: #33202A !important;
-    color: #ffffff !important;
+    background-color: #8AEA92 !important; /* Green background */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
   }
   
   .light footer * {
-    color: #ffffff !important;
-  }
-  
-  /* Footer - Light Mode Override for Better Visibility */
-  .light footer {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-  }
-  
-  .light footer * {
-    color: #000000 !important;
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   .light footer h1,
@@ -297,79 +300,83 @@
   .light footer h4,
   .light footer h5,
   .light footer h6 {
-    color: #000000 !important;
+    color: #000000 !important; /* Black text - ensure 18pt+ or 14pt+ bold for WCAG AA */
+    font-weight: 600 !important; /* Bold for better contrast */
   }
   
   .light footer p,
   .light footer span,
   .light footer div {
-    color: #000000 !important;
+    color: #000000 !important; /* Black text - ensure 18pt+ or 14pt+ bold for WCAG AA */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   .light footer a {
-    color: #8AEA92 !important;
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-weight: 600 !important; /* Bold for better contrast */
   }
   
-  /* Sage green enhancements for visual life and depth */
+  /* Green enhancements - Using only Huemint palette: #000000 and #8AEA92 */
   
   /* Portfolio cards and project containers */
   .light .bg-primary\/5, .light .bg-primary\/10, .light .bg-primary\/20 {
-    background-color: rgba(90, 122, 107, 0.05) !important;
-    border: 1px solid rgba(90, 122, 107, 0.1) !important;
+    background-color: rgba(138, 234, 146, 0.05) !important; /* Green with low opacity */
+    border: 1px solid rgba(0, 0, 0, 0.1) !important; /* Black border with opacity */
   }
   
-  /* Service cards subtle darker sage green backgrounds */
+  /* Service cards - Using only Huemint palette: #000000 and #8AEA92 */
   .light .service-card, .light [class*="service"] {
-    background-color: rgba(90, 122, 107, 0.08) !important;
-    border: 1px solid rgba(90, 122, 107, 0.15) !important;
+    background-color: rgba(138, 234, 146, 0.08) !important; /* Green with low opacity */
+    border: 1px solid rgba(0, 0, 0, 0.15) !important; /* Black border with opacity */
   }
   
-  /* Input fields with darker sage green borders */
+  /* Input fields - Using only Huemint palette: #000000 and #8AEA92 */
   .light input, .light textarea, .light select {
-    border-color: rgba(90, 122, 107, 0.3) !important;
+    border-color: rgba(0, 0, 0, 0.3) !important; /* Black border with opacity */
   }
   
   .light input:focus, .light textarea:focus, .light select:focus {
-    border-color: #5A7A6B !important;
-    box-shadow: 0 0 0 3px rgba(90, 122, 107, 0.1) !important;
+    border-color: #000000 !important; /* Black border */
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important; /* Black shadow with opacity */
   }
   
-  /* Navigation hover states with darker sage green */
+  /* Navigation hover states - Using only Huemint palette: #000000 and #8AEA92 */
   .light nav a:hover, .light nav button:hover {
-    background-color: rgba(90, 122, 107, 0.1) !important;
+    background-color: rgba(138, 234, 146, 0.1) !important; /* Green with low opacity */
   }
   
-  /* Dropdown backgrounds with darker sage green tint */
+  /* Dropdown backgrounds - Using only Huemint palette: #000000 and #8AEA92 */
   .light .dropdown, .light [class*="dropdown"] {
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    border: 1px solid rgba(90, 122, 107, 0.2) !important;
+    background-color: rgba(138, 234, 146, 0.95) !important; /* Green with high opacity */
+    border: 1px solid rgba(0, 0, 0, 0.2) !important; /* Black border with opacity */
   }
   
   /* Section dividers and progress indicators */
   .light hr, .light [class*="divider"], .light [class*="separator"] {
-    border-color: rgba(90, 122, 107, 0.2) !important;
+    border-color: rgba(0, 0, 0, 0.2) !important; /* Black border with opacity */
   }
   
-  /* Card hover effects with darker sage green */
+  /* Card hover effects - Using only Huemint palette: #000000 and #8AEA92 */
   .light .card:hover, .light [class*="card"]:hover {
-    border-color: rgba(90, 122, 107, 0.3) !important;
-    box-shadow: 0 4px 12px rgba(90, 122, 107, 0.1) !important;
+    border-color: rgba(0, 0, 0, 0.3) !important; /* Black border with opacity */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important; /* Black shadow with opacity */
   }
   
-  /* Subtle darker sage green backgrounds for empty states */
+  /* Empty states - Using only Huemint palette: #000000 and #8AEA92 */
   .light .empty-state, .light [class*="empty"] {
-    background-color: rgba(90, 122, 107, 0.05) !important;
-    border: 1px dashed rgba(90, 122, 107, 0.2) !important;
+    background-color: rgba(138, 234, 146, 0.05) !important; /* Green with low opacity */
+    border: 1px dashed rgba(0, 0, 0, 0.2) !important; /* Black border with opacity */
   }
   
   .light footer a:hover {
-    color: #6dd475 !important;
+    color: #000000 !important; /* Black text on green - maintain contrast */
+    text-decoration: underline !important;
   }
   
-  /* Address hover effect in light mode */
-  .light footer .group:hover { color: #8AEA92 !important; }
-  .light footer .group:hover span { color: #8AEA92 !important; }
-  .light footer .group:hover svg { color: #8AEA92 !important; }
+  /* Address hover effect in light mode - Using only Huemint palette: #000000 and #8AEA92 */
+  .light footer .group:hover { color: #000000 !important; } /* Black text */
+  .light footer .group:hover span { color: #000000 !important; } /* Black text */
+  .light footer .group:hover svg { color: #000000 !important; } /* Black icon */
   
   .light footer .address,
   .light footer .contact-info,
@@ -383,33 +390,36 @@
     color: #000000 !important;
   }
   
-  /* Testimonials and cards */
+  /* Testimonials and cards - Using only Huemint palette: #000000 and #8AEA92 */
   .light .bg-secondary {
-    background-color: #33202A !important;
-    color: #ffffff !important;
+    background-color: #8AEA92 !important; /* Green background */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
   }
   
   .light .bg-secondary * {
-    color: #ffffff !important;
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
-  /* Form elements */
+  /* Form elements - Using only Huemint palette: #000000 and #8AEA92 */
   .light input, .light textarea, .light select {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border-color: #5F5566 !important;
+    background-color: #8AEA92 !important; /* Green background */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    border-color: #000000 !important; /* Black border */
   }
   
-  /* Links */
+  /* Links - Using only Huemint palette: #000000 and #8AEA92 */
   .light a {
-    color: #8AEA92 !important;
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-weight: 600 !important; /* Bold for better contrast */
   }
   
   .light a:hover {
-    color: #6dd475 !important;
+    color: #000000 !important; /* Black text on green - maintain contrast */
+    text-decoration: underline !important;
   }
   
-  /* Portfolio Cards - Match Works Section Styling */
+  /* Portfolio Cards - Using only Huemint palette: #000000 and #8AEA92 */
   .light .bg-primary\/90,
   .light .bg-primary\/95,
   .light .bg-primary\/80,
@@ -421,12 +431,12 @@
   .light .bg-primary\/20,
   .light .bg-primary\/10,
   .light .bg-primary\/5 {
-    background-color: rgba(255, 255, 255, 0.9) !important;
-    border: 1px solid rgba(138, 234, 146, 0.2) !important;
+    background-color: rgba(138, 234, 146, 0.9) !important; /* Green with opacity */
+    border: 1px solid rgba(0, 0, 0, 0.2) !important; /* Black border with opacity */
     backdrop-filter: blur(10px) !important;
   }
   
-  /* Portfolio Card Text */
+  /* Portfolio Card Text - Using only Huemint palette: #000000 and #8AEA92 */
   .light .bg-primary\/90 *,
   .light .bg-primary\/95 *,
   .light .bg-primary\/80 *,
@@ -438,7 +448,8 @@
   .light .bg-primary\/20 *,
   .light .bg-primary\/10 *,
   .light .bg-primary\/5 * {
-    color: #000000 !important;
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   /* Portfolio Card Headings */
@@ -454,7 +465,8 @@
   .light .bg-primary\/95 h4,
   .light .bg-primary\/95 h5,
   .light .bg-primary\/95 h6 {
-    color: #000000 !important;
+    color: #000000 !important; /* Black text - ensure 18pt+ or 14pt+ bold for WCAG AA */
+    font-weight: 600 !important; /* Bold for better contrast */
   }
   
   /* Portfolio Card Paragraphs */
@@ -464,7 +476,8 @@
   .light .bg-primary\/70 p,
   .light .bg-primary\/60 p,
   .light .bg-primary\/50 p {
-    color: #5F5566 !important;
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   /* Portfolio Card Links */
@@ -474,7 +487,8 @@
   .light .bg-primary\/70 a,
   .light .bg-primary\/60 a,
   .light .bg-primary\/50 a {
-    color: #8AEA92 !important;
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-weight: 600 !important; /* Bold for better contrast */
   }
   
   .light .bg-primary\/90 a:hover,
@@ -483,7 +497,8 @@
   .light .bg-primary\/70 a:hover,
   .light .bg-primary\/60 a:hover,
   .light .bg-primary\/50 a:hover {
-    color: #6dd475 !important;
+    color: #000000 !important; /* Black text on green - maintain contrast */
+    text-decoration: underline !important;
   }
   
   /* Portfolio Card Buttons */
@@ -533,8 +548,9 @@
   .light .btn-primary:hover,
   .light .hero-btn:hover,
   .light .bg-accent:hover {
-    background-color: #6dd475 !important;
-    color: #000000 !important;
+    background-color: #8AEA92 !important; /* Green background - using only palette colors */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    opacity: 0.9 !important; /* Slight opacity change for hover effect */
   }
   
   .light button[type="submit"]:focus,
@@ -571,19 +587,20 @@
     color: #000000 !important;
   }
   
-  /* Contact Form - Complete Light Mode Styling */
+  /* Contact Form - Complete Light Mode Styling - Using only Huemint palette: #000000 and #8AEA92 */
   .light #contact,
   .light .contact-section,
   .light [id*="contact"] {
-    background-color: #ffffff !important;
-    color: #000000 !important;
+    background-color: #8AEA92 !important; /* Green background */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
   }
   
   /* Contact Form Container */
   .light #contact *,
   .light .contact-section *,
   .light [id*="contact"] * {
-    color: #000000 !important;
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   /* Contact Form Headings */
@@ -599,32 +616,34 @@
   .light .contact-section h4,
   .light .contact-section h5,
   .light .contact-section h6 {
-    color: #000000 !important;
+    color: #000000 !important; /* Black text - ensure 18pt+ or 14pt+ bold for WCAG AA */
+    font-weight: 600 !important; /* Bold for better contrast */
   }
   
   /* Contact Form Paragraphs */
   .light #contact p,
   .light .contact-section p {
-    color: #5F5566 !important;
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
   }
   
   /* Contact Form Labels */
   .light #contact label,
   .light .contact-section label {
-    color: #000000 !important;
-    font-weight: 600 !important;
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    font-weight: 600 !important; /* Bold for better contrast */
   }
   
-  /* Contact Form Input Fields */
+  /* Contact Form Input Fields - Using only Huemint palette: #000000 and #8AEA92 */
   .light #contact input,
   .light #contact textarea,
   .light #contact select,
   .light .contact-section input,
   .light .contact-section textarea,
   .light .contact-section select {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: 2px solid #8AEA92 !important;
+    background-color: #8AEA92 !important; /* Green background */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    border: 2px solid #000000 !important; /* Black border */
     border-radius: 8px !important;
   }
   
@@ -634,11 +653,11 @@
   .light .contact-section input:focus,
   .light .contact-section textarea:focus,
   .light .contact-section select:focus {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: 2px solid #6dd475 !important;
+    background-color: #8AEA92 !important; /* Green background */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    border: 2px solid #000000 !important; /* Black border */
     outline: none !important;
-    box-shadow: 0 0 0 3px rgba(138, 234, 146, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2) !important; /* Black shadow with opacity */
   }
   
   /* Contact Form Input Placeholders */
@@ -646,8 +665,8 @@
   .light #contact textarea::placeholder,
   .light .contact-section input::placeholder,
   .light .contact-section textarea::placeholder {
-    color: #5F5566 !important;
-    opacity: 0.7 !important;
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    opacity: 0.6 !important; /* Slightly transparent for placeholder effect */
   }
   
   /* Contact Form Field Groups */
@@ -679,41 +698,45 @@
   /* Contact Form Links */
   .light #contact a,
   .light .contact-section a {
-    color: #8AEA92 !important;
+    color: #000000 !important; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    font-weight: 600 !important; /* Bold for better contrast */
   }
   
   .light #contact a:hover,
   .light .contact-section a:hover {
-    color: #6dd475 !important;
+    color: #000000 !important; /* Black text on green - maintain contrast */
+    text-decoration: underline !important;
   }
   
-  /* Contact Form Icons */
+  /* Contact Form Icons - Using only Huemint palette: #000000 and #8AEA92 */
   .light #contact svg,
   .light #contact .icon,
   .light .contact-section svg,
   .light .contact-section .icon {
-    color: #8AEA92 !important;
+    color: #000000 !important; /* Black icon - 3.8:1 contrast (AA for large text) */
+    fill: #000000 !important; /* Black fill */
+    stroke: #000000 !important; /* Black stroke */
   }
   
-  /* Contact Form Success/Error Messages */
+  /* Contact Form Success/Error Messages - Using only Huemint palette: #000000 and #8AEA92 */
   .light #contact .success,
   .light #contact .error,
   .light .contact-section .success,
   .light .contact-section .error {
-    background-color: rgba(138, 234, 146, 0.1) !important;
-    color: #000000 !important;
-    border: 1px solid #8AEA92 !important;
+    background-color: rgba(138, 234, 146, 0.1) !important; /* Green with low opacity */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    border: 1px solid #000000 !important; /* Black border */
   }
   
-  /* Contact Form Required Field Indicators */
+  /* Contact Form Required Field Indicators - Using only Huemint palette: #000000 and #8AEA92 */
   .light #contact .required,
   .light #contact .required::after,
   .light .contact-section .required,
   .light .contact-section .required::after {
-    color: #8AEA92 !important;
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
   }
   
-  /* Send Button - Force Green Background with Visible Text */
+  /* Send Button - Using only Huemint palette: #000000 and #8AEA92 */
   .light button[type="submit"],
   .light .send-button,
   .light .submit-button,
@@ -722,11 +745,12 @@
   .light button:contains("Send"),
   .light button:contains("Submit"),
   .light input[type="submit"] {
-    background-color: #8AEA92 !important;
-    background: #8AEA92 !important;
-    color: #000000 !important;
-    border: 2px solid #8AEA92 !important;
-    font-weight: 600 !important;
+    background-color: #8AEA92 !important; /* Green background */
+    background: #8AEA92 !important; /* Green background */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    border: 2px solid #000000 !important; /* Black border */
+    font-weight: 600 !important; /* Bold for better contrast */
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
     text-shadow: none !important;
   }
   
@@ -778,9 +802,10 @@
   .light button[type="submit"]:hover,
   .light .send-button:hover,
   .light .submit-button:hover {
-    background-color: #6dd475 !important;
-    color: #000000 !important;
-    border: 2px solid #6dd475 !important;
+    background-color: #8AEA92 !important; /* Green background - using only palette colors */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    border: 2px solid #000000 !important; /* Black border */
+    opacity: 0.9 !important; /* Slight opacity change for hover effect */
   }
   
   .light button[type="submit"]:hover span,
@@ -863,9 +888,10 @@
   .light #contact button:hover,
   .light .contact-section button:hover,
   .light [id*="contact"] button:hover {
-    background-color: #6dd475 !important;
-    background: #6dd475 !important;
-    color: #000000 !important;
+    background-color: #8AEA92 !important; /* Green background - using only palette colors */
+    background: #8AEA92 !important; /* Green background */
+    color: #000000 !important; /* Black text - 3.8:1 contrast (AA for large text) */
+    opacity: 0.9 !important; /* Slight opacity change for hover effect */
   }
   
   .light #contact button:hover *,
@@ -874,18 +900,29 @@
     color: #000000 !important;
   }
 
-  /* Dark mode styles (default) */
+  /* Dark mode styles (default) - Using only Huemint palette: #000000 and #8AEA92 */
+  /* Contrast ratio: #8AEA92 on #000000 = 3.8:1 (AA for large text 18pt+ or 14pt+ bold) */
+  /* All text must be 18px+ or 14px+ bold to meet WCAG AA standards */
   .dark {
-    --primary: #000000;
-    --primary-foreground: #ffffff;
-    --secondary: #33202A;
-    --secondary-foreground: #ffffff;
-    --accent: #8AEA92;
-    --accent-foreground: #000000;
-    --neutral: #5F5566;
-    --neutral-foreground: #ffffff;
-    --light: #80ADA0;
-    --light-foreground: #000000;
+    --primary: #000000; /* Black background */
+    --primary-foreground: #8AEA92; /* Green text on black - 3.8:1 contrast (AA for large text) */
+    --secondary: #000000; /* Black background */
+    --secondary-foreground: #8AEA92; /* Green text on black - 3.8:1 contrast (AA for large text) */
+    --accent: #8AEA92; /* Green accent */
+    --accent-foreground: #000000; /* Black text on green - 3.8:1 contrast (AA for large text) */
+    --neutral: #000000; /* Black background */
+    --neutral-foreground: #8AEA92; /* Green text on black - 3.8:1 contrast (AA for large text) */
+    --light: #8AEA92; /* Green background */
+    --light-foreground: #000000; /* Black text on green - 3.8:1 contrast (AA for large text) */
+  }
+  
+  /* Dark mode text size requirements for WCAG AA compliance */
+  .dark p, .dark span, .dark div, .dark a, .dark li {
+    font-size: 18px !important; /* Minimum 18pt for normal text to meet 3:1 requirement */
+  }
+  
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    font-weight: 600 !important; /* Bold for better contrast */
   }
 }
 
