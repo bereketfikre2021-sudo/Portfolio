@@ -55,6 +55,18 @@ import {
 // Vite automatically handles public folder assets, so we use absolute paths
 const logoImg = '/img/Logo.svg';
 
+// Try multiple logo paths for Netlify compatibility
+// Netlify is case-sensitive, so we try both /img and /SVG paths
+// Defined outside component to prevent React hooks violations
+const logoPaths = [
+  '/img/Logo.svg',
+  '/SVG/Logo.svg',
+  './img/Logo.svg',
+  './SVG/Logo.svg',
+  'img/Logo.svg',
+  'SVG/Logo.svg'
+];
+
 // Image paths for deployment - using consistent paths for both development and production
 const IMAGES = {
   swanClothing: '/img/swan-clothing.webp',
@@ -920,17 +932,6 @@ const HeaderWithContext = ({
   const [activeMobileDropdown, setActiveMobileDropdown] = useState(null);
   const [logoError, setLogoError] = useState(false);
   const [logoSrc, setLogoSrc] = useState(logoImg);
-  
-  // Try multiple logo paths for Netlify compatibility
-  // Netlify is case-sensitive, so we try both /img and /SVG paths
-  const logoPaths = [
-    '/img/Logo.svg',
-    '/SVG/Logo.svg',
-    './img/Logo.svg',
-    './SVG/Logo.svg',
-    'img/Logo.svg',
-    'SVG/Logo.svg'
-  ];
   
   // Handle install app functionality
   const handleInstallApp = async () => {
@@ -4522,17 +4523,6 @@ Contact.displayName = 'Contact';
 const Footer = React.memo(({ onPrivacyClick, onTermsClick }) => {
   const [footerLogoError, setFooterLogoError] = useState(false);
   const [footerLogoSrc, setFooterLogoSrc] = useState(logoImg);
-  
-  // Use same logo paths for footer
-  // Netlify is case-sensitive, so we try both /img and /SVG paths
-  const footerLogoPaths = [
-    '/img/Logo.svg',
-    '/SVG/Logo.svg',
-    './img/Logo.svg',
-    './SVG/Logo.svg',
-    'img/Logo.svg',
-    'SVG/Logo.svg'
-  ];
   const { resolvedTheme } = useTheme();
   
   return (
@@ -4658,16 +4648,16 @@ const Footer = React.memo(({ onPrivacyClick, onTermsClick }) => {
                    fetchPriority="low"
                    onError={(e) => {
                      // Try alternative paths for Netlify compatibility
-                     const currentIndex = footerLogoPaths.findIndex(path => footerLogoSrc === path || footerLogoSrc.includes(path));
+                     const currentIndex = logoPaths.findIndex(path => footerLogoSrc === path || footerLogoSrc.includes(path));
                      const nextIndex = currentIndex + 1;
                      
-                     if (nextIndex < footerLogoPaths.length) {
+                     if (nextIndex < logoPaths.length) {
                        // Try next path
-                       setFooterLogoSrc(footerLogoPaths[nextIndex]);
+                       setFooterLogoSrc(logoPaths[nextIndex]);
                      } else {
                        // All paths failed - show text logo
                        setFooterLogoError(true);
-                       console.warn('Footer logo failed to load from all paths:', footerLogoPaths);
+                       console.warn('Footer logo failed to load from all paths:', logoPaths);
                      }
                    }}
                  />
