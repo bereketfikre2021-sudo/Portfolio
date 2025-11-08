@@ -1,0 +1,250 @@
+import React, { useState, useContext } from 'react';
+import { ModalContext } from '../context/ModalContext';
+
+const Contact = () => {
+  const { showFormModal } = useContext(ModalContext);
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const validateForm = () => {
+    const required = ['first_name', 'last_name', 'email', 'subject', 'message'];
+    const invalidFields = [];
+
+    required.forEach(field => {
+      if (!formData[field]?.trim()) {
+        invalidFields.push(field);
+      }
+    });
+
+    if (formData.email && formData.email.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email.trim())) {
+        invalidFields.push('email');
+      }
+    }
+
+    return invalidFields;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const invalidFields = validateForm();
+    if (invalidFields.length > 0) {
+      const firstInvalid = invalidFields[0];
+      let message = 'Please fill out all required fields.';
+      if (firstInvalid === 'email') {
+        message = 'Please enter a valid email address.';
+      } else {
+        const fieldName = firstInvalid.replace('_', ' ');
+        message = `Please fill out the "${fieldName}" field.`;
+      }
+      showFormModal('validation', message);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://formspree.io/f/mandzwvb', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        setFormData({
+          first_name: '',
+          last_name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+        showFormModal('success');
+        setTimeout(() => {
+          showFormModal(null);
+        }, 4000);
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      showFormModal('warning');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <section id="contact" className="contact">
+      <div className="container">
+        <div className="section-intro">
+          <span className="section-number">09</span>
+          <div className="section-header">
+            <span className="section-label">Get in Touch</span>
+            <h2 className="section-title">
+              <span className="title-main">Let's Create Something</span>
+              <span className="title-accent">Amazing</span>
+            </h2>
+          </div>
+        </div>
+        
+        <p className="contact-subtitle">Share your vision and let's bring it to life together</p>
+        
+        <div className="contact-content-wrapper">
+          <div className="contact-form-wrapper">
+            <form className="contact-form-simple" onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div className="form-field">
+                  <label htmlFor="firstName">First Name</label>
+                  <input 
+                    type="text" 
+                    id="firstName" 
+                    name="first_name" 
+                    value={formData.first_name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="lastName">Last Name</label>
+                  <input 
+                    type="text" 
+                    id="lastName" 
+                    name="last_name" 
+                    value={formData.last_name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-field">
+                <label htmlFor="emailAddress">Email Address</label>
+                <input 
+                  type="email" 
+                  id="emailAddress" 
+                  name="email" 
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="projectSubject">Project Subject</label>
+                <input 
+                  type="text" 
+                  id="projectSubject" 
+                  name="subject" 
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="projectMessage">Project Message</label>
+                <textarea 
+                  id="projectMessage" 
+                  name="message" 
+                  rows="5" 
+                  placeholder="Tell me about your project..." 
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  aria-describedby="message-help"
+                ></textarea>
+                <span id="message-help" className="sr-only">Please provide details about your project</span>
+              </div>
+              <button type="submit" className="btn-contact-submit" disabled={isSubmitting}>
+                <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
+                <span>→</span>
+              </button>
+            </form>
+          </div>
+          
+          <div className="contact-info-wrapper">
+            <div className="contact-info-header">
+              <h3 className="contact-info-title">Get in Touch</h3>
+              <p className="contact-info-subtitle">Reach out through any of these channels</p>
+            </div>
+            
+            <div className="contact-info-cards">
+              <a href="tel:+251923988838" className="contact-info-card" aria-label="Call phone number">
+                <div className="contact-info-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                </div>
+                <div className="contact-info-content">
+                  <span className="contact-info-label">Phone</span>
+                  <span className="contact-info-value">+251 923 988 838</span>
+                </div>
+                <div className="contact-info-arrow">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </a>
+              
+              <a href="https://t.me/Believeandforward" target="_blank" rel="noopener noreferrer" className="contact-info-card" aria-label="Open Telegram">
+                <div className="contact-info-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.54-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                  </svg>
+                </div>
+                <div className="contact-info-content">
+                  <span className="contact-info-label">Telegram</span>
+                  <span className="contact-info-value">@Believeandforward</span>
+                </div>
+                <div className="contact-info-arrow">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </a>
+              
+              <a href="mailto:bereketfikre2021@gmail.com" className="contact-info-card" aria-label="Send email">
+                <div className="contact-info-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                </div>
+                <div className="contact-info-content">
+                  <span className="contact-info-label">Email</span>
+                  <span className="contact-info-value">bereketfikre2021@gmail.com</span>
+                </div>
+                <div className="contact-info-arrow">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Contact;
+
+
+
+
+

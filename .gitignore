@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+# package-lock.json should be tracked in Git for consistent dependency versions
+
+# Build outputs
+dist/
+# Note: build/ folder is needed for GitHub Pages deployment
+# Uncomment the line below if you want to exclude build folder from git
+# build/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Netlify/Vercel
+.netlify/
+.vercel/
+
+# Other
+*.orig
+*.bak
+
+
+
+
+
+

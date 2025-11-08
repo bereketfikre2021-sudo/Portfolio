@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Favicon Support -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+    <meta name="msapplication-TileImage" content="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Bereket Fikre - Creative Designer & Brand Builder | UI/UX Expert | Addis Ababa</title>
+    <meta name="title" content="Bereket Fikre - Creative Designer & Brand Builder | UI/UX Expert | Addis Ababa" />
+    <meta name="description" content="Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing. Based in Addis Ababa, Ethiopia. Transform your brand with stunning visual solutions." />
+    <meta name="keywords" content="creative designer, UI/UX designer, brand designer, graphic designer, web designer, logo design, brand identity, digital marketing, Addis Ababa, Ethiopia, portfolio, freelance designer" />
+    <meta name="author" content="Bereket Fikre" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bereketfikre.com/" />
+    <meta property="og:title" content="Bereket Fikre - Creative Designer & Brand Builder | UI/UX Expert" />
+    <meta property="og:description" content="Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing. Transform your brand with stunning visual solutions." />
+    <meta property="og:image" content="https://bereketfikre.com/img/Bereket-Fikre.webp" />
+    <meta property="og:image:secure_url" content="https://bereketfikre.com/img/Bereket-Fikre.webp" />
+    <meta property="og:image:alt" content="Bereket Fikre - Professional Creative Designer" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:site_name" content="Bereket Fikre Portfolio" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:updated_time" content="2024-01-01T00:00:00Z" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://bereketfikre.com/" />
+    <meta name="twitter:title" content="Bereket Fikre - Creative Designer & Brand Builder | UI/UX Expert" />
+    <meta name="twitter:description" content="Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing. Transform your brand with stunning visual solutions." />
+    <meta name="twitter:image" content="https://bereketfikre.com/img/Bereket-Fikre.webp" />
+    <meta name="twitter:image:alt" content="Bereket Fikre - Professional Creative Designer" />
+    <meta name="twitter:creator" content="@bereketfikre" />
+    <meta name="twitter:site" content="@bereketfikre" />
+    <meta name="twitter:domain" content="bereketfikre.com" />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#101027" />
+    <meta name="msapplication-TileColor" content="#101027" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Bereket Fikre" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://bereketfikre.com/" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Performance Optimization -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    
+    <!-- Resource Hints -->
+    <link rel="preload" href="/img/Bereket-Fikre.webp" as="image" type="image/webp" />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Bereket Fikre",
+      "jobTitle": "Creative Designer, Brand Builder & Educator",
+      "description": "Professional Creative Designer specializing in UI/UX design, brand identity, graphic design, and digital marketing",
+      "url": "https://bereketfikre.com",
+      "image": "https://bereketfikre.com/img/Bereket-Fikre.webp",
+      "sameAs": [
+        "https://www.linkedin.com/in/bereket-fikre",
+        "https://www.instagram.com/bereket_fikre",
+        "https://github.com/bereketfikre",
+        "https://dribbble.com/bereketfikre"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Addis Ababa",
+        "addressCountry": "Ethiopia"
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Freelance Creative Designer"
+      },
+      "knowsAbout": [
+        "UI/UX Design",
+        "Brand Identity Design",
+        "Graphic Design",
+        "Web Design",
+        "Digital Marketing",
+        "Logo Design",
+        "Print Design"
+      ],
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Creative Designer",
+        "occupationLocation": {
+          "@type": "City",
+          "name": "Addis Ababa, Ethiopia"
+        }
+      }
+    }
+    </script>
+    
+    <!-- Portfolio Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": "Bereket Fikre Portfolio",
+      "description": "Professional portfolio showcasing creative design work including UI/UX design, brand identity, and graphic design projects",
+      "creator": {
+        "@type": "Person",
+        "name": "Bereket Fikre"
+      },
+      "url": "https://bereketfikre.com",
+      "dateCreated": "2024",
+      "genre": "Portfolio",
+      "keywords": "creative design, UI/UX, brand identity, graphic design, portfolio"
+    }
+    </script>
+    
+    <!-- Organization Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Bereket Fikre Design Studio",
+      "description": "Professional creative design services specializing in UI/UX design, brand identity, and graphic design",
+      "url": "https://bereketfikre.com",
+      "logo": "https://bereketfikre.com/img/Bereket-Fikre.webp",
+      "founder": {
+        "@type": "Person",
+        "name": "Bereket Fikre"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Addis Ababa",
+        "addressCountry": "Ethiopia"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "bereketfikre2021@gmail.com",
+        "contactType": "customer service"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/bereket-fikre",
+        "https://www.instagram.com/bereket_fikre",
+        "https://github.com/bereketfikre",
+        "https://dribbble.com/bereketfikre"
+      ],
+      "serviceArea": {
+        "@type": "Country",
+        "name": "Ethiopia"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Design Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "UI/UX Design",
+              "description": "User interface and user experience design services"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Brand Identity Design",
+              "description": "Complete brand identity and logo design services"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Graphic Design",
+              "description": "Print and digital graphic design services"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+    <script type="module" crossorigin src="/assets/index-75f85dd6.js"></script>
+    <link rel="stylesheet" href="/assets/index-191962f9.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    
+  </body>
+</html>
