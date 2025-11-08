@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ModalContext } from '../context/ModalContext';
 
 const Footer = () => {
+  const { openPrivacyTermsModal } = useContext(ModalContext);
+
   return (
     <footer className="footer-modern">
       <div className="container">
@@ -71,7 +74,23 @@ const Footer = () => {
             </div>
           </div>
           <div className="footer-right">
-            <p>Made with <span className="heart-beat">♥</span> in Addis Ababa</p>
+            <div className="footer-links">
+              <button 
+                className="footer-link" 
+                onClick={() => openPrivacyTermsModal('privacy')}
+                aria-label="View Privacy Policy"
+              >
+                <span>Privacy</span>
+              </button>
+              <span className="footer-link-divider" aria-hidden="true">·</span>
+              <button 
+                className="footer-link" 
+                onClick={() => openPrivacyTermsModal('terms')}
+                aria-label="View Terms of Service"
+              >
+                <span>Terms of Service</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

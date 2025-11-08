@@ -10,40 +10,136 @@ const BlogModal = () => {
       category: 'Digital Marketing',
       title: 'Finix Web Asset Collection',
       description: 'Comprehensive web asset collection including website banners, digital marketing materials, and promotional graphics for engaging online presence. This project showcases the importance of cohesive digital assets in building a strong online brand presence.',
-      type: 'Web',
-      content: 'In today\'s digital landscape, having a cohesive collection of web assets is crucial for brand consistency. This project involved creating a comprehensive set of digital marketing materials that work seamlessly across various platforms and devices. From website banners to social media graphics, each asset was designed to maintain brand identity while optimizing for different digital contexts.',
-      date: '2024',
-      tags: ['Web Design', 'Digital Marketing', 'Brand Consistency']
+      type: 'Web Design',
+      date: 'December 2024',
+      readTime: '5 min read',
+      author: 'Bereket Fikre',
+      tags: ['Web Design', 'Digital Marketing', 'Brand Consistency', 'UI/UX'],
+      content: [
+        {
+          heading: 'The Challenge',
+          text: 'In today\'s digital landscape, having a cohesive collection of web assets is crucial for brand consistency. The challenge was creating a comprehensive set of digital marketing materials that work seamlessly across various platforms and devices while maintaining brand identity.'
+        },
+        {
+          heading: 'The Solution',
+          text: 'I developed a comprehensive web asset collection that includes website banners, social media graphics, email templates, and promotional materials. Each asset was designed with scalability in mind, ensuring they work perfectly from mobile screens to large desktop displays. The color palette, typography, and visual style were carefully crafted to maintain brand consistency across all touchpoints.'
+        },
+        {
+          heading: 'Key Features',
+          text: 'The collection includes responsive banner designs, social media templates optimized for different platforms, email marketing graphics, and promotional materials. Each asset follows a consistent design system while being optimized for its specific use case and platform requirements.'
+        },
+        {
+          heading: 'The Impact',
+          text: 'This cohesive asset collection has significantly improved brand recognition and consistency across all digital channels. The unified visual language helps build trust and recognition, making the brand more memorable and professional in the digital space.'
+        }
+      ],
+      insights: [
+        'Consistent branding across all digital platforms increases brand recognition by up to 80%',
+        'Well-designed web assets can improve user engagement and conversion rates',
+        'A cohesive design system saves time and ensures brand consistency across all marketing materials'
+      ]
     },
     'medavail': {
       image: '/assets/Portfolio/Medavail-0d27baad.webp',
       category: 'Healthcare',
       title: 'Company Logo Rebranding - Medavail Pharmaceuticals',
       description: 'Complete company logo rebranding including office signage, stationery design, and social media templates. Comprehensive brand identity transformation with modern design elements and cohesive visual system for pharmaceutical company.',
-      type: 'Rebranding',
-      content: 'Rebranding a pharmaceutical company requires careful consideration of trust, professionalism, and modern healthcare aesthetics. This project involved transforming the brand identity while maintaining the credibility and trust that patients and healthcare professionals expect. The new identity reflects innovation in healthcare while maintaining a professional, trustworthy appearance.',
-      date: '2024',
-      tags: ['Healthcare', 'Rebranding', 'Corporate Identity']
+      type: 'Brand Identity',
+      date: 'November 2024',
+      readTime: '6 min read',
+      author: 'Bereket Fikre',
+      tags: ['Healthcare', 'Rebranding', 'Corporate Identity', 'Brand Strategy'],
+      content: [
+        {
+          heading: 'The Challenge',
+          text: 'Rebranding a pharmaceutical company requires careful consideration of trust, professionalism, and modern healthcare aesthetics. The challenge was transforming the brand identity while maintaining the credibility and trust that patients and healthcare professionals expect.'
+        },
+        {
+          heading: 'The Approach',
+          text: 'I conducted extensive research into healthcare branding best practices and worked closely with the client to understand their values and goals. The new identity needed to reflect innovation in healthcare while maintaining a professional, trustworthy appearance that resonates with both medical professionals and patients.'
+        },
+        {
+          heading: 'Design Elements',
+          text: 'The rebranding included a new logo design that conveys trust and innovation, a comprehensive color palette that reflects healthcare professionalism, updated typography for better readability, and a complete visual identity system applied across all touchpoints including stationery, signage, and digital platforms.'
+        },
+        {
+          heading: 'The Result',
+          text: 'The new brand identity successfully modernized the company\'s image while maintaining its credibility. The cohesive visual system has been well-received by both internal stakeholders and external audiences, positioning the company as a forward-thinking yet trustworthy healthcare provider.'
+        }
+      ],
+      insights: [
+        'Healthcare branding must balance innovation with trust and professionalism',
+        'A well-executed rebrand can improve brand perception and market positioning',
+        'Consistent application of brand identity across all touchpoints is crucial for success'
+      ]
     },
     'niqat-menu': {
       image: '/assets/Portfolio/Niqat-Menu-6b07a3f4.webp',
       category: 'Cafe',
       title: 'Cafe Menu & Brochure Design - Niqat Coffee',
       description: 'Complete cafe menu design including trifold layout and modern typography. Professional menu design that enhances customer experience with elegant print presentation and clear visual hierarchy.',
-      type: 'Menu Design',
-      content: 'Menu design is an art form that combines functionality with aesthetics. A well-designed menu not only presents information clearly but also enhances the dining experience and reflects the cafe\'s brand personality. This project focused on creating a menu that is both beautiful and functional, with clear typography, logical organization, and visual appeal that matches the cafe\'s atmosphere.',
-      date: '2024',
-      tags: ['Menu Design', 'Print Design', 'Typography']
+      type: 'Print Design',
+      date: 'October 2024',
+      readTime: '4 min read',
+      author: 'Bereket Fikre',
+      tags: ['Menu Design', 'Print Design', 'Typography', 'Branding'],
+      content: [
+        {
+          heading: 'The Challenge',
+          text: 'Menu design is an art form that combines functionality with aesthetics. The challenge was creating a menu that not only presents information clearly but also enhances the dining experience and reflects the cafe\'s brand personality.'
+        },
+        {
+          heading: 'Design Philosophy',
+          text: 'I focused on creating a menu that is both beautiful and functional. The design features clear typography for easy reading, logical organization of items, and visual appeal that matches the cafe\'s atmosphere. The trifold layout allows for easy navigation while maximizing the use of space.'
+        },
+        {
+          heading: 'Typography & Layout',
+          text: 'The typography was carefully selected to ensure readability while maintaining elegance. The layout follows a clear hierarchy, making it easy for customers to find what they\'re looking for. Strategic use of white space and visual elements creates an inviting and professional appearance.'
+        },
+        {
+          heading: 'The Impact',
+          text: 'The new menu design has enhanced the customer experience and reflects the cafe\'s commitment to quality. The professional presentation has also helped position the cafe as a premium destination, potentially influencing customer perception and ordering behavior.'
+        }
+      ],
+      insights: [
+        'Well-designed menus can influence customer ordering decisions and increase sales',
+        'Typography and layout play crucial roles in menu readability and user experience',
+        'A menu that reflects the brand personality enhances the overall customer experience'
+      ]
     },
     'rollup-banners': {
       image: '/assets/Portfolio/Rollup-Banners-68a13cab.webp',
       category: 'Events',
       title: 'Rollup Banners for Different Companies',
       description: 'Professional rollup banner designs for various companies, featuring modern layouts, compelling visuals, and brand-consistent messaging. High-quality print-ready designs that effectively communicate company information and enhance brand visibility at events and exhibitions.',
-      type: 'Banners',
-      content: 'Rollup banners are essential marketing tools for events, exhibitions, and trade shows. Effective banner design requires understanding the event context, target audience, and key messaging. This collection showcases various approaches to banner design, each tailored to the specific company\'s brand and communication goals. The designs balance visual impact with clear information delivery.',
-      date: '2024',
-      tags: ['Banner Design', 'Event Marketing', 'Print Design']
+      type: 'Event Marketing',
+      date: 'September 2024',
+      readTime: '5 min read',
+      author: 'Bereket Fikre',
+      tags: ['Banner Design', 'Event Marketing', 'Print Design', 'Branding'],
+      content: [
+        {
+          heading: 'The Challenge',
+          text: 'Rollup banners are essential marketing tools for events, exhibitions, and trade shows. The challenge was creating effective banner designs that capture attention, communicate key messages clearly, and represent each company\'s brand accurately in a competitive event environment.'
+        },
+        {
+          heading: 'Design Strategy',
+          text: 'Each banner was designed with the specific event context, target audience, and key messaging in mind. The designs balance visual impact with clear information delivery, ensuring that the banners are both eye-catching and informative. I worked closely with each client to understand their goals and brand requirements.'
+        },
+        {
+          heading: 'Key Design Principles',
+          text: 'The banners feature bold typography for readability from a distance, strategic use of color to capture attention, clear visual hierarchy to guide the eye, and brand-consistent messaging. Each design was optimized for print quality and visibility in various lighting conditions.'
+        },
+        {
+          heading: 'The Results',
+          text: 'These professional banner designs have helped companies stand out at events and effectively communicate their messages. The cohesive branding and professional appearance have contributed to increased brand visibility and engagement at trade shows and exhibitions.'
+        }
+      ],
+      insights: [
+        'Effective banner design requires understanding the event context and target audience',
+        'Bold typography and clear visual hierarchy are essential for event banners',
+        'Well-designed banners can significantly increase brand visibility and engagement at events'
+      ]
     }
   };
 
@@ -54,9 +150,21 @@ const BlogModal = () => {
       }
     };
 
+    const handlePopState = () => {
+      if (blogModal.isOpen) {
+        closeBlogModal();
+      }
+    };
+
+    if (blogModal.isOpen) {
+      window.history.pushState({ modal: 'blog' }, '');
+      window.addEventListener('popstate', handlePopState);
+    }
+
     document.addEventListener('keydown', handleEscape);
     return () => {
       document.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('popstate', handlePopState);
     };
   }, [blogModal.isOpen, closeBlogModal]);
 
@@ -67,62 +175,104 @@ const BlogModal = () => {
 
   return (
     <div 
-      className={`portfolio-modal ${blogModal.isOpen ? 'active' : ''}`}
+      className={`blog-modal ${blogModal.isOpen ? 'active' : ''}`}
       role="dialog"
-      aria-labelledby="modalTitle"
+      aria-labelledby="blogModalTitle"
       aria-modal="true"
     >
       <div className="modal-overlay" onClick={closeBlogModal}></div>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" aria-label="Close modal" onClick={closeBlogModal}>
+      <div className="blog-modal-container" onClick={(e) => e.stopPropagation()}>
+        <button className="blog-modal-close" aria-label="Close modal" onClick={closeBlogModal}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
-        <div className="modal-content">
-          <div className="modal-image-wrapper">
-            <img 
-              id="modalImage"
-              src={`${process.env.PUBLIC_URL || ''}${post.image}`} 
-              alt={`${post.title} - ${post.category} blog post by Bereket Fikre. ${post.description}`} 
-              className="modal-image"
-              loading="lazy"
-              decoding="async"
-              sizes="(max-width: 768px) 100vw, 90vw"
-            />
-          </div>
-          <div className="modal-body">
-            <span id="modalCategory" className="modal-category">{post.category}</span>
-            <h2 id="modalTitle" className="modal-title">{post.title}</h2>
-            <div className="blog-meta">
-              <span className="blog-date">{post.date}</span>
+        <div className="blog-modal-content">
+          <div className="blog-modal-header">
+            <div className="blog-modal-image-wrapper">
+              <img 
+                id="blogModalImage"
+                src={`${process.env.PUBLIC_URL || ''}${post.image}`} 
+                alt={`${post.title} - ${post.category} blog post by Bereket Fikre. ${post.description}`} 
+                className="blog-modal-image"
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 768px) 100vw, 90vw"
+              />
+            </div>
+            <div className="blog-modal-header-content">
+              <span id="blogModalCategory" className="blog-modal-category">{post.category}</span>
+              <h2 id="blogModalTitle" className="blog-modal-title">{post.title}</h2>
+              <div className="blog-modal-meta">
+                <div className="blog-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                  </svg>
+                  <span>{post.readTime}</span>
+                </div>
+                <div className="blog-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span>{post.date}</span>
+                </div>
+                <div className="blog-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <span>{post.author}</span>
+                </div>
+              </div>
               {post.tags && (
-                <div className="blog-tags">
+                <div className="blog-modal-tags">
                   {post.tags.map((tag, index) => (
-                    <span key={index} className="blog-tag">{tag}</span>
+                    <span key={index} className="blog-modal-tag">{tag}</span>
                   ))}
                 </div>
               )}
             </div>
-            <div id="modalDescription" className="modal-description">
-              <p>{post.description}</p>
+          </div>
+          <div className="blog-modal-body">
+            <div className="blog-modal-intro">
+              <p className="blog-modal-description">{post.description}</p>
             </div>
-            {post.content && (
-              <div className="blog-content">
-                <p>{post.content}</p>
+            {post.content && post.content.length > 0 && (
+              <div className="blog-modal-article">
+                {post.content.map((section, index) => (
+                  <div key={index} className="blog-article-section">
+                    <h3 className="blog-section-heading">{section.heading}</h3>
+                    <p className="blog-section-text">{section.text}</p>
+                  </div>
+                ))}
               </div>
             )}
-            <div className="modal-details">
-              <div className="modal-detail-item">
-                <span className="detail-label">Category</span>
-                <span id="modalCategoryFull" className="detail-value">{post.category}</span>
+            {post.insights && post.insights.length > 0 && (
+              <div className="blog-modal-insights">
+                <h3 className="blog-insights-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                  </svg>
+                  Key Insights
+                </h3>
+                <ul className="blog-insights-list">
+                  {post.insights.map((insight, index) => (
+                    <li key={index} className="blog-insight-item">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      <span>{insight}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="modal-detail-item">
-                <span className="detail-label">Post Type</span>
-                <span id="modalType" className="detail-value">{post.type}</span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

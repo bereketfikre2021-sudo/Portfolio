@@ -169,9 +169,14 @@ const Contact = () => {
                 ></textarea>
                 <span id="message-help" className="sr-only">Please provide details about your project</span>
               </div>
-              <button type="submit" className="btn-contact-submit" disabled={isSubmitting}>
+              <button 
+                type="submit" 
+                className="btn-contact-submit" 
+                disabled={isSubmitting}
+                aria-label={isSubmitting ? 'Sending message' : 'Send message'}
+              >
                 <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
-                <span>→</span>
+                <span aria-hidden="true">→</span>
               </button>
             </form>
           </div>

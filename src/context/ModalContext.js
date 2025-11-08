@@ -8,6 +8,7 @@ export const ModalProvider = ({ children }) => {
   const [formModal, setFormModal] = useState({ type: null, message: null });
   const [caseStudyModal, setCaseStudyModal] = useState({ isOpen: false, caseStudyId: null });
   const [blogModal, setBlogModal] = useState({ isOpen: false, blogId: null });
+  const [privacyTermsModal, setPrivacyTermsModal] = useState({ isOpen: false, type: null });
 
   const openPortfolioModal = (projectId) => {
     setPortfolioModal({ isOpen: true, projectId });
@@ -59,6 +60,16 @@ export const ModalProvider = ({ children }) => {
     document.body.style.overflow = '';
   };
 
+  const openPrivacyTermsModal = (type) => {
+    setPrivacyTermsModal({ isOpen: true, type });
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closePrivacyTermsModal = () => {
+    setPrivacyTermsModal({ isOpen: false, type: null });
+    document.body.style.overflow = '';
+  };
+
   return (
     <ModalContext.Provider
       value={{
@@ -76,7 +87,10 @@ export const ModalProvider = ({ children }) => {
         closeCaseStudyModal,
         blogModal,
         openBlogModal,
-        closeBlogModal
+        closeBlogModal,
+        privacyTermsModal,
+        openPrivacyTermsModal,
+        closePrivacyTermsModal
       }}
     >
       {children}

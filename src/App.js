@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { ModalProvider } from './context/ModalContext';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
@@ -15,8 +15,9 @@ import CaseStudyModal from './components/CaseStudyModal';
 import BlogModal from './components/BlogModal';
 import ServicesModal from './components/ServicesModal';
 import FormModals from './components/FormModals';
+import PrivacyTermsModal from './components/PrivacyTermsModal';
 
-// Lazy load below-the-fold components to reduce initial DOM size
+// Lazy load below-the-fold components to reduce initial bundle size and improve performance
 const CaseStudies = lazy(() => import('./components/CaseStudies'));
 const Blog = lazy(() => import('./components/Blog'));
 const Testimonials = lazy(() => import('./components/Testimonials'));
@@ -26,7 +27,41 @@ const Contact = lazy(() => import('./components/Contact'));
 const Footer = lazy(() => import('./components/Footer'));
 const BottomNav = lazy(() => import('./components/BottomNav'));
 
+// Loading fallback component
+const LoadingFallback = () => null;
+
 function App() {
+  // Performance optimization: Preload critical resources
+  useEffect(() => {
+    // Preload critical images
+    const preloadImages = [
+      '/assets/Bereket-Fikre-1.webp',
+      '/assets/Logo.svg'
+    ];
+    
+    preloadImages.forEach(src => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      link.crossOrigin = 'anonymous';
+      document.head.appendChild(link);
+    });
+
+    // Register service worker for PWA (if available)
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+  }, []);
+
   return (
     <ModalProvider>
       <div className="App">
@@ -41,19 +76,19 @@ function App() {
         <Navigation />
         <main id="main-content">
           <Hero />
-        <About />
-        <Services />
-        <Portfolio />
-        <Suspense fallback={null}>
-          <CaseStudies />
-          <Blog />
-          <Testimonials />
-          <TrustedBy />
-          <FAQ />
-          <Contact />
-          <Footer />
-          <BottomNav />
-        </Suspense>
+          <About />
+          <Services />
+          <Portfolio />
+          <Suspense fallback={LoadingFallback()}>
+            <CaseStudies />
+            <Blog />
+            <Testimonials />
+            <TrustedBy />
+            <FAQ />
+            <Contact />
+            <Footer />
+            <BottomNav />
+          </Suspense>
         </main>
         <ScrollToTop />
         <PortfolioModal />
@@ -61,6 +96,7 @@ function App() {
         <BlogModal />
         <ServicesModal />
         <FormModals />
+        <PrivacyTermsModal />
       </div>
     </ModalProvider>
   );

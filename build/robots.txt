@@ -3,8 +3,11 @@
 
 User-agent: *
 Allow: /
-Disallow: /assets/
-Disallow: /*.json$
+# Allow assets for better SEO (images, fonts, etc.)
+Allow: /assets/
+Disallow: /assets/*.json$
+Disallow: /build/
+Disallow: /node_modules/
 
 # Allow all major search engines
 User-agent: Googlebot

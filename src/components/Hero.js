@@ -48,12 +48,22 @@ const Hero = () => {
           </div>
           
           <div className="hero-actions">
-            <a href="#portfolio" className="btn btn-primary" onClick={(e) => handleNavClick(e, '#portfolio')}>
+            <a 
+              href="#portfolio" 
+              className="btn btn-primary" 
+              onClick={(e) => handleNavClick(e, '#portfolio')}
+              aria-label="Explore my work portfolio"
+            >
               <span className="btn-text">Explore Work</span>
-              <span className="btn-arrow">→</span>
+              <span className="btn-arrow" aria-hidden="true">→</span>
               <div className="btn-shine"></div>
             </a>
-            <a href="#contact" className="btn btn-outline" onClick={(e) => handleNavClick(e, '#contact')}>
+            <a 
+              href="#contact" 
+              className="btn btn-outline" 
+              onClick={(e) => handleNavClick(e, '#contact')}
+              aria-label="Let's talk about your project"
+            >
               <span className="btn-text">Let's Talk</span>
             </a>
           </div>

@@ -73,9 +73,10 @@ const Blog = () => {
                     e.preventDefault();
                     openBlogModal(post.id);
                   }}
+                  aria-label={`Read more about ${post.title}`}
                 >
                   <span>Read More</span>
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                     <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </a>

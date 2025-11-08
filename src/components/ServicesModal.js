@@ -102,9 +102,21 @@ const ServicesModal = () => {
       }
     };
 
+    const handlePopState = () => {
+      if (serviceModal.isOpen) {
+        closeServiceModal();
+      }
+    };
+
+    if (serviceModal.isOpen) {
+      window.history.pushState({ modal: 'service' }, '');
+      window.addEventListener('popstate', handlePopState);
+    }
+
     document.addEventListener('keydown', handleEscape);
     return () => {
       document.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('popstate', handlePopState);
     };
   }, [serviceModal.isOpen, closeServiceModal]);
 
@@ -167,6 +179,7 @@ const ServicesModal = () => {
 };
 
 export default ServicesModal;
+
 
 
 

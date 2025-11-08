@@ -130,6 +130,9 @@ const Navigation = () => {
                         setPortfolioDropdownOpen(!portfolioDropdownOpen);
                       }}
                       onMouseEnter={() => setPortfolioDropdownOpen(true)}
+                      aria-label={`${link.label} menu`}
+                      aria-expanded={portfolioDropdownOpen}
+                      aria-haspopup="true"
                     >
                       <span>{link.label}</span>
                       <svg 
@@ -138,6 +141,7 @@ const Navigation = () => {
                         viewBox="0 0 12 12" 
                         fill="none" 
                         className={`dropdown-arrow ${portfolioDropdownOpen ? 'open' : ''}`}
+                        aria-hidden="true"
                       >
                         <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -152,6 +156,7 @@ const Navigation = () => {
                               handleNavClick(e, dropdownItem.href);
                               setPortfolioDropdownOpen(false);
                             }}
+                            aria-label={`Go to ${dropdownItem.label} section`}
                           >
                             <span>{dropdownItem.label}</span>
                           </a>
@@ -164,6 +169,7 @@ const Navigation = () => {
                     href={link.href} 
                     className={`nav-link ${activeSection === link.section ? 'active' : ''}`}
                     onClick={(e) => handleNavClick(e, link.href)}
+                    aria-label={`Go to ${link.label} section`}
                   >
                     <span>{link.label}</span>
                   </a>
