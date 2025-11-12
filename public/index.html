@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
+    <!-- Early Resource Hints - Reduce connection time and chain length -->
+    <!-- DNS prefetch and preconnect should be as early as possible to establish connections in parallel -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//formspree.io">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://bereketfikre.com" crossorigin>
+    
     <!-- Primary Meta Tags -->
     <title>Bereket Fikre | Creative Designer | Brand Identity & UI/UX Specialist | Addis Ababa, Ethiopia</title>
     <meta name="title" content="Bereket Fikre | Creative Designer | Brand Identity & UI/UX Specialist | Addis Ababa, Ethiopia">
@@ -63,24 +73,16 @@
     <meta name="twitter:label2" content="Services">
     <meta name="twitter:data2" content="Brand Identity, UI/UX Design, Graphic Design">
     
-    <!-- Performance & Resource Hints -->
-    <meta http-equiv="x-dns-prefetch-control" content="on">
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://bereketfikre.com" crossorigin>
-    
-    <!-- Preload critical resources for LCP -->
+    <!-- Preload critical resources for LCP - highest priority -->
+    <!-- Hero image is the LCP element - load immediately, in parallel with other resources -->
     <link rel="preload" href="%PUBLIC_URL%/assets/Bereket-Fikre-1.webp" as="image" type="image/webp" fetchpriority="high" crossorigin="anonymous">
     <link rel="preload" href="%PUBLIC_URL%/assets/Logo.svg" as="image" type="image/svg+xml" fetchpriority="high" crossorigin="anonymous">
     
-    <!-- Prefetch next likely resources to optimize network dependency tree -->
+    <!-- Prefetch next likely resources - lower priority, don't block LCP or critical chain -->
     <link rel="prefetch" href="%PUBLIC_URL%/assets/Bereket-Fikre-2.webp" as="image" type="image/webp">
-    <link rel="dns-prefetch" href="//formspree.io">
     
     <!-- Fonts loaded asynchronously to prevent render blocking with font-display: swap -->
-    <!-- Using &display=swap in URL ensures fonts use font-display: swap for better performance -->
+    <!-- Preload font CSS to reduce chain length - loads in parallel with other critical resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"></noscript>
     
@@ -94,8 +96,8 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     
     <!-- Theme & Mobile Web App -->
-    <meta name="theme-color" content="#08122c">
-    <meta name="msapplication-TileColor" content="#08122c">
+    <meta name="theme-color" content="#050a1f">
+    <meta name="msapplication-TileColor" content="#050a1f">
     <meta name="msapplication-TileImage" content="%PUBLIC_URL%/assets/android-chrome-192x192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -140,8 +142,97 @@
     <meta property="og:see_also" content="https://dribbble.com/bereket-fikre">
     <meta property="og:see_also" content="https://www.linkedin.com/in/bereket-fikre-graphic-designer">
     
-    <!-- JSON-LD Structured Data for SEO - Deferred for performance -->
-    <script defer type="application/ld+json">
+    <!-- Critical CSS inlined for above-the-fold content to prevent render blocking -->
+    <style>
+      /* Critical CSS - Minimal styles for hero section and initial render */
+      :root {
+        --color-dark: #050a1f;
+        --color-light: #b4e8c9;
+        --bg-primary: #050a1f;
+        --text-primary: #b4e8c9;
+        --font-sans: 'Nunito Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        --font-serif: 'Space Grotesk', sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html { scroll-behavior: smooth; font-size: 16px; }
+      body {
+        font-family: var(--font-sans);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        margin: 0;
+        padding: 0;
+      }
+      img { max-width: 100%; height: auto; display: block; }
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding: 100px 2rem 3rem;
+        background: var(--bg-primary);
+      }
+      .hero-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+      .hero-title {
+        font-family: var(--font-serif);
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        font-weight: 900;
+        line-height: 1.1;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+      }
+      .hero-image {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+      }
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(5, 10, 31, 0.95);
+        backdrop-filter: blur(20px);
+        transition: all 0.3s ease;
+      }
+      .scroll-progress {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        background: var(--color-light);
+        z-index: 9999;
+        transform-origin: left;
+        width: 0%;
+      }
+      @media (max-width: 768px) {
+        .hero { padding: 100px 1.5rem 3rem; }
+        .hero-content { grid-template-columns: 1fr; gap: 2rem; }
+        body { cursor: auto; }
+      }
+    </style>
+    
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
+    <!-- JSON-LD Structured Data for SEO - Deferred to end of body to not block initial render -->
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Person",
@@ -354,10 +445,6 @@
       "copyrightYear": "2024"
     }
     </script>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
   </body>
 </html>
 

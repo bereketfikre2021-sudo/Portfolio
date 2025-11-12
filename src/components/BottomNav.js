@@ -54,14 +54,17 @@ const BottomNav = () => {
       }
     };
 
-    const initTimeout = setTimeout(updateSectionCache, 100);
+    // Initial cache update - use requestAnimationFrame instead of delay
+    requestAnimationFrame(() => {
+      updateSectionCache();
+      handleScroll();
+    });
     
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', updateSectionCache, { passive: true });
     handleScroll();
 
     return () => {
-      clearTimeout(initTimeout);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', updateSectionCache);
     };

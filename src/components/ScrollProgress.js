@@ -82,31 +82,39 @@ const ScrollProgress = () => {
       updateProgress();
     };
 
-    // Initial cache update with delay to allow lazy-loaded content
-    const initialTimeout = setTimeout(() => {
+    // Initial cache update - no delay to avoid affecting LCP
+    // Use requestAnimationFrame to ensure DOM is ready but don't delay
+    requestAnimationFrame(() => {
       updateCache();
       updateProgress();
-    }, 1000);
+    });
     
     window.addEventListener('scroll', updateProgress, { passive: true });
     window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('load', () => {
-      setTimeout(() => {
+      // Update on load but don't delay - use requestAnimationFrame
+      requestAnimationFrame(() => {
         updateCache();
         updateProgress();
-      }, 500);
+      });
     });
     
-    // Also listen for when images/content finish loading
+    // Also listen for when images/content finish loading - use requestIdleCallback
     if (document.readyState === 'complete') {
-      setTimeout(() => {
-        updateCache();
-        updateProgress();
-      }, 1000);
+      if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(() => {
+          updateCache();
+          updateProgress();
+        }, { timeout: 2000 });
+      } else {
+        requestAnimationFrame(() => {
+          updateCache();
+          updateProgress();
+        });
+      }
     }
 
     return () => {
-      clearTimeout(initialTimeout);
       if (recalculateTimeout) {
         clearTimeout(recalculateTimeout);
       }

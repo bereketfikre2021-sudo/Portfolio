@@ -227,6 +227,9 @@ const PortfolioModal = () => {
     }
   };
 
+  const modalRef = React.useRef(null);
+  const previousFocusRef = React.useRef(null);
+
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape' && portfolioModal.isOpen) {
@@ -241,14 +244,34 @@ const PortfolioModal = () => {
     };
 
     if (portfolioModal.isOpen) {
+      // Store the previously focused element
+      previousFocusRef.current = document.activeElement;
+      
+      // Focus the modal
+      if (modalRef.current) {
+        modalRef.current.focus();
+      }
+      
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
+      
       window.history.pushState({ modal: 'portfolio' }, '');
       window.addEventListener('popstate', handlePopState);
+    } else {
+      // Restore body scroll
+      document.body.style.overflow = '';
+      
+      // Restore focus to previously focused element
+      if (previousFocusRef.current) {
+        previousFocusRef.current.focus();
+      }
     }
 
     document.addEventListener('keydown', handleEscape);
     return () => {
       document.removeEventListener('keydown', handleEscape);
       window.removeEventListener('popstate', handlePopState);
+      document.body.style.overflow = '';
     };
   }, [portfolioModal.isOpen, closePortfolioModal]);
 
@@ -259,10 +282,13 @@ const PortfolioModal = () => {
 
   return (
     <div 
+      ref={modalRef}
       className={`portfolio-modal ${portfolioModal.isOpen ? 'active' : ''}`}
       role="dialog"
       aria-labelledby="portfolioModalTitle"
+      aria-describedby="portfolioModalCategory"
       aria-modal="true"
+      tabIndex={-1}
     >
       <div className="modal-overlay" onClick={closePortfolioModal}></div>
       <div className="portfolio-modal-container" onClick={(e) => e.stopPropagation()}>

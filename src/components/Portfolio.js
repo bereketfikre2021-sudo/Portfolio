@@ -128,13 +128,22 @@ const Portfolio = () => {
           ))}
         </div>
         
-        <div className="portfolio-grid-modern">
+        <div className="portfolio-grid-modern" role="list">
           {filteredProjects.map((project) => (
             <article 
               key={project.id} 
               className="portfolio-item-modern" 
               data-project={project.id}
+              role="listitem"
+              tabIndex={0}
               onClick={() => openPortfolioModal(project.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openPortfolioModal(project.id);
+                }
+              }}
+              aria-label={`${project.title} - ${project.category}. Click to view project details`}
             >
               <div className="portfolio-image-small">
                 <img 

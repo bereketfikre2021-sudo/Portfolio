@@ -51,10 +51,11 @@ export const useCounterAnimation = (target, containerRef) => {
             hasAnimated.current = true;
             observer.disconnect();
             
-            // Start animation after a brief delay for smooth entry
-            timeoutId.current = setTimeout(() => {
+            // Start animation immediately using requestAnimationFrame - no delay
+            // This ensures animation starts as soon as element is visible
+            requestAnimationFrame(() => {
               startAnimation();
-            }, 200);
+            });
           }
         });
       },

@@ -13,11 +13,11 @@ const Hero = () => {
     if (target) {
       // Use requestAnimationFrame to batch layout reads
       requestAnimationFrame(() => {
-        const isMobile = window.innerWidth <= 768;
-        const offsetTop = isMobile ? target.offsetTop - 20 : target.offsetTop - 100;
-        window.scrollTo({
-          top: Math.max(0, offsetTop),
-          behavior: 'smooth'
+      const isMobile = window.innerWidth <= 768;
+      const offsetTop = isMobile ? target.offsetTop - 20 : target.offsetTop - 100;
+      window.scrollTo({
+        top: Math.max(0, offsetTop),
+        behavior: 'smooth'
         });
       });
     }

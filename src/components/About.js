@@ -18,7 +18,8 @@ const About = () => {
             
             // Batch all DOM writes together using requestAnimationFrame
             // This ensures we don't read layout properties after writes
-            requestAnimationFrame(() => {
+            // Use requestIdleCallback if available to not block critical rendering
+            const animateWidth = () => {
               progress.style.width = '0%';
               // Use double requestAnimationFrame to ensure browser has painted before animating
               requestAnimationFrame(() => {
@@ -26,7 +27,13 @@ const About = () => {
                   progress.style.width = targetWidth;
                 });
               });
-            });
+            };
+            
+            if (typeof requestIdleCallback !== 'undefined') {
+              requestIdleCallback(animateWidth, { timeout: 1000 });
+            } else {
+              requestAnimationFrame(animateWidth);
+            }
             skillObserver.unobserve(progress);
           }
         });

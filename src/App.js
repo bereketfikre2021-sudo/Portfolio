@@ -1,14 +1,16 @@
 import React, { lazy, Suspense, useEffect } from 'react';
 import { ModalProvider } from './context/ModalContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import About from './components/About';
 import Services from './components/Services';
 import Portfolio from './components/Portfolio';
 import ScrollProgress from './components/ScrollProgress';
-import ScrollPattern from './components/ScrollPattern';
-import ParticleCanvas from './components/ParticleCanvas';
-import CustomCursor from './components/CustomCursor';
+// Defer non-critical visual effects to not block LCP
+const ScrollPattern = lazy(() => import('./components/ScrollPattern'));
+const ParticleCanvas = lazy(() => import('./components/ParticleCanvas'));
+const CustomCursor = lazy(() => import('./components/CustomCursor'));
 import ScrollToTop from './components/ScrollToTop';
 // Lazy load modals - they're not needed until user interaction
 const PortfolioModal = lazy(() => import('./components/PortfolioModal'));
@@ -58,44 +60,48 @@ function App() {
   }, []);
 
   return (
-    <ModalProvider>
-      <div className="App">
-        {/* Skip to main content link for accessibility */}
-        <a href="#main-content" className="skip-to-main-content">
-          Skip to main content
-        </a>
-        <ScrollProgress />
-        <ScrollPattern />
-        <ParticleCanvas />
-        <CustomCursor />
-        <Navigation />
-        <main id="main-content">
-          <Hero />
-          <About />
-          <Services />
-          <Portfolio />
-          <Suspense fallback={LoadingFallback()}>
-            <CaseStudies />
-            <Blog />
-            <Testimonials />
-            <TrustedBy />
-            <FAQ />
-            <Contact />
-            <Footer />
-            <BottomNav />
+    <ErrorBoundary>
+      <ModalProvider>
+        <div className="App">
+          {/* Skip to main content link for accessibility */}
+          <a href="#main-content" className="skip-to-main-content">
+            Skip to main content
+          </a>
+          <ScrollProgress />
+          <Suspense fallback={null}>
+            <ScrollPattern />
+            <ParticleCanvas />
+            <CustomCursor />
           </Suspense>
-        </main>
-        <ScrollToTop />
-        <Suspense fallback={null}>
-          <PortfolioModal />
-          <CaseStudyModal />
-          <BlogModal />
-          <ServicesModal />
-          <FormModals />
-          <PrivacyTermsModal />
-        </Suspense>
-      </div>
-    </ModalProvider>
+          <Navigation />
+          <main id="main-content">
+            <Hero />
+            <About />
+            <Services />
+            <Portfolio />
+            <Suspense fallback={LoadingFallback()}>
+              <CaseStudies />
+              <Blog />
+              <Testimonials />
+              <TrustedBy />
+              <FAQ />
+              <Contact />
+              <Footer />
+              <BottomNav />
+            </Suspense>
+          </main>
+          <ScrollToTop />
+          <Suspense fallback={null}>
+            <PortfolioModal />
+            <CaseStudyModal />
+            <BlogModal />
+            <ServicesModal />
+            <FormModals />
+            <PrivacyTermsModal />
+          </Suspense>
+        </div>
+      </ModalProvider>
+    </ErrorBoundary>
   );
 }
 

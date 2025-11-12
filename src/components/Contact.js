@@ -111,7 +111,7 @@ const Contact = () => {
             <form className="contact-form-simple" onSubmit={handleSubmit}>
               <div className="form-row">
                 <div className="form-field">
-                  <label htmlFor="firstName">First Name</label>
+                  <label htmlFor="firstName">First Name <span aria-label="required">*</span></label>
                   <input 
                     type="text" 
                     id="firstName" 
@@ -119,10 +119,12 @@ const Contact = () => {
                     value={formData.first_name}
                     onChange={handleChange}
                     required
+                    aria-required="true"
+                    autoComplete="given-name"
                   />
                 </div>
                 <div className="form-field">
-                  <label htmlFor="lastName">Last Name</label>
+                  <label htmlFor="lastName">Last Name <span aria-label="required">*</span></label>
                   <input 
                     type="text" 
                     id="lastName" 
@@ -130,11 +132,13 @@ const Contact = () => {
                     value={formData.last_name}
                     onChange={handleChange}
                     required
+                    aria-required="true"
+                    autoComplete="family-name"
                   />
                 </div>
               </div>
               <div className="form-field">
-                <label htmlFor="emailAddress">Email Address</label>
+                <label htmlFor="emailAddress">Email Address <span aria-label="required">*</span></label>
                 <input 
                   type="email" 
                   id="emailAddress" 
@@ -142,10 +146,12 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  aria-required="true"
+                  autoComplete="email"
                 />
               </div>
               <div className="form-field">
-                <label htmlFor="projectSubject">Project Subject</label>
+                <label htmlFor="projectSubject">Project Subject <span aria-label="required">*</span></label>
                 <input 
                   type="text" 
                   id="projectSubject" 
@@ -153,10 +159,12 @@ const Contact = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
+                  aria-required="true"
+                  autoComplete="off"
                 />
               </div>
               <div className="form-field">
-                <label htmlFor="projectMessage">Project Message</label>
+                <label htmlFor="projectMessage">Project Message <span aria-label="required">*</span></label>
                 <textarea 
                   id="projectMessage" 
                   name="message" 
@@ -165,6 +173,7 @@ const Contact = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
+                  aria-required="true"
                   aria-describedby="message-help"
                 ></textarea>
                 <span id="message-help" className="sr-only">Please provide details about your project</span>
