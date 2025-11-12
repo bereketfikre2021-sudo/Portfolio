@@ -7,13 +7,24 @@ const ScrollProgress = () => {
     let ticking = false;
     let cachedScrollHeight = 0;
     let cachedClientHeight = 0;
+    let recalculateTimeout = null;
     
     // Cache document dimensions to avoid forced reflows
     const updateCache = () => {
+      // Wait a bit for lazy-loaded content to render
       // Get the maximum scroll height from both body and documentElement
       const bodyScrollHeight = document.body.scrollHeight;
       const documentScrollHeight = document.documentElement.scrollHeight;
-      cachedScrollHeight = Math.max(bodyScrollHeight, documentScrollHeight);
+      const bodyOffsetHeight = document.body.offsetHeight;
+      const documentOffsetHeight = document.documentElement.offsetHeight;
+      
+      // Use the maximum of all these values to ensure we get the full height
+      cachedScrollHeight = Math.max(
+        bodyScrollHeight,
+        documentScrollHeight,
+        bodyOffsetHeight,
+        documentOffsetHeight
+      );
       cachedClientHeight = window.innerHeight || document.documentElement.clientHeight;
     };
     
@@ -23,9 +34,14 @@ const ScrollProgress = () => {
           // Get current scroll position
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
           
-          // Update cache if needed (on load/resize)
-          if (cachedScrollHeight === 0) {
+          // Recalculate cache periodically to account for lazy-loaded content
+          if (cachedScrollHeight === 0 || recalculateTimeout === null) {
             updateCache();
+            // Recalculate every 500ms to catch lazy-loaded content
+            recalculateTimeout = setTimeout(() => {
+              updateCache();
+              recalculateTimeout = null;
+            }, 500);
           }
           
           // Calculate scrollable distance
@@ -50,23 +66,36 @@ const ScrollProgress = () => {
       updateProgress();
     };
 
-    // Initial cache update
-    updateCache();
+    // Initial cache update with delay to allow lazy-loaded content
+    const initialTimeout = setTimeout(() => {
+      updateCache();
+      updateProgress();
+    }, 1000);
     
     window.addEventListener('scroll', updateProgress, { passive: true });
     window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('load', () => {
-      updateCache();
-      updateProgress();
+      setTimeout(() => {
+        updateCache();
+        updateProgress();
+      }, 500);
     });
     
-    // Initial update
-    updateProgress();
+    // Also listen for when images/content finish loading
+    if (document.readyState === 'complete') {
+      setTimeout(() => {
+        updateCache();
+        updateProgress();
+      }, 1000);
+    }
 
     return () => {
+      clearTimeout(initialTimeout);
+      if (recalculateTimeout) {
+        clearTimeout(recalculateTimeout);
+      }
       window.removeEventListener('scroll', updateProgress);
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('load', handleResize);
     };
   }, []);
 

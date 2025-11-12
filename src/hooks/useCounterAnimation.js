@@ -5,6 +5,7 @@ export const useCounterAnimation = (target, containerRef) => {
   const hasAnimated = useRef(false);
   const rafId = useRef(null);
   const timeoutId = useRef(null);
+  const lastDisplayedValue = useRef(0);
 
   useEffect(() => {
     if (hasAnimated.current) return;
@@ -21,15 +22,21 @@ export const useCounterAnimation = (target, containerRef) => {
         const eased = 1 - Math.pow(1 - progress, 3);
         const currentValue = Math.floor(eased * target);
         
-        // Update count
-        setCount(currentValue);
+        // Only update if the integer value has changed to prevent glitching
+        if (currentValue !== lastDisplayedValue.current && currentValue <= target) {
+          lastDisplayedValue.current = currentValue;
+          setCount(currentValue);
+        }
         
         // Continue or finish
         if (progress < 1) {
           rafId.current = requestAnimationFrame(animate);
         } else {
           // Ensure final value is exact
-          setCount(target);
+          if (lastDisplayedValue.current !== target) {
+            lastDisplayedValue.current = target;
+            setCount(target);
+          }
           rafId.current = null;
         }
       };
