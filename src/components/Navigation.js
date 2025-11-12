@@ -97,11 +97,16 @@ const Navigation = () => {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
-      const isMobile = window.innerWidth <= 768;
-      const offsetTop = isMobile ? target.offsetTop - 20 : target.offsetTop - 100;
-      window.scrollTo({
-        top: Math.max(0, offsetTop),
-        behavior: 'smooth'
+      // Batch layout reads in requestAnimationFrame to avoid forced reflow
+      requestAnimationFrame(() => {
+        // Read all layout properties together in one batch
+        const isMobile = window.innerWidth <= 768;
+        const offsetTop = target.offsetTop;
+        const scrollOffset = isMobile ? offsetTop - 20 : offsetTop - 100;
+        window.scrollTo({
+          top: Math.max(0, scrollOffset),
+          behavior: 'smooth'
+        });
       });
     }
   };

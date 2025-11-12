@@ -10,13 +10,19 @@ const ScrollProgress = () => {
     let recalculateTimeout = null;
     
     // Cache document dimensions to avoid forced reflows
+    // Batch all layout property reads together to minimize forced reflows
     const updateCache = () => {
-      // Wait a bit for lazy-loaded content to render
-      // Get the maximum scroll height from both body and documentElement
-      const bodyScrollHeight = document.body.scrollHeight;
-      const documentScrollHeight = document.documentElement.scrollHeight;
-      const bodyOffsetHeight = document.body.offsetHeight;
-      const documentOffsetHeight = document.documentElement.offsetHeight;
+      // Batch all layout reads together in one operation to avoid multiple forced reflows
+      const body = document.body;
+      const docEl = document.documentElement;
+      
+      // Read all layout properties in one batch
+      const bodyScrollHeight = body.scrollHeight;
+      const documentScrollHeight = docEl.scrollHeight;
+      const bodyOffsetHeight = body.offsetHeight;
+      const documentOffsetHeight = docEl.offsetHeight;
+      const windowHeight = window.innerHeight;
+      const clientHeight = docEl.clientHeight;
       
       // Use the maximum of all these values to ensure we get the full height
       cachedScrollHeight = Math.max(
@@ -25,7 +31,7 @@ const ScrollProgress = () => {
         bodyOffsetHeight,
         documentOffsetHeight
       );
-      cachedClientHeight = window.innerHeight || document.documentElement.clientHeight;
+      cachedClientHeight = windowHeight || clientHeight;
     };
     
     const updateProgress = () => {
@@ -35,12 +41,22 @@ const ScrollProgress = () => {
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
           
           // Recalculate cache periodically to account for lazy-loaded content
-          if (cachedScrollHeight === 0 || recalculateTimeout === null) {
+          // Only recalculate when needed, not on every scroll event
+          if (cachedScrollHeight === 0) {
             updateCache();
+          } else if (recalculateTimeout === null) {
             // Recalculate every 500ms to catch lazy-loaded content
+            // Use requestIdleCallback if available for non-critical updates
             recalculateTimeout = setTimeout(() => {
-              updateCache();
-              recalculateTimeout = null;
+              if (typeof requestIdleCallback !== 'undefined') {
+                requestIdleCallback(() => {
+                  updateCache();
+                  recalculateTimeout = null;
+                }, { timeout: 1000 });
+              } else {
+                updateCache();
+                recalculateTimeout = null;
+              }
             }, 500);
           }
           

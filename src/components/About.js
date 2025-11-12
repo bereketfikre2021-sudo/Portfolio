@@ -12,11 +12,21 @@ const About = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const progress = entry.target;
-            const width = progress.style.width;
-            progress.style.width = '0%';
-            setTimeout(() => {
-              progress.style.width = width;
-            }, 100);
+            // Read from data attribute first to avoid forced reflow from getComputedStyle
+            // This avoids forced reflow by reading attribute before any style reads/writes
+            const targetWidth = progress.getAttribute('data-width') || '100%';
+            
+            // Batch all DOM writes together using requestAnimationFrame
+            // This ensures we don't read layout properties after writes
+            requestAnimationFrame(() => {
+              progress.style.width = '0%';
+              // Use double requestAnimationFrame to ensure browser has painted before animating
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  progress.style.width = targetWidth;
+                });
+              });
+            });
             skillObserver.unobserve(progress);
           }
         });
@@ -143,25 +153,25 @@ const About = () => {
                 <div className="skill-item" data-skill="Graphic Design">
                   <span className="skill-name">Graphic Design</span>
                   <div className="skill-bar">
-                    <div className="skill-progress" style={{ width: '92%' }}></div>
+                    <div className="skill-progress" data-width="92%" style={{ width: '92%' }}></div>
                   </div>
                 </div>
                 <div className="skill-item" data-skill="Brand Identity">
                   <span className="skill-name">Brand Identity</span>
                   <div className="skill-bar">
-                    <div className="skill-progress" style={{ width: '98%' }}></div>
+                    <div className="skill-progress" data-width="98%" style={{ width: '98%' }}></div>
                   </div>
                 </div>
                 <div className="skill-item" data-skill="UI/UX Design">
                   <span className="skill-name">UI/UX Design</span>
                   <div className="skill-bar">
-                    <div className="skill-progress" style={{ width: '95%' }}></div>
+                    <div className="skill-progress" data-width="95%" style={{ width: '95%' }}></div>
                   </div>
                 </div>
                 <div className="skill-item" data-skill="Web Design">
                   <span className="skill-name">Web Design</span>
                   <div className="skill-bar">
-                    <div className="skill-progress" style={{ width: '90%' }}></div>
+                    <div className="skill-progress" data-width="90%" style={{ width: '90%' }}></div>
                   </div>
                 </div>
               </div>
