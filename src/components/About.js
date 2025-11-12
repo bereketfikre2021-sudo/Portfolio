@@ -132,6 +132,7 @@ const About = () => {
                 loading="lazy"
                 decoding="async"
                 sizes="(max-width: 768px) 100vw, 50vw"
+                srcSet={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp 600w, ${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp 1200w`}
               />
               <div className="card-accent"></div>
             </div>

@@ -3,39 +3,38 @@ import { useState, useEffect, useRef } from 'react';
 export const useCounterAnimation = (target, containerRef) => {
   const [count, setCount] = useState(0);
   const hasAnimated = useRef(false);
-  const animationFrameId = useRef(null);
-  const startTime = useRef(null);
+  const rafId = useRef(null);
+  const timeoutId = useRef(null);
 
   useEffect(() => {
     if (hasAnimated.current) return;
 
-    const animateCounter = () => {
+    const startAnimation = () => {
       const duration = 2000; // 2 seconds
-      startTime.current = null;
-
+      const startTime = performance.now();
+      
       const animate = (currentTime) => {
-        if (!startTime.current) {
-          startTime.current = currentTime;
-        }
-
-        const elapsed = currentTime - startTime.current;
+        const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-
-        // Easing function for smooth animation
-        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-        const current = Math.floor(easeOutQuart * target);
-
-        setCount(current);
-
+        
+        // Ease out cubic for smooth deceleration
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const currentValue = Math.floor(eased * target);
+        
+        // Update count
+        setCount(currentValue);
+        
+        // Continue or finish
         if (progress < 1) {
-          animationFrameId.current = requestAnimationFrame(animate);
+          rafId.current = requestAnimationFrame(animate);
         } else {
+          // Ensure final value is exact
           setCount(target);
-          animationFrameId.current = null;
+          rafId.current = null;
         }
       };
-
-      animationFrameId.current = requestAnimationFrame(animate);
+      
+      rafId.current = requestAnimationFrame(animate);
     };
 
     const observer = new IntersectionObserver(
@@ -43,12 +42,16 @@ export const useCounterAnimation = (target, containerRef) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAnimated.current) {
             hasAnimated.current = true;
-            animateCounter();
             observer.disconnect();
+            
+            // Start animation after a brief delay for smooth entry
+            timeoutId.current = setTimeout(() => {
+              startAnimation();
+            }, 200);
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.2, rootMargin: '0px' }
     );
 
     if (containerRef?.current) {
@@ -57,8 +60,11 @@ export const useCounterAnimation = (target, containerRef) => {
 
     return () => {
       observer.disconnect();
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+      }
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
       }
     };
   }, [containerRef, target]);

@@ -10,12 +10,13 @@ import ScrollPattern from './components/ScrollPattern';
 import ParticleCanvas from './components/ParticleCanvas';
 import CustomCursor from './components/CustomCursor';
 import ScrollToTop from './components/ScrollToTop';
-import PortfolioModal from './components/PortfolioModal';
-import CaseStudyModal from './components/CaseStudyModal';
-import BlogModal from './components/BlogModal';
-import ServicesModal from './components/ServicesModal';
-import FormModals from './components/FormModals';
-import PrivacyTermsModal from './components/PrivacyTermsModal';
+// Lazy load modals - they're not needed until user interaction
+const PortfolioModal = lazy(() => import('./components/PortfolioModal'));
+const CaseStudyModal = lazy(() => import('./components/CaseStudyModal'));
+const BlogModal = lazy(() => import('./components/BlogModal'));
+const ServicesModal = lazy(() => import('./components/ServicesModal'));
+const FormModals = lazy(() => import('./components/FormModals'));
+const PrivacyTermsModal = lazy(() => import('./components/PrivacyTermsModal'));
 
 // Lazy load below-the-fold components to reduce initial bundle size and improve performance
 const CaseStudies = lazy(() => import('./components/CaseStudies'));
@@ -31,34 +32,28 @@ const BottomNav = lazy(() => import('./components/BottomNav'));
 const LoadingFallback = () => null;
 
 function App() {
-  // Performance optimization: Preload critical resources
+  // Performance optimization: Register service worker (images already preloaded in index.html)
   useEffect(() => {
-    // Preload critical images
-    const preloadImages = [
-      '/assets/Bereket-Fikre-1.webp',
-      '/assets/Logo.svg'
-    ];
-    
-    preloadImages.forEach(src => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = src;
-      link.crossOrigin = 'anonymous';
-      document.head.appendChild(link);
-    });
-
-    // Register service worker for PWA (if available)
+    // Register service worker for PWA (if available) - deferred to not block initial render
     if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-      window.addEventListener('load', () => {
+      // Use requestIdleCallback for non-critical work, fallback to setTimeout
+      const registerSW = () => {
         navigator.serviceWorker.register('/sw.js')
           .then(registration => {
-            console.log('SW registered: ', registration);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('SW registered: ', registration);
+            }
           })
-          .catch(registrationError => {
-            console.log('SW registration failed: ', registrationError);
+          .catch(() => {
+            // Silently fail - service worker is optional
           });
-      });
+      };
+      
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(registerSW, { timeout: 2000 });
+      } else {
+        setTimeout(registerSW, 2000);
+      }
     }
   }, []);
 
@@ -91,12 +86,14 @@ function App() {
           </Suspense>
         </main>
         <ScrollToTop />
-        <PortfolioModal />
-        <CaseStudyModal />
-        <BlogModal />
-        <ServicesModal />
-        <FormModals />
-        <PrivacyTermsModal />
+        <Suspense fallback={null}>
+          <PortfolioModal />
+          <CaseStudyModal />
+          <BlogModal />
+          <ServicesModal />
+          <FormModals />
+          <PrivacyTermsModal />
+        </Suspense>
       </div>
     </ModalProvider>
   );

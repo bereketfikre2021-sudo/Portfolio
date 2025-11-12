@@ -69,12 +69,18 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://bereketfikre.com" crossorigin>
     
     <!-- Preload critical resources for LCP -->
     <link rel="preload" href="%PUBLIC_URL%/assets/Bereket-Fikre-1.webp" as="image" type="image/webp" fetchpriority="high" crossorigin="anonymous">
     <link rel="preload" href="%PUBLIC_URL%/assets/Logo.svg" as="image" type="image/svg+xml" fetchpriority="high" crossorigin="anonymous">
     
-    <!-- Fonts loaded asynchronously to prevent render blocking -->
+    <!-- Prefetch next likely resources to optimize network dependency tree -->
+    <link rel="prefetch" href="%PUBLIC_URL%/assets/Bereket-Fikre-2.webp" as="image" type="image/webp">
+    <link rel="dns-prefetch" href="//formspree.io">
+    
+    <!-- Fonts loaded asynchronously to prevent render blocking with font-display: swap -->
+    <!-- Using &display=swap in URL ensures fonts use font-display: swap for better performance -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"></noscript>
     
@@ -134,8 +140,8 @@
     <meta property="og:see_also" content="https://dribbble.com/bereket-fikre">
     <meta property="og:see_also" content="https://www.linkedin.com/in/bereket-fikre-graphic-designer">
     
-    <!-- JSON-LD Structured Data for SEO -->
-    <script type="application/ld+json">
+    <!-- JSON-LD Structured Data for SEO - Deferred for performance -->
+    <script defer type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Person",

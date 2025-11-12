@@ -8,39 +8,72 @@ const Navigation = () => {
 
   useEffect(() => {
     let ticking = false;
+    let cachedSections = null;
+    let cachedSectionData = new Map();
+    let lastWindowWidth = window.innerWidth;
+    
+    // Cache section data to avoid forced reflows
+    const updateSectionCache = () => {
+      const sections = document.querySelectorAll('section[id]');
+      cachedSections = sections;
+      cachedSectionData.clear();
+      sections.forEach(section => {
+        const id = section.getAttribute('id');
+        if (id) {
+          cachedSectionData.set(id, {
+            top: section.offsetTop,
+            height: section.offsetHeight
+          });
+        }
+      });
+    };
     
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const isMobile = window.innerWidth <= 768;
+          const currentWidth = window.innerWidth;
+          // Re-cache if window width changed (responsive breakpoint)
+          if (Math.abs(currentWidth - lastWindowWidth) > 50) {
+            updateSectionCache();
+            lastWindowWidth = currentWidth;
+          }
+          
+          const isMobile = currentWidth <= 768;
           if (!isMobile) {
             setScrolled(window.pageYOffset > 50);
           }
 
-          // Update active nav link
-          const sections = document.querySelectorAll('section[id]');
+          // Use cached section data to avoid forced reflows
+          if (!cachedSections || cachedSectionData.size === 0) {
+            updateSectionCache();
+          }
+          
           const scrollPos = window.pageYOffset + (isMobile ? 50 : 150);
-
-          sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-
-            if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-              setActiveSection(sectionId || 'home');
+          
+          for (const [sectionId, data] of cachedSectionData.entries()) {
+            if (scrollPos >= data.top && scrollPos < data.top + data.height) {
+              setActiveSection(sectionId);
+              break;
             }
-          });
+          }
+          
           ticking = false;
         });
         ticking = true;
       }
     };
 
+    // Initial cache update after a short delay to ensure DOM is ready
+    const initTimeout = setTimeout(updateSectionCache, 100);
+    
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', updateSectionCache, { passive: true });
     handleScroll();
 
     return () => {
+      clearTimeout(initTimeout);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateSectionCache);
     };
   }, []);
 

@@ -5,34 +5,65 @@ const BottomNav = () => {
 
   useEffect(() => {
     let ticking = false;
+    let cachedSectionData = new Map();
+    let lastWindowWidth = window.innerWidth;
+    
+    // Cache section data to avoid forced reflows
+    const updateSectionCache = () => {
+      const sections = document.querySelectorAll('section[id]');
+      cachedSectionData.clear();
+      sections.forEach(section => {
+        const id = section.getAttribute('id');
+        if (id) {
+          cachedSectionData.set(id, {
+            top: section.offsetTop,
+            height: section.offsetHeight
+          });
+        }
+      });
+    };
     
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const sections = document.querySelectorAll('section[id]');
-          const isMobile = window.innerWidth <= 768;
+          const currentWidth = window.innerWidth;
+          // Re-cache if window width changed
+          if (Math.abs(currentWidth - lastWindowWidth) > 50) {
+            updateSectionCache();
+            lastWindowWidth = currentWidth;
+          }
+          
+          if (cachedSectionData.size === 0) {
+            updateSectionCache();
+          }
+          
+          const isMobile = currentWidth <= 768;
           const scrollPos = window.pageYOffset + (isMobile ? 50 : 150);
 
-          sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-
-            if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+          // Use cached data to avoid forced reflows
+          for (const [sectionId, data] of cachedSectionData.entries()) {
+            if (scrollPos >= data.top && scrollPos < data.top + data.height) {
               setActiveSection(sectionId || 'home');
+              break;
             }
-          });
+          }
+          
           ticking = false;
         });
         ticking = true;
       }
     };
 
+    const initTimeout = setTimeout(updateSectionCache, 100);
+    
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', updateSectionCache, { passive: true });
     handleScroll();
 
     return () => {
+      clearTimeout(initTimeout);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateSectionCache);
     };
   }, []);
 
@@ -40,11 +71,14 @@ const BottomNav = () => {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
-      const isMobile = window.innerWidth <= 768;
-      const offsetTop = isMobile ? target.offsetTop - 20 : target.offsetTop - 100;
-      window.scrollTo({
-        top: Math.max(0, offsetTop),
-        behavior: 'smooth'
+      // Use requestAnimationFrame to batch layout reads
+      requestAnimationFrame(() => {
+        const isMobile = window.innerWidth <= 768;
+        const offsetTop = isMobile ? target.offsetTop - 20 : target.offsetTop - 100;
+        window.scrollTo({
+          top: Math.max(0, offsetTop),
+          behavior: 'smooth'
+        });
       });
     }
   };

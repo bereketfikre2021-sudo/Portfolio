@@ -11,11 +11,14 @@ const Hero = () => {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
-      const isMobile = window.innerWidth <= 768;
-      const offsetTop = isMobile ? target.offsetTop - 20 : target.offsetTop - 100;
-      window.scrollTo({
-        top: Math.max(0, offsetTop),
-        behavior: 'smooth'
+      // Use requestAnimationFrame to batch layout reads
+      requestAnimationFrame(() => {
+        const isMobile = window.innerWidth <= 768;
+        const offsetTop = isMobile ? target.offsetTop - 20 : target.offsetTop - 100;
+        window.scrollTo({
+          top: Math.max(0, offsetTop),
+          behavior: 'smooth'
+        });
       });
     }
   };
@@ -105,6 +108,7 @@ const Hero = () => {
                 fetchPriority="high"
                 decoding="async"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
+                srcSet={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp 800w, ${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp 1600w`}
               />
               <div className="image-overlay"></div>
             </div>

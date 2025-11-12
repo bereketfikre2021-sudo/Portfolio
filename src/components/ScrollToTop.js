@@ -7,15 +7,29 @@ const ScrollToTop = () => {
 
   useEffect(() => {
     let ticking = false;
+    let cachedDocumentHeight = 0;
+    let cachedWindowHeight = window.innerHeight;
+    let cachedIsMobile = window.innerWidth <= 768;
+    
+    // Cache layout properties to avoid forced reflows
+    const updateCache = () => {
+      cachedDocumentHeight = document.documentElement.scrollHeight;
+      cachedWindowHeight = window.innerHeight;
+      cachedIsMobile = window.innerWidth <= 768;
+    };
     
     const updateScrollProgress = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const windowHeight = window.innerHeight;
-          const documentHeight = document.documentElement.scrollHeight;
+          // Only read scroll position (non-layout property)
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
           
-          const scrollableHeight = documentHeight - windowHeight;
+          // Update cache only when needed
+          if (cachedDocumentHeight === 0) {
+            updateCache();
+          }
+          
+          const scrollableHeight = cachedDocumentHeight - cachedWindowHeight;
           const percent = scrollableHeight > 0 
             ? Math.min(100, Math.round((scrollTop / scrollableHeight) * 100))
             : 0;
@@ -23,10 +37,9 @@ const ScrollToTop = () => {
           setScrollPercent(percent);
           setIsVisible(scrollTop > 300);
 
-          // Update circle progress
+          // Update circle progress using cached values
           if (progressCircleRef.current) {
-            const isMobile = window.innerWidth <= 768;
-            const radius = isMobile ? 23 : 26;
+            const radius = cachedIsMobile ? 23 : 26;
             const circumference = 2 * Math.PI * radius;
             const offset = circumference - (percent / 100) * circumference;
             progressCircleRef.current.style.strokeDashoffset = offset;
@@ -37,11 +50,18 @@ const ScrollToTop = () => {
       }
     };
 
+    const handleResize = () => {
+      updateCache();
+      updateScrollProgress();
+    };
+
     window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
     updateScrollProgress();
 
     return () => {
       window.removeEventListener('scroll', updateScrollProgress);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 

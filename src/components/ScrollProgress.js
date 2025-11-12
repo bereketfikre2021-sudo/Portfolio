@@ -5,15 +5,28 @@ const ScrollProgress = () => {
 
   useEffect(() => {
     let ticking = false;
+    let cachedDocumentHeight = 0;
+    let cachedWindowHeight = window.innerHeight;
+    
+    // Cache document height to avoid forced reflows
+    const updateCache = () => {
+      cachedDocumentHeight = document.documentElement.scrollHeight;
+      cachedWindowHeight = window.innerHeight;
+    };
     
     const updateProgress = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const windowHeight = window.innerHeight;
-          const documentHeight = document.documentElement.scrollHeight;
+          // Only read layout properties once per frame
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          const scrollPercent = documentHeight > windowHeight 
-            ? Math.min(100, (scrollTop / (documentHeight - windowHeight)) * 100)
+          
+          // Update cache only when needed (on load/resize)
+          if (cachedDocumentHeight === 0) {
+            updateCache();
+          }
+          
+          const scrollPercent = cachedDocumentHeight > cachedWindowHeight 
+            ? Math.min(100, (scrollTop / (cachedDocumentHeight - cachedWindowHeight)) * 100)
             : 0;
           setProgress(scrollPercent);
           ticking = false;
@@ -22,13 +35,23 @@ const ScrollProgress = () => {
       }
     };
 
+    const handleResize = () => {
+      updateCache();
+      updateProgress();
+    };
+
     window.addEventListener('scroll', updateProgress, { passive: true });
-    window.addEventListener('load', updateProgress);
+    window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('load', () => {
+      updateCache();
+      updateProgress();
+    });
     updateProgress();
 
     return () => {
       window.removeEventListener('scroll', updateProgress);
-      window.removeEventListener('load', updateProgress);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('load', handleResize);
     };
   }, []);
 
