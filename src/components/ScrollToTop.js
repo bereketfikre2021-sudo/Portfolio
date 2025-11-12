@@ -7,32 +7,39 @@ const ScrollToTop = () => {
 
   useEffect(() => {
     let ticking = false;
-    let cachedDocumentHeight = 0;
-    let cachedWindowHeight = window.innerHeight;
+    let cachedScrollHeight = 0;
+    let cachedClientHeight = 0;
     let cachedIsMobile = window.innerWidth <= 768;
     
     // Cache layout properties to avoid forced reflows
     const updateCache = () => {
-      cachedDocumentHeight = document.documentElement.scrollHeight;
-      cachedWindowHeight = window.innerHeight;
+      // Get the maximum scroll height from both body and documentElement
+      const bodyScrollHeight = document.body.scrollHeight;
+      const documentScrollHeight = document.documentElement.scrollHeight;
+      cachedScrollHeight = Math.max(bodyScrollHeight, documentScrollHeight);
+      cachedClientHeight = window.innerHeight || document.documentElement.clientHeight;
       cachedIsMobile = window.innerWidth <= 768;
     };
     
     const updateScrollProgress = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          // Only read scroll position (non-layout property)
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          // Get current scroll position
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
           
-          // Update cache only when needed
-          if (cachedDocumentHeight === 0) {
+          // Update cache if needed
+          if (cachedScrollHeight === 0) {
             updateCache();
           }
           
-          const scrollableHeight = cachedDocumentHeight - cachedWindowHeight;
-          const percent = scrollableHeight > 0 
-            ? Math.min(100, Math.round((scrollTop / scrollableHeight) * 100))
-            : 0;
+          // Calculate scrollable distance
+          const scrollableHeight = cachedScrollHeight - cachedClientHeight;
+          
+          // Calculate progress percentage
+          let percent = 0;
+          if (scrollableHeight > 0) {
+            percent = Math.min(100, Math.max(0, Math.round((scrollTop / scrollableHeight) * 100)));
+          }
           
           setScrollPercent(percent);
           setIsVisible(scrollTop > 300);
@@ -55,13 +62,23 @@ const ScrollToTop = () => {
       updateScrollProgress();
     };
 
+    // Initial cache update
+    updateCache();
+
     window.addEventListener('scroll', updateScrollProgress, { passive: true });
     window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('load', () => {
+      updateCache();
+      updateScrollProgress();
+    });
+    
+    // Initial update
     updateScrollProgress();
 
     return () => {
       window.removeEventListener('scroll', updateScrollProgress);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('load', handleResize);
     };
   }, []);
 
