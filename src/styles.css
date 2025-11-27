@@ -1578,9 +1578,12 @@ section {
   border: 1px solid var(--color-light-10);
   border-radius: var(--radius-lg);
   padding: 2.5rem;
-  transition: all 0.5s var(--ease-out-expo);
+  transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s var(--ease-out-expo), border-color 0.5s var(--ease-out-expo);
   overflow: hidden;
   cursor: pointer;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
 }
 
 .service-hover-effect {
@@ -1601,9 +1604,10 @@ section {
 }
 
 .service-card-modern:hover {
-  transform: translateY(-12px);
+  transform: translateY(-12px) translateZ(0);
   border-color: var(--color-light-30);
   box-shadow: var(--shadow-lg);
+  will-change: transform;
 }
 
 .service-card-header {
@@ -1646,12 +1650,14 @@ section {
 
 .service-card-modern:hover .service-icon-wrapper {
   background: var(--color-light);
-  transform: rotate(10deg) scale(1.1);
+  transform: rotate(10deg) scale(1.1) translateZ(0);
+  will-change: transform;
 }
 
 .service-card-modern:hover .service-icon {
   color: var(--color-dark);
-  transform: rotate(-10deg);
+  transform: rotate(-10deg) translateZ(0);
+  will-change: transform;
 }
 
 .service-card-body h3 {
@@ -1713,7 +1719,8 @@ section {
 }
 
 .service-card-modern:hover .service-link svg {
-  transform: translateX(5px);
+  transform: translateX(5px) translateZ(0);
+  will-change: transform;
 }
 
 /* ============================================
@@ -1808,7 +1815,6 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
-  transition: all 0.4s var(--ease-out-expo);
 }
 
 .portfolio-item-modern {
@@ -1818,22 +1824,36 @@ section {
   border: 1px solid var(--color-light-10);
   padding: 0;
   cursor: pointer;
-  transition: all 0.5s var(--ease-out-expo), opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
-  transform-style: preserve-3d;
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(5, 10, 31, 0.1);
   animation: fadeInUp 0.5s var(--ease-out-expo) forwards;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+  isolation: isolate;
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(20px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
+}
+
+/* Ensure animation doesn't conflict with hover */
+.portfolio-item-modern.animation-complete {
+  animation: none;
+}
+
+/* Prevent animation from interfering with hover */
+.portfolio-item-modern:hover {
+  animation: none;
 }
 
 .portfolio-item-modern::before {
@@ -1848,12 +1868,13 @@ section {
 }
 
 .portfolio-item-modern:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-8px) translateZ(0);
   border-color: var(--color-light-40);
   box-shadow: 
     0 24px 60px rgba(5, 10, 31, 0.3),
     0 0 40px rgba(180, 232, 201, 0.15),
     inset 0 1px 0 rgba(180, 232, 201, 0.1);
+  will-change: transform;
 }
 
 .portfolio-item-modern:hover::before {
@@ -1863,11 +1884,13 @@ section {
 .portfolio-image-small {
   position: relative;
   width: 100%;
-  height: 240px;
   overflow: hidden;
   background: var(--bg-primary);
-  aspect-ratio: 3 / 2;
-  min-height: 240px;
+  display: block;
+  padding: 0;
+  margin: 0;
+  min-height: 200px;
+  contain: layout style paint;
 }
 
 .portfolio-image-small::after {
@@ -1887,17 +1910,23 @@ section {
 
 .portfolio-thumb {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  transition: transform 0.8s var(--ease-out-expo), filter 0.5s var(--ease-out-expo);
-  filter: brightness(0.95);
+  height: auto;
+  max-width: 100%;
   display: block;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 0.4s var(--ease-out-expo), filter 0.4s var(--ease-out-expo);
+  filter: brightness(0.95);
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  contain: layout style paint;
 }
 
 .portfolio-item-modern:hover .portfolio-thumb {
-  transform: scale(1.15);
+  transform: scale(1.05) translateZ(0);
   filter: brightness(1.05);
+  will-change: transform, filter;
 }
 
 .portfolio-content {
@@ -1924,16 +1953,19 @@ section {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin: 0;
-  transition: all 0.4s var(--ease-out-expo);
+  transition: background 0.4s var(--ease-out-expo), color 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
   width: fit-content;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .portfolio-item-modern:hover .portfolio-category-modern {
   background: var(--color-light);
   color: var(--color-dark);
   border-color: var(--color-light);
-  transform: translateY(-2px);
+  transform: translateY(-2px) translateZ(0);
   box-shadow: 0 4px 12px rgba(180, 232, 201, 0.3);
+  will-change: transform;
 }
 
 .portfolio-content h3 {
@@ -1966,11 +1998,13 @@ section {
   text-decoration: none;
   font-weight: 600;
   font-size: 0.875rem;
-  transition: all 0.4s var(--ease-out-expo);
+  transition: gap 0.4s var(--ease-out-expo), color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
   margin-top: 0.25rem;
   padding: 0.5rem 0;
   position: relative;
   width: fit-content;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .portfolio-link-modern::after {
@@ -1992,15 +2026,20 @@ section {
   transition: transform 0.4s var(--ease-out-expo);
   width: 18px;
   height: 18px;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .portfolio-item-modern:hover .portfolio-link-modern {
   gap: 1rem;
-  transform: translateX(4px);
+  transform: translateX(4px) translateZ(0);
+  will-change: transform;
 }
 
 .portfolio-item-modern:hover .portfolio-link-modern svg {
-  transform: translateX(8px);
+  transform: translateX(8px) translateZ(0);
+  will-change: transform;
 }
 
 /* ============================================
@@ -2030,18 +2069,23 @@ section {
   border: 2px solid var(--color-light-20);
   padding: 0;
   cursor: pointer;
-  transition: all 0.5s var(--ease-out-expo);
+  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
 }
 
 .case-study-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-8px) translateZ(0);
   border-color: var(--color-light);
   box-shadow: 
     0 20px 60px rgba(5, 10, 31, 0.4),
     0 0 40px rgba(180, 232, 201, 0.2);
+  will-change: transform;
 }
 
 .case-study-image {
@@ -2052,6 +2096,7 @@ section {
   background: var(--bg-primary);
   aspect-ratio: 3 / 2;
   min-height: 280px;
+  contain: layout style paint;
 }
 
 .case-study-thumb {
@@ -2059,8 +2104,12 @@ section {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: transform 0.8s var(--ease-out-expo);
+  transition: transform 0.4s var(--ease-out-expo);
   display: block;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  contain: layout style paint;
 }
 
 .case-study-overlay {
@@ -2072,7 +2121,8 @@ section {
 }
 
 .case-study-card:hover .case-study-thumb {
-  transform: scale(1.15);
+  transform: scale(1.1) translateZ(0);
+  will-change: transform;
 }
 
 .case-study-card:hover .case-study-overlay {
@@ -2155,7 +2205,8 @@ section {
 }
 
 .case-study-card:hover .case-study-link svg {
-  transform: translateX(6px);
+  transform: translateX(6px) translateZ(0);
+  will-change: transform;
 }
 
 @media (max-width: 1024px) {
@@ -2331,15 +2382,18 @@ section {
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(5, 10, 31, 0.3);
-  aspect-ratio: 4 / 3;
+  display: block;
+  background: var(--bg-primary);
+  width: 100%;
+  min-height: 300px;
 }
 
 .portfolio-modal-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+  height: auto;
   display: block;
+  object-fit: contain;
+  object-position: center;
 }
 
 .portfolio-modal-header-content {
@@ -2544,7 +2598,7 @@ section {
   }
 
   .portfolio-modal-image-wrapper {
-    max-height: 300px;
+    width: 100%;
   }
 }
 
@@ -4037,7 +4091,7 @@ section {
   border: 1px solid var(--color-light-10);
   border-radius: var(--radius-lg);
   padding: 2rem;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   flex: 0 0 calc(33.333% - 1.33rem);
   min-width: 0;
@@ -4048,15 +4102,19 @@ section {
   box-shadow: 
     0 4px 20px rgba(8, 18, 44, 0.1),
     0 0 0 1px rgba(185, 234, 209, 0.1);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
 }
 
 .testimonial-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-8px) scale(1.02) translateZ(0);
   border-color: var(--color-light-30);
   box-shadow: 
     0 8px 30px rgba(8, 18, 44, 0.2),
     0 0 40px rgba(185, 234, 209, 0.15),
     0 0 0 1px rgba(185, 234, 209, 0.2);
+  will-change: transform;
 }
 
 .testimonial-card::before {
@@ -4172,7 +4230,8 @@ section {
 
 .testimonial-card:hover .testimonial-image {
   border-color: var(--color-light-40);
-  transform: scale(1.05);
+  transform: scale(1.05) translateZ(0);
+  will-change: transform;
 }
 
 .testimonial-img {

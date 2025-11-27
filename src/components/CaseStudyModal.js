@@ -28,7 +28,7 @@ const CaseStudyModal = () => {
       deliverables: ['T-Shirt Design', 'Brand Guidelines', 'Color Specifications', 'Print Specifications']
     },
     'andegna-wood-metal': {
-      image: '/assets/Portfolio/Andegna-b3d5f6c0.webp',
+      image: '/assets/Portfolio/Office Signage For Andegna Furniture.webp',
       category: 'Corporate',
       title: 'Office Signage Design - Andegna Wood And Metal Works',
       description: 'Professional signage design including office wall graphics, roll-up banner displays, and environmental graphics for impactful corporate communication. This comprehensive signage system creates a cohesive brand experience throughout the office environment.',
@@ -50,7 +50,7 @@ const CaseStudyModal = () => {
       deliverables: ['Office Wall Graphics', 'Roll-up Banners', 'Environmental Graphics', 'Signage Guidelines']
     },
     'swan-clothing': {
-      image: '/assets/Portfolio/swan-clothing-208aede7.webp',
+      image: '/assets/Portfolio/Full brand identity for swan clothing.webp',
       category: 'Fashion',
       title: 'Brand Identity - Swan Clothing',
       description: 'Complete brand identity package including logo design, product packaging mockups, and comprehensive brand guidelines for a modern fashion brand. This project established a strong visual identity that resonates with the target audience and sets the brand apart in the competitive fashion market.',
@@ -116,7 +116,7 @@ const CaseStudyModal = () => {
       deliverables: ['Logo Design', 'Stationery Design', 'Business Cards', 'Letterheads', 'Brand Guidelines']
     },
     'alta': {
-      image: '/assets/Portfolio/Alta-145bd5fa.webp',
+      image: '/assets/Portfolio/Full brand identity for Alta Counseling.webp',
       category: 'Healthcare',
       title: 'Company Logo Rebranding - Alta Counseling',
       description: 'Complete company logo rebranding including full stationery design, roll-up banners, and website banner. Comprehensive brand identity overhaul with modern design elements and cohesive visual system for a healthcare counseling service.',

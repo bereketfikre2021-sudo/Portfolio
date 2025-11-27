@@ -6,7 +6,7 @@ const BlogModal = () => {
 
   const blogData = {
     'finix': {
-      image: '/assets/Portfolio/Finix-e442443e.webp',
+      image: '/assets/Portfolio/Website Banner For Finix Bet.webp',
       category: 'Digital Marketing',
       title: 'Finix Web Asset Collection',
       description: 'Comprehensive web asset collection including website banners, digital marketing materials, and promotional graphics for engaging online presence. This project showcases the importance of cohesive digital assets in building a strong online brand presence.',
@@ -40,7 +40,7 @@ const BlogModal = () => {
       ]
     },
     'medavail': {
-      image: '/assets/Portfolio/Medavail-0d27baad.webp',
+      image: '/assets/Portfolio/Office Signage Medavail-.webp',
       category: 'Healthcare',
       title: 'Company Logo Rebranding - Medavail Pharmaceuticals',
       description: 'Complete company logo rebranding including office signage, stationery design, and social media templates. Comprehensive brand identity transformation with modern design elements and cohesive visual system for pharmaceutical company.',
@@ -74,7 +74,7 @@ const BlogModal = () => {
       ]
     },
     'niqat-menu': {
-      image: '/assets/Portfolio/Niqat-Menu-6b07a3f4.webp',
+      image: '/assets/Portfolio/Menu & Broshure for niqat coffee.webp',
       category: 'Cafe',
       title: 'Cafe Menu & Brochure Design - Niqat Coffee',
       description: 'Complete cafe menu design including trifold layout and modern typography. Professional menu design that enhances customer experience with elegant print presentation and clear visual hierarchy.',

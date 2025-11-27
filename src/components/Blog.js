@@ -7,21 +7,21 @@ const Blog = () => {
   const blogPosts = [
     {
       id: 'finix',
-      image: '/assets/Portfolio/Finix-e442443e.webp',
+      image: '/assets/Portfolio/Website Banner For Finix Bet.webp',
       category: 'Web Design · Digital Marketing',
       title: 'Finix Web Asset Collection',
       description: 'Comprehensive web asset collection including website banners, digital marketing materials, and promotional graphics for engaging online presence.'
     },
     {
       id: 'medavail',
-      image: '/assets/Portfolio/Medavail-0d27baad.webp',
+      image: '/assets/Portfolio/Office Signage Medavail-.webp',
       category: 'Brand Identity · Corporate Rebranding',
       title: 'Company Logo Rebranding - Medavail Pharmaceuticals',
       description: 'Complete company logo rebranding including office signage, stationery design, and social media templates.'
     },
     {
       id: 'niqat-menu',
-      image: '/assets/Portfolio/Niqat-Menu-6b07a3f4.webp',
+      image: '/assets/Portfolio/Menu & Broshure for niqat coffee.webp',
       category: 'Menu Design · Print Design',
       title: 'Cafe Menu & Brochure Design - Niqat Coffee',
       description: 'Complete cafe menu design including trifold layout and modern typography.'

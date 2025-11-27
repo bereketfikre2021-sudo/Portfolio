@@ -7,7 +7,7 @@ const CaseStudies = () => {
   const caseStudies = [
     {
       id: 'swan-clothing',
-      image: '/assets/Portfolio/swan-clothing-208aede7.webp',
+      image: '/assets/Portfolio/Full brand identity for swan clothing.webp',
       category: 'Brand Identity · Fashion',
       title: 'Brand Identity - Swan Clothing',
       description: 'Complete brand identity package including logo design, product packaging mockups, and comprehensive brand guidelines for a modern fashion brand.'
