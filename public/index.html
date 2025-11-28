@@ -91,8 +91,8 @@
     
     <!-- Preload critical resources for LCP - highest priority -->
     <!-- Hero image is the LCP element - load immediately, in parallel with other resources -->
-    <link rel="preload" href="%PUBLIC_URL%/assets/Bereket-Fikre-1.webp" as="image" type="image/webp" fetchpriority="high" crossorigin="anonymous">
-    <link rel="preload" href="%PUBLIC_URL%/assets/Logo.svg" as="image" type="image/svg+xml" fetchpriority="high" crossorigin="anonymous">
+    <link rel="preload" href="%PUBLIC_URL%/assets/Bereket-Fikre-1.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="%PUBLIC_URL%/assets/Logo.svg" as="image" type="image/svg+xml" fetchpriority="high">
     
     <!-- Prefetch next likely resources - lower priority, don't block LCP or critical chain -->
     <link rel="prefetch" href="%PUBLIC_URL%/assets/Bereket-Fikre-2.webp" as="image" type="image/webp">

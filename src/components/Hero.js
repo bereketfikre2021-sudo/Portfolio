@@ -105,7 +105,7 @@ const Hero = () => {
                 width="800" 
                 height="1000" 
                 loading="eager" 
-                fetchPriority="high"
+                fetchpriority="high"
                 decoding="async"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                 srcSet={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp 800w, ${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp 1600w`}

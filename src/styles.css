@@ -2105,8 +2105,8 @@ section {
 .case-study-thumb {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: top;
+  object-fit: cover;
+  object-position: center;
   transition: transform 0.4s var(--ease-out-expo);
   display: block;
   will-change: transform;
@@ -2217,6 +2217,11 @@ section {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
+
+  .case-study-image {
+    height: 260px;
+    min-height: 260px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -2227,6 +2232,7 @@ section {
 
   .case-study-image {
     height: 240px;
+    min-height: 240px;
   }
 
   .case-study-content {

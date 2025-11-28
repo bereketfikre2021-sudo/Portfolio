@@ -147,7 +147,7 @@ const Navigation = () => {
               height="48"
               decoding="async"
               sizes="150px"
-              fetchPriority="high"
+              fetchpriority="high"
             />
           </a>
         </div>
