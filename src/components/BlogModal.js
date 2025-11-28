@@ -5,140 +5,118 @@ const BlogModal = () => {
   const { blogModal, closeBlogModal } = useContext(ModalContext);
 
   const blogData = {
-    'finix': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet.webp',
-      category: 'Digital Marketing',
-      title: 'Finix Web Asset Collection',
-      description: 'Comprehensive web asset collection including website banners, digital marketing materials, and promotional graphics for engaging online presence. This project showcases the importance of cohesive digital assets in building a strong online brand presence.',
-      type: 'Web Design',
-      date: 'December 2024',
-      readTime: '5 min read',
+    'design-principles': {
+      image: '/assets/Portfolio/Design principles.webp',
+      category: 'Design Principles',
+      title: 'Essential Graphic Design Principles Every Designer Should Master',
+      description: 'Graphic design is built on fundamental principles that guide visual communication. These core concepts help designers create effective, aesthetically pleasing, and functional designs that communicate messages clearly and powerfully.',
+      date: 'January 2025',
       author: 'Bereket Fikre',
-      tags: ['Web Design', 'Digital Marketing', 'Brand Consistency', 'UI/UX'],
-      content: [
+      type: 'Design Education',
+      sections: [
         {
-          heading: 'The Challenge',
-          text: 'In today\'s digital landscape, having a cohesive collection of web assets is crucial for brand consistency. The challenge was creating a comprehensive set of digital marketing materials that work seamlessly across various platforms and devices while maintaining brand identity.'
+          heading: 'Balance: Creating Visual Stability',
+          text: 'Balance is the distribution of visual weight in a design. Whether symmetrical or asymmetrical, balance ensures that elements don\'t feel lopsided or overwhelming. Symmetrical balance creates formal, stable compositions, while asymmetrical balance uses contrast to create dynamic, engaging layouts that still feel harmonious.'
         },
         {
-          heading: 'The Solution',
-          text: 'I developed a comprehensive web asset collection that includes website banners, social media graphics, email templates, and promotional materials. Each asset was designed with scalability in mind, ensuring they work perfectly from mobile screens to large desktop displays. The color palette, typography, and visual style were carefully crafted to maintain brand consistency across all touchpoints.'
+          heading: 'Contrast: Making Elements Stand Out',
+          text: 'Contrast is one of the most powerful tools in a designer\'s toolkit. By using contrasting colors, sizes, shapes, or textures, designers can create visual hierarchy and draw attention to key elements. High contrast ensures readability and helps important information stand out, while subtle contrast can create depth and sophistication.'
         },
         {
-          heading: 'Key Features',
-          text: 'The collection includes responsive banner designs, social media templates optimized for different platforms, email marketing graphics, and promotional materials. Each asset follows a consistent design system while being optimized for its specific use case and platform requirements.'
+          heading: 'Hierarchy: Guiding the Eye',
+          text: 'Visual hierarchy determines the order in which the human eye perceives information. Through size, color, spacing, and positioning, designers guide viewers through content in a logical sequence. Effective hierarchy ensures that the most important information is noticed first, creating a clear path for the viewer\'s attention.'
         },
         {
-          heading: 'The Impact',
-          text: 'This cohesive asset collection has significantly improved brand recognition and consistency across all digital channels. The unified visual language helps build trust and recognition, making the brand more memorable and professional in the digital space.'
+          heading: 'Alignment: Creating Order',
+          text: 'Alignment creates visual connections between elements, making designs appear organized and cohesive. Proper alignment creates a clean, professional look and helps establish relationships between different parts of a design. Consistent alignment throughout a project creates unity and makes content easier to scan and understand.'
+        },
+        {
+          heading: 'Repetition: Building Consistency',
+          text: 'Repetition strengthens designs by creating consistency and unity. Repeating visual elements like colors, fonts, shapes, or patterns creates rhythm and helps establish brand identity. Consistent repetition makes designs feel cohesive and professional, while strategic variation keeps them interesting and dynamic.'
         }
       ],
       insights: [
-        'Consistent branding across all digital platforms increases brand recognition by up to 80%',
-        'Well-designed web assets can improve user engagement and conversion rates',
-        'A cohesive design system saves time and ensures brand consistency across all marketing materials'
+        'Mastering these principles is the foundation of great design',
+        'Balance and contrast work together to create visual interest',
+        'Hierarchy is essential for effective communication',
+        'Consistent alignment creates professional, polished designs',
+        'Repetition builds brand recognition and visual consistency'
       ]
     },
-    'medavail': {
-      image: '/assets/Portfolio/Office Signage Medavail-.webp',
-      category: 'Healthcare',
-      title: 'Company Logo Rebranding - Medavail Pharmaceuticals',
-      description: 'Complete company logo rebranding including office signage, stationery design, and social media templates. Comprehensive brand identity transformation with modern design elements and cohesive visual system for pharmaceutical company.',
-      type: 'Brand Identity',
-      date: 'November 2024',
-      readTime: '6 min read',
+    'design-trends-2025': {
+      image: '/assets/Portfolio/Graphic Design Trends 2025.webp',
+      category: 'Design Trends',
+      title: 'Graphic Design Trends 2025: What\'s Shaping the Future',
+      description: 'The graphic design landscape continues to evolve, with 2025 bringing fresh perspectives on visual communication. From bold typography to sustainable design practices, these trends reflect our changing world and the ways designers are responding to new challenges and opportunities.',
+      date: 'January 2025',
       author: 'Bereket Fikre',
-      tags: ['Healthcare', 'Rebranding', 'Corporate Identity', 'Brand Strategy'],
-      content: [
+      type: 'Trend Analysis',
+      sections: [
         {
-          heading: 'The Challenge',
-          text: 'Rebranding a pharmaceutical company requires careful consideration of trust, professionalism, and modern healthcare aesthetics. The challenge was transforming the brand identity while maintaining the credibility and trust that patients and healthcare professionals expect.'
+          heading: 'Bold Typography and Expressive Letterforms',
+          text: '2025 sees a return to bold, expressive typography that makes a statement. Designers are embracing custom letterforms, oversized text, and typography as the primary visual element. This trend reflects a desire for authenticity and personality in brand communication, moving away from safe, generic type choices toward more distinctive and memorable typographic solutions.'
         },
         {
-          heading: 'The Approach',
-          text: 'I conducted extensive research into healthcare branding best practices and worked closely with the client to understand their values and goals. The new identity needed to reflect innovation in healthcare while maintaining a professional, trustworthy appearance that resonates with both medical professionals and patients.'
+          heading: 'Sustainable and Eco-Conscious Design',
+          text: 'Environmental awareness is driving design decisions, with brands prioritizing sustainable materials, minimal packaging, and eco-friendly production methods. Designers are creating visuals that communicate environmental values while maintaining aesthetic appeal. This includes using earth tones, natural textures, and imagery that connects brands to sustainability narratives.'
         },
         {
-          heading: 'Design Elements',
-          text: 'The rebranding included a new logo design that conveys trust and innovation, a comprehensive color palette that reflects healthcare professionalism, updated typography for better readability, and a complete visual identity system applied across all touchpoints including stationery, signage, and digital platforms.'
+          heading: 'Nostalgic Retro Aesthetics',
+          text: 'Nostalgia continues to influence design, with 90s and early 2000s aesthetics making a comeback. This includes vibrant color palettes, pixel art, and design elements that evoke memories of earlier digital eras. However, modern designers are reinterpreting these styles with contemporary sensibilities, creating fresh takes on familiar visual languages.'
         },
         {
-          heading: 'The Result',
-          text: 'The new brand identity successfully modernized the company\'s image while maintaining its credibility. The cohesive visual system has been well-received by both internal stakeholders and external audiences, positioning the company as a forward-thinking yet trustworthy healthcare provider.'
+          heading: 'Minimalism with Purpose',
+          text: 'While minimalism remains popular, 2025 sees a shift toward purposeful minimalism—designs that are clean and simple but with intentional, meaningful elements. Every element serves a function, and white space is used strategically to create focus and breathing room. This approach values clarity and user experience over decorative elements.'
+        },
+        {
+          heading: 'Dynamic Motion and Animation',
+          text: 'As digital platforms continue to dominate, motion design becomes increasingly important. Subtle animations, micro-interactions, and dynamic graphics help brands stand out in crowded digital spaces. Motion adds personality and engagement, making static designs feel alive and responsive to user interaction.'
         }
       ],
       insights: [
-        'Healthcare branding must balance innovation with trust and professionalism',
-        'A well-executed rebrand can improve brand perception and market positioning',
-        'Consistent application of brand identity across all touchpoints is crucial for success'
+        'Typography is becoming the hero element in many designs',
+        'Sustainability is no longer optional—it\'s essential',
+        'Nostalgia creates emotional connections with audiences',
+        'Purposeful minimalism focuses on clarity and function',
+        'Motion design adds personality and engagement to digital experiences'
       ]
     },
-    'niqat-menu': {
-      image: '/assets/Portfolio/Menu & Broshure for niqat coffee.webp',
-      category: 'Cafe',
-      title: 'Cafe Menu & Brochure Design - Niqat Coffee',
-      description: 'Complete cafe menu design including trifold layout and modern typography. Professional menu design that enhances customer experience with elegant print presentation and clear visual hierarchy.',
-      type: 'Print Design',
-      date: 'October 2024',
-      readTime: '4 min read',
+    'brand-identity': {
+      image: '/assets/Portfolio/Branding.webp',
+      category: 'Brand Design',
+      title: 'Building Strong Brand Identities: A Complete Guide',
+      description: 'A strong brand identity is the foundation of successful businesses. It goes beyond logos and colors to create a cohesive visual system that communicates your brand\'s values, personality, and promise. Learn how to build memorable brand identities that resonate with audiences and stand the test of time.',
+      date: 'January 2025',
       author: 'Bereket Fikre',
-      tags: ['Menu Design', 'Print Design', 'Typography', 'Branding'],
-      content: [
+      type: 'Brand Strategy',
+      sections: [
         {
-          heading: 'The Challenge',
-          text: 'Menu design is an art form that combines functionality with aesthetics. The challenge was creating a menu that not only presents information clearly but also enhances the dining experience and reflects the cafe\'s brand personality.'
+          heading: 'Understanding Brand Identity vs. Brand Image',
+          text: 'Brand identity is what you create—the visual and verbal elements that represent your brand, including logos, colors, typography, and messaging. Brand image is how audiences perceive your brand based on their experiences. A successful brand identity aligns these two, ensuring that what you communicate matches how you\'re perceived. This alignment builds trust and creates lasting connections with your audience.'
         },
         {
-          heading: 'Design Philosophy',
-          text: 'I focused on creating a menu that is both beautiful and functional. The design features clear typography for easy reading, logical organization of items, and visual appeal that matches the cafe\'s atmosphere. The trifold layout allows for easy navigation while maximizing the use of space.'
+          heading: 'The Core Elements of Brand Identity',
+          text: 'Every strong brand identity consists of essential elements working together: the logo serves as the visual anchor, typography establishes voice and personality, color palette evokes emotions and associations, imagery style creates visual consistency, and brand voice communicates your unique perspective. These elements must work harmoniously across all touchpoints to create a unified brand experience that audiences recognize and remember.'
         },
         {
-          heading: 'Typography & Layout',
-          text: 'The typography was carefully selected to ensure readability while maintaining elegance. The layout follows a clear hierarchy, making it easy for customers to find what they\'re looking for. Strategic use of white space and visual elements creates an inviting and professional appearance.'
+          heading: 'Research and Strategy: The Foundation',
+          text: 'Before designing, thorough research is essential. Understand your target audience, analyze competitors, define your brand\'s unique value proposition, and clarify your brand personality. This strategic foundation ensures that every design decision serves a purpose and connects with your intended audience. Without strategy, even beautiful designs can miss the mark and fail to communicate effectively.'
         },
         {
-          heading: 'The Impact',
-          text: 'The new menu design has enhanced the customer experience and reflects the cafe\'s commitment to quality. The professional presentation has also helped position the cafe as a premium destination, potentially influencing customer perception and ordering behavior.'
+          heading: 'Creating Visual Consistency',
+          text: 'Consistency is key to building brand recognition. Develop comprehensive brand guidelines that document logo usage, color specifications, typography rules, spacing guidelines, and application examples. These guidelines ensure that your brand looks cohesive whether it appears on a business card, website, or billboard. Consistent application builds trust and makes your brand instantly recognizable across all platforms and touchpoints.'
+        },
+        {
+          heading: 'Adapting Across Media and Platforms',
+          text: 'Modern brands exist across multiple platforms—from print materials to digital interfaces, social media to physical spaces. A flexible brand identity adapts to different contexts while maintaining core visual elements. This might mean creating logo variations for different sizes, adapting color palettes for digital vs. print, or developing platform-specific guidelines. The goal is maintaining brand recognition while optimizing for each medium\'s unique requirements and constraints.'
         }
       ],
       insights: [
-        'Well-designed menus can influence customer ordering decisions and increase sales',
-        'Typography and layout play crucial roles in menu readability and user experience',
-        'A menu that reflects the brand personality enhances the overall customer experience'
-      ]
-    },
-    'rollup-banners': {
-      image: '/assets/Portfolio/Rollup-Banners-68a13cab.webp',
-      category: 'Events',
-      title: 'Rollup Banners for Different Companies',
-      description: 'Professional rollup banner designs for various companies, featuring modern layouts, compelling visuals, and brand-consistent messaging. High-quality print-ready designs that effectively communicate company information and enhance brand visibility at events and exhibitions.',
-      type: 'Event Marketing',
-      date: 'September 2024',
-      readTime: '5 min read',
-      author: 'Bereket Fikre',
-      tags: ['Banner Design', 'Event Marketing', 'Print Design', 'Branding'],
-      content: [
-        {
-          heading: 'The Challenge',
-          text: 'Rollup banners are essential marketing tools for events, exhibitions, and trade shows. The challenge was creating effective banner designs that capture attention, communicate key messages clearly, and represent each company\'s brand accurately in a competitive event environment.'
-        },
-        {
-          heading: 'Design Strategy',
-          text: 'Each banner was designed with the specific event context, target audience, and key messaging in mind. The designs balance visual impact with clear information delivery, ensuring that the banners are both eye-catching and informative. I worked closely with each client to understand their goals and brand requirements.'
-        },
-        {
-          heading: 'Key Design Principles',
-          text: 'The banners feature bold typography for readability from a distance, strategic use of color to capture attention, clear visual hierarchy to guide the eye, and brand-consistent messaging. Each design was optimized for print quality and visibility in various lighting conditions.'
-        },
-        {
-          heading: 'The Results',
-          text: 'These professional banner designs have helped companies stand out at events and effectively communicate their messages. The cohesive branding and professional appearance have contributed to increased brand visibility and engagement at trade shows and exhibitions.'
-        }
-      ],
-      insights: [
-        'Effective banner design requires understanding the event context and target audience',
-        'Bold typography and clear visual hierarchy are essential for event banners',
-        'Well-designed banners can significantly increase brand visibility and engagement at events'
+        'Brand identity is what you create; brand image is how you\'re perceived',
+        'Strategic research ensures design decisions serve a clear purpose',
+        'Visual consistency builds recognition and trust over time',
+        'Comprehensive brand guidelines maintain quality across all applications',
+        'Flexible brand systems adapt to different media while staying consistent'
       ]
     }
   };
@@ -175,44 +153,37 @@ const BlogModal = () => {
 
   return (
     <div 
-      className={`blog-modal ${blogModal.isOpen ? 'active' : ''}`}
+      className={`case-study-modal ${blogModal.isOpen ? 'active' : ''}`}
       role="dialog"
       aria-labelledby="blogModalTitle"
       aria-modal="true"
     >
       <div className="modal-overlay" onClick={closeBlogModal}></div>
-      <div className="blog-modal-container" onClick={(e) => e.stopPropagation()}>
-        <button className="blog-modal-close" aria-label="Close modal" onClick={closeBlogModal}>
+      <div className="case-study-modal-container" onClick={(e) => e.stopPropagation()}>
+        <button className="case-study-modal-close" aria-label="Close modal" onClick={closeBlogModal}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
-        <div className="blog-modal-content">
-          <div className="blog-modal-header">
-            <div className="blog-modal-image-wrapper">
+        <div className="case-study-modal-content">
+          <div className="case-study-modal-header">
+            <div className="case-study-modal-image-wrapper">
               <img 
                 id="blogModalImage"
                 src={`${process.env.PUBLIC_URL || ''}${post.image}`} 
                 alt={`${post.title} - ${post.category} blog post by Bereket Fikre. ${post.description}`} 
-                className="blog-modal-image"
+                className="case-study-modal-image"
                 loading="lazy"
                 decoding="async"
                 sizes="(max-width: 768px) 100vw, 90vw"
               />
             </div>
-            <div className="blog-modal-header-content">
-              <span id="blogModalCategory" className="blog-modal-category">{post.category}</span>
-              <h2 id="blogModalTitle" className="blog-modal-title">{post.title}</h2>
-              <div className="blog-modal-meta">
-                <div className="blog-meta-item">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 6v6l4 2"/>
-                  </svg>
-                  <span>{post.readTime}</span>
-                </div>
-                <div className="blog-meta-item">
+            <div className="case-study-modal-header-content">
+              <span id="blogModalCategory" className="case-study-modal-category">{post.category}</span>
+              <h2 id="blogModalTitle" className="case-study-modal-title">{post.title}</h2>
+              <div className="case-study-modal-meta">
+                <div className="case-study-meta-item">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <rect x="3" y="4" width="18" height="18" rx="2"/>
                     <line x1="16" y1="2" x2="16" y2="6"/>
@@ -221,49 +192,55 @@ const BlogModal = () => {
                   </svg>
                   <span>{post.date}</span>
                 </div>
-                <div className="blog-meta-item">
+                <div className="case-study-meta-item">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                     <circle cx="12" cy="7" r="4"/>
                   </svg>
                   <span>{post.author}</span>
                 </div>
-              </div>
-              {post.tags && (
-                <div className="blog-modal-tags">
-                  {post.tags.map((tag, index) => (
-                    <span key={index} className="blog-modal-tag">{tag}</span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="blog-modal-body">
-            <div className="blog-modal-intro">
-              <p className="blog-modal-description">{post.description}</p>
-            </div>
-            {post.content && post.content.length > 0 && (
-              <div className="blog-modal-article">
-                {post.content.map((section, index) => (
-                  <div key={index} className="blog-article-section">
-                    <h3 className="blog-section-heading">{section.heading}</h3>
-                    <p className="blog-section-text">{section.text}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-            {post.insights && post.insights.length > 0 && (
-              <div className="blog-modal-insights">
-                <h3 className="blog-insights-title">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="case-study-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                     <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
                   </svg>
+                  <span>{post.type}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="case-study-modal-body">
+            <div className="case-study-modal-intro">
+              <p className="case-study-modal-description">{post.description}</p>
+            </div>
+            <div className="case-study-modal-article">
+              {post.sections.map((section, index) => (
+                <div key={index} className="case-study-article-section">
+                  <div className="case-study-section-header">
+                    <div className="case-study-section-icon solution-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                      </svg>
+                    </div>
+                    <h3 className="case-study-section-heading">{section.heading}</h3>
+                  </div>
+                  <p className="case-study-section-text">{section.text}</p>
+                </div>
+              ))}
+            </div>
+            {post.insights && post.insights.length > 0 && (
+              <div className="case-study-modal-deliverables">
+                <h3 className="case-study-deliverables-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 11l3 3L22 4"/>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                  </svg>
                   Key Insights
                 </h3>
-                <ul className="blog-insights-list">
+                <ul className="case-study-deliverables-list">
                   {post.insights.map((insight, index) => (
-                    <li key={index} className="blog-insight-item">
+                    <li key={index} className="case-study-deliverable-item">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <polyline points="20 6 9 17 4 12"/>
                       </svg>

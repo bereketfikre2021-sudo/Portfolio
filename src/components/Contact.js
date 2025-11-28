@@ -94,7 +94,7 @@ const Contact = () => {
     <section id="contact" className="contact">
       <div className="container">
         <div className="section-intro">
-          <span className="section-number">09</span>
+          <span className="section-number">08</span>
           <div className="section-header">
             <span className="section-label">Get in Touch</span>
             <h2 className="section-title">

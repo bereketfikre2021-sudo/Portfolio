@@ -14,14 +14,12 @@ const CustomCursor = lazy(() => import('./components/CustomCursor'));
 import ScrollToTop from './components/ScrollToTop';
 // Lazy load modals - they're not needed until user interaction
 const PortfolioModal = lazy(() => import('./components/PortfolioModal'));
-const CaseStudyModal = lazy(() => import('./components/CaseStudyModal'));
 const BlogModal = lazy(() => import('./components/BlogModal'));
 const ServicesModal = lazy(() => import('./components/ServicesModal'));
 const FormModals = lazy(() => import('./components/FormModals'));
 const PrivacyTermsModal = lazy(() => import('./components/PrivacyTermsModal'));
 
 // Lazy load below-the-fold components to reduce initial bundle size and improve performance
-const CaseStudies = lazy(() => import('./components/CaseStudies'));
 const Blog = lazy(() => import('./components/Blog'));
 const Testimonials = lazy(() => import('./components/Testimonials'));
 const TrustedBy = lazy(() => import('./components/TrustedBy'));
@@ -80,7 +78,6 @@ function App() {
             <Services />
             <Portfolio />
             <Suspense fallback={LoadingFallback()}>
-              <CaseStudies />
               <Blog />
               <Testimonials />
               <TrustedBy />
@@ -93,7 +90,6 @@ function App() {
           <ScrollToTop />
           <Suspense fallback={null}>
             <PortfolioModal />
-            <CaseStudyModal />
             <BlogModal />
             <ServicesModal />
             <FormModals />

@@ -6,7 +6,6 @@ export const ModalProvider = ({ children }) => {
   const [portfolioModal, setPortfolioModal] = useState({ isOpen: false, projectId: null });
   const [serviceModal, setServiceModal] = useState({ isOpen: false, serviceId: null });
   const [formModal, setFormModal] = useState({ type: null, message: null });
-  const [caseStudyModal, setCaseStudyModal] = useState({ isOpen: false, caseStudyId: null });
   const [blogModal, setBlogModal] = useState({ isOpen: false, blogId: null });
   const [privacyTermsModal, setPrivacyTermsModal] = useState({ isOpen: false, type: null });
 
@@ -40,16 +39,6 @@ export const ModalProvider = ({ children }) => {
     document.body.style.overflow = '';
   };
 
-  const openCaseStudyModal = (caseStudyId) => {
-    setCaseStudyModal({ isOpen: true, caseStudyId });
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeCaseStudyModal = () => {
-    setCaseStudyModal({ isOpen: false, caseStudyId: null });
-    document.body.style.overflow = '';
-  };
-
   const openBlogModal = (blogId) => {
     setBlogModal({ isOpen: true, blogId });
     document.body.style.overflow = 'hidden';
@@ -59,6 +48,7 @@ export const ModalProvider = ({ children }) => {
     setBlogModal({ isOpen: false, blogId: null });
     document.body.style.overflow = '';
   };
+
 
   const openPrivacyTermsModal = (type) => {
     setPrivacyTermsModal({ isOpen: true, type });
@@ -82,9 +72,6 @@ export const ModalProvider = ({ children }) => {
         formModal,
         showFormModal,
         closeFormModal,
-        caseStudyModal,
-        openCaseStudyModal,
-        closeCaseStudyModal,
         blogModal,
         openBlogModal,
         closeBlogModal,

@@ -170,7 +170,7 @@ const Testimonials = () => {
     <section id="testimonials" className="testimonials">
       <div className="container">
         <div className="section-intro">
-          <span className="section-number">06</span>
+          <span className="section-number">05</span>
           <div className="section-header">
             <span className="section-label">Client Feedback</span>
             <h2 className="section-title">

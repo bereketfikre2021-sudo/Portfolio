@@ -46,7 +46,7 @@ const FAQ = () => {
     <section id="faq" className="faq">
       <div className="container">
         <div className="section-intro">
-          <span className="section-number">08</span>
+          <span className="section-number">07</span>
           <div className="section-header">
             <span className="section-label">Common Questions</span>
             <h2 className="section-title">

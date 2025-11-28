@@ -124,7 +124,6 @@ const Navigation = () => {
       hasDropdown: true,
       dropdownItems: [
         { href: '#portfolio', label: 'Featured Works', section: 'portfolio' },
-        { href: '#case-studies', label: 'Case Studies', section: 'case-studies' },
         { href: '#blog', label: 'Blog', section: 'blog' }
       ]
     },
@@ -164,7 +163,7 @@ const Navigation = () => {
                   <>
                     <a 
                       href={link.href} 
-                      className={`nav-link ${activeSection === link.section || activeSection === 'case-studies' || activeSection === 'blog' ? 'active' : ''}`}
+                      className={`nav-link ${activeSection === link.section || activeSection === 'blog' ? 'active' : ''}`}
                       onClick={(e) => {
                         e.preventDefault();
                         setPortfolioDropdownOpen(!portfolioDropdownOpen);
