@@ -3,9 +3,39 @@ import { useCounterAnimation } from '../hooks/useCounterAnimation';
 
 const Hero = () => {
   const statsRef = useRef(null);
+  const heroRef = useRef(null);
   const [projectsCount] = useCounterAnimation(50, statsRef);
   const [clientsCount] = useCounterAnimation(30, statsRef);
   const [yearsCount] = useCounterAnimation(5, statsRef);
+
+  // Parallax effect for hero section
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!heroRef.current) return;
+      const scrolled = window.pageYOffset;
+      const hero = heroRef.current;
+      const heroContent = hero.querySelector('.hero-content');
+      const heroImage = hero.querySelector('.hero-image-container');
+      const heroBlobs = hero.querySelectorAll('.hero-blob');
+
+      if (heroContent) {
+        heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+        heroContent.style.opacity = 1 - scrolled / 600;
+      }
+
+      if (heroImage) {
+        heroImage.style.transform = `translateY(${scrolled * 0.5}px)`;
+      }
+
+      heroBlobs.forEach((blob, index) => {
+        const speed = 0.2 + (index * 0.1);
+        blob.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.05}deg)`;
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleNavClick = (e, href) => {
     e.preventDefault();
@@ -24,7 +54,7 @@ const Hero = () => {
   };
 
   return (
-    <section id="home" className="hero">
+    <section id="home" className="hero" ref={heroRef}>
       <div className="hero-background">
         <div className="hero-gradient-overlay"></div>
         <div className="hero-blob blob-1"></div>
@@ -90,7 +120,7 @@ const Hero = () => {
         </div>
         
         <div className="hero-right">
-          <div className="hero-image-container">
+          <div className="hero-image-container" data-parallax="true">
             <div className="image-frame">
               <div className="frame-corner frame-corner-tl"></div>
               <div className="frame-corner frame-corner-tr"></div>

@@ -1,9 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
 const Portfolio = () => {
   const { openPortfolioModal } = useContext(ModalContext);
   const [activeFilter, setActiveFilter] = useState('branding');
+  const [hoveredProject, setHoveredProject] = useState(null);
+  const [previewPosition, setPreviewPosition] = useState({ x: 0, y: 0 });
+  const previewRef = useRef(null);
 
   const services = [
     { id: 'branding', label: 'Branding' },
@@ -585,6 +588,24 @@ const Portfolio = () => {
               data-aos="fade-up"
               data-aos-delay={index % 6 * 50}
               onClick={() => openPortfolioModal(project.id)}
+              onMouseEnter={(e) => {
+                setHoveredProject(project.id);
+                const rect = e.currentTarget.getBoundingClientRect();
+                setPreviewPosition({
+                  x: rect.left + rect.width / 2,
+                  y: rect.top
+                });
+              }}
+              onMouseMove={(e) => {
+                if (hoveredProject === project.id) {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setPreviewPosition({
+                    x: e.clientX,
+                    y: rect.top - 20
+                  });
+                }
+              }}
+              onMouseLeave={() => setHoveredProject(null)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
@@ -604,6 +625,27 @@ const Portfolio = () => {
                   decoding="async"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
+                {hoveredProject === project.id && (
+                  <div 
+                    className="portfolio-hover-preview"
+                    ref={previewRef}
+                    style={{
+                      left: `${previewPosition.x}px`,
+                      top: `${previewPosition.y}px`,
+                      transform: 'translate(-50%, -100%)'
+                    }}
+                  >
+                    <img 
+                      src={`${process.env.PUBLIC_URL || ''}${project.image}`} 
+                      alt={`${project.title} preview`}
+                      loading="eager"
+                    />
+                    <div className="preview-content">
+                      <span className="preview-category">{project.category}</span>
+                      <h4 className="preview-title">{project.title}</h4>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="portfolio-content">
                 <span className="portfolio-category-modern">{project.category}</span>

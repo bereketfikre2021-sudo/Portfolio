@@ -7037,3 +7037,405 @@ html {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+/* ============================================
+   LIGHTBOX GALLERY
+   ============================================ */
+.lightbox-gallery {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.lightbox-gallery[aria-modal="true"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 10, 31, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(180, 232, 201, 0.1);
+  border: 2px solid rgba(180, 232, 201, 0.3);
+  color: var(--color-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.lightbox-close:hover {
+  background: rgba(180, 232, 201, 0.2);
+  border-color: var(--color-light);
+  transform: rotate(90deg);
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(180, 232, 201, 0.1);
+  border: 2px solid rgba(180, 232, 201, 0.3);
+  color: var(--color-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.lightbox-prev {
+  left: 2rem;
+}
+
+.lightbox-next {
+  right: 2rem;
+}
+
+.lightbox-nav:hover {
+  background: rgba(180, 232, 201, 0.2);
+  border-color: var(--color-light);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-content {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  z-index: 5;
+}
+
+.lightbox-image-wrapper {
+  width: 100%;
+  max-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-image {
+  width: 100%;
+  height: auto;
+  max-height: 75vh;
+  object-fit: contain;
+  display: block;
+}
+
+.lightbox-counter {
+  color: var(--color-light);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+}
+
+.lightbox-thumbnails {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.lightbox-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: rgba(180, 232, 201, 0.1);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  flex-shrink: 0;
+}
+
+.lightbox-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lightbox-thumb.active {
+  border-color: var(--color-light);
+  box-shadow: 0 0 20px rgba(180, 232, 201, 0.4);
+}
+
+.lightbox-thumb:hover {
+  transform: scale(1.1);
+  border-color: rgba(180, 232, 201, 0.5);
+}
+
+/* ============================================
+   PORTFOLIO HOVER PREVIEW
+   ============================================ */
+.portfolio-hover-preview {
+  position: fixed;
+  width: 400px;
+  max-width: 90vw;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -100%) scale(0.9);
+  transition: all 0.3s var(--ease-out-expo);
+  animation: previewFadeIn 0.3s var(--ease-out-expo) forwards;
+}
+
+@keyframes previewFadeIn {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
+
+.portfolio-hover-preview img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(180, 232, 201, 0.3);
+}
+
+.preview-content {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(5, 10, 31, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(180, 232, 201, 0.2);
+}
+
+.preview-category {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-light);
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-sans);
+}
+
+.preview-title {
+  font-size: 1rem;
+  color: var(--color-light);
+  font-weight: 600;
+  margin: 0;
+  font-family: var(--font-sans);
+}
+
+/* ============================================
+   IMAGE ZOOM HINT
+   ============================================ */
+.portfolio-modal-image-wrapper {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.portfolio-modal-image-wrapper:hover {
+  transform: scale(1.02);
+}
+
+.image-zoom-hint {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(5, 10, 31, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(180, 232, 201, 0.3);
+  border-radius: var(--radius-full);
+  color: var(--color-light);
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s var(--ease-out-expo);
+  pointer-events: none;
+  font-family: var(--font-sans);
+}
+
+.portfolio-modal-image-wrapper:hover .image-zoom-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.image-zoom-hint svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ============================================
+   ENHANCED MICRO-INTERACTIONS
+   ============================================ */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(180, 232, 201, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s var(--ease-out-expo), height 0.6s var(--ease-out-expo);
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.service-card-modern,
+.portfolio-item-modern {
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.service-card-modern:active,
+.portfolio-item-modern:active {
+  transform: scale(0.98) translateY(-4px);
+}
+
+/* Enhanced card hover with 3D effect */
+.portfolio-item-modern:hover {
+  transform: translateY(-8px) translateZ(0) rotateX(2deg);
+}
+
+.service-card-modern:hover {
+  transform: translateY(-6px) translateZ(0) rotateX(1deg);
+}
+
+/* ============================================
+   PARALLAX EFFECTS
+   ============================================ */
+.hero-content {
+  transition: transform 0.1s ease-out, opacity 0.3s ease-out;
+}
+
+.hero-image-container[data-parallax="true"] {
+  transition: transform 0.1s ease-out;
+}
+
+.hero-blob {
+  transition: transform 0.1s ease-out;
+}
+
+/* ============================================
+   ENHANCED SCROLL ANIMATIONS
+   ============================================ */
+[data-aos] {
+  transition-property: opacity, transform;
+}
+
+[data-aos].aos-animate {
+  transition-duration: 0.8s;
+  transition-timing-function: var(--ease-out-expo);
+}
+
+/* Stagger animations for grid items */
+.portfolio-grid-modern [data-aos] {
+  transition-delay: calc(var(--aos-delay, 0) * 1ms);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 768px) {
+  .portfolio-hover-preview {
+    display: none;
+  }
+
+  .lightbox-close,
+  .lightbox-nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .lightbox-prev {
+    left: 1rem;
+  }
+
+  .lightbox-next {
+    right: 1rem;
+  }
+
+  .lightbox-thumbnails {
+    gap: 0.5rem;
+  }
+
+  .lightbox-thumb {
+    width: 60px;
+    height: 60px;
+  }
+
+  .image-zoom-hint {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .image-zoom-hint span {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-content,
+  .hero-image-container[data-parallax="true"],
+  .hero-blob,
+  .portfolio-hover-preview {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .lightbox-gallery,
+  .lightbox-image,
+  .lightbox-nav {
+    transition: none !important;
+  }
+}

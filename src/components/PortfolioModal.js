@@ -1,8 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ModalContext } from '../context/ModalContext';
+import LightboxGallery from './LightboxGallery';
 
 const PortfolioModal = () => {
   const { portfolioModal, closePortfolioModal } = useContext(ModalContext);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState([]);
 
   const projectData = {
     'andegna-tshirt': {
@@ -1466,7 +1469,14 @@ const PortfolioModal = () => {
         </button>
         <div className="portfolio-modal-content">
           <div className="portfolio-modal-header">
-            <div className="portfolio-modal-image-wrapper">
+            <div 
+              className="portfolio-modal-image-wrapper"
+              onClick={() => {
+                const images = [{ src: `${process.env.PUBLIC_URL || ''}${project.image}`, alt: project.title }];
+                setLightboxImages(images);
+                setLightboxOpen(true);
+              }}
+            >
               <img 
                 id="portfolioModalImage"
                 src={`${process.env.PUBLIC_URL || ''}${project.image}`} 
@@ -1476,6 +1486,15 @@ const PortfolioModal = () => {
                 decoding="async"
                 sizes="(max-width: 768px) 100vw, 90vw"
               />
+              <div className="image-zoom-hint">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                  <line x1="11" y1="8" x2="11" y2="14"/>
+                  <line x1="8" y1="11" x2="14" y2="11"/>
+                </svg>
+                <span>Click to view full size</span>
+              </div>
             </div>
             <div className="portfolio-modal-header-content">
               <span id="portfolioModalCategory" className="portfolio-modal-category">{project.category}</span>
@@ -1582,6 +1601,15 @@ const PortfolioModal = () => {
           </div>
         </div>
       </div>
+      {portfolioModal?.projectId && (
+        <LightboxGallery
+          images={lightboxImages}
+          currentIndex={0}
+          isOpen={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+          projectTitle={projectData[portfolioModal.projectId]?.title}
+        />
+      )}
     </div>
   );
 };
