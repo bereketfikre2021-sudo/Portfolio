@@ -549,7 +549,7 @@ const Portfolio = () => {
   return (
     <section id="portfolio" className="portfolio">
       <div className="container">
-        <div className="section-intro">
+        <div className="section-intro" data-aos="fade-up">
           <span className="section-number">03</span>
           <div className="section-header">
             <span className="section-label">Selected Work</span>
@@ -575,13 +575,15 @@ const Portfolio = () => {
         </div>
         
         <div className="portfolio-grid-modern" role="list">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, index) => (
             <article 
               key={project.id} 
               className="portfolio-item-modern" 
               data-project={project.id}
               role="listitem"
               tabIndex={0}
+              data-aos="fade-up"
+              data-aos-delay={index % 6 * 50}
               onClick={() => openPortfolioModal(project.id)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {

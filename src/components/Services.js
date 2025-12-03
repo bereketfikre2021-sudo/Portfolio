@@ -62,7 +62,7 @@ const Services = () => {
   return (
     <section id="services" className="services">
       <div className="container">
-        <div className="section-intro">
+        <div className="section-intro" data-aos="fade-up">
           <span className="section-number">02</span>
           <div className="section-header">
             <span className="section-label">What I Do</span>
@@ -74,8 +74,8 @@ const Services = () => {
         </div>
         
         <div className="services-grid-modern">
-          {services.map((service) => (
-            <article key={service.id} className="service-card-modern" data-service={service.id}>
+          {services.map((service, index) => (
+            <article key={service.id} className="service-card-modern" data-service={service.id} data-aos="fade-up" data-aos-delay={index * 100}>
               <div className="service-card-header">
                 <div className="service-number">{service.number}</div>
                 <div className="service-icon-wrapper">

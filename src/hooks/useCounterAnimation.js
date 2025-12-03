@@ -4,13 +4,19 @@ export const useCounterAnimation = (target, containerRef) => {
   const [count, setCount] = useState(0);
   const hasAnimated = useRef(false);
   const rafId = useRef(null);
-  const timeoutId = useRef(null);
+  const observerRef = useRef(null);
   const lastDisplayedValue = useRef(0);
+  const isAnimating = useRef(false);
 
   useEffect(() => {
-    if (hasAnimated.current) return;
+    // Prevent re-animation if already animated
+    if (hasAnimated.current || isAnimating.current) return;
 
     const startAnimation = () => {
+      // Prevent multiple simultaneous animations
+      if (isAnimating.current) return;
+      isAnimating.current = true;
+      
       const duration = 2000; // 2 seconds
       const startTime = performance.now();
       
@@ -23,9 +29,11 @@ export const useCounterAnimation = (target, containerRef) => {
         const currentValue = Math.floor(eased * target);
         
         // Only update if the integer value has changed to prevent glitching
-        if (currentValue !== lastDisplayedValue.current && currentValue <= target) {
-          lastDisplayedValue.current = currentValue;
-          setCount(currentValue);
+        if (currentValue !== lastDisplayedValue.current) {
+          // Clamp value to ensure it never exceeds target
+          const clampedValue = Math.min(currentValue, target);
+          lastDisplayedValue.current = clampedValue;
+          setCount(clampedValue);
         }
         
         // Continue or finish
@@ -37,22 +45,28 @@ export const useCounterAnimation = (target, containerRef) => {
             lastDisplayedValue.current = target;
             setCount(target);
           }
+          isAnimating.current = false;
           rafId.current = null;
         }
       };
       
+      // Reset to 0 before starting
+      lastDisplayedValue.current = 0;
+      setCount(0);
+      
       rafId.current = requestAnimationFrame(animate);
     };
 
-    const observer = new IntersectionObserver(
+    observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimated.current) {
+          if (entry.isIntersecting && !hasAnimated.current && !isAnimating.current) {
             hasAnimated.current = true;
-            observer.disconnect();
+            if (observerRef.current) {
+              observerRef.current.disconnect();
+            }
             
-            // Start animation immediately using requestAnimationFrame - no delay
-            // This ensures animation starts as soon as element is visible
+            // Start animation immediately using requestAnimationFrame
             requestAnimationFrame(() => {
               startAnimation();
             });
@@ -62,20 +76,23 @@ export const useCounterAnimation = (target, containerRef) => {
       { threshold: 0.2, rootMargin: '0px' }
     );
 
-    if (containerRef?.current) {
-      observer.observe(containerRef.current);
+    const container = containerRef?.current;
+    if (container && observerRef.current) {
+      observerRef.current.observe(container);
     }
 
     return () => {
-      observer.disconnect();
-      if (timeoutId.current) {
-        clearTimeout(timeoutId.current);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
       }
       if (rafId.current) {
         cancelAnimationFrame(rafId.current);
+        rafId.current = null;
       }
+      isAnimating.current = false;
     };
-  }, [containerRef, target]);
+  }, [target]); // Removed containerRef from dependencies - refs are stable
 
   return [count];
 };

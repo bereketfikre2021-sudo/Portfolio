@@ -62,12 +62,12 @@ const Hero = () => {
               <div className="btn-shine"></div>
             </a>
             <a 
-              href="#contact" 
+              href="tel:+251923988838" 
               className="btn btn-outline" 
-              onClick={(e) => handleNavClick(e, '#contact')}
-              aria-label="Let's talk about your project"
+              aria-label="Call me to discuss your project"
             >
               <span className="btn-text">Let's Talk</span>
+              <span className="btn-arrow" aria-hidden="true">→</span>
             </a>
           </div>
           

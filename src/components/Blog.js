@@ -10,7 +10,7 @@ const Blog = () => {
       image: '/assets/Portfolio/Design principles.webp',
       category: 'Design Principles · Fundamentals',
       title: 'Essential Graphic Design Principles Every Designer Should Master',
-      description: 'Explore the fundamental principles of graphic design including balance, contrast, hierarchy, and alignment. Learn how these core concepts form the foundation of effective visual communication.'
+      description: 'Explore the 7 fundamental principles of graphic design including balance, contrast, hierarchy, alignment, repetition, proportion, and movement. Learn how these core concepts form the foundation of effective visual communication.'
     },
     {
       id: 'design-trends-2025',
@@ -31,7 +31,7 @@ const Blog = () => {
   return (
     <section id="blog" className="case-studies">
       <div className="container">
-        <div className="section-intro">
+        <div className="section-intro" data-aos="fade-up">
           <span className="section-number">04</span>
           <div className="section-header">
             <span className="section-label">Design Insights</span>
@@ -43,11 +43,13 @@ const Blog = () => {
         </div>
         
         <div className="case-studies-grid">
-          {blogPosts.map((post) => (
+          {blogPosts.map((post, index) => (
             <article 
               key={post.id} 
               className="case-study-card" 
               data-project={post.id}
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
               onClick={() => openBlogModal(post.id)}
             >
               <div className="case-study-image">

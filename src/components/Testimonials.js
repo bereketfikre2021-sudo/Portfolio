@@ -169,7 +169,7 @@ const Testimonials = () => {
   return (
     <section id="testimonials" className="testimonials">
       <div className="container">
-        <div className="section-intro">
+        <div className="section-intro" data-aos="fade-up">
           <span className="section-number">05</span>
           <div className="section-header">
             <span className="section-label">Client Feedback</span>

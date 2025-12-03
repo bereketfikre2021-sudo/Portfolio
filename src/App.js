@@ -1,4 +1,6 @@
 import React, { lazy, Suspense, useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import { ModalProvider } from './context/ModalContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import Navigation from './components/Navigation';
@@ -12,12 +14,14 @@ const ScrollPattern = lazy(() => import('./components/ScrollPattern'));
 const ParticleCanvas = lazy(() => import('./components/ParticleCanvas'));
 const CustomCursor = lazy(() => import('./components/CustomCursor'));
 import ScrollToTop from './components/ScrollToTop';
+import FloatingQuoteButton from './components/FloatingQuoteButton';
 // Lazy load modals - they're not needed until user interaction
 const PortfolioModal = lazy(() => import('./components/PortfolioModal'));
 const BlogModal = lazy(() => import('./components/BlogModal'));
 const ServicesModal = lazy(() => import('./components/ServicesModal'));
 const FormModals = lazy(() => import('./components/FormModals'));
 const PrivacyTermsModal = lazy(() => import('./components/PrivacyTermsModal'));
+const ProjectRequestModal = lazy(() => import('./components/ProjectRequestModal'));
 
 // Lazy load below-the-fold components to reduce initial bundle size and improve performance
 const Blog = lazy(() => import('./components/Blog'));
@@ -32,6 +36,17 @@ const BottomNav = lazy(() => import('./components/BottomNav'));
 const LoadingFallback = () => null;
 
 function App() {
+  // Initialize AOS (Animate On Scroll)
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 100,
+      disable: window.innerWidth <= 768 ? 'mobile' : false,
+    });
+  }, []);
+
   // Performance optimization: Register service worker (images already preloaded in index.html)
   useEffect(() => {
     // Register service worker for PWA (if available) - deferred to not block initial render
@@ -88,12 +103,14 @@ function App() {
             </Suspense>
           </main>
           <ScrollToTop />
+          <FloatingQuoteButton />
           <Suspense fallback={null}>
             <PortfolioModal />
             <BlogModal />
             <ServicesModal />
             <FormModals />
             <PrivacyTermsModal />
+            <ProjectRequestModal />
           </Suspense>
         </div>
       </ModalProvider>

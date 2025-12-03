@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
 const Contact = () => {
-  const { showFormModal } = useContext(ModalContext);
+  const { showFormModal, openProjectRequestModal } = useContext(ModalContext);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -93,7 +93,7 @@ const Contact = () => {
   return (
     <section id="contact" className="contact">
       <div className="container">
-        <div className="section-intro">
+        <div className="section-intro" data-aos="fade-up">
           <span className="section-number">08</span>
           <div className="section-header">
             <span className="section-label">Get in Touch</span>
@@ -105,6 +105,29 @@ const Contact = () => {
         </div>
         
         <p className="contact-subtitle">Share your vision and let's bring it to life together</p>
+        
+        <div className="contact-quote-cta" data-aos="fade-up" data-aos-delay="100">
+          <div className="contact-quote-content">
+            <div className="contact-quote-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <div className="contact-quote-text">
+              <h3>Need a Detailed Quote?</h3>
+              <p>Get a comprehensive project estimate with our quote request form</p>
+            </div>
+            <button 
+              className="btn btn-outline"
+              onClick={openProjectRequestModal}
+              aria-label="Request a project quote"
+            >
+              <span>Get Quote</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
         
         <div className="contact-content-wrapper">
           <div className="contact-form-wrapper">
