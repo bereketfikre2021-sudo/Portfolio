@@ -1,82 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useCounterAnimation } from '../hooks/useCounterAnimation';
+import React, { useRef } from 'react';
+import { useTextTypingAnimation } from '../hooks/useTextTypingAnimation';
 
 const Hero = () => {
-  const statsRef = useRef(null);
-  const heroRef = useRef(null);
-  const [projectsCount] = useCounterAnimation(50, statsRef);
-  const [clientsCount] = useCounterAnimation(30, statsRef);
-  const [yearsCount] = useCounterAnimation(5, statsRef);
-
-  // Enhanced parallax effect for hero section
-  useEffect(() => {
-    let ticking = false;
-    
-    const handleScroll = () => {
-      if (!heroRef.current || ticking) return;
-      
-      ticking = true;
-      requestAnimationFrame(() => {
-        if (!heroRef.current) {
-          ticking = false;
-          return;
-        }
-        
-        const scrolled = window.pageYOffset;
-        const hero = heroRef.current;
-        const heroContent = hero.querySelector('.hero-content');
-        const heroImage = hero.querySelector('.hero-image-container');
-        const heroBlobs = hero.querySelectorAll('.hero-blob');
-        const heroLeft = hero.querySelector('.hero-left');
-        const heroRight = hero.querySelector('.hero-right');
-
-        // Hero content - slower parallax for depth
-        if (heroContent) {
-          const contentY = scrolled * 0.25;
-          heroContent.style.transform = `translateY(${contentY}px)`;
-        }
-
-        // Left side (text content) - subtle movement
-        if (heroLeft) {
-          const leftY = scrolled * 0.2;
-          const leftX = scrolled * 0.05;
-          heroLeft.style.transform = `translate(${leftX}px, ${leftY}px)`;
-        }
-
-        // Right side (image) - faster parallax for foreground effect
-        if (heroRight) {
-          const rightY = scrolled * 0.4;
-          const rightX = scrolled * -0.03;
-          heroRight.style.transform = `translate(${rightX}px, ${rightY}px)`;
-        }
-
-        // Hero image - enhanced parallax with scale
-        if (heroImage) {
-          const imageY = scrolled * 0.6;
-          const imageScale = 1 + (scrolled * 0.0001);
-          heroImage.style.transform = `translateY(${imageY}px) scale(${Math.min(imageScale, 1.05)})`;
-        }
-
-        // Background blobs - varied speeds for layered depth
-        heroBlobs.forEach((blob, index) => {
-          const baseSpeed = 0.15 + (index * 0.08);
-          const rotationSpeed = 0.03 + (index * 0.02);
-          const horizontalOffset = (index % 2 === 0 ? 1 : -1) * scrolled * 0.02;
-          
-          blob.style.transform = `
-            translate(${horizontalOffset}px, ${scrolled * baseSpeed}px) 
-            rotate(${scrolled * rotationSpeed}deg)
-            scale(${1 + (scrolled * 0.00005)})
-          `;
-        });
-
-        ticking = false;
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const titleRef = useRef(null);
+  
+  // Typing animation for hero title
+  const [firstWord, isFirstTyping] = useTextTypingAnimation('Creating', 300, 60);
+  const [secondWord, isSecondTyping] = useTextTypingAnimation('Extraordinary', 1200, 60);
+  const [thirdWord, isThirdTyping] = useTextTypingAnimation('Experiences', 2200, 60);
 
   const handleNavClick = (e, href) => {
     e.preventDefault();
@@ -95,7 +26,7 @@ const Hero = () => {
   };
 
   return (
-    <section id="home" className="hero" ref={heroRef}>
+    <section id="home" className="hero">
       <div className="hero-background">
         <div className="hero-gradient-overlay"></div>
         <div className="hero-blob blob-1"></div>
@@ -110,10 +41,19 @@ const Hero = () => {
             <span className="badge-text">Available for Projects</span>
           </div>
           
-          <h1 className="hero-title">
-            <span className="title-word" data-word="Creating">Creating</span>
-            <span className="title-word" data-word="Extraordinary">Extraordinary</span>
-            <span className="title-word highlight" data-word="Experiences">Experiences</span>
+          <h1 className="hero-title" ref={titleRef}>
+            <span className="title-word" data-word="Creating">
+              {firstWord}
+              {isFirstTyping && <span className="typing-cursor">|</span>}
+            </span>
+            <span className="title-word" data-word="Extraordinary">
+              {secondWord}
+              {isSecondTyping && <span className="typing-cursor">|</span>}
+            </span>
+            <span className="title-word highlight" data-word="Experiences">
+              {thirdWord}
+              {isThirdTyping && <span className="typing-cursor">|</span>}
+            </span>
           </h1>
           
           <div className="hero-subtitle">
@@ -142,26 +82,26 @@ const Hero = () => {
             </a>
           </div>
           
-          <div className="hero-stats" ref={statsRef}>
+          <div className="hero-stats">
             <div className="stat-box">
-              <span className="stat-number" data-target="50">{projectsCount}+</span>
+              <span className="stat-number" data-target="50">50+</span>
               <span className="stat-label">Projects</span>
             </div>
             <div className="stat-divider"></div>
             <div className="stat-box">
-              <span className="stat-number" data-target="30">{clientsCount}+</span>
+              <span className="stat-number" data-target="30">30+</span>
               <span className="stat-label">Clients</span>
             </div>
             <div className="stat-divider"></div>
             <div className="stat-box">
-              <span className="stat-number" data-target="5">{yearsCount}+</span>
+              <span className="stat-number" data-target="5">5+</span>
               <span className="stat-label">Years</span>
             </div>
           </div>
         </div>
         
         <div className="hero-right">
-          <div className="hero-image-container" data-parallax="true">
+          <div className="hero-image-container">
             <div className="image-frame">
               <div className="frame-corner frame-corner-tl"></div>
               <div className="frame-corner frame-corner-tr"></div>

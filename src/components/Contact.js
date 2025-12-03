@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
 const Contact = () => {
@@ -11,6 +11,83 @@ const Contact = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Ensure Contact section is visible on mobile and desktop when AOS is disabled or not working
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    
+    const ensureVisibility = () => {
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        const aosElements = contactSection.querySelectorAll('[data-aos]');
+        aosElements.forEach((el) => {
+          el.style.opacity = '1';
+          el.style.visibility = 'visible';
+          el.style.transform = 'none';
+          el.style.pointerEvents = 'auto';
+        });
+        
+        // Also ensure section-intro and other elements are visible
+        const sectionIntro = contactSection.querySelector('.section-intro');
+        if (sectionIntro) {
+          sectionIntro.style.opacity = '1';
+          sectionIntro.style.visibility = 'visible';
+          sectionIntro.style.display = 'flex';
+        }
+        
+        // Ensure form and content wrapper are visible
+        const contentWrapper = contactSection.querySelector('.contact-content-wrapper');
+        if (contentWrapper) {
+          contentWrapper.style.opacity = '1';
+          contentWrapper.style.visibility = 'visible';
+          contentWrapper.style.display = 'grid';
+        }
+      }
+    };
+    
+    if (isMobile) {
+      // Force visibility on mobile immediately
+      ensureVisibility();
+      return;
+    }
+    
+    // Desktop: Try AOS first, but ensure visibility as fallback
+    const refreshAOS = () => {
+      if (window.AOS) {
+        window.AOS.refresh();
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+          const rect = contactSection.getBoundingClientRect();
+          const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+          
+          if (isInViewport) {
+            const aosElements = contactSection.querySelectorAll('[data-aos]');
+            aosElements.forEach((el) => {
+              if (window.AOS) {
+                window.AOS.animate(el);
+              }
+            });
+          }
+        }
+      }
+    };
+    
+    // Try AOS first
+    refreshAOS();
+    const timer1 = setTimeout(refreshAOS, 100);
+    const timer2 = setTimeout(refreshAOS, 300);
+    
+    // Fallback: ensure visibility after a delay if AOS doesn't work
+    const fallbackTimer = setTimeout(() => {
+      ensureVisibility();
+    }, 2000);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(fallbackTimer);
+    };
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -105,29 +182,6 @@ const Contact = () => {
         </div>
         
         <p className="contact-subtitle">Share your vision and let's bring it to life together</p>
-        
-        <div className="contact-quote-cta" data-aos="fade-up" data-aos-delay="100">
-          <div className="contact-quote-content">
-            <div className="contact-quote-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-              </svg>
-            </div>
-            <div className="contact-quote-text">
-              <h3>Need a Detailed Quote?</h3>
-              <p>Get a comprehensive project estimate with our quote request form</p>
-            </div>
-            <button 
-              className="btn btn-outline"
-              onClick={openProjectRequestModal}
-              aria-label="Request a project quote"
-            >
-              <span>Get Quote</span>
-              <span aria-hidden="true">→</span>
-            </button>
-          </div>
-        </div>
         
         <div className="contact-content-wrapper">
           <div className="contact-form-wrapper">

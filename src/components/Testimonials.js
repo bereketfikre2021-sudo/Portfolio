@@ -8,6 +8,25 @@ const Testimonials = () => {
   const touchEndX = useRef(0);
   const autoPlayInterval = useRef(null);
 
+  // Ensure testimonials section is visible on mobile when AOS is disabled
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      // Force visibility on mobile
+      const testimonialsSection = document.getElementById('testimonials');
+      if (testimonialsSection) {
+        const aosElements = testimonialsSection.querySelectorAll('[data-aos]');
+        aosElements.forEach((el) => {
+          el.style.opacity = '1';
+          el.style.visibility = 'visible';
+          el.style.transform = 'none';
+          el.style.pointerEvents = 'auto';
+        });
+      }
+    }
+  }, []);
+
   const testimonials = [
     {
       name: 'Abenezer Alemayehu',

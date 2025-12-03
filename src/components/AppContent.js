@@ -66,6 +66,41 @@ function AppContent() {
       offset: 100,
       disable: window.innerWidth <= 768 ? 'mobile' : false,
     });
+    
+    // Refresh AOS when lazy-loaded components mount
+    const refreshAOS = () => {
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          AOS.refresh();
+        }, 200);
+      });
+    };
+    
+    // Refresh AOS after initial load
+    refreshAOS();
+    
+    // Also refresh on window load to catch any late-loading elements
+    window.addEventListener('load', refreshAOS);
+    
+    // Use MutationObserver to refresh AOS when new elements are added
+    const observer = new MutationObserver(() => {
+      refreshAOS();
+    });
+    
+    // Observe the main content area for changes
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      observer.observe(mainContent, {
+        childList: true,
+        subtree: true
+      });
+    }
+    
+    return () => {
+      window.removeEventListener('load', refreshAOS);
+      observer.disconnect();
+    };
   }, []);
 
   // Keyboard shortcuts

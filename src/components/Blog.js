@@ -13,14 +13,72 @@ const Blog = () => {
 
   // Refresh AOS after component mounts to ensure animations work
   useEffect(() => {
-    // Small delay to ensure AOS is initialized
-    const timer = setTimeout(() => {
+    // On mobile, ensure elements are visible immediately since AOS is disabled
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      // Force visibility on mobile
+      const blogSection = document.getElementById('blog');
+      if (blogSection) {
+        const aosElements = blogSection.querySelectorAll('[data-aos]');
+        aosElements.forEach((el) => {
+          el.style.opacity = '1';
+          el.style.visibility = 'visible';
+          el.style.transform = 'none';
+          el.style.pointerEvents = 'auto';
+        });
+      }
+      return;
+    }
+    
+    // Desktop: Use AOS animations
+    const refreshAOS = () => {
       if (window.AOS) {
         window.AOS.refresh();
+        // Also check if blog section is in viewport and trigger animations
+        const blogSection = document.getElementById('blog');
+        if (blogSection) {
+          const rect = blogSection.getBoundingClientRect();
+          const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+          
+          if (isInViewport) {
+            // If section is already visible, trigger AOS animations immediately
+            const aosElements = blogSection.querySelectorAll('[data-aos]');
+            aosElements.forEach((el) => {
+              if (window.AOS) {
+                window.AOS.animate(el);
+              }
+            });
+          }
+        }
       }
-    }, 100);
+    };
     
-    return () => clearTimeout(timer);
+    // Immediate refresh
+    refreshAOS();
+    
+    // Refresh after a short delay
+    const timer1 = setTimeout(refreshAOS, 100);
+    
+    // Refresh after DOM is fully ready
+    const timer2 = setTimeout(refreshAOS, 300);
+    
+    // Also refresh on next frame
+    requestAnimationFrame(() => {
+      setTimeout(refreshAOS, 50);
+    });
+    
+    // Refresh on scroll to catch any missed elements
+    const handleScroll = () => {
+      refreshAOS();
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true, once: true });
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const blogPosts = [

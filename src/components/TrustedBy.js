@@ -1,6 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const TrustedBy = () => {
+  // Ensure TrustedBy section is visible on mobile when AOS is disabled
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      // Force visibility on mobile
+      const trustedBySection = document.getElementById('trusted-by');
+      if (trustedBySection) {
+        const aosElements = trustedBySection.querySelectorAll('[data-aos]');
+        aosElements.forEach((el) => {
+          el.style.opacity = '1';
+          el.style.visibility = 'visible';
+          el.style.transform = 'none';
+          el.style.pointerEvents = 'auto';
+        });
+        
+        // Also ensure section-intro is visible
+        const sectionIntro = trustedBySection.querySelector('.section-intro');
+        if (sectionIntro) {
+          sectionIntro.style.opacity = '1';
+          sectionIntro.style.visibility = 'visible';
+          sectionIntro.style.display = 'flex';
+        }
+      }
+    }
+  }, []);
   const companies = [
     { name: 'Andegna', logo: '/assets/Trusted By/Andegna-Logo-Outline-7565946d.webp', url: 'https://andegnafurniture.com/' },
     { name: 'Gedylaw', logo: '/assets/Trusted By/Gedylaw-53a5feb2.webp', url: 'https://gedy-law.com/welcome' },

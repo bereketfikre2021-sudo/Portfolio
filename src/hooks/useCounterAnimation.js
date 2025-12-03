@@ -14,8 +14,9 @@ export const useCounterAnimation = (target, containerRef) => {
 
     const startAnimation = () => {
       // Prevent multiple simultaneous animations
-      if (isAnimating.current) return;
+      if (isAnimating.current || hasAnimated.current) return;
       isAnimating.current = true;
+      hasAnimated.current = true;
       
       const duration = 2000; // 2 seconds
       const startTime = performance.now();
@@ -57,29 +58,54 @@ export const useCounterAnimation = (target, containerRef) => {
       rafId.current = requestAnimationFrame(animate);
     };
 
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimated.current && !isAnimating.current) {
-            hasAnimated.current = true;
-            if (observerRef.current) {
-              observerRef.current.disconnect();
-            }
-            
-            // Start animation immediately using requestAnimationFrame
-            requestAnimationFrame(() => {
-              startAnimation();
-            });
-          }
-        });
-      },
-      { threshold: 0.2, rootMargin: '0px' }
-    );
+    // Check if element is visible on mount (for hero section which is always visible)
+    const checkAndStart = () => {
+      const container = containerRef?.current;
+      if (!container) {
+        // If container not ready, try again after a short delay
+        setTimeout(checkAndStart, 100);
+        return;
+      }
 
-    const container = containerRef?.current;
-    if (container && observerRef.current) {
-      observerRef.current.observe(container);
-    }
+      const rect = container.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (isVisible) {
+        // Element is visible, start animation after a delay
+        setTimeout(() => {
+          startAnimation();
+        }, 1000);
+      } else {
+        // Element not visible, use IntersectionObserver
+        observerRef.current = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && !hasAnimated.current && !isAnimating.current) {
+                hasAnimated.current = true;
+                if (observerRef.current) {
+                  observerRef.current.disconnect();
+                }
+                
+                // Start animation immediately using requestAnimationFrame
+                requestAnimationFrame(() => {
+                  startAnimation();
+                });
+              }
+            });
+          },
+          { threshold: 0.2, rootMargin: '0px' }
+        );
+
+        if (observerRef.current) {
+          observerRef.current.observe(container);
+        }
+      }
+    };
+
+    // Check visibility after component mounts
+    requestAnimationFrame(() => {
+      checkAndStart();
+    });
 
     return () => {
       if (observerRef.current) {

@@ -873,20 +873,9 @@ body:hover .cursor-follower {
 
 .title-word {
   display: block;
-  opacity: 0;
-  transform: translateY(50px);
-  animation: wordReveal 1s var(--ease-out-expo) forwards;
-}
-
-.title-word:nth-child(1) { animation-delay: 0.2s; }
-.title-word:nth-child(2) { animation-delay: 0.4s; }
-.title-word:nth-child(3) { animation-delay: 0.6s; }
-
-@keyframes wordReveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  opacity: 1;
+  transform: translateY(0);
+  min-height: 1.2em; /* Prevent layout shift during typing */
 }
 
 .title-word.highlight {
@@ -915,6 +904,13 @@ body:hover .cursor-follower {
 @keyframes underlineGrow {
   to {
     transform: scaleX(1);
+  }
+}
+
+@keyframes wordReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -1012,8 +1008,6 @@ body:hover .cursor-follower {
   gap: 2rem;
   padding-top: 2.5rem;
   border-top: 1px solid var(--color-dark-20);
-  opacity: 0;
-  animation: fadeInUp 1s var(--ease-out-expo) 1.2s forwards;
 }
 
 .stat-box {
@@ -1031,6 +1025,56 @@ body:hover .cursor-follower {
   background-clip: text;
   line-height: 1;
   margin-bottom: 0.5rem;
+  position: relative;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: wordReveal 1s var(--ease-out-expo) forwards;
+}
+
+/* Staggered delays for stat numbers */
+.stat-box:nth-child(1) .stat-number {
+  animation-delay: 0.2s;
+}
+
+.stat-box:nth-child(3) .stat-number {
+  animation-delay: 0.4s;
+}
+
+.stat-box:nth-child(5) .stat-number {
+  animation-delay: 0.6s;
+}
+
+.typing-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--color-dark);
+  font-weight: 300;
+  animation: blinkCursor 1s infinite;
+  -webkit-text-fill-color: var(--color-dark);
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+}
+
+/* Typing cursor for title words */
+.title-word .typing-cursor {
+  color: var(--text-on-light);
+  -webkit-text-fill-color: var(--text-on-light);
+}
+
+.title-word.highlight .typing-cursor {
+  color: var(--color-dark);
+  -webkit-text-fill-color: var(--color-dark);
+  opacity: 0.8;
+}
+
+@keyframes blinkCursor {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
 }
 
 .stat-label {
@@ -6668,6 +6712,293 @@ a, button, [role="button"], [tabindex="0"] {
   pointer-events: auto;
 }
 
+/* Ensure blog section content is visible - fallback if AOS doesn't work */
+#blog .case-studies-grid {
+  min-height: 400px;
+}
+
+/* Force visibility for blog cards after component loads */
+#blog .case-studies-grid [data-aos] {
+  min-height: 1px;
+}
+
+/* Fallback: show content if AOS hasn't animated after 2 seconds */
+@keyframes forceVisible {
+  to {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+}
+
+#blog .case-studies-grid [data-aos]:not(.aos-animate) {
+  animation: forceVisible 0.1s 2s forwards;
+}
+
+/* Mobile: Ensure blog section is always visible when AOS is disabled */
+@media (max-width: 768px) {
+  #blog [data-aos] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  
+  #blog .case-studies-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+  
+  #blog .case-study-card {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #blog .section-intro {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  /* Testimonials section: Ensure heading and number are visible on mobile */
+  #testimonials [data-aos] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  
+  #testimonials .section-intro {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #testimonials .section-number {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #testimonials .section-header {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #testimonials .section-title {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  /* TrustedBy section: Ensure heading and number are visible on mobile */
+  #trusted-by [data-aos] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  
+  #trusted-by .section-intro {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #trusted-by .section-number {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #trusted-by .section-header {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #trusted-by .section-title {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #trusted-by .trusted-by-grid {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #trusted-by .trusted-by-track {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  /* Contact section: Ensure all elements are visible on mobile */
+  #contact [data-aos] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  
+  #contact .section-intro {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #contact .section-number {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #contact .section-header {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #contact .section-title {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #contact .contact-content-wrapper {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: grid !important;
+  }
+  
+  #contact .contact-form-wrapper {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #contact .contact-info-wrapper {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #contact .contact-quote-cta {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #contact .contact-subtitle {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  /* About section: Ensure all elements are visible on mobile */
+  #about [data-aos] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  
+  #about .section-intro {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #about .about-grid {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: grid !important;
+  }
+  
+  /* Services section: Ensure all elements are visible on mobile */
+  #services [data-aos] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  
+  #services .section-intro {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #services .services-grid-modern {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: grid !important;
+  }
+  
+  /* Portfolio section: Ensure all elements are visible on mobile */
+  #portfolio [data-aos] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  
+  #portfolio .section-intro {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #portfolio .portfolio-grid-modern {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: grid !important;
+  }
+  
+  /* FAQ section: Ensure all elements are visible on mobile */
+  #faq .section-intro {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+  
+  #faq .faq-wrapper {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+  
+  #faq .faq-grid {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+}
+
+/* Desktop: Ensure Contact section is visible even if AOS fails */
+#contact [data-aos]:not(.aos-animate) {
+  animation: forceVisible 0.1s 2s forwards;
+}
+
+#contact .section-intro {
+  min-height: 1px;
+}
+
+#contact .contact-content-wrapper {
+  min-height: 400px;
+}
+
+/* General: Ensure Contact section elements are visible */
+#contact .contact-subtitle {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
@@ -7297,13 +7628,6 @@ html {
 /* ============================================
    PARALLAX EFFECTS
    ============================================ */
-.hero-content {
-  transition: transform 0.1s ease-out, opacity 0.3s ease-out;
-}
-
-.hero-image-container[data-parallax="true"] {
-  transition: transform 0.1s ease-out;
-}
 
 .hero-blob {
   transition: transform 0.1s ease-out;
@@ -7366,8 +7690,6 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-content,
-  .hero-image-container[data-parallax="true"],
   .hero-blob {
     transform: none !important;
     transition: none !important;
