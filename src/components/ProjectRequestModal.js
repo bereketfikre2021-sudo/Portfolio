@@ -249,16 +249,14 @@ const ProjectRequestModal = () => {
       ></div>
       <div 
         className="project-request-modal-content"
+        onClick={(e) => e.stopPropagation()}
         style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, #19183B 0%, #1a1a3d 100%)',
           borderRadius: '20px',
           width: '100%',
           maxWidth: '800px',
           maxHeight: '90vh',
           overflowY: 'auto',
-          boxShadow: '0 25px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(161, 194, 189, 0.2)',
-          border: '1px solid rgba(161, 194, 189, 0.3)',
           zIndex: 10001
         }}
       >
@@ -290,8 +288,8 @@ const ProjectRequestModal = () => {
           </svg>
         </button>
 
-        <div className="project-request-header" style={{ padding: '2.5rem 2.5rem 1.5rem', borderBottom: '1px solid rgba(161, 194, 189, 0.2)', background: 'linear-gradient(180deg, rgba(161, 194, 189, 0.05) 0%, transparent 100%)' }}>
-          <h2 id="project-request-title" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, color: '#E7F2EF', marginBottom: '0.75rem', fontFamily: 'Raleway, sans-serif', textShadow: '0 2px 10px rgba(231, 242, 239, 0.1)' }}>Request a Project Quote</h2>
+        <div className="project-request-header">
+          <h2 id="project-request-title">Request a Project Quote</h2>
           <p id="project-request-description" style={{ fontSize: '1rem', color: '#A1C2BD', opacity: 1, marginBottom: '2rem', fontWeight: 400 }}>Let's discuss your project and get you a detailed quote</p>
           
           <div className="project-request-progress-bar" style={{ marginTop: '1.5rem' }}>
@@ -335,7 +333,7 @@ const ProjectRequestModal = () => {
           </div>
         </div>
 
-        <form className="project-request-form-container" onSubmit={handleSubmit} style={{ padding: '2rem 2.5rem 2.5rem' }}>
+        <form className="project-request-form-container" onSubmit={handleSubmit}>
           {/* Step 1 */}
           {currentStep === 1 && (
             <div className="form-step-content" style={{ minHeight: '300px', padding: '0' }}>
@@ -351,7 +349,7 @@ const ProjectRequestModal = () => {
                     value={formData.first_name}
                     onChange={handleChange}
                     required
-                    style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.08)', border: '1px solid rgba(161, 194, 189, 0.4)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', transition: 'all 0.3s ease', fontWeight: 400 }}
+                    style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.06)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(161, 194, 189, 0.3)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', transition: 'all 0.3s ease', fontWeight: 400 }}
                   />
                 </div>
                 <div className="form-group" style={{ marginBottom: '1.5rem' }}>
@@ -362,7 +360,7 @@ const ProjectRequestModal = () => {
                     value={formData.last_name}
                     onChange={handleChange}
                     required
-                    style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.08)', border: '1px solid rgba(161, 194, 189, 0.4)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', transition: 'all 0.3s ease', fontWeight: 400 }}
+                    style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.06)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(161, 194, 189, 0.3)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', transition: 'all 0.3s ease', fontWeight: 400 }}
                   />
                 </div>
               </div>
@@ -379,27 +377,26 @@ const ProjectRequestModal = () => {
                 />
               </div>
 
-              <div className="form-row-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#A1C2BD', marginBottom: '0.75rem', fontFamily: 'Raleway, sans-serif', opacity: 1 }}>Phone Number</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.08)', border: '1px solid rgba(161, 194, 189, 0.4)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', transition: 'all 0.3s ease', fontWeight: 400 }}
-                  />
-                </div>
-                <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#A1C2BD', marginBottom: '0.75rem', fontFamily: 'Raleway, sans-serif', opacity: 1 }}>Company/Organization</label>
-                  <input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.08)', border: '1px solid rgba(161, 194, 189, 0.4)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', transition: 'all 0.3s ease', fontWeight: 400 }}
-                  />
-                </div>
+              <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#A1C2BD', marginBottom: '0.75rem', fontFamily: 'Raleway, sans-serif', opacity: 1 }}>Phone Number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.08)', border: '1px solid rgba(161, 194, 189, 0.4)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', transition: 'all 0.3s ease', fontWeight: 400 }}
+                />
+              </div>
+
+              <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#A1C2BD', marginBottom: '0.75rem', fontFamily: 'Raleway, sans-serif', opacity: 1 }}>Company/Organization</label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.08)', border: '1px solid rgba(161, 194, 189, 0.4)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', transition: 'all 0.3s ease', fontWeight: 400 }}
+                />
               </div>
 
               <div className="form-group" style={{ marginBottom: '1.5rem' }}>
@@ -437,15 +434,17 @@ const ProjectRequestModal = () => {
                       style={{
                         padding: '1rem 1.25rem',
                         borderRadius: '10px',
-                        border: `2px solid ${formData.service_needed === service.id ? '#A1C2BD' : 'rgba(161, 194, 189, 0.4)'}`,
-                        background: formData.service_needed === service.id ? '#A1C2BD' : 'rgba(231, 242, 239, 0.08)',
-                        color: formData.service_needed === service.id ? '#19183B' : '#A1C2BD',
+                        border: `2px solid ${formData.service_needed === service.id ? '#A1C2BD' : 'rgba(161, 194, 189, 0.3)'}`,
+                        background: formData.service_needed === service.id ? 'rgba(161, 194, 189, 0.25)' : 'rgba(231, 242, 239, 0.06)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        color: formData.service_needed === service.id ? '#E7F2EF' : '#A1C2BD',
                         fontWeight: 600,
                         fontSize: '0.9375rem',
                         cursor: 'pointer',
                         transition: 'all 0.3s ease',
                         fontFamily: 'Raleway, sans-serif',
-                        boxShadow: formData.service_needed === service.id ? '0 4px 12px rgba(161, 194, 189, 0.3)' : 'none'
+                        boxShadow: formData.service_needed === service.id ? '0 4px 12px rgba(161, 194, 189, 0.25)' : 'none'
                       }}
                     >
                       {service.label}
@@ -466,15 +465,17 @@ const ProjectRequestModal = () => {
                       style={{
                         padding: '1rem 1.25rem',
                         borderRadius: '10px',
-                        border: `2px solid ${formData.budget_range === budget.id ? '#A1C2BD' : 'rgba(161, 194, 189, 0.4)'}`,
-                        background: formData.budget_range === budget.id ? '#A1C2BD' : 'rgba(231, 242, 239, 0.08)',
-                        color: formData.budget_range === budget.id ? '#19183B' : '#A1C2BD',
+                        border: `2px solid ${formData.budget_range === budget.id ? '#A1C2BD' : 'rgba(161, 194, 189, 0.3)'}`,
+                        background: formData.budget_range === budget.id ? 'rgba(161, 194, 189, 0.25)' : 'rgba(231, 242, 239, 0.06)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        color: formData.budget_range === budget.id ? '#E7F2EF' : '#A1C2BD',
                         fontWeight: 600,
                         fontSize: '0.9375rem',
                         cursor: 'pointer',
                         transition: 'all 0.3s ease',
                         fontFamily: 'Raleway, sans-serif',
-                        boxShadow: formData.budget_range === budget.id ? '0 4px 12px rgba(161, 194, 189, 0.3)' : 'none'
+                        boxShadow: formData.budget_range === budget.id ? '0 4px 12px rgba(161, 194, 189, 0.25)' : 'none'
                       }}
                     >
                       {budget.label}
@@ -495,15 +496,17 @@ const ProjectRequestModal = () => {
                       style={{
                         padding: '1rem 1.25rem',
                         borderRadius: '10px',
-                        border: `2px solid ${formData.timeline === timeline.id ? '#A1C2BD' : 'rgba(161, 194, 189, 0.4)'}`,
-                        background: formData.timeline === timeline.id ? '#A1C2BD' : 'rgba(231, 242, 239, 0.08)',
-                        color: formData.timeline === timeline.id ? '#19183B' : '#A1C2BD',
+                        border: `2px solid ${formData.timeline === timeline.id ? '#A1C2BD' : 'rgba(161, 194, 189, 0.3)'}`,
+                        background: formData.timeline === timeline.id ? 'rgba(161, 194, 189, 0.25)' : 'rgba(231, 242, 239, 0.06)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        color: formData.timeline === timeline.id ? '#E7F2EF' : '#A1C2BD',
                         fontWeight: 600,
                         fontSize: '0.9375rem',
                         cursor: 'pointer',
                         transition: 'all 0.3s ease',
                         fontFamily: 'Raleway, sans-serif',
-                        boxShadow: formData.timeline === timeline.id ? '0 4px 12px rgba(161, 194, 189, 0.3)' : 'none'
+                        boxShadow: formData.timeline === timeline.id ? '0 4px 12px rgba(161, 194, 189, 0.25)' : 'none'
                       }}
                     >
                       {timeline.label}
@@ -532,7 +535,7 @@ const ProjectRequestModal = () => {
                   onChange={handleChange}
                   required
                   placeholder="Please describe your project goals, target audience, design preferences, and any specific requirements..."
-                  style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.08)', border: '1px solid rgba(161, 194, 189, 0.4)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', resize: 'vertical', minHeight: '140px', transition: 'all 0.3s ease', fontWeight: 400, lineHeight: '1.6' }}
+                  style={{ width: '100%', padding: '1rem 1.25rem', background: 'rgba(231, 242, 239, 0.06)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(161, 194, 189, 0.3)', borderRadius: '10px', color: '#E7F2EF', fontSize: '1rem', fontFamily: 'Raleway, sans-serif', boxSizing: 'border-box', resize: 'vertical', minHeight: '140px', transition: 'all 0.3s ease', fontWeight: 400, lineHeight: '1.6' }}
                 ></textarea>
                 <small className="field-help" style={{ display: 'block', fontSize: '0.8125rem', color: '#A1C2BD', opacity: 0.85, marginTop: '0.75rem', fontFamily: 'Raleway, sans-serif' }}>Minimum 50 characters. The more details you provide, the more accurate our quote will be.</small>
               </div>
