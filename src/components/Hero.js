@@ -8,28 +8,69 @@ const Hero = () => {
   const [clientsCount] = useCounterAnimation(30, statsRef);
   const [yearsCount] = useCounterAnimation(5, statsRef);
 
-  // Parallax effect for hero section
+  // Enhanced parallax effect for hero section
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      if (!heroRef.current) return;
-      const scrolled = window.pageYOffset;
-      const hero = heroRef.current;
-      const heroContent = hero.querySelector('.hero-content');
-      const heroImage = hero.querySelector('.hero-image-container');
-      const heroBlobs = hero.querySelectorAll('.hero-blob');
+      if (!heroRef.current || ticking) return;
+      
+      ticking = true;
+      requestAnimationFrame(() => {
+        if (!heroRef.current) {
+          ticking = false;
+          return;
+        }
+        
+        const scrolled = window.pageYOffset;
+        const hero = heroRef.current;
+        const heroContent = hero.querySelector('.hero-content');
+        const heroImage = hero.querySelector('.hero-image-container');
+        const heroBlobs = hero.querySelectorAll('.hero-blob');
+        const heroLeft = hero.querySelector('.hero-left');
+        const heroRight = hero.querySelector('.hero-right');
 
-      if (heroContent) {
-        heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
-        heroContent.style.opacity = 1 - scrolled / 600;
-      }
+        // Hero content - slower parallax for depth
+        if (heroContent) {
+          const contentY = scrolled * 0.25;
+          heroContent.style.transform = `translateY(${contentY}px)`;
+        }
 
-      if (heroImage) {
-        heroImage.style.transform = `translateY(${scrolled * 0.5}px)`;
-      }
+        // Left side (text content) - subtle movement
+        if (heroLeft) {
+          const leftY = scrolled * 0.2;
+          const leftX = scrolled * 0.05;
+          heroLeft.style.transform = `translate(${leftX}px, ${leftY}px)`;
+        }
 
-      heroBlobs.forEach((blob, index) => {
-        const speed = 0.2 + (index * 0.1);
-        blob.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.05}deg)`;
+        // Right side (image) - faster parallax for foreground effect
+        if (heroRight) {
+          const rightY = scrolled * 0.4;
+          const rightX = scrolled * -0.03;
+          heroRight.style.transform = `translate(${rightX}px, ${rightY}px)`;
+        }
+
+        // Hero image - enhanced parallax with scale
+        if (heroImage) {
+          const imageY = scrolled * 0.6;
+          const imageScale = 1 + (scrolled * 0.0001);
+          heroImage.style.transform = `translateY(${imageY}px) scale(${Math.min(imageScale, 1.05)})`;
+        }
+
+        // Background blobs - varied speeds for layered depth
+        heroBlobs.forEach((blob, index) => {
+          const baseSpeed = 0.15 + (index * 0.08);
+          const rotationSpeed = 0.03 + (index * 0.02);
+          const horizontalOffset = (index % 2 === 0 ? 1 : -1) * scrolled * 0.02;
+          
+          blob.style.transform = `
+            translate(${horizontalOffset}px, ${scrolled * baseSpeed}px) 
+            rotate(${scrolled * rotationSpeed}deg)
+            scale(${1 + (scrolled * 0.00005)})
+          `;
+        });
+
+        ticking = false;
       });
     };
 
@@ -152,11 +193,6 @@ const Hero = () => {
             </div>
           </div>
         </div>
-      </div>
-      
-      <div className="scroll-hint">
-        <span>Scroll</span>
-        <div className="scroll-line"></div>
       </div>
     </section>
   );

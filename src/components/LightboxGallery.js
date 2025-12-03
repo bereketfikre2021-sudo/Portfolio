@@ -129,3 +129,4 @@ const LightboxGallery = ({ images, currentIndex, isOpen, onClose, projectTitle }
 
 export default LightboxGallery;
 
+

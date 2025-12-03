@@ -36,8 +36,23 @@ const Contact = lazy(() => import('./Contact'));
 const Footer = lazy(() => import('./Footer'));
 const BottomNav = lazy(() => import('./BottomNav'));
 
-// Loading fallback component
-const LoadingFallback = () => null;
+// Loading fallback component - show minimal placeholder to prevent layout shift
+const LoadingFallback = () => (
+  <section id="blog" className="case-studies" style={{ minHeight: '400px' }}>
+    <div className="container">
+      <div className="section-intro">
+        <span className="section-number">04</span>
+        <div className="section-header">
+          <span className="section-label">Design Insights</span>
+          <h2 className="section-title">
+            <span className="title-main">Design</span>
+            <span className="title-accent">Blog</span>
+          </h2>
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
 function AppContent() {
   const { openProjectRequestModal } = useContext(ModalContext);
@@ -79,7 +94,7 @@ function AppContent() {
         <About />
         <Services />
         <Portfolio />
-        <Suspense fallback={LoadingFallback()}>
+        <Suspense fallback={<LoadingFallback />}>
           <Blog />
           <Testimonials />
           <TrustedBy />

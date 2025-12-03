@@ -45,3 +45,4 @@ export const useKeyboardShortcuts = (shortcuts, dependencies = []) => {
 
 export default useKeyboardShortcuts;
 
+

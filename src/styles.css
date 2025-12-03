@@ -736,11 +736,11 @@ body:hover .cursor-follower {
    HERO SECTION - OUTSTANDING
    ============================================ */
 .hero {
-  min-height: 100vh;
+  min-height: auto;
   position: relative;
   display: flex;
   align-items: center;
-  padding: 120px 2rem 4rem;
+  padding: 120px 2rem 2rem;
   overflow: hidden;
   z-index: 2;
   background: var(--bg-light);
@@ -5474,8 +5474,8 @@ section {
 
   /* Hero Section Mobile */
   .hero {
-    padding: 100px 1.5rem 3rem !important;
-    min-height: 100vh !important;
+    padding: 100px 1.5rem 1.5rem !important;
+    min-height: auto !important;
   }
 
   .hero-content {
@@ -7199,61 +7199,6 @@ html {
   border-color: rgba(180, 232, 201, 0.5);
 }
 
-/* ============================================
-   PORTFOLIO HOVER PREVIEW
-   ============================================ */
-.portfolio-hover-preview {
-  position: fixed;
-  width: 400px;
-  max-width: 90vw;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(-50%, -100%) scale(0.9);
-  transition: all 0.3s var(--ease-out-expo);
-  animation: previewFadeIn 0.3s var(--ease-out-expo) forwards;
-}
-
-@keyframes previewFadeIn {
-  to {
-    opacity: 1;
-    transform: translate(-50%, -100%) scale(1);
-  }
-}
-
-.portfolio-hover-preview img {
-  width: 100%;
-  height: auto;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  border: 2px solid rgba(180, 232, 201, 0.3);
-}
-
-.preview-content {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: rgba(5, 10, 31, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(180, 232, 201, 0.2);
-}
-
-.preview-category {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--color-light);
-  opacity: 0.7;
-  margin-bottom: 0.5rem;
-  font-family: var(--font-sans);
-}
-
-.preview-title {
-  font-size: 1rem;
-  color: var(--color-light);
-  font-weight: 600;
-  margin: 0;
-  font-family: var(--font-sans);
-}
 
 /* ============================================
    IMAGE ZOOM HINT
@@ -7385,10 +7330,6 @@ html {
    RESPONSIVE ADJUSTMENTS
    ============================================ */
 @media (max-width: 768px) {
-  .portfolio-hover-preview {
-    display: none;
-  }
-
   .lightbox-close,
   .lightbox-nav {
     width: 40px;
@@ -7427,8 +7368,7 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .hero-content,
   .hero-image-container[data-parallax="true"],
-  .hero-blob,
-  .portfolio-hover-preview {
+  .hero-blob {
     transform: none !important;
     transition: none !important;
   }

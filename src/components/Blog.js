@@ -1,8 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
 const Blog = () => {
-  const { openBlogModal } = useContext(ModalContext);
+  const modalContext = useContext(ModalContext);
+  
+  // Safely get openBlogModal with fallback
+  const openBlogModal = modalContext?.openBlogModal || (() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Blog modal context not available');
+    }
+  });
+
+  // Refresh AOS after component mounts to ensure animations work
+  useEffect(() => {
+    // Small delay to ensure AOS is initialized
+    const timer = setTimeout(() => {
+      if (window.AOS) {
+        window.AOS.refresh();
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const blogPosts = [
     {
@@ -50,7 +69,17 @@ const Blog = () => {
               data-project={post.id}
               data-aos="fade-up"
               data-aos-delay={index * 100}
-              onClick={() => openBlogModal(post.id)}
+              onClick={() => {
+                try {
+                  if (openBlogModal) {
+                    openBlogModal(post.id);
+                  }
+                } catch (error) {
+                  if (process.env.NODE_ENV === 'development') {
+                    console.error('Error opening blog modal:', error);
+                  }
+                }
+              }}
             >
               <div className="case-study-image">
                 <img 
@@ -62,6 +91,10 @@ const Blog = () => {
                   height="400"
                   decoding="async"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  onError={(e) => {
+                    // Fallback: hide broken image gracefully
+                    e.target.style.display = 'none';
+                  }}
                 />
                 <div className="case-study-overlay"></div>
               </div>
@@ -74,7 +107,15 @@ const Blog = () => {
                   className="case-study-link"
                   onClick={(e) => {
                     e.preventDefault();
-                    openBlogModal(post.id);
+                    try {
+                      if (openBlogModal) {
+                        openBlogModal(post.id);
+                      }
+                    } catch (error) {
+                      if (process.env.NODE_ENV === 'development') {
+                        console.error('Error opening blog modal:', error);
+                      }
+                    }
                   }}
                   aria-label={`Read ${post.title} blog post`}
                 >

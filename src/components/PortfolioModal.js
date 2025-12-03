@@ -15,7 +15,13 @@ const PortfolioModal = () => {
     if (portfolioModal?.isOpen && portfolioModal?.projectId) {
       const project = projectData[portfolioModal.projectId];
       if (project) {
-        useLiveRegion(`Opened project: ${project.title}. ${project.description}`, 'polite');
+        const liveRegion = document.getElementById('live-region');
+        if (liveRegion) {
+          liveRegion.textContent = `Opened project: ${project.title}. ${project.description}`;
+          setTimeout(() => {
+            liveRegion.textContent = '';
+          }, 1000);
+        }
       }
     }
   }, [portfolioModal?.isOpen, portfolioModal?.projectId]);
