@@ -1,11 +1,24 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
 import LightboxGallery from './LightboxGallery';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 const PortfolioModal = () => {
   const { portfolioModal, closePortfolioModal } = useContext(ModalContext);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
+  const modalRef = useRef(null);
+  useFocusTrap(portfolioModal?.isOpen, modalRef);
+  
+  // Announce modal opening to screen readers
+  useEffect(() => {
+    if (portfolioModal?.isOpen && portfolioModal?.projectId) {
+      const project = projectData[portfolioModal.projectId];
+      if (project) {
+        useLiveRegion(`Opened project: ${project.title}. ${project.description}`, 'polite');
+      }
+    }
+  }, [portfolioModal?.isOpen, portfolioModal?.projectId]);
 
   const projectData = {
     'andegna-tshirt': {
@@ -1396,7 +1409,6 @@ const PortfolioModal = () => {
     }
   };
 
-  const modalRef = React.useRef(null);
   const previousFocusRef = React.useRef(null);
 
   useEffect(() => {
@@ -1458,6 +1470,7 @@ const PortfolioModal = () => {
       aria-describedby="portfolioModalCategory"
       aria-modal="true"
       tabIndex={-1}
+      aria-live="polite"
     >
       <div className="modal-overlay" onClick={closePortfolioModal}></div>
       <div className="portfolio-modal-container" onClick={(e) => e.stopPropagation()}>

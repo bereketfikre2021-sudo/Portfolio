@@ -1,8 +1,27 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 const ServicesModal = () => {
   const { serviceModal, closeServiceModal } = useContext(ModalContext);
+  const modalRef = useRef(null);
+  useFocusTrap(serviceModal?.isOpen, modalRef);
+  
+  // Announce modal opening to screen readers
+  useEffect(() => {
+    if (serviceModal?.isOpen && serviceModal?.serviceId) {
+      const service = serviceData[serviceModal.serviceId];
+      if (service) {
+        const liveRegion = document.getElementById('live-region');
+        if (liveRegion) {
+          liveRegion.textContent = `Opened service: ${service.title}`;
+          setTimeout(() => {
+            liveRegion.textContent = '';
+          }, 1000);
+        }
+      }
+    }
+  }, [serviceModal?.isOpen, serviceModal?.serviceId]);
 
   const serviceData = {
     '1': {
@@ -126,7 +145,12 @@ const ServicesModal = () => {
   if (!service) return null;
 
   return (
-    <div 
+    <div
+      ref={modalRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="service-modal-title"
+      aria-describedby="service-modal-description" 
       className={`services-modal ${serviceModal.isOpen ? 'active' : ''}`}
       role="dialog"
       aria-labelledby="serviceModalTitle"

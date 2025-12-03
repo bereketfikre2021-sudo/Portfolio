@@ -1,8 +1,24 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 const ProjectRequestModal = () => {
   const { projectRequestModal, closeProjectRequestModal, showFormModal } = useContext(ModalContext);
+  const modalRef = useRef(null);
+  useFocusTrap(projectRequestModal?.isOpen, modalRef);
+  
+  // Announce modal opening to screen readers
+  useEffect(() => {
+    if (projectRequestModal?.isOpen) {
+      const liveRegion = document.getElementById('live-region');
+      if (liveRegion) {
+        liveRegion.textContent = 'Project request form opened. Step 1 of 3.';
+        setTimeout(() => {
+          liveRegion.textContent = '';
+        }, 1000);
+      }
+    }
+  }, [projectRequestModal?.isOpen]);
   
   const [formData, setFormData] = useState({
     first_name: '',
@@ -20,6 +36,20 @@ const ProjectRequestModal = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
+
+  // Announce step changes to screen readers
+  useEffect(() => {
+    if (projectRequestModal?.isOpen) {
+      const announcement = `Step ${currentStep} of ${totalSteps}`;
+      const liveRegion = document.getElementById('live-region');
+      if (liveRegion) {
+        liveRegion.textContent = announcement;
+        setTimeout(() => {
+          liveRegion.textContent = '';
+        }, 1000);
+      }
+    }
+  }, [currentStep, projectRequestModal?.isOpen, totalSteps]);
 
   const services = [
     { id: 'graphic-design', label: 'Graphic Design' },
@@ -180,7 +210,12 @@ const ProjectRequestModal = () => {
 
   return (
     <div 
+      ref={modalRef}
       className="project-request-modal-wrapper"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="project-request-title"
+      aria-describedby="project-request-description"
       style={{
         position: 'fixed',
         top: 0,
@@ -256,8 +291,8 @@ const ProjectRequestModal = () => {
         </button>
 
         <div className="project-request-header" style={{ padding: '2.5rem 2.5rem 1.5rem', borderBottom: '1px solid rgba(161, 194, 189, 0.2)', background: 'linear-gradient(180deg, rgba(161, 194, 189, 0.05) 0%, transparent 100%)' }}>
-          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, color: '#E7F2EF', marginBottom: '0.75rem', fontFamily: 'Raleway, sans-serif', textShadow: '0 2px 10px rgba(231, 242, 239, 0.1)' }}>Request a Project Quote</h2>
-          <p style={{ fontSize: '1rem', color: '#A1C2BD', opacity: 1, marginBottom: '2rem', fontWeight: 400 }}>Let's discuss your project and get you a detailed quote</p>
+          <h2 id="project-request-title" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, color: '#E7F2EF', marginBottom: '0.75rem', fontFamily: 'Raleway, sans-serif', textShadow: '0 2px 10px rgba(231, 242, 239, 0.1)' }}>Request a Project Quote</h2>
+          <p id="project-request-description" style={{ fontSize: '1rem', color: '#A1C2BD', opacity: 1, marginBottom: '2rem', fontWeight: 400 }}>Let's discuss your project and get you a detailed quote</p>
           
           <div className="project-request-progress-bar" style={{ marginTop: '1.5rem' }}>
             <div className="progress-steps-container" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>

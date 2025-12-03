@@ -1,8 +1,27 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 const BlogModal = () => {
   const { blogModal, closeBlogModal } = useContext(ModalContext);
+  const modalRef = useRef(null);
+  useFocusTrap(blogModal?.isOpen, modalRef);
+  
+  // Announce modal opening to screen readers
+  useEffect(() => {
+    if (blogModal?.isOpen && blogModal?.postId) {
+      const post = blogData[blogModal.postId];
+      if (post) {
+        const liveRegion = document.getElementById('live-region');
+        if (liveRegion) {
+          liveRegion.textContent = `Opened blog post: ${post.title}`;
+          setTimeout(() => {
+            liveRegion.textContent = '';
+          }, 1000);
+        }
+      }
+    }
+  }, [blogModal?.isOpen, blogModal?.postId]);
 
   const blogData = {
     'design-principles': {
@@ -166,9 +185,11 @@ const BlogModal = () => {
 
   return (
     <div 
+      ref={modalRef}
       className={`case-study-modal ${blogModal.isOpen ? 'active' : ''}`}
       role="dialog"
       aria-labelledby="blogModalTitle"
+      aria-describedby="blogModalDescription"
       aria-modal="true"
     >
       <div className="modal-overlay" onClick={closeBlogModal}></div>
