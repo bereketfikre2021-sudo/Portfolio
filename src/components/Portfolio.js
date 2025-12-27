@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
 const Portfolio = () => {
@@ -6,13 +6,13 @@ const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState('branding');
 
   const services = [
-    { id: 'branding', label: 'Branding' },
+    { id: 'branding', label: 'Corporate Branding' },
     { id: 'marketing-advertising', label: 'Marketing & Advertising Design' },
     { id: 'digital-web', label: 'Digital & Web Design' },
-    { id: 'print-layout', label: 'Print Layout Design' },
-    { id: 'packaging-label', label: 'Product & Packaging Design' },
-    { id: 'ui-ux', label: 'UI/UX Design' },
-    { id: 'environmental', label: 'Signage Design' }
+    { id: 'print-layout', label: 'Print Layout and Stationery Design' },
+    { id: 'packaging-label', label: 'Product Labeling and Packaging Design' },
+    { id: 'ui-ux', label: 'UI UX Wireframe and Prototype' },
+    { id: 'environmental', label: 'Signage and Environmental Design' }
   ];
 
   const projects = [
@@ -215,15 +215,6 @@ const Portfolio = () => {
       description: 'Complete cafe menu design including trifold layout and modern typography for an elegant dining experience.',
       service: 'print-layout',
       company: 'Niqat Coffee'
-    },
-    {
-      id: 'raba-calendar',
-      image: '/assets/Portfolio/calendar for raba construction.webp',
-      category: 'Calendar Design · Print Design',
-      title: 'Calendar Design - Raba Construction',
-      description: 'Professional calendar design for Raba Construction, featuring branded layouts and functional date organization for corporate use.',
-      service: 'print-layout',
-      company: 'Raba Construction'
     },
     {
       id: 'niqat-social',
@@ -542,9 +533,182 @@ const Portfolio = () => {
       service: 'ui-ux',
       company: 'Havana PLC'
     },
+    // New Branding Projects
+    {
+      id: 'dumas-properties-branding',
+      image: '/assets/Portfolio/Branding Dumas Properties.webp',
+      category: 'Brand Identity · Real Estate',
+      title: 'Full Brand Identity - Dumas Properties',
+      description: 'Complete brand identity package including logo design, brand guidelines, and comprehensive visual identity for a real estate company.',
+      service: 'branding',
+      company: 'Dumas Properties'
+    },
+    {
+      id: 'raya-hotel-branding',
+      image: '/assets/Portfolio/Branding Raya Hotel & Convention Center.webp',
+      category: 'Brand Identity · Hospitality',
+      title: 'Full Brand Identity - Raya Hotel & Convention Center',
+      description: 'Comprehensive brand identity system including logo design, brand guidelines, and corporate materials for a hospitality and convention center.',
+      service: 'branding',
+      company: 'Raya Hotel & Convention Center'
+    },
+    // New Social Media Template Projects
+    {
+      id: 'ptgr-social-template',
+      image: '/assets/Portfolio/Social Media Template - PTGR.webp',
+      category: 'Social Media Design · Digital Marketing',
+      title: 'Social Media Template - PTGR',
+      description: 'Professional social media template design featuring modern layouts and engaging visual content for consistent brand communication.',
+      service: 'marketing-advertising',
+      company: 'PTGR'
+    },
+    {
+      id: 'task-plug-social-template',
+      image: '/assets/Portfolio/Social Media Template - Task Plug.webp',
+      category: 'Social Media Design · Digital Marketing',
+      title: 'Social Media Template - Task Plug',
+      description: 'Engaging social media template design with modern aesthetics and compelling visuals for digital marketing campaigns.',
+      service: 'marketing-advertising',
+      company: 'Task Plug'
+    },
+    {
+      id: 'task-plug-social-template-2',
+      image: '/assets/Portfolio/Social Media Template - Task Plug-2.webp',
+      category: 'Social Media Design · Digital Marketing',
+      title: 'Social Media Template Series - Task Plug',
+      description: 'Additional social media template design featuring promotional graphics and engaging visual content for digital marketing.',
+      service: 'marketing-advertising',
+      company: 'Task Plug'
+    },
+    {
+      id: 'finix-social-template',
+      image: '/assets/Portfolio/Social Media Template - Finix Bet.webp',
+      category: 'Social Media Design · Digital Marketing',
+      title: 'Social Media Template - Finix Bet',
+      description: 'Professional social media template design for Finix Bet, featuring modern layouts and engaging visual content.',
+      service: 'marketing-advertising',
+      company: 'Finix Bet'
+    },
+    {
+      id: 'finix-social-template-2',
+      image: '/assets/Portfolio/Social Media Template - Finix Bet-2.webp',
+      category: 'Social Media Design · Digital Marketing',
+      title: 'Social Media Template Collection - Finix Bet',
+      description: 'Comprehensive social media template collection with various formats and styles for consistent brand communication.',
+      service: 'marketing-advertising',
+      company: 'Finix Bet'
+    },
+    {
+      id: 'finix-social-template-3',
+      image: '/assets/Portfolio/Social Media Template - Finix Bet-3.webp',
+      category: 'Social Media Design · Digital Marketing',
+      title: 'Social Media Template Series - Finix Bet',
+      description: 'Professional social media template series featuring promotional graphics and engaging visual content for digital marketing.',
+      service: 'marketing-advertising',
+      company: 'Finix Bet'
+    },
+    {
+      id: 'finix-social-template-4',
+      image: '/assets/Portfolio/Social Media Template - Finix Bet-4.webp',
+      category: 'Social Media Design · Digital Marketing',
+      title: 'Social Media Template Assets - Finix Bet',
+      description: 'Digital marketing template assets including social media posts and promotional graphics for online campaigns.',
+      service: 'marketing-advertising',
+      company: 'Finix Bet'
+    },
+    {
+      id: 'finix-social-template-5',
+      image: '/assets/Portfolio/Social Media Template - Finix Bet-5.webp',
+      category: 'Social Media Design · Digital Marketing',
+      title: 'Social Media Template Design - Finix Bet',
+      description: 'Engaging social media template design featuring modern layouts and compelling visuals for digital engagement.',
+      service: 'marketing-advertising',
+      company: 'Finix Bet'
+    },
+    {
+      id: 'finix-social-template-6',
+      image: '/assets/Portfolio/Social Media Template - Finix Bet-6.webp',
+      category: 'Social Media Design · Digital Marketing',
+      title: 'Social Media Template Collection - Finix Bet',
+      description: 'Professional social media template collection designed for various digital marketing campaigns and promotions.',
+      service: 'marketing-advertising',
+      company: 'Finix Bet'
+    },
+    // New Print & Layout Projects
+    {
+      id: 'ptgr-flyer',
+      image: '/assets/Portfolio/A5 Flyer - PTGR.webp',
+      category: 'Print Design · Marketing',
+      title: 'A5 Flyer Design - PTGR',
+      description: 'Professional A5 flyer design featuring modern layouts, compelling visuals, and clear messaging for marketing campaigns.',
+      service: 'print-layout',
+      company: 'PTGR'
+    },
+    {
+      id: 'dumas-print-layout',
+      image: '/assets/Portfolio/Print & Layout - Dumas.webp',
+      category: 'Print Design · Corporate',
+      title: 'Print & Layout Design - Dumas Properties',
+      description: 'Complete print and layout design including professional materials and corporate communications for brand consistency.',
+      service: 'print-layout',
+      company: 'Dumas Properties'
+    },
+    {
+      id: 'raya-print-layout',
+      image: '/assets/Portfolio/Print & Layout - Raya.webp',
+      category: 'Print Design · Hospitality',
+      title: 'Print & Layout Design - Raya Hotel',
+      description: 'Professional print and layout design for hospitality materials, featuring elegant layouts and brand-consistent messaging.',
+      service: 'print-layout',
+      company: 'Raya Hotel & Convention Center'
+    },
+    // New Product & Packaging Projects
+    {
+      id: 'dumas-packaging',
+      image: '/assets/Portfolio/Product & Packaging - Dumas.webp',
+      category: 'Packaging Design · Real Estate',
+      title: 'Product & Packaging Design - Dumas Properties',
+      description: 'Professional product and packaging design for real estate materials, creating a cohesive brand experience.',
+      service: 'packaging-label',
+      company: 'Dumas Properties'
+    },
+    {
+      id: 'raya-packaging',
+      image: '/assets/Portfolio/Product & Packaging - Raya.webp',
+      category: 'Packaging Design · Hospitality',
+      title: 'Product & Packaging Design - Raya Hotel',
+      description: 'Elegant product and packaging design for hospitality materials, reflecting brand quality and style.',
+      service: 'packaging-label',
+      company: 'Raya Hotel & Convention Center'
+    },
   ];
 
-  const filteredProjects = projects.filter(project => project.service === activeFilter);
+  // Shuffle function to randomize project order (only once on mount)
+  const shuffledProjects = useMemo(() => {
+    const shuffled = [...projects];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, []);
+
+  // For marketing-advertising, shuffle individually to spread companies apart
+  const filteredProjects = useMemo(() => {
+    const filtered = shuffledProjects.filter(project => project.service === activeFilter);
+    
+    if (activeFilter === 'marketing-advertising') {
+      // Shuffle all social media projects individually (not grouped by company)
+      const shuffled = [...filtered];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+    
+    return filtered;
+  }, [shuffledProjects, activeFilter]);
 
   return (
     <section id="portfolio" className="portfolio">

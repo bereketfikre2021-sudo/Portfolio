@@ -71,3 +71,6 @@ export const useTextTypingAnimation = (text, delay = 0, typingSpeed = 50) => {
   return [displayedText, isTyping];
 };
 
+
+
+
