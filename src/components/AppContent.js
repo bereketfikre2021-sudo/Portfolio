@@ -17,6 +17,7 @@ import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 const ScrollPattern = lazy(() => import('./ScrollPattern'));
 const ParticleCanvas = lazy(() => import('./ParticleCanvas'));
 const CustomCursor = lazy(() => import('./CustomCursor'));
+const ChristmasFloatingIcons = lazy(() => import('./ChristmasFloatingIcons'));
 
 // Lazy load modals - they're not needed until user interaction
 const PortfolioModal = lazy(() => import('./PortfolioModal'));
@@ -122,6 +123,7 @@ function AppContent() {
         <ScrollPattern />
         <ParticleCanvas />
         <CustomCursor />
+        <ChristmasFloatingIcons />
       </Suspense>
       <Navigation />
       <main id="main-content">
