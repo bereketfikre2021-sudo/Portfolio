@@ -2075,6 +2075,7 @@ section {
   color: var(--text-light);
   position: relative;
   overflow: hidden;
+  padding-bottom: 0;
 }
 
 .portfolio .section-title .title-main {
