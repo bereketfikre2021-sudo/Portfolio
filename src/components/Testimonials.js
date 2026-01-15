@@ -186,10 +186,10 @@ const Testimonials = () => {
   };
 
   return (
-    <section id="testimonials" className="testimonials">
+    <section id="testimonials" className="testimonials" aria-labelledby="testimonials-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number">05</span>
+          <span className="section-number">06</span>
           <div className="section-header">
             <span className="section-label">Client Feedback</span>
             <h2 className="section-title">

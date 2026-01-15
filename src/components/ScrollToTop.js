@@ -152,7 +152,8 @@ const ScrollToTop = () => {
     <button 
       className={`scroll-to-top ${isVisible ? 'visible' : ''}`}
       id="scrollToTop"
-      aria-label="Scroll to top"
+      aria-label="Scroll to top of page"
+      aria-keyshortcuts="Home"
       onClick={scrollToTop}
     >
       <div className="scroll-progress-circle">

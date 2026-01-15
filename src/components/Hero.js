@@ -26,7 +26,7 @@ const Hero = () => {
   };
 
   return (
-    <section id="home" className="hero">
+    <section id="home" className="hero" aria-label="Hero section - Introduction">
       <div className="hero-background">
         <div className="hero-gradient-overlay"></div>
         <div className="hero-blob blob-1"></div>
@@ -55,11 +55,6 @@ const Hero = () => {
               {isThirdTyping && <span className="typing-cursor">|</span>}
             </span>
           </h1>
-          
-          <div className="hero-subtitle">
-            <p className="subtitle-line">I'm <strong>Bereket Fikre</strong>, a creative designer</p>
-            <p className="subtitle-line">specializing in <strong>brand identity</strong>, <strong>UI/UX</strong>, and <strong>digital experiences</strong></p>
-          </div>
           
           <div className="hero-actions">
             <a 
@@ -111,7 +106,7 @@ const Hero = () => {
             <div className="image-wrapper">
               <img 
                 src={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp`} 
-                alt="Bereket Fikre - Creative Graphic Designer and Brand Builder specializing in brand identity, UI/UX design, and digital experiences" 
+                alt="Bereket Fikre, Senior Graphic Designer and Brand Builder, specializing in brand identity design, visual systems, logo design, print design, digital design, and art direction" 
                 className="hero-image" 
                 width="800" 
                 height="1000" 
@@ -125,11 +120,11 @@ const Hero = () => {
             </div>
             <div className="floating-label floating-label-1">
               <div className="label-dot"></div>
-              <span>Brand Design</span>
+              <span>Brand Builder</span>
             </div>
             <div className="floating-label floating-label-2">
               <div className="label-dot"></div>
-              <span>UI/UX Expert</span>
+              <span>Senior Graphic Designer</span>
             </div>
           </div>
         </div>

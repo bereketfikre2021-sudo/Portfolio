@@ -11,11 +11,9 @@
    ============================================ */
 /* GPU acceleration for animations - prevents forced reflows */
 .hero-image,
-.portfolio-thumb,
 .case-study-thumb,
 .testimonial-card,
-.service-card-modern,
-.portfolio-item-modern {
+.service-card-modern {
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -424,25 +422,81 @@ body:hover .cursor-follower {
   }
 }
 
+
 /* ============================================
-   SCROLL PROGRESS
+   CALL NOW BUTTON (Bottom Right - Full Circle)
    ============================================ */
-.scroll-progress {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 0%;
-  height: 3px;
-  background: var(--color-light) !important;
-  z-index: 10000 !important;
-  transition: width 0.1s linear;
-  box-shadow: 0 0 10px var(--color-light-50);
-  pointer-events: none;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+.call-now-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 64px;
+  height: 64px;
+  background: rgba(5, 10, 31, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--color-light-30);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-light);
+  text-decoration: none;
+  z-index: 9998;
+  transition: all 0.4s var(--ease-out-expo);
+  box-shadow: 
+    0 4px 20px rgba(8, 18, 44, 0.4),
+    0 0 20px rgba(185, 234, 209, 0.2);
 }
 
+.call-now-button:hover {
+  background: var(--color-light);
+  border-color: var(--color-light);
+  color: var(--color-dark);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 
+    0 8px 30px rgba(185, 234, 209, 0.4),
+    0 0 40px rgba(185, 234, 209, 0.3),
+    0 0 60px rgba(185, 234, 209, 0.2);
+}
+
+.call-now-button:active {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.call-now-button:focus-visible {
+  outline: 3px solid var(--color-light);
+  outline-offset: 2px;
+}
+
+.call-now-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.call-now-text {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .call-now-button {
+    bottom: calc(5rem + env(safe-area-inset-bottom)) !important;
+    right: 1.5rem !important;
+    width: 56px !important;
+    height: 56px !important;
+    z-index: 10000 !important;
+  }
+  
+  .call-now-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Old scroll-progress styles removed */
 @media (max-width: 768px) {
   .scroll-progress {
     height: 4px !important;
@@ -1498,10 +1552,32 @@ section {
   margin-bottom: 3rem;
 }
 
+.signature {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-light-10);
+}
+
+.signature-logo {
+  max-width: 120px;
+  height: auto;
+  opacity: 0.85;
+  transition: opacity 0.3s var(--ease-out-expo);
+}
+
+.signature-logo:hover {
+  opacity: 1;
+}
+
 .about-features {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  background: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-light-10);
+  margin-top: 3rem;
 }
 
 .feature-item {
@@ -1656,6 +1732,8 @@ section {
   padding: 2rem;
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-light-10);
+  width: 100%;
+  margin-top: 4rem;
 }
 
 .skills-title {
@@ -1666,21 +1744,70 @@ section {
 }
 
 .skills-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.875rem;
 }
 
 .skill-item {
   position: relative;
+  padding: 1rem 1.25rem;
+  background: var(--color-dark-10);
+  border: 1px solid var(--color-light-10);
+  border-radius: var(--radius-md);
+  transition: all 0.3s var(--ease-out-expo);
+  cursor: default;
+  overflow: hidden;
+}
+
+.skill-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-light);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.skill-item:hover {
+  background: var(--color-light-05);
+  border-color: var(--color-light-20);
+  transform: translateX(4px);
+}
+
+.skill-item:hover::before {
+  transform: scaleY(1);
 }
 
 .skill-name {
-  display: block;
+  display: flex;
+  align-items: center;
   font-size: 0.9375rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-light);
-  margin-bottom: 0.5rem;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.skill-name::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--color-light);
+  font-size: 1rem;
+  opacity: 0.6;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.skill-item:hover .skill-name::before {
+  opacity: 1;
+  transform: translateX(4px);
 }
 
 .skill-bar {
@@ -1692,6 +1819,81 @@ section {
 }
 
 .skill-progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-light), rgba(182, 213, 195, 0.8));
+  border-radius: var(--radius-full);
+  transition: width 1.5s var(--ease-out-expo);
+  box-shadow: 0 0 10px var(--color-light-30);
+}
+
+/* Responsive adjustments for skills list */
+@media (max-width: 640px) {
+  .skills-list {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .skill-item {
+    padding: 0.875rem 1rem;
+  }
+  
+  .skill-name {
+    font-size: 0.875rem;
+    padding-left: 1.25rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .skills-list {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 0.875rem;
+  }
+}
+
+/* Tools Section */
+.tools-showcase {
+  background: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-light-10);
+  margin-top: 2rem;
+}
+
+.tools-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+}
+
+.tools-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tool-item {
+  position: relative;
+}
+
+.tool-name {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+
+.tool-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--color-light-10);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.tool-progress {
   height: 100%;
   background: linear-gradient(90deg, var(--color-light), rgba(182, 213, 195, 0.8));
   border-radius: var(--radius-full);
@@ -1929,8 +2131,15 @@ section {
 }
 
 .portfolio-filter-btn:focus {
-  outline: 2px solid var(--color-light);
-  outline-offset: 2px;
+  outline: 3px solid var(--color-light);
+  outline-offset: 3px;
+  outline-style: solid;
+}
+
+.portfolio-filter-btn:focus-visible {
+  outline: 3px solid var(--color-light);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(180, 232, 201, 0.3);
 }
 
 .portfolio-filter-btn.active {
@@ -1966,61 +2175,14 @@ section {
   border: 1px solid var(--color-light-10);
   padding: 0;
   cursor: pointer;
-  transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo);
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(5, 10, 31, 0.1);
-  animation: fadeInUp 0.5s var(--ease-out-expo) forwards;
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
   contain: layout style paint;
   isolation: isolate;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) translateZ(0);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) translateZ(0);
-  }
-}
-
-/* Ensure animation doesn't conflict with hover */
-.portfolio-item-modern.animation-complete {
-  animation: none;
-}
-
-/* Prevent animation from interfering with hover */
-.portfolio-item-modern:hover {
-  animation: none;
-}
-
 .portfolio-item-modern::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(180, 232, 201, 0.05) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.5s var(--ease-out-expo);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.portfolio-item-modern:hover {
-  transform: translateY(-8px) translateZ(0);
-  border-color: var(--color-light-40);
-  box-shadow: 
-    0 24px 60px rgba(5, 10, 31, 0.3),
-    0 0 40px rgba(180, 232, 201, 0.15),
-    inset 0 1px 0 rgba(180, 232, 201, 0.1);
-  will-change: transform;
-}
-
-.portfolio-item-modern:hover::before {
-  opacity: 1;
+  display: none;
 }
 
 .portfolio-image-small {
@@ -2036,18 +2198,7 @@ section {
 }
 
 .portfolio-image-small::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 0%, rgba(5, 10, 31, 0.4) 100%);
-  opacity: 0;
-  transition: opacity 0.5s var(--ease-out-expo);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.portfolio-item-modern:hover .portfolio-image-small::after {
-  opacity: 1;
+  display: none;
 }
 
 .portfolio-thumb {
@@ -2057,18 +2208,6 @@ section {
   display: block;
   object-fit: contain;
   object-position: center;
-  transition: transform 0.4s var(--ease-out-expo), filter 0.4s var(--ease-out-expo);
-  filter: brightness(0.95);
-  will-change: transform;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-  contain: layout style paint;
-}
-
-.portfolio-item-modern:hover .portfolio-thumb {
-  transform: scale(1.05) translateZ(0);
-  filter: brightness(1.05);
-  will-change: transform, filter;
 }
 
 .portfolio-content {
@@ -2095,20 +2234,10 @@ section {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin: 0;
-  transition: background 0.4s var(--ease-out-expo), color 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
   width: fit-content;
-  transform: translateZ(0);
-  backface-visibility: hidden;
 }
 
-.portfolio-item-modern:hover .portfolio-category-modern {
-  background: var(--color-light);
-  color: var(--color-dark);
-  border-color: var(--color-light);
-  transform: translateY(-2px) translateZ(0);
-  box-shadow: 0 4px 12px rgba(180, 232, 201, 0.3);
-  will-change: transform;
-}
+/* Removed hover animation to prevent glitches */
 
 .portfolio-content h3 {
   font-family: var(--font-serif);
@@ -2117,12 +2246,9 @@ section {
   color: var(--text-light);
   margin: 0;
   line-height: 1.3;
-  transition: color 0.4s var(--ease-out-expo);
 }
 
-.portfolio-item-modern:hover .portfolio-content h3 {
-  color: var(--color-light);
-}
+/* Removed hover animation to prevent glitches */
 
 .portfolio-content p {
   color: var(--text-on-dark);
@@ -2140,48 +2266,19 @@ section {
   text-decoration: none;
   font-weight: 600;
   font-size: 0.875rem;
-  transition: gap 0.4s var(--ease-out-expo), color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
   margin-top: 0.25rem;
   padding: 0.5rem 0;
   position: relative;
   width: fit-content;
-  transform: translateZ(0);
-  backface-visibility: hidden;
 }
 
 .portfolio-link-modern::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--color-light);
-  transition: width 0.4s var(--ease-out-expo);
-}
-
-.portfolio-item-modern:hover .portfolio-link-modern::after {
-  width: 100%;
+  display: none;
 }
 
 .portfolio-link-modern svg {
-  transition: transform 0.4s var(--ease-out-expo);
   width: 18px;
   height: 18px;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  will-change: transform;
-}
-
-.portfolio-item-modern:hover .portfolio-link-modern {
-  gap: 1rem;
-  transform: translateX(4px) translateZ(0);
-  will-change: transform;
-}
-
-.portfolio-item-modern:hover .portfolio-link-modern svg {
-  transform: translateX(8px) translateZ(0);
-  will-change: transform;
 }
 
 /* ============================================
@@ -5685,24 +5782,53 @@ section {
 
   .portfolio-filters {
     margin: 2rem 0 1.5rem !important;
-    gap: 0.5rem !important;
-    padding: 0 !important;
+    gap: 0.75rem !important;
+    padding: 0 1rem !important;
     display: flex !important;
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
     width: 100% !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    scroll-behavior: smooth !important;
+  }
+
+  .portfolio-filters::-webkit-scrollbar {
+    display: none !important;
   }
 
   .portfolio-filter-btn {
-    padding: 0.625rem 0.5rem !important;
-    font-size: 0.65rem !important;
-    letter-spacing: 0.3px !important;
-    flex: 1 1 calc(50% - 0.25rem) !important;
-    min-width: 0 !important;
+    padding: 0.75rem 1.25rem !important;
+    font-size: 0.8125rem !important;
+    letter-spacing: 0.5px !important;
+    flex: 0 0 auto !important;
+    min-width: auto !important;
     text-align: center !important;
     white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: calc(50% - 0.25rem) !important;
+    border-radius: var(--radius-full) !important;
+    background: rgba(5, 10, 31, 0.6) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1.5px solid var(--color-light-15) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 2px 8px rgba(5, 10, 31, 0.15) !important;
+  }
+
+  .portfolio-filter-btn:active {
+    transform: scale(0.95) !important;
+  }
+
+  .portfolio-filter-btn.active {
+    background: var(--color-light) !important;
+    color: var(--color-dark) !important;
+    border-color: var(--color-light) !important;
+    box-shadow: 
+      0 4px 12px rgba(180, 232, 201, 0.35),
+      0 0 0 3px rgba(180, 232, 201, 0.1) !important;
+    transform: scale(1.05) !important;
+    font-weight: 700 !important;
   }
 
   .portfolio-grid-modern {
@@ -7333,7 +7459,7 @@ html {
 .scroll-to-top {
   position: fixed;
   bottom: 2rem;
-  right: 2rem;
+  left: 2rem;
   width: 64px;
   height: 64px;
   background: rgba(5, 10, 31, 0.95);
@@ -7446,7 +7572,7 @@ html {
 @media (max-width: 768px) {
   .scroll-to-top {
     bottom: calc(5rem + env(safe-area-inset-bottom)) !important;
-    right: 1.5rem !important;
+    left: 1.5rem !important;
     width: 56px !important;
     height: 56px !important;
     z-index: 10000 !important;
@@ -7922,9 +8048,6 @@ html {
 }
 
 /* Stagger animations for grid items */
-.portfolio-grid-modern [data-aos] {
-  transition-delay: calc(var(--aos-delay, 0) * 1ms);
-}
 
 /* ============================================
    RESPONSIVE ADJUSTMENTS

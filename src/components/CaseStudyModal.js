@@ -5,137 +5,71 @@ const CaseStudyModal = () => {
   const { caseStudyModal, closeCaseStudyModal } = useContext(ModalContext);
 
   const caseStudyData = {
-    'andegna-tshirt': {
-      image: '/assets/Portfolio/Andegna-Tshirt-d5d4e074.webp',
-      category: 'Furniture',
-      title: 'Corporate Apparel Design – Driver\'s T-Shirt for Andegna Furniture',
-      description: 'Branded t-shirt design for Andegna Furniture\'s delivery team, created to reflect professionalism, brand consistency, and day-to-day wearability. Corporate apparel design that enhances brand visibility while maintaining comfort and functionality for delivery personnel.',
-      type: 'Apparel Design',
-      date: '2024',
-      client: 'Andegna Furniture',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create professional branded apparel that maintains brand consistency while being practical for daily delivery operations. The design needed to work in various environments, withstand daily wear, and enhance brand visibility without compromising comfort or functionality for delivery personnel.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed a clean, professional design that incorporates the brand logo and colors strategically placed for maximum visibility. The design ensures comfort and durability for delivery personnel while maintaining a professional appearance. The t-shirt design works seamlessly across different lighting conditions and environments, ensuring brand recognition at every customer touchpoint.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The branded apparel successfully increased brand visibility and enhanced the professional appearance of the delivery team. This improvement in brand presentation has positively influenced customer perception and brand recognition, creating a more cohesive brand experience throughout the customer journey.'
-      },
-      deliverables: ['T-Shirt Design', 'Brand Guidelines', 'Color Specifications', 'Print Specifications']
-    },
     'andegna-wood-metal': {
       image: '/assets/Portfolio/Office Signage For Andegna Furniture.webp',
-      category: 'Corporate',
-      title: 'Office Signage Design - Andegna Wood And Metal Works',
-      description: 'Professional signage design including office wall graphics, roll-up banner displays, and environmental graphics for impactful corporate communication. This comprehensive signage system creates a cohesive brand experience throughout the office environment.',
-      type: 'Environmental Design',
-      date: '2024',
-      client: 'Andegna Wood And Metal Works',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Design a comprehensive signage system that reflects the company\'s expertise in wood and metal works while maintaining professional corporate aesthetics. The signage needed to enhance wayfinding, communicate the brand effectively, and create a cohesive visual experience throughout the office space.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I created a unified signage system using materials and design elements that echo the company\'s core business. The design incorporates wood and metal textures in the visual language, creating a connection between the company\'s services and its visual identity. The signage system includes wall graphics, roll-up banners, and environmental graphics that work together to create a cohesive brand experience.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The comprehensive signage system enhanced brand presence and professional image throughout the office. It improved wayfinding for visitors and employees, and created a cohesive brand experience that reinforces the company\'s expertise and professionalism to clients and stakeholders.'
-      },
-      deliverables: ['Office Wall Graphics', 'Roll-up Banners', 'Environmental Graphics', 'Signage Guidelines']
-    },
-    'swan-clothing': {
-      image: '/assets/Portfolio/Full brand identity for swan clothing.webp',
-      category: 'Fashion',
-      title: 'Brand Identity - Swan Clothing',
-      description: 'Complete brand identity package including logo design, product packaging mockups, and comprehensive brand guidelines for a modern fashion brand. This project established a strong visual identity that resonates with the target audience and sets the brand apart in the competitive fashion market.',
+      category: 'Brand Identity & Logo Design',
+      title: 'Andegna Wood & Metal Works',
+      description: 'Logo and brand identity design for Andegna Wood & Metal Works, creating a strong, professional visual identity aligned with the parent brand.',
       type: 'Brand Identity',
       date: '2024',
-      client: 'Swan Clothing',
+      client: 'Andegna Wood & Metal Works',
       challenge: {
-        heading: 'The Challenge',
-        text: 'Create a distinctive brand identity for a new fashion brand that stands out in a competitive market while appealing to the target demographic. The identity needed to reflect the brand\'s values, resonate with fashion-conscious consumers, and work across various applications from packaging to digital platforms.'
+        heading: 'Challenge',
+        text: 'No existing brand identity for the sister company. Needed visual distinction without breaking alignment with Andegna Furniture. Brand had to feel durable, professional, and industry-appropriate.'
       },
       solution: {
-        heading: 'The Solution',
-        text: 'I developed a modern, elegant brand identity with a sophisticated color palette and typography that reflects the brand\'s values. The logo design is versatile and memorable, working effectively across different applications. The brand guidelines ensure consistent application across all touchpoints, from product packaging to social media, creating a cohesive brand experience.'
+        heading: 'Solution',
+        text: 'I designed a logo and brand identity that balanced boldness and simplicity, reflecting the company\'s focus on wood and metal craftsmanship. The visual direction was intentionally clean and structured to ensure versatility across physical and digital applications. The identity was developed to work seamlessly alongside the parent brand while giving Andegna Wood & Metal Works its own recognizable presence.'
       },
       results: {
-        heading: 'The Results',
-        text: 'The brand identity successfully established a strong brand presence in the fashion market. It increased brand recognition and created a foundation for consistent brand communication across all touchpoints. The cohesive visual identity has helped the brand stand out in a competitive market and connect with its target audience.'
+        heading: 'Outcome',
+        text: 'The new brand identity gave Andegna Wood & Metal Works a clear and professional visual presence. The logo provided a strong foundation for future brand applications while maintaining consistency within the broader Andegna brand family.'
       },
-      deliverables: ['Logo Design', 'Brand Guidelines', 'Packaging Design', 'Color Palette', 'Typography System']
+      deliverables: ['Brand identity concept development', 'Logo design and refinement', 'Visual system alignment with parent brand', 'Preparation of brand-ready assets']
     },
-    'maleda-coffee': {
-      image: '/assets/Portfolio/Maleda-Coffee-7b6d183c.webp',
-      category: 'Beverage',
-      title: 'Maleda Coffee',
-      description: 'Premium coffee brand identity with rich visual storytelling, packaging design, and complete brand experience from bean to cup. The identity reflects the artisanal quality and heritage of Ethiopian coffee culture, creating an emotional connection with coffee enthusiasts.',
-      type: 'Brand Identity & Packaging',
-      date: '2024',
-      client: 'Maleda Coffee',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create a premium coffee brand identity that honors Ethiopian coffee heritage while appealing to modern consumers and standing out in a crowded market. The identity needed to tell the story of the coffee\'s origin, convey quality, and create an emotional connection with coffee enthusiasts.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed a rich, authentic brand identity that combines traditional Ethiopian coffee culture with modern design aesthetics. The packaging design tells the story of the coffee\'s origin and quality through visual storytelling. The color palette and typography reflect the premium nature of the product while honoring its cultural heritage.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The brand identity successfully established premium brand positioning in the coffee market. It increased consumer engagement and created a memorable brand experience that differentiates the product. The authentic storytelling approach has resonated with coffee enthusiasts, creating a strong emotional connection with the brand.'
-      },
-      deliverables: ['Brand Identity', 'Packaging Design', 'Logo Design', 'Brand Guidelines', 'Visual Storytelling']
-    },
-    'yat-construction': {
-      image: '/assets/Portfolio/YAT-Construction-PLC-8e3605ca.webp',
-      category: 'Corporate',
-      title: 'Company Logo Rebranding - Y.A.T Construction PLC',
-      description: 'Complete logo rebranding and stationery design including professional letterheads, business cards, envelopes, and folders for cohesive corporate identity with modern brand transformation. This rebranding project modernized the company\'s visual identity while maintaining trust and credibility.',
-      type: 'Corporate Rebranding',
-      date: '2024',
-      client: 'Y.A.T Construction PLC',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Modernize the company\'s brand identity while maintaining the trust and credibility established over years of operation. The rebrand needed to reflect the company\'s expertise and reliability while creating a more contemporary and professional appearance that appeals to modern clients.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I created a contemporary logo design that reflects the company\'s expertise and reliability in the construction industry. The new identity maintains the trust associated with the established brand while introducing modern design elements. A comprehensive stationery system ensures consistent brand communication across all business touchpoints, from letterheads to business cards.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The rebranding successfully refreshed the company\'s brand image while maintaining its credibility. The modernized identity improved the professional appearance and created a cohesive brand system that enhances credibility and brand recognition. The new identity better reflects the company\'s expertise and appeals to both existing and potential clients.'
-      },
-      deliverables: ['Logo Design', 'Stationery Design', 'Business Cards', 'Letterheads', 'Brand Guidelines']
-    },
-    'alta': {
+    'alta-counseling': {
       image: '/assets/Portfolio/Full brand identity for Alta Counseling.webp',
-      category: 'Healthcare',
-      title: 'Company Logo Rebranding - Alta Counseling',
-      description: 'Complete company logo rebranding including full stationery design, roll-up banners, and website banner. Comprehensive brand identity overhaul with modern design elements and cohesive visual system for a healthcare counseling service.',
-      type: 'Healthcare Rebranding',
+      category: 'Brand Identity Redesign',
+      title: 'Alta Counseling',
+      description: 'Brand identity redesign for Alta Counseling focused on clarity, trust, and consistency through a calm, professional visual system.',
+      type: 'Brand Identity',
       date: '2024',
       client: 'Alta Counseling',
       challenge: {
-        heading: 'The Challenge',
-        text: 'Rebrand a healthcare counseling service to reflect modern therapeutic approaches while maintaining a professional, trustworthy appearance. The identity needed to balance professionalism with approachability, conveying care and expertise to both clients and healthcare professionals.'
+        heading: 'Challenge',
+        text: 'Existing brand lacked clarity and emotional alignment. Visual identity did not reflect the sensitivity and professionalism of the service. Inconsistent use of colors, typography, and visual elements.'
       },
       solution: {
-        heading: 'The Solution',
-        text: 'I developed a warm, approachable brand identity that balances professionalism with accessibility. The design uses colors and design elements that convey care and expertise, creating a welcoming yet professional appearance. The comprehensive visual system includes stationery, banners, and digital assets that work together to create a cohesive brand experience.'
+        heading: 'Solution',
+        text: 'I led a full rebranding process focused on simplicity, emotional balance, and consistency. The new visual identity was designed to feel warm and reassuring while maintaining a clean, professional tone suitable for a counseling practice.'
       },
       results: {
-        heading: 'The Results',
-        text: 'The rebranding successfully modernized the brand image while maintaining its professional and trustworthy appearance. It improved client perception and created a cohesive brand system that reflects the organization\'s values and approach to care. The new identity better communicates the service\'s commitment to providing compassionate, professional counseling services.'
+        heading: 'Outcome',
+        text: 'The redesigned identity gave Alta Counseling a clearer and more confident visual presence. The new brand helped communicate trust, professionalism, and care, aligning the visual language with the values of the service.'
       },
-      deliverables: ['Logo Design', 'Stationery Design', 'Roll-up Banners', 'Website Assets', 'Brand Guidelines']
+      deliverables: ['Brand identity concept development', 'Logo design and visual system', 'Color palette and typography selection', 'Brand consistency across applications']
+    },
+    'niqat-coffee': {
+      image: '/assets/Portfolio/Social Media Design for niqat coffee.webp',
+      category: 'Social Media Campaign & Brand Presence',
+      title: 'Niqat Coffee',
+      description: 'Social media campaign and content design for Niqat Coffee, building brand presence, visual consistency, and audience engagement from scratch.',
+      type: 'Social Media Design',
+      date: '2024',
+      client: 'Niqat Coffee',
+      challenge: {
+        heading: 'Challenge',
+        text: 'No existing social media presence. Low brand awareness online. Need for consistent content direction and visual identity.'
+      },
+      solution: {
+        heading: 'Solution',
+        text: 'I created Niqat Coffee\'s social media accounts and developed a clear content direction focused on brand storytelling, product highlights, and audience engagement. The visuals were designed to be consistent, recognizable, and aligned with the brand\'s tone.'
+      },
+      results: {
+        heading: 'Outcome',
+        text: 'The campaign established a recognizable brand presence on social media and led to increased engagement through consistent, visually cohesive content. Niqat Coffee gained stronger visibility and interaction with its audience.'
+      },
+      deliverables: ['Social media account setup', 'Content strategy and visual direction', 'Graphic design for posts and stories', 'Ongoing content creation and optimization']
     }
   };
 

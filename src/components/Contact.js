@@ -168,13 +168,13 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="contact">
+    <section id="contact" className="contact" aria-labelledby="contact-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number">08</span>
+          <span className="section-number">09</span>
           <div className="section-header">
             <span className="section-label">Get in Touch</span>
-            <h2 className="section-title">
+            <h2 id="contact-heading" className="section-title">
               <span className="title-main">Let's Create Something</span>
               <span className="title-accent">Amazing</span>
             </h2>
@@ -185,7 +185,7 @@ const Contact = () => {
         
         <div className="contact-content-wrapper">
           <div className="contact-form-wrapper">
-            <form className="contact-form-simple" onSubmit={handleSubmit}>
+            <form className="contact-form-simple" onSubmit={handleSubmit} aria-label="Contact form">
               <div className="form-row">
                 <div className="form-field">
                   <label htmlFor="firstName">First Name <span aria-label="required">*</span></label>

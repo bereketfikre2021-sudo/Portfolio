@@ -124,6 +124,7 @@ const Navigation = () => {
       hasDropdown: true,
       dropdownItems: [
         { href: '#portfolio', label: 'Featured Works', section: 'portfolio' },
+        { href: '#case-studies', label: 'Case Studies', section: 'case-studies' },
         { href: '#blog', label: 'Blog', section: 'blog' }
       ]
     },
@@ -141,7 +142,7 @@ const Navigation = () => {
           >
             <img 
               src={`${process.env.PUBLIC_URL || ''}/assets/Logo.svg`} 
-              alt="Bereket Fikre - Creative Graphic Designer and Brand Builder Logo" 
+              alt="Bereket Fikre - Senior Graphic Designer and Brand Builder Logo" 
               className="logo-image" 
               width="150" 
               height="48"
@@ -163,7 +164,7 @@ const Navigation = () => {
                   <>
                     <a 
                       href={link.href} 
-                      className={`nav-link ${activeSection === link.section || activeSection === 'blog' ? 'active' : ''}`}
+                      className={`nav-link ${activeSection === link.section || activeSection === 'blog' || activeSection === 'case-studies' ? 'active' : ''}`}
                       onClick={(e) => {
                         e.preventDefault();
                         setPortfolioDropdownOpen(!portfolioDropdownOpen);

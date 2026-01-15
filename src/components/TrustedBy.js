@@ -40,10 +40,10 @@ const TrustedBy = () => {
   const allCompanies = [...companies, ...companies, ...companies, ...companies];
 
   return (
-    <section id="trusted-by" className="trusted-by">
+    <section id="trusted-by" className="trusted-by" aria-labelledby="trusted-by-heading">
       <div className="container">
         <div className="section-intro">
-          <span className="section-number">06</span>
+          <span className="section-number">07</span>
           <div className="section-header">
             <span className="section-label">Our Partners</span>
             <h2 className="section-title">

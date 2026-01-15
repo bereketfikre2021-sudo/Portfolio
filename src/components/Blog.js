@@ -90,11 +90,11 @@ const Blog = () => {
       description: 'Explore the 7 fundamental principles of graphic design including balance, contrast, hierarchy, alignment, repetition, proportion, and movement. Learn how these core concepts form the foundation of effective visual communication.'
     },
     {
-      id: 'design-trends-2025',
+      id: 'design-trends-2026',
       image: '/assets/Portfolio/Graphic Design Trends 2025.webp',
-      category: 'Trends · 2025',
-      title: 'Graphic Design Trends 2025: What\'s Shaping the Future',
-      description: 'Discover the latest graphic design trends for 2025, from bold typography to sustainable design practices. Stay ahead with insights into emerging visual styles and techniques.'
+      category: 'Trends · 2026',
+      title: 'Graphic Design Trends 2026: What\'s Shaping the Future',
+      description: 'Discover the latest graphic design trends for 2026, from bold typography to sustainable design practices. Stay ahead with insights into emerging visual styles and techniques.'
     },
     {
       id: 'brand-identity',
@@ -106,13 +106,13 @@ const Blog = () => {
   ];
 
   return (
-    <section id="blog" className="case-studies">
+    <section id="blog" className="case-studies" aria-labelledby="blog-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number">04</span>
+          <span className="section-number">05</span>
           <div className="section-header">
             <span className="section-label">Design Insights</span>
-            <h2 className="section-title">
+            <h2 id="blog-heading" className="section-title">
               <span className="title-main">Design</span>
               <span className="title-accent">Blog</span>
             </h2>

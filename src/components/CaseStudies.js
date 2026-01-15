@@ -6,36 +6,36 @@ const CaseStudies = () => {
 
   const caseStudies = [
     {
-      id: 'swan-clothing',
-      image: '/assets/Portfolio/Full brand identity for swan clothing.webp',
-      category: 'Brand Identity · Fashion',
-      title: 'Brand Identity - Swan Clothing',
-      description: 'Complete brand identity package including logo design, product packaging mockups, and comprehensive brand guidelines for a modern fashion brand.'
+      id: 'andegna-wood-metal',
+      image: '/assets/Portfolio/Office Signage For Andegna Furniture.webp',
+      category: 'Brand Identity & Logo Design',
+      title: 'Andegna Wood & Metal Works',
+      description: 'Logo and brand identity design for Andegna Wood & Metal Works, creating a strong, professional visual identity aligned with the parent brand.'
     },
     {
-      id: 'maleda-coffee',
-      image: '/assets/Portfolio/Maleda-Coffee-7b6d183c.webp',
-      category: 'Beverage',
-      title: 'Maleda Coffee',
-      description: 'Premium coffee brand identity with rich visual storytelling, packaging design, and complete brand experience from bean to cup.'
+      id: 'alta-counseling',
+      image: '/assets/Portfolio/Full brand identity for Alta Counseling.webp',
+      category: 'Brand Identity Redesign',
+      title: 'Alta Counseling',
+      description: 'Brand identity redesign for Alta Counseling focused on clarity, trust, and consistency through a calm, professional visual system.'
     },
     {
-      id: 'yat-construction',
-      image: '/assets/Portfolio/YAT-Construction-PLC-8e3605ca.webp',
-      category: 'Logo Rebranding · Stationery Design · Corporate',
-      title: 'Company Logo Rebranding - Y.A.T Construction PLC',
-      description: 'Complete logo rebranding and stationery design including professional letterheads, business cards, envelopes, and folders for cohesive corporate identity.'
+      id: 'niqat-coffee',
+      image: '/assets/Portfolio/Social Media Design for niqat coffee.webp',
+      category: 'Social Media Campaign & Brand Presence',
+      title: 'Niqat Coffee',
+      description: 'Social media campaign and content design for Niqat Coffee, building brand presence, visual consistency, and audience engagement from scratch.'
     }
   ];
 
   return (
-    <section id="case-studies" className="case-studies">
+    <section id="case-studies" className="case-studies" data-aos="fade-up" aria-labelledby="case-studies-heading">
       <div className="container">
         <div className="section-intro">
           <span className="section-number">04</span>
           <div className="section-header">
             <span className="section-label">In-Depth Analysis</span>
-            <h2 className="section-title">
+            <h2 id="case-studies-heading" className="section-title">
               <span className="title-main">Case</span>
               <span className="title-accent">Studies</span>
             </h2>
@@ -53,7 +53,7 @@ const CaseStudies = () => {
               <div className="case-study-image">
                 <img 
                   src={`${process.env.PUBLIC_URL || ''}${caseStudy.image}`} 
-                  alt={`${caseStudy.title} - ${caseStudy.category} case study by Bereket Fikre`} 
+                  alt={`${caseStudy.title} - ${caseStudy.description}`} 
                   className="case-study-thumb" 
                   loading="lazy" 
                   width="600" 

@@ -4,6 +4,7 @@ export const ModalContext = createContext();
 
 export const ModalProvider = ({ children }) => {
   const [portfolioModal, setPortfolioModal] = useState({ isOpen: false, projectId: null });
+  const [caseStudyModal, setCaseStudyModal] = useState({ isOpen: false, caseStudyId: null });
   const [serviceModal, setServiceModal] = useState({ isOpen: false, serviceId: null });
   const [formModal, setFormModal] = useState({ type: null, message: null });
   const [blogModal, setBlogModal] = useState({ isOpen: false, blogId: null });
@@ -17,6 +18,16 @@ export const ModalProvider = ({ children }) => {
 
   const closePortfolioModal = () => {
     setPortfolioModal({ isOpen: false, projectId: null });
+    document.body.style.overflow = '';
+  };
+
+  const openCaseStudyModal = (caseStudyId) => {
+    setCaseStudyModal({ isOpen: true, caseStudyId });
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeCaseStudyModal = () => {
+    setCaseStudyModal({ isOpen: false, caseStudyId: null });
     document.body.style.overflow = '';
   };
 
@@ -77,6 +88,9 @@ export const ModalProvider = ({ children }) => {
         portfolioModal,
         openPortfolioModal,
         closePortfolioModal,
+        caseStudyModal,
+        openCaseStudyModal,
+        closeCaseStudyModal,
         serviceModal,
         openServiceModal,
         closeServiceModal,

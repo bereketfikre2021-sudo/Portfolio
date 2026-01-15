@@ -72,18 +72,18 @@ const BlogModal = () => {
         'Movement guides viewers through your design in a deliberate flow'
       ]
     },
-    'design-trends-2025': {
+    'design-trends-2026': {
       image: '/assets/Portfolio/Graphic Design Trends 2025.webp',
       category: 'Design Trends',
-      title: 'Graphic Design Trends 2025: What\'s Shaping the Future',
-      description: 'The graphic design landscape continues to evolve, with 2025 bringing fresh perspectives on visual communication. From bold typography to sustainable design practices, these trends reflect our changing world and the ways designers are responding to new challenges and opportunities.',
-      date: 'January 2025',
+      title: 'Graphic Design Trends 2026: What\'s Shaping the Future',
+      description: 'The graphic design landscape continues to evolve, with 2026 bringing fresh perspectives on visual communication. From bold typography to sustainable design practices, these trends reflect our changing world and the ways designers are responding to new challenges and opportunities.',
+      date: 'January 2026',
       author: 'Bereket Fikre',
       type: 'Trend Analysis',
       sections: [
         {
           heading: 'Bold Typography and Expressive Letterforms',
-          text: '2025 sees a return to bold, expressive typography that makes a statement. Designers are embracing custom letterforms, oversized text, and typography as the primary visual element. This trend reflects a desire for authenticity and personality in brand communication, moving away from safe, generic type choices toward more distinctive and memorable typographic solutions.'
+          text: '2026 sees a return to bold, expressive typography that makes a statement. Designers are embracing custom letterforms, oversized text, and typography as the primary visual element. This trend reflects a desire for authenticity and personality in brand communication, moving away from safe, generic type choices toward more distinctive and memorable typographic solutions.'
         },
         {
           heading: 'Sustainable and Eco-Conscious Design',
@@ -95,7 +95,7 @@ const BlogModal = () => {
         },
         {
           heading: 'Minimalism with Purpose',
-          text: 'While minimalism remains popular, 2025 sees a shift toward purposeful minimalism—designs that are clean and simple but with intentional, meaningful elements. Every element serves a function, and white space is used strategically to create focus and breathing room. This approach values clarity and user experience over decorative elements.'
+          text: 'While minimalism remains popular, 2026 sees a shift toward purposeful minimalism—designs that are clean and simple but with intentional, meaningful elements. Every element serves a function, and white space is used strategically to create focus and breathing room. This approach values clarity and user experience over decorative elements.'
         },
         {
           heading: 'Dynamic Motion and Animation',

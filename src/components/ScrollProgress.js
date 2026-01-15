@@ -124,11 +124,10 @@ const ScrollProgress = () => {
   }, []);
 
   return (
-    <div 
-      className="scroll-progress" 
-      id="scrollProgress"
-      style={{ width: `${progress}%` }}
-    />
+    <div className="scroll-progress-left" id="scrollProgress">
+      <div className="scroll-progress-bar" style={{ height: `${progress}%` }}></div>
+      <div className="scroll-progress-percentage">{Math.round(progress)}%</div>
+    </div>
   );
 };
 

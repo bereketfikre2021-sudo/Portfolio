@@ -7,9 +7,8 @@ import Hero from './Hero';
 import About from './About';
 import Services from './Services';
 import Portfolio from './Portfolio';
-import ScrollProgress from './ScrollProgress';
+import CallNowButton from './CallNowButton';
 import ScrollToTop from './ScrollToTop';
-import FloatingQuoteButton from './FloatingQuoteButton';
 import KeyboardShortcuts from './KeyboardShortcuts';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
@@ -17,10 +16,10 @@ import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 const ScrollPattern = lazy(() => import('./ScrollPattern'));
 const ParticleCanvas = lazy(() => import('./ParticleCanvas'));
 const CustomCursor = lazy(() => import('./CustomCursor'));
-const ChristmasFloatingIcons = lazy(() => import('./ChristmasFloatingIcons'));
 
 // Lazy load modals - they're not needed until user interaction
 const PortfolioModal = lazy(() => import('./PortfolioModal'));
+const CaseStudyModal = lazy(() => import('./CaseStudyModal'));
 const BlogModal = lazy(() => import('./BlogModal'));
 const ServicesModal = lazy(() => import('./ServicesModal'));
 const FormModals = lazy(() => import('./FormModals'));
@@ -29,6 +28,7 @@ const ProjectRequestModal = lazy(() => import('./ProjectRequestModal'));
 const LightboxGallery = lazy(() => import('./LightboxGallery'));
 
 // Lazy load below-the-fold components to reduce initial bundle size and improve performance
+const CaseStudies = lazy(() => import('./CaseStudies'));
 const Blog = lazy(() => import('./Blog'));
 const Testimonials = lazy(() => import('./Testimonials'));
 const TrustedBy = lazy(() => import('./TrustedBy'));
@@ -118,12 +118,11 @@ function AppContent() {
       <a href="#main-content" className="skip-to-main-content">
         Skip to main content
       </a>
-      <ScrollProgress />
+      <CallNowButton />
       <Suspense fallback={null}>
         <ScrollPattern />
         <ParticleCanvas />
         <CustomCursor />
-        <ChristmasFloatingIcons />
       </Suspense>
       <Navigation />
       <main id="main-content">
@@ -131,6 +130,9 @@ function AppContent() {
         <About />
         <Services />
         <Portfolio />
+        <Suspense fallback={null}>
+          <CaseStudies />
+        </Suspense>
         <Suspense fallback={<LoadingFallback />}>
           <Blog />
           <Testimonials />
@@ -142,10 +144,10 @@ function AppContent() {
         </Suspense>
       </main>
       <ScrollToTop />
-      <FloatingQuoteButton />
       <KeyboardShortcuts />
       <Suspense fallback={null}>
         <PortfolioModal />
+        <CaseStudyModal />
         <BlogModal />
         <ServicesModal />
         <FormModals />
