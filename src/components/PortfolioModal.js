@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
 import LightboxGallery from './LightboxGallery';
 import { useFocusTrap } from '../hooks/useFocusTrap';
+import { portfolioProjects } from './Portfolio';
 
 const PortfolioModal = () => {
   const { portfolioModal, closePortfolioModal } = useContext(ModalContext);
@@ -10,22 +11,6 @@ const PortfolioModal = () => {
   const modalRef = useRef(null);
   useFocusTrap(portfolioModal?.isOpen, modalRef);
   
-  // Announce modal opening to screen readers
-  useEffect(() => {
-    if (portfolioModal?.isOpen && portfolioModal?.projectId) {
-      const project = projectData[portfolioModal.projectId];
-      if (project) {
-        const liveRegion = document.getElementById('live-region');
-        if (liveRegion) {
-          liveRegion.textContent = `Opened project: ${project.title}. ${project.description}`;
-          setTimeout(() => {
-            liveRegion.textContent = '';
-          }, 1000);
-        }
-      }
-    }
-  }, [portfolioModal?.isOpen, portfolioModal?.projectId]);
-
   const projectData = {
     'andegna-tshirt': {
       image: '/assets/Portfolio/Andegna-Tshirt-d5d4e074.webp',
@@ -1505,6 +1490,42 @@ const PortfolioModal = () => {
     }
   };
 
+  // Helper function to get project data (with fallback)
+  const getProjectData = (projectId) => {
+    let project = projectData[projectId];
+    if (!project) {
+      const basicProject = portfolioProjects.find(p => p.id === projectId);
+      if (basicProject) {
+        project = {
+          image: basicProject.image,
+          category: basicProject.category,
+          title: basicProject.title,
+          description: basicProject.description,
+          type: basicProject.category.split(' · ')[0] || 'Design',
+          date: '2024',
+          client: basicProject.company || 'Client'
+        };
+      }
+    }
+    return project;
+  };
+
+  // Announce modal opening to screen readers
+  useEffect(() => {
+    if (portfolioModal?.isOpen && portfolioModal?.projectId) {
+      const project = getProjectData(portfolioModal.projectId);
+      if (project) {
+        const liveRegion = document.getElementById('live-region');
+        if (liveRegion) {
+          liveRegion.textContent = `Opened project: ${project.title}. ${project.description}`;
+          setTimeout(() => {
+            liveRegion.textContent = '';
+          }, 1000);
+        }
+      }
+    }
+  }, [portfolioModal?.isOpen, portfolioModal?.projectId]);
+
   const previousFocusRef = React.useRef(null);
 
   useEffect(() => {
@@ -1554,7 +1575,8 @@ const PortfolioModal = () => {
 
   if (!portfolioModal.isOpen || !portfolioModal.projectId) return null;
 
-  const project = projectData[portfolioModal.projectId];
+  // Get project from detailed projectData, or fallback to basic info from portfolioProjects
+  const project = getProjectData(portfolioModal.projectId);
   if (!project) return null;
 
   return (
@@ -1716,7 +1738,7 @@ const PortfolioModal = () => {
           currentIndex={0}
           isOpen={lightboxOpen}
           onClose={() => setLightboxOpen(false)}
-          projectTitle={projectData[portfolioModal.projectId]?.title}
+          projectTitle={getProjectData(portfolioModal.projectId)?.title}
         />
       )}
     </div>

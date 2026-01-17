@@ -1,20 +1,8 @@
 import React, { useContext, useState, useMemo } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
-const Portfolio = () => {
-  const { openPortfolioModal } = useContext(ModalContext);
-  const [activeFilter, setActiveFilter] = useState('branding');
-
-  const services = [
-    { id: 'branding', label: 'Branding' },
-    { id: 'campaigns', label: 'Campaigns' },
-    { id: 'print', label: 'Print' },
-    { id: 'digital', label: 'Digital' },
-    { id: 'brand-applications', label: 'Brand Applications' },
-    { id: 'art-direction', label: 'Art Direction' }
-  ];
-
-  const projects = [
+// Projects array - exported for use in PortfolioModal
+export const portfolioProjects = [
     // Brand Identity Projects
     {
       id: 'swan-clothing',
@@ -752,11 +740,24 @@ const Portfolio = () => {
       service: 'brand-applications-assets',
       company: 'Raya Hotel & Convention Center'
     },
+];
+
+const Portfolio = () => {
+  const { openPortfolioModal } = useContext(ModalContext);
+  const [activeFilter, setActiveFilter] = useState('branding');
+
+  const services = [
+    { id: 'branding', label: 'Branding' },
+    { id: 'campaigns', label: 'Campaigns' },
+    { id: 'print', label: 'Print' },
+    { id: 'digital', label: 'Digital' },
+    { id: 'brand-applications', label: 'Brand Applications' },
+    { id: 'art-direction', label: 'Art Direction' }
   ];
 
   // Shuffle function to randomize project order (only once on mount)
   const shuffledProjects = useMemo(() => {
-    const shuffled = [...projects];
+    const shuffled = [...portfolioProjects];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];

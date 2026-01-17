@@ -58,21 +58,15 @@ const About = () => {
         
         <div className="about-grid">
           <div className="about-text-block" data-aos="fade-right" data-aos-delay="100">
-            <div className="text-block-header">
+            <div className="text-block-header desktop-only">
               <h3>Hello, I'm Bereket</h3>
               <div className="divider-short"></div>
             </div>
-            <p className="text-large">
+            <p className="text-large desktop-only">
               I design intentional, strategic visual identities that help brands communicate clearly and consistently.
             </p>
-            <p className="text-body">
-              With experience in logo design, brand systems, and digital and print assets, I work closely with clients to translate ideas into cohesive visual identities that truly represent who they are.
-            </p>
-            <p className="text-body">
-              By combining design thinking with brand strategy, I help businesses of all sizes build brands that feel confident, recognizable, and built to last.
-            </p>
-            <p className="text-body" style={{ marginTop: '1.5rem', fontWeight: 600, color: 'var(--color-light)' }}>
-              Senior Graphic Designer & Brand Builder
+            <p className="text-large mobile-only">
+              Senior Graphic Designer and Brand Builder focused on creating intentional, consistent visual identities across digital and print.
             </p>
             
             <div className="signature" style={{ marginTop: '2rem' }}>
@@ -87,7 +81,7 @@ const About = () => {
               />
             </div>
             
-            <div className="tools-showcase" ref={toolsRef} data-aos="fade-up" data-aos-delay="150">
+            <div className="tools-showcase desktop-only" ref={toolsRef} data-aos="fade-up" data-aos-delay="150">
               <h4 className="tools-title">Tools</h4>
               <div className="tools-list">
                 <div className="tool-item" data-tool="Adobe Photoshop">
@@ -147,70 +141,50 @@ const About = () => {
               <div className="card-accent"></div>
             </div>
             
-            <div className="about-features" data-aos="fade-up" data-aos-delay="250">
-              <div className="feature-item">
-                <div className="feature-icon">✓</div>
-                <div className="feature-content">
-                  <h4>Strategic Design</h4>
-                  <p>Data-driven decisions meet creative vision</p>
-                </div>
-              </div>
-              <div className="feature-item">
-                <div className="feature-icon">✓</div>
-                <div className="feature-content">
-                  <h4>Brand Focus</h4>
-                  <p>Building memorable brand identities</p>
-                </div>
-              </div>
-              <div className="feature-item">
-                <div className="feature-icon">✓</div>
-                <div className="feature-content">
-                  <h4>User-Centered</h4>
-                  <p>Designs that users love and understand</p>
-                </div>
-              </div>
+          </div>
+        </div>
+        
+        <div className="about-features-fullwidth desktop-only" data-aos="fade-up" data-aos-delay="300">
+          <div className="feature-item">
+            <div className="feature-icon">✓</div>
+            <div className="feature-content">
+              <h4>Strategic Design</h4>
+              <p>Data-driven decisions meet creative vision</p>
+            </div>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">✓</div>
+            <div className="feature-content">
+              <h4>Brand Focus</h4>
+              <p>Building memorable brand identities</p>
+            </div>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">✓</div>
+            <div className="feature-content">
+              <h4>User-Centered</h4>
+              <p>Designs that users love and understand</p>
             </div>
           </div>
         </div>
         
-        <div className="skills-showcase" data-aos="fade-up" data-aos-delay="300">
+        <div className="skills-showcase desktop-only" data-aos="fade-up" data-aos-delay="300">
           <h4 className="skills-title">Core Expertise</h4>
           <div className="skills-list">
             <div className="skill-item">
-              <span className="skill-name">Brand Identity Design & Visual Systems</span>
+              <span className="skill-name">Brand Identity & Logo Design</span>
             </div>
             <div className="skill-item">
-              <span className="skill-name">Logo Design & Brand Marks</span>
+              <span className="skill-name">Visual Systems & Brand Consistency</span>
             </div>
             <div className="skill-item">
-              <span className="skill-name">Visual Storytelling & Concept Development</span>
+              <span className="skill-name">Creative Direction & Visual Storytelling</span>
             </div>
             <div className="skill-item">
-              <span className="skill-name">Creative Direction & Art Direction</span>
+              <span className="skill-name">Digital & Print Design</span>
             </div>
             <div className="skill-item">
-              <span className="skill-name">Brand Consistency & Design Standards</span>
-            </div>
-            <div className="skill-item">
-              <span className="skill-name">Campaign & Marketing Visuals</span>
-            </div>
-            <div className="skill-item">
-              <span className="skill-name">Print Design (Catalogs, Brochures, Posters)</span>
-            </div>
-            <div className="skill-item">
-              <span className="skill-name">Digital Design (Social Media & Web Assets)</span>
-            </div>
-            <div className="skill-item">
-              <span className="skill-name">Typography & Layout Design</span>
-            </div>
-            <div className="skill-item">
-              <span className="skill-name">Product Presentation & Visual Hierarchy</span>
-            </div>
-            <div className="skill-item">
-              <span className="skill-name">Photo Direction & Basic Product Photography</span>
-            </div>
-            <div className="skill-item">
-              <span className="skill-name">Design for Digital & Print Production</span>
+              <span className="skill-name">Social Media Visuals</span>
             </div>
           </div>
         </div>
