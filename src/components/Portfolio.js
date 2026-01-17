@@ -524,11 +524,83 @@ const Portfolio = () => {
     },
     // Art Direction Projects
     {
-      id: 'art-direction',
+      id: 'art-direction-1',
       image: '/assets/Portfolio/Art Direction.webp',
       category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance',
-      description: 'Comprehensive art direction and visual guidance for product presentation, photography, and creative assets to ensure high-quality, cohesive results.',
+      title: 'Art Direction & Visual Guidance - Project 1',
+      description: 'Comprehensive art direction and visual guidance for product presentation, photography, and creative assets. This project involved developing a cohesive visual language across multiple touchpoints, ensuring brand consistency and high-quality execution. The art direction encompassed styling, composition, color palette selection, and overall aesthetic direction for product photography and marketing materials.',
+      service: 'art-direction-visual-guidance',
+      company: 'Various Clients'
+    },
+    {
+      id: 'art-direction-2',
+      image: '/assets/Portfolio/Art Direction-1 copy.webp',
+      category: 'Art Direction · Visual Guidance',
+      title: 'Art Direction & Visual Guidance - Project 2',
+      description: 'Professional art direction and visual guidance for creative campaigns and brand storytelling. This project focused on establishing visual narratives that align with brand identity, including direction for photography shoots, video production, and digital content creation. The guidance ensured all visual elements work harmoniously to communicate the brand message effectively.',
+      service: 'art-direction-visual-guidance',
+      company: 'Various Clients'
+    },
+    {
+      id: 'art-direction-3',
+      image: '/assets/Portfolio/Art Direction-2 copy.webp',
+      category: 'Art Direction · Visual Guidance',
+      title: 'Art Direction & Visual Guidance - Project 3',
+      description: 'Strategic art direction for product launches and marketing initiatives. This project involved creating comprehensive visual guidelines for product photography, including lighting, composition, background selection, and styling direction. The art direction ensured consistent visual quality across all product presentations and marketing channels.',
+      service: 'art-direction-visual-guidance',
+      company: 'Various Clients'
+    },
+    {
+      id: 'art-direction-4',
+      image: '/assets/Portfolio/Art Direction-3 copy.webp',
+      category: 'Art Direction · Visual Guidance',
+      title: 'Art Direction & Visual Guidance - Project 4',
+      description: 'Comprehensive art direction for brand campaigns and visual communication. This project encompassed developing creative concepts, visual style guides, and direction for photography and videography teams. The guidance ensured all creative assets maintain brand integrity while achieving compelling visual storytelling that resonates with target audiences.',
+      service: 'art-direction-visual-guidance',
+      company: 'Various Clients'
+    },
+    {
+      id: 'art-direction-5',
+      image: '/assets/Portfolio/Art Direction-4 copy.webp',
+      category: 'Art Direction · Visual Guidance',
+      title: 'Art Direction & Visual Guidance - Project 5',
+      description: 'Professional art direction for digital and print marketing materials. This project involved establishing visual direction for social media content, advertising campaigns, and promotional materials. The art direction included color palette selection, typography guidance, layout composition, and overall aesthetic direction to ensure cohesive brand presentation across all platforms.',
+      service: 'art-direction-visual-guidance',
+      company: 'Various Clients'
+    },
+    {
+      id: 'art-direction-6',
+      image: '/assets/Portfolio/Art Direction-5 copy.webp',
+      category: 'Art Direction · Visual Guidance',
+      title: 'Art Direction & Visual Guidance - Project 6',
+      description: 'Strategic art direction for brand identity and visual systems. This project focused on creating comprehensive visual guidelines that extend beyond logo design to encompass photography style, illustration direction, and overall creative execution. The art direction ensured all brand touchpoints maintain visual consistency and brand alignment.',
+      service: 'art-direction-visual-guidance',
+      company: 'Various Clients'
+    },
+    {
+      id: 'art-direction-7',
+      image: '/assets/Portfolio/Art Direction-6 copy.webp',
+      category: 'Art Direction · Visual Guidance',
+      title: 'Art Direction & Visual Guidance - Project 7',
+      description: 'Comprehensive art direction for creative projects and visual campaigns. This project involved developing visual concepts, directing photography sessions, and providing guidance for post-production processes. The art direction ensured high-quality visual outcomes that align with brand values and effectively communicate the intended message to target audiences.',
+      service: 'art-direction-visual-guidance',
+      company: 'Various Clients'
+    },
+    {
+      id: 'art-direction-8',
+      image: '/assets/Portfolio/Art Direction-7 copy.webp',
+      category: 'Art Direction · Visual Guidance',
+      title: 'Art Direction & Visual Guidance - Project 8',
+      description: 'Professional art direction for product photography and visual content creation. This project encompassed styling direction, composition guidelines, lighting specifications, and overall aesthetic direction for product shoots. The art direction ensured consistent visual quality and brand alignment across all product imagery used in marketing and e-commerce platforms.',
+      service: 'art-direction-visual-guidance',
+      company: 'Various Clients'
+    },
+    {
+      id: 'art-direction-9',
+      image: '/assets/Portfolio/Art Direction-8 copy.webp',
+      category: 'Art Direction · Visual Guidance',
+      title: 'Art Direction & Visual Guidance - Project 9',
+      description: 'Strategic art direction for brand campaigns and visual storytelling initiatives. This project involved creating comprehensive visual guidelines, directing creative teams, and ensuring brand consistency across all visual touchpoints. The art direction encompassed photography direction, video production guidance, and digital content creation to deliver cohesive and impactful brand experiences.',
       service: 'art-direction-visual-guidance',
       company: 'Various Clients'
     },
@@ -723,6 +795,12 @@ const Portfolio = () => {
       filtered = shuffledProjects.filter(project => 
         project.service === 'art-direction-visual-guidance'
       );
+      // Sort art direction projects by ID to maintain numerical order (1-9)
+      filtered.sort((a, b) => {
+        const numA = parseInt(a.id.match(/\d+/)?.[0] || '0');
+        const numB = parseInt(b.id.match(/\d+/)?.[0] || '0');
+        return numA - numB;
+      });
     } else if (activeFilter === 'brand-applications') {
       // Brand Applications: Brand Applications & Assets
       filtered = shuffledProjects.filter(project => 

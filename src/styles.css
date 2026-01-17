@@ -2075,7 +2075,7 @@ section {
   color: var(--text-light);
   position: relative;
   overflow: hidden;
-  padding-bottom: 0;
+  padding-bottom: var(--space-32);
 }
 
 .portfolio .section-title .title-main {
@@ -7113,6 +7113,18 @@ a, button, [role="button"], [tabindex="0"] {
 
 [data-aos].aos-animate {
   pointer-events: auto;
+}
+
+/* Prevent layout shift and glitches for case-studies section */
+#case-studies[data-aos] {
+  min-height: 1px;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+#case-studies[data-aos].aos-animate {
+  will-change: auto;
 }
 
 /* Ensure blog section content is visible - fallback if AOS doesn't work */

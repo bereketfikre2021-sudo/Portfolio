@@ -29,7 +29,7 @@ const CaseStudies = () => {
   ];
 
   return (
-    <section id="case-studies" className="case-studies" data-aos="fade-up" aria-labelledby="case-studies-heading">
+    <section id="case-studies" className="case-studies"  aria-labelledby="case-studies-heading">
       <div className="container">
         <div className="section-intro">
           <span className="section-number">04</span>
