@@ -18,42 +18,20 @@ const ServicesModal = () => {
       ),
       category: 'Branding Service',
       title: 'Brand Identity',
-      description: 'Logo design, visual identity systems, brand guidelines, sub-brand development',
+      description: 'Logo design, visual systems, brand consistency',
       features: [
         'Logo Design',
-        'Visual Identity Systems',
+        'Visual Systems',
+        'Brand Consistency',
         'Brand Guidelines',
-        'Sub-brand Development',
         'Color Palette & Typography',
         'Brand Applications'
       ],
       type: 'Complete Branding',
       deliveryTime: '14-21 Business Days'
     },
-    '2': {
-      number: '02',
-      icon: (
-        <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      ),
-      category: 'Creative Service',
-      title: 'Creative Direction',
-      description: 'Concept development, visual storytelling, art direction for campaigns and shoots',
-      features: [
-        'Concept Development',
-        'Visual Storytelling',
-        'Art Direction',
-        'Campaign Direction',
-        'Photo Shoot Direction',
-        'Creative Strategy'
-      ],
-      type: 'Creative Leadership',
-      deliveryTime: '7-14 Business Days'
-    },
     '3': {
-      number: '03',
+      number: '02',
       icon: (
         <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -62,12 +40,12 @@ const ServicesModal = () => {
       ),
       category: 'Digital Service',
       title: 'Digital Design',
-      description: 'Social media visuals, digital campaigns, web and interface visuals',
+      description: 'Social media visuals, campaigns, content creation',
       features: [
         'Social Media Visuals',
         'Digital Campaigns',
+        'Content Creation',
         'Web Visuals',
-        'Interface Design',
         'Digital Branding',
         'Online Marketing Materials'
       ],
@@ -75,7 +53,7 @@ const ServicesModal = () => {
       deliveryTime: '7-14 Business Days'
     },
     '4': {
-      number: '04',
+      number: '03',
       icon: (
         <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -84,38 +62,38 @@ const ServicesModal = () => {
       ),
       category: 'Print Service',
       title: 'Print & Marketing',
-      description: 'Catalogs, brochures, flyers, banners, brand collateral',
+      description: 'Catalogs, brochures, brand collateral',
       features: [
         'Catalogs',
         'Brochures',
-        'Flyers',
-        'Banners',
         'Brand Collateral',
-        'Print Marketing Materials'
+        'Print Marketing Materials',
+        'Brand Applications',
+        'Marketing Design'
       ],
       type: 'Print & Marketing Design',
       deliveryTime: '7-14 Business Days'
     },
-    '5': {
-      number: '05',
+    '2': {
+      number: '04',
       icon: (
         <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/>
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
         </svg>
       ),
-      category: 'Production Service',
-      title: 'Content & Visual Production',
-      description: 'Product photography, photo editing, video and motion basics',
+      category: 'Creative Service',
+      title: 'Creative Direction',
+      description: 'Concept development, visual storytelling, art direction',
       features: [
-        'Product Photography',
-        'Photo Editing',
-        'Video Production',
-        'Motion Graphics Basics',
-        'Content Creation',
-        'Visual Asset Production'
+        'Concept Development',
+        'Visual Storytelling',
+        'Art Direction',
+        'Campaign Direction',
+        'Creative Strategy',
+        'Visual Communication'
       ],
-      type: 'Visual Production',
+      type: 'Creative Leadership',
       deliveryTime: '7-14 Business Days'
     }
   };

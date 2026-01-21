@@ -46,7 +46,8 @@ const About = () => {
     <section id="about" className="about" aria-labelledby="about-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number">01</span>
+          <span className="section-number desktop-number">01</span>
+          <span className="section-number mobile-number">01</span>
           <div className="section-header">
             <span className="section-label">About Me</span>
             <h2 id="about-heading" className="section-title">
@@ -181,10 +182,7 @@ const About = () => {
               <span className="skill-name">Creative Direction & Visual Storytelling</span>
             </div>
             <div className="skill-item">
-              <span className="skill-name">Digital & Print Design</span>
-            </div>
-            <div className="skill-item">
-              <span className="skill-name">Social Media Visuals</span>
+              <span className="skill-name">Strategic Design Thinking</span>
             </div>
           </div>
         </div>

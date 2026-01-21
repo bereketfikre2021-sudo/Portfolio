@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
 // Projects array - exported for use in PortfolioModal
@@ -598,7 +598,7 @@ export const portfolioProjects = [
       image: '/assets/Portfolio/Branding Dumas Properties.webp',
       category: 'Brand Identity · Real Estate',
       title: 'Full Brand Identity - Dumas Properties',
-      description: 'Complete brand identity package including logo design, brand guidelines, and comprehensive visual identity for a real estate company.',
+      description: 'Complete brand identity package including logo design, brand guidelines, comprehensive visual identity system, color palette, typography, and brand applications for a real estate company. The identity reflects trust, professionalism, and modern real estate excellence.',
       service: 'brand-identity-design',
       company: 'Dumas Properties'
     },
@@ -607,7 +607,7 @@ export const portfolioProjects = [
       image: '/assets/Portfolio/Branding Raya Hotel & Convention Center.webp',
       category: 'Brand Identity · Hospitality',
       title: 'Full Brand Identity - Raya Hotel & Convention Center',
-      description: 'Comprehensive brand identity system including logo design, brand guidelines, and corporate materials for a hospitality and convention center.',
+      description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for a hospitality and convention center. The identity captures elegance, luxury, and exceptional hospitality experiences.',
       service: 'brand-identity-design',
       company: 'Raya Hotel & Convention Center'
     },
@@ -744,15 +744,14 @@ export const portfolioProjects = [
 
 const Portfolio = () => {
   const { openPortfolioModal } = useContext(ModalContext);
-  const [activeFilter, setActiveFilter] = useState('branding');
+  const [activeFilter, setActiveFilter] = useState('brand-identity');
+  const filtersRef = useRef(null);
 
   const services = [
-    { id: 'branding', label: 'Branding' },
-    { id: 'campaigns', label: 'Campaigns' },
-    { id: 'print', label: 'Print' },
-    { id: 'digital', label: 'Digital' },
-    { id: 'brand-applications', label: 'Brand Applications' },
-    { id: 'art-direction', label: 'Art Direction' }
+    { id: 'brand-identity', label: 'Brand Identity' },
+    { id: 'digital-design', label: 'Digital Design' },
+    { id: 'print-marketing', label: 'Print & Marketing' },
+    { id: 'creative-direction', label: 'Creative Direction' }
   ];
 
   // Shuffle function to randomize project order (only once on mount)
@@ -769,30 +768,15 @@ const Portfolio = () => {
   const filteredProjects = useMemo(() => {
     let filtered = [];
     
-    if (activeFilter === 'branding') {
-      // Branding: Brand Identity Design, Logo Design, Visual Identity Systems
+    if (activeFilter === 'brand-identity') {
+      // Brand Identity: Logo design, visual systems, brand consistency
       filtered = shuffledProjects.filter(project => 
         project.service === 'brand-identity-design' ||
         project.service === 'logo-design' ||
         project.service === 'visual-identity-systems'
       );
-    } else if (activeFilter === 'campaigns') {
-      // Campaigns: Marketing & Campaign Design
-      filtered = shuffledProjects.filter(project => 
-        project.service === 'marketing-campaign-design'
-      );
-    } else if (activeFilter === 'print') {
-      // Print: Print Design
-      filtered = shuffledProjects.filter(project => 
-        project.service === 'print-design'
-      );
-    } else if (activeFilter === 'digital') {
-      // Digital: Digital & Social Media Design
-      filtered = shuffledProjects.filter(project => 
-        project.service === 'digital-social-media-design'
-      );
-    } else if (activeFilter === 'art-direction') {
-      // Art Direction: Art Direction & Visual Guidance
+    } else if (activeFilter === 'creative-direction') {
+      // Creative Direction: Concept development, visual storytelling, art direction
       filtered = shuffledProjects.filter(project => 
         project.service === 'art-direction-visual-guidance'
       );
@@ -802,31 +786,70 @@ const Portfolio = () => {
         const numB = parseInt(b.id.match(/\d+/)?.[0] || '0');
         return numA - numB;
       });
-    } else if (activeFilter === 'brand-applications') {
-      // Brand Applications: Brand Applications & Assets
+    } else if (activeFilter === 'digital-design') {
+      // Digital Design: Social media visuals, campaigns, content creation
       filtered = shuffledProjects.filter(project => 
+        project.service === 'digital-social-media-design' ||
+        project.service === 'marketing-campaign-design'
+      );
+    } else if (activeFilter === 'print-marketing') {
+      // Print & Marketing: Catalogs, brochures, brand collateral
+      filtered = shuffledProjects.filter(project => 
+        project.service === 'print-design' ||
         project.service === 'brand-applications-assets'
       );
-    }
-    
-    // Shuffle campaigns individually to spread companies apart
-    if (activeFilter === 'campaigns') {
-      const shuffled = [...filtered];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
     }
     
     return filtered;
   }, [shuffledProjects, activeFilter]);
 
+  // Scroll active filter into view on mobile
+  useEffect(() => {
+    const scrollActiveFilter = () => {
+      if (filtersRef.current && window.innerWidth <= 768) {
+        const activeButton = filtersRef.current.querySelector('.portfolio-filter-btn.active');
+        if (activeButton) {
+          // For first filter (Brand Identity), scroll to start, for others center
+          const isFirstFilter = activeButton === filtersRef.current.querySelector('.portfolio-filter-btn:first-child');
+          activeButton.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: isFirstFilter ? 'start' : 'center'
+          });
+        }
+      }
+    };
+
+    // Scroll on mount and when filter changes
+    const timer = setTimeout(scrollActiveFilter, 300);
+    return () => clearTimeout(timer);
+  }, [activeFilter]);
+
+  // Also scroll on initial mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (filtersRef.current && window.innerWidth <= 768) {
+        const activeButton = filtersRef.current.querySelector('.portfolio-filter-btn.active');
+        if (activeButton) {
+          // For first filter (Brand Identity), scroll to start
+          const isFirstFilter = activeButton === filtersRef.current.querySelector('.portfolio-filter-btn:first-child');
+          activeButton.scrollIntoView({
+            behavior: 'auto',
+            block: 'nearest',
+            inline: isFirstFilter ? 'start' : 'center'
+          });
+        }
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <section id="portfolio" className="portfolio" aria-labelledby="portfolio-heading">
       <div className="container">
         <div className="section-intro">
-          <span className="section-number">03</span>
+          <span className="section-number desktop-number">03</span>
+          <span className="section-number mobile-number">03</span>
           <div className="section-header">
             <span className="section-label">Selected Work</span>
             <h2 id="portfolio-heading" className="section-title">
@@ -836,7 +859,7 @@ const Portfolio = () => {
           </div>
         </div>
 
-        <div className="portfolio-filters" role="tablist" aria-label="Filter portfolio projects by service">
+        <div ref={filtersRef} className="portfolio-filters" role="tablist" aria-label="Filter portfolio projects by service">
           {services.map((service) => (
             <button
               key={service.id}

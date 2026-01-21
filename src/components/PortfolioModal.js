@@ -122,6 +122,50 @@ const PortfolioModal = () => {
       },
       deliverables: ['Brand Identity', 'Packaging Design', 'Logo Design', 'Brand Guidelines', 'Visual Storytelling']
     },
+    'dumas-properties-branding': {
+      image: '/assets/Portfolio/Branding Dumas Properties.webp',
+      category: 'Real Estate',
+      title: 'Full Brand Identity - Dumas Properties',
+      description: 'Complete brand identity package including logo design, brand guidelines, comprehensive visual identity system, color palette, typography, and brand applications for a real estate company. The identity reflects trust, professionalism, and modern real estate excellence.',
+      type: 'Brand Identity',
+      date: '2024',
+      client: 'Dumas Properties',
+      challenge: {
+        heading: 'The Challenge',
+        text: 'Create a comprehensive brand identity for a real estate company that builds trust and credibility while standing out in a competitive market. The identity needed to reflect professionalism, reliability, and modern real estate excellence, working effectively across various applications from marketing materials to digital platforms.'
+      },
+      solution: {
+        heading: 'The Solution',
+        text: 'I developed a professional, trustworthy brand identity with a sophisticated color palette and typography that reflects the company\'s commitment to excellence. The logo design is versatile and memorable, conveying trust and professionalism. The comprehensive brand guidelines ensure consistent application across all touchpoints, from print materials to digital platforms, creating a cohesive brand experience that builds credibility and trust with clients.'
+      },
+      results: {
+        heading: 'The Results',
+        text: 'The brand identity successfully established a strong, professional presence in the real estate market. It increased brand recognition and created a foundation for consistent brand communication that builds trust with clients. The cohesive visual identity has helped the company stand out in a competitive market and communicate its commitment to excellence in real estate services.'
+      },
+      deliverables: ['Logo Design', 'Brand Guidelines', 'Visual Identity System', 'Color Palette', 'Typography System', 'Brand Applications']
+    },
+    'raya-hotel-branding': {
+      image: '/assets/Portfolio/Branding Raya Hotel & Convention Center.webp',
+      category: 'Hospitality',
+      title: 'Full Brand Identity - Raya Hotel & Convention Center',
+      description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for a hospitality and convention center. The identity captures elegance, luxury, and exceptional hospitality experiences.',
+      type: 'Brand Identity',
+      date: '2024',
+      client: 'Raya Hotel & Convention Center',
+      challenge: {
+        heading: 'The Challenge',
+        text: 'Create a distinctive brand identity for a hospitality and convention center that conveys luxury, elegance, and exceptional service while appealing to both business and leisure travelers. The identity needed to work across various applications from hotel signage to marketing materials, creating a memorable brand experience that reflects the quality of hospitality services.'
+      },
+      solution: {
+        heading: 'The Solution',
+        text: 'I developed an elegant, sophisticated brand identity that captures the essence of luxury hospitality. The logo design reflects elegance and professionalism, working effectively across different applications. The comprehensive brand system includes a refined color palette and typography that conveys luxury and sophistication. The brand guidelines ensure consistent application across all touchpoints, from hotel signage to digital marketing, creating a cohesive brand experience that reflects exceptional hospitality.'
+      },
+      results: {
+        heading: 'The Results',
+        text: 'The brand identity successfully established a premium brand positioning in the hospitality market. It increased brand recognition and created a memorable brand experience that differentiates the hotel and convention center. The elegant visual identity has resonated with both business and leisure travelers, creating a strong emotional connection and reinforcing the brand\'s commitment to exceptional hospitality experiences.'
+      },
+      deliverables: ['Logo Design', 'Brand Guidelines', 'Visual Identity System', 'Color Palette', 'Typography System', 'Hotel Signage', 'Brand Applications']
+    },
     'yat-construction': {
       image: '/assets/Portfolio/YAT-Construction-PLC-8e3605ca.webp',
       category: 'Corporate',

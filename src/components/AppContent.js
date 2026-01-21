@@ -131,12 +131,18 @@ function AppContent() {
         <Services />
         <Portfolio />
         <Suspense fallback={null}>
-          <CaseStudies />
+          <div className="desktop-only">
+            <CaseStudies />
+          </div>
         </Suspense>
         <Suspense fallback={<LoadingFallback />}>
-          <Blog />
+          <div className="desktop-only">
+            <Blog />
+          </div>
           <Testimonials />
-          <TrustedBy />
+          <div className="desktop-only">
+            <TrustedBy />
+          </div>
           <FAQ />
           <Contact />
           <Footer />

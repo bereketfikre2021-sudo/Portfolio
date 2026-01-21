@@ -171,7 +171,8 @@ const Contact = () => {
     <section id="contact" className="contact" aria-labelledby="contact-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number">09</span>
+          <span className="section-number desktop-number">09</span>
+          <span className="section-number mobile-number">06</span>
           <div className="section-header">
             <span className="section-label">Get in Touch</span>
             <h2 id="contact-heading" className="section-title">
@@ -184,7 +185,7 @@ const Contact = () => {
         <p className="contact-subtitle">Share your vision and let's bring it to life together</p>
         
         <div className="contact-content-wrapper">
-          <div className="contact-form-wrapper">
+          <div className="contact-form-wrapper desktop-only">
             <form className="contact-form-simple" onSubmit={handleSubmit} aria-label="Contact form">
               <div className="form-row">
                 <div className="form-field">

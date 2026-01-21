@@ -32,7 +32,7 @@ const CaseStudies = () => {
     <section id="case-studies" className="case-studies"  aria-labelledby="case-studies-heading">
       <div className="container">
         <div className="section-intro">
-          <span className="section-number">04</span>
+          <span className="section-number desktop-number">04</span>
           <div className="section-header">
             <span className="section-label">In-Depth Analysis</span>
             <h2 id="case-studies-heading" className="section-title">
