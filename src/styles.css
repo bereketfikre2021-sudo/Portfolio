@@ -2450,6 +2450,87 @@ section {
   gap: 2rem;
 }
 
+/* Digital Design Section Styles */
+.digital-design-section {
+  margin-bottom: 4rem;
+}
+
+.digital-design-section:last-child {
+  margin-bottom: 0;
+}
+
+.digital-design-section-title {
+  font-family: var(--font-serif);
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--text-light);
+  margin: 0 0 2rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-light-10);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Square Grid for Social Media Visuals (1:1 aspect ratio) */
+.portfolio-grid-square {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.portfolio-item-square {
+  aspect-ratio: 1 / 1;
+}
+
+.portfolio-item-square .portfolio-image-small {
+  height: 0;
+  padding-bottom: 100%;
+  position: relative;
+  min-height: 0;
+}
+
+.portfolio-item-square .portfolio-image-small img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Wide Grid for Web & Campaign Banners (landscape) */
+.portfolio-grid-wide {
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .portfolio-grid-wide {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.portfolio-item-wide {
+  /* Remove fixed aspect ratio - let images determine height */
+}
+
+.portfolio-item-wide .portfolio-image-small {
+  position: relative;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portfolio-item-wide .portfolio-image-small img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
+
 .portfolio-item-modern {
   position: relative;
   border-radius: var(--radius-xl);
@@ -3559,6 +3640,344 @@ section {
 
   .case-study-modal-image-wrapper {
     max-height: 300px;
+  }
+}
+
+/* ============================================
+   BLOG MODAL STYLES
+   ============================================ */
+.blog-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.blog-modal.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.blog-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 10, 31, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.blog-modal-container {
+  position: relative;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  background: var(--bg-secondary);
+  border: 1px solid var(--color-light-20);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.4s var(--ease-out-expo);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(5, 10, 31, 0.5);
+}
+
+.blog-modal.active .blog-modal-container {
+  transform: scale(1) translateY(0);
+}
+
+.blog-modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 44px;
+  height: 44px;
+  background: rgba(180, 232, 201, 0.1);
+  border: 1px solid var(--color-light-20);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-light);
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s var(--ease-out-expo);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.blog-modal-close:hover,
+.blog-modal-close:focus {
+  background: var(--color-light);
+  color: var(--color-dark);
+  transform: rotate(90deg);
+  border-color: var(--color-light);
+  outline: none;
+}
+
+.blog-modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.blog-modal-content {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-light-30) transparent;
+  padding-bottom: 4rem !important;
+}
+
+.blog-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.blog-modal-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.blog-modal-content::-webkit-scrollbar-thumb {
+  background: var(--color-light-30);
+  border-radius: 4px;
+}
+
+.blog-modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-light-50);
+}
+
+.blog-modal-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  padding: 2.5rem;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--color-light-10);
+}
+
+.blog-modal-image-wrapper {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(5, 10, 31, 0.3);
+  aspect-ratio: 4 / 3;
+  background: var(--bg-primary);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+}
+
+.blog-modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: top;
+  display: block;
+}
+
+.blog-modal-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.blog-modal-category {
+  display: inline-block;
+  padding: 0.5rem 1.125rem;
+  background: var(--color-light-10);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-light-20);
+  border-radius: var(--radius-full);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--color-light);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  width: fit-content;
+}
+
+.blog-modal-title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.blog-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.blog-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.blog-meta-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-light);
+  opacity: 0.6;
+}
+
+.blog-modal-body {
+  padding: 2.5rem;
+  padding-bottom: 4rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  overflow: visible !important;
+  position: relative;
+  min-height: fit-content;
+}
+
+.blog-modal-intro {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-light-10);
+}
+
+.blog-modal-description {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.blog-modal-article {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.blog-article-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.blog-section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-section-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-light-10);
+  border-radius: var(--radius-md);
+  color: var(--color-light);
+  flex-shrink: 0;
+}
+
+.blog-section-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.blog-section-heading {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.blog-section-text {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 0;
+  padding-left: 3rem;
+}
+
+.blog-modal-insights {
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-light-10);
+}
+
+.blog-insights-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-light);
+  margin: 0 0 1.5rem 0;
+}
+
+.blog-insights-title svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-light);
+}
+
+.blog-insights-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.blog-insight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.blog-insight-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-light);
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .blog-modal-header {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .blog-modal-image-wrapper {
+    max-height: 300px;
+  }
+
+  .blog-section-text {
+    padding-left: 0;
   }
 }
 
@@ -6324,6 +6743,35 @@ section {
     gap: 1.25rem !important;
   }
 
+  /* Digital Design Section Mobile Styles */
+  .digital-design-section {
+    margin-bottom: 3rem;
+  }
+
+  .digital-design-section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .portfolio-grid-square {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  .portfolio-item-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .portfolio-grid-wide {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  .portfolio-item-wide .portfolio-image-small {
+    min-height: 150px;
+  }
+
   /* Testimonials Section Mobile */
   .testimonials {
     padding: 3rem 0 !important;
@@ -6742,44 +7190,70 @@ a, button, [role="button"], [tabindex="0"] {
    BLOG SOCIAL SHARING
    ============================================ */
 .blog-social-share {
-  margin-top: 3rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--color-light-10);
+  margin-top: 3rem !important;
+  padding-top: 2.5rem !important;
+  padding-bottom: 1rem !important;
+  border-top: 1px solid var(--color-light-10) !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 10 !important;
+  width: 100% !important;
+  background: var(--bg-secondary) !important;
 }
 
 .blog-share-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-on-light);
-  margin-bottom: 1.25rem;
-  font-family: var(--font-sans);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: var(--text-on-light) !important;
+  margin-bottom: 1.25rem !important;
+  font-family: var(--font-sans) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .blog-share-buttons {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  display: flex !important;
+  gap: 0.75rem !important;
+  flex-wrap: wrap !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  position: relative !important;
+  z-index: 10 !important;
 }
 
 .blog-share-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-decoration: none;
-  border: 1px solid var(--color-light-10);
-  background: var(--bg-secondary);
-  color: var(--text-on-light);
-  transition: all 0.3s var(--ease-out-expo);
-  cursor: pointer;
-  font-family: var(--font-sans);
-  position: relative;
-  overflow: hidden;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  padding: 0.75rem 1.25rem !important;
+  border-radius: var(--radius-md) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  border: 1px solid var(--color-light-10) !important;
+  background: var(--bg-secondary) !important;
+  color: var(--text-on-light) !important;
+  transition: all 0.3s var(--ease-out-expo) !important;
+  cursor: pointer !important;
+  font-family: var(--font-sans) !important;
+  position: relative !important;
+  overflow: visible !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-width: 120px !important;
+  box-shadow: 0 2px 8px rgba(5, 10, 31, 0.1) !important;
+}
+
+.blog-share-btn span {
+  display: inline-block;
+  color: inherit;
 }
 
 .blog-share-btn:hover {
@@ -6792,18 +7266,41 @@ a, button, [role="button"], [tabindex="0"] {
 }
 
 .blog-share-btn svg {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.3s var(--ease-out-expo);
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  transition: transform 0.3s var(--ease-out-expo) !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: var(--text-on-light) !important;
+  stroke: var(--text-on-light) !important;
+}
+
+.blog-share-btn svg path,
+.blog-share-btn svg rect,
+.blog-share-btn svg circle,
+.blog-share-btn svg polyline {
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: inherit !important;
 }
 
 .blog-share-btn:hover svg {
   transform: scale(1.1);
 }
 
-.blog-share-twitter:hover {
-  background: #1DA1F2;
-  border-color: #1DA1F2;
+.blog-share-telegram:hover {
+  background: #0088cc;
+  border-color: #0088cc;
   color: white;
 }
 
@@ -6828,6 +7325,105 @@ a, button, [role="button"], [tabindex="0"] {
 .blog-share-copy {
   border: none;
   background: var(--bg-secondary);
+}
+
+/* Force visibility for blog share buttons - highest priority */
+.blog-modal .blog-social-share,
+.blog-modal-body .blog-social-share,
+.case-study-modal-body .blog-social-share {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 100 !important;
+  width: 100% !important;
+  margin-top: 3rem !important;
+  padding-top: 2.5rem !important;
+  padding-bottom: 1rem !important;
+  border-top: 1px solid var(--color-light-10) !important;
+}
+
+.blog-modal .blog-share-buttons,
+.blog-modal-body .blog-share-buttons,
+.case-study-modal-body .blog-share-buttons {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  gap: 0.75rem !important;
+  flex-wrap: wrap !important;
+}
+
+.blog-modal .blog-share-btn,
+.blog-modal-body .blog-share-btn,
+.case-study-modal-body .blog-share-btn {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  padding: 0.75rem 1.25rem !important;
+  border: 1px solid var(--color-light-10) !important;
+  background: var(--bg-secondary) !important;
+  color: var(--text-on-light) !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  border-radius: var(--radius-md) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  min-width: 120px !important;
+}
+
+.blog-modal .blog-share-btn svg,
+.blog-modal-body .blog-share-btn svg,
+.case-study-modal-body .blog-share-btn svg {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  min-height: 20px !important;
+  color: var(--text-on-light) !important;
+  stroke: var(--text-on-light) !important;
+  flex-shrink: 0 !important;
+}
+
+.blog-modal .blog-share-btn svg path,
+.blog-modal .blog-share-btn svg rect,
+.blog-modal .blog-share-btn svg circle,
+.blog-modal .blog-share-btn svg polyline,
+.blog-modal-body .blog-share-btn svg path,
+.blog-modal-body .blog-share-btn svg rect,
+.blog-modal-body .blog-share-btn svg circle,
+.blog-modal-body .blog-share-btn svg polyline,
+.case-study-modal-body .blog-share-btn svg path,
+.case-study-modal-body .blog-share-btn svg rect,
+.case-study-modal-body .blog-share-btn svg circle,
+.case-study-modal-body .blog-share-btn svg polyline {
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: inherit !important;
+}
+
+.blog-modal .blog-share-title,
+.blog-modal-body .blog-share-title,
+.case-study-modal-body .blog-share-title {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: var(--text-on-light) !important;
+  margin-bottom: 1.25rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
 }
 
 /* ============================================
@@ -8914,11 +9510,81 @@ html {
   .blog-modal-header {
     padding: 1.5rem !important;
     flex-shrink: 0 !important;
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  .blog-modal-title {
+    font-size: 1.75rem !important;
   }
 
   .blog-modal-body {
     padding: 1.5rem !important;
     overflow: visible !important;
+    gap: 2rem !important;
+    padding-bottom: 4rem !important;
+  }
+
+  .blog-modal-content {
+    padding-bottom: 4rem !important;
+  }
+
+  .blog-social-share {
+    margin-top: 2rem !important;
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    position: relative !important;
+    z-index: 100 !important;
+  }
+
+  .blog-share-buttons {
+    gap: 0.5rem !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+  }
+
+  .blog-share-btn {
+    min-width: 100px !important;
+    padding: 0.625rem 1rem !important;
+    font-size: 0.8125rem !important;
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: rgba(5, 10, 31, 0.8) !important;
+    color: #b4e8c9 !important;
+    border: 1px solid rgba(180, 232, 201, 0.2) !important;
+  }
+
+  .blog-share-btn svg {
+    stroke: #b4e8c9 !important;
+    color: #b4e8c9 !important;
+  }
+
+  .blog-share-btn span {
+    color: #b4e8c9 !important;
+  }
+
+  .blog-modal-description {
+    font-size: 1.125rem !important;
+  }
+
+  .blog-section-heading {
+    font-size: 1.5rem !important;
+  }
+
+  .blog-section-text {
+    padding-left: 0 !important;
+    font-size: 1rem !important;
+  }
+
+  .blog-insights-list {
+    grid-template-columns: 1fr !important;
   }
 
   /* Privacy Terms Modal Mobile */

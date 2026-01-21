@@ -1182,221 +1182,82 @@ const PortfolioModal = () => {
       image: '/assets/Portfolio/Website Banner For Finix Bet.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Design - Finix Bet',
-      description: 'Professional website banner design for Finix Bet, optimized for web display and digital marketing campaigns. The banner creates engaging visual communication for online platforms.',
+      description: 'Professional website banner design optimized for web display and digital marketing campaigns.',
       type: 'Web Design',
       date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create professional website banner design for Finix Bet that is optimized for web display and digital marketing campaigns while maintaining brand consistency and visual appeal.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed professional website banner design that is optimized for web display and various screen sizes. The banner maintains brand consistency while creating engaging visual communication for digital marketing campaigns.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The website banner design successfully enhanced online brand visibility and engagement. It created compelling visual communication for digital marketing campaigns and helped drive performance across web platforms.'
-      },
-      deliverables: ['Website Banner', 'Responsive Design', 'Digital Assets', 'Brand Guidelines']
+      client: 'Finix Bet'
     },
     'finix-banner-2': {
       image: '/assets/Portfolio/Website Banner For Finix Bet-2.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Collection - Finix Bet',
-      description: 'Website banner design featuring modern layouts and engaging visuals for effective online presence. The banner enhances brand communication across digital platforms.',
+      description: 'Website banner design featuring modern layouts and engaging visuals for effective online presence.',
       type: 'Web Design',
       date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create website banner design for Finix Bet featuring modern layouts and engaging visuals that enhance brand communication and create effective online presence.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed website banner design with modern layouts and engaging visuals. The banner maintains brand consistency while creating effective visual communication for online platforms.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The website banner design successfully enhanced brand communication and online presence. It created engaging visual content that helped drive performance and connect with the target audience across digital platforms.'
-      },
-      deliverables: ['Website Banner', 'Modern Layouts', 'Digital Assets', 'Brand Guidelines']
+      client: 'Finix Bet'
     },
     'finix-banner-3': {
       image: '/assets/Portfolio/Website Banner For Finix Bet-3.webp',
       category: 'Digital Marketing',
       title: 'Web Banner Design - Finix Bet',
-      description: 'Professional web banner design optimized for various screen sizes and digital platforms. The banner creates consistent brand communication across web environments.',
+      description: 'Professional web banner design optimized for various screen sizes and digital platforms.',
       type: 'Web Design',
       date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create professional web banner design for Finix Bet that is optimized for various screen sizes and digital platforms while maintaining brand consistency and visual appeal.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed professional web banner design that is optimized for various screen sizes and digital platforms. The banner maintains brand consistency while creating engaging visual communication across different web environments.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The web banner design successfully enhanced brand communication across various screen sizes and digital platforms. It created consistent visual communication that helped drive performance and engagement.'
-      },
-      deliverables: ['Web Banner', 'Responsive Design', 'Platform Optimization', 'Brand Guidelines']
+      client: 'Finix Bet'
     },
     'finix-banner-4': {
       image: '/assets/Portfolio/Website Banner For Finix Bet-4.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Series - Finix Bet',
-      description: 'Comprehensive website banner series designed for consistent brand communication across digital platforms. The series enhances online brand visibility and engagement.',
+      description: 'Comprehensive website banner series designed for consistent brand communication across digital platforms.',
       type: 'Web Design',
       date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create comprehensive website banner series for Finix Bet designed for consistent brand communication across digital platforms that enhance online brand visibility and engagement.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed comprehensive website banner series with consistent branding and engaging visuals. The series creates cohesive brand communication across various digital platforms while maintaining visual appeal.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The website banner series successfully created consistent brand communication across digital platforms. It enhanced online brand visibility and engagement while maintaining visual consistency and appeal.'
-      },
-      deliverables: ['Banner Series', 'Consistent Branding', 'Digital Assets', 'Brand Guidelines']
+      client: 'Finix Bet'
     },
     'finix-banner-5': {
       image: '/assets/Portfolio/Website Banner For Finix Bet-5.webp',
       category: 'Digital Marketing',
       title: 'Web Banner Assets - Finix Bet',
-      description: 'Professional web banner assets featuring modern design and engaging visuals for digital marketing. The assets enhance brand communication across online platforms.',
+      description: 'Professional web banner assets featuring modern design and engaging visuals for digital marketing.',
       type: 'Web Design',
       date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create professional web banner assets for Finix Bet featuring modern design and engaging visuals that enhance brand communication across online platforms for digital marketing.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed professional web banner assets with modern design and engaging visuals. The assets maintain brand consistency while creating compelling visual communication for digital marketing across online platforms.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The web banner assets successfully enhanced brand communication across online platforms. They created compelling visual content for digital marketing that helped drive performance and connect with the target audience.'
-      },
-      deliverables: ['Web Banner Assets', 'Modern Design', 'Digital Marketing Assets', 'Brand Guidelines']
+      client: 'Finix Bet'
     },
     'finix-banner-6': {
       image: '/assets/Portfolio/Website Banner For Finix Bet-6.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Design - Finix Bet',
-      description: 'Engaging website banner design with compelling visuals and clear messaging for online campaigns. The banner enhances brand visibility and engagement.',
+      description: 'Engaging website banner design with compelling visuals and clear messaging for online campaigns.',
       type: 'Web Design',
       date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create engaging website banner design for Finix Bet with compelling visuals and clear messaging that enhance brand visibility and engagement for online campaigns.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed engaging website banner design with compelling visuals and clear messaging. The banner maintains brand consistency while creating effective visual communication for online campaigns.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The website banner design successfully enhanced brand visibility and engagement for online campaigns. It created compelling visual content that helped drive performance and connect with the target audience.'
-      },
-      deliverables: ['Website Banner', 'Compelling Visuals', 'Campaign Assets', 'Brand Guidelines']
+      client: 'Finix Bet'
     },
     'finix-banner-7': {
       image: '/assets/Portfolio/Website Banner For Finix Bet-7.webp',
       category: 'Digital Marketing',
       title: 'Web Banner Collection - Finix Bet',
-      description: 'Professional web banner collection designed for various digital marketing campaigns and promotions. The collection enhances brand communication and engagement.',
+      description: 'Professional web banner collection designed for various digital marketing campaigns and promotions.',
       type: 'Web Design',
       date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create professional web banner collection for Finix Bet designed for various digital marketing campaigns and promotions that enhance brand communication and engagement.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed professional web banner collection designed for various digital marketing campaigns. The banners maintain brand consistency while creating engaging visual content for different promotional activities.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The web banner collection successfully enhanced brand communication and engagement across various digital marketing campaigns. It created compelling visual content that helped drive performance and connect with the target audience.'
-      },
-      deliverables: ['Web Banner Collection', 'Campaign Assets', 'Promotional Content', 'Brand Guidelines']
+      client: 'Finix Bet'
     },
     'finix-banner-8': {
       image: '/assets/Portfolio/Website Banner For Finix Bet-8.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Series - Finix Bet',
-      description: 'Comprehensive website banner series with consistent branding and engaging visual content. The series creates cohesive digital brand communication.',
+      description: 'Comprehensive website banner series with consistent branding and engaging visual content.',
       type: 'Web Design',
       date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create comprehensive website banner series for Finix Bet with consistent branding and engaging visual content that creates cohesive digital brand communication.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed comprehensive website banner series with consistent branding and engaging visual content. The series creates cohesive digital brand communication while maintaining visual appeal and consistency.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The website banner series successfully created cohesive digital brand communication. It enhanced brand visibility and engagement while maintaining consistent branding and visual appeal across all banners.'
-      },
-      deliverables: ['Banner Series', 'Consistent Branding', 'Visual Content', 'Brand Guidelines']
-    },
-    'finix-banner-9': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet-9.webp',
-      category: 'Digital Marketing',
-      title: 'Web Banner Design Assets - Finix Bet',
-      description: 'Professional web banner design assets optimized for various screen sizes and digital platforms. The assets enhance brand communication across web environments.',
-      type: 'Web Design',
-      date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create professional web banner design assets for Finix Bet that are optimized for various screen sizes and digital platforms while enhancing brand communication across web environments.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed professional web banner design assets that are optimized for various screen sizes and digital platforms. The assets maintain brand consistency while creating engaging visual communication across different web environments.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The web banner design assets successfully enhanced brand communication across various screen sizes and digital platforms. They created consistent visual communication that helped drive performance and engagement.'
-      },
-      deliverables: ['Web Banner Assets', 'Responsive Design', 'Platform Optimization', 'Brand Guidelines']
+      client: 'Finix Bet'
     },
     'finix-banner-10': {
       image: '/assets/Portfolio/Website Banner For Finix Bet-10.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Collection - Finix Bet',
-      description: 'Engaging website banner collection featuring modern design and compelling visuals for digital marketing. The collection enhances brand visibility and engagement.',
+      description: 'Engaging website banner collection featuring modern design and compelling visuals for digital marketing.',
       type: 'Web Design',
       date: '2024',
-      client: 'Finix Bet',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create engaging website banner collection for Finix Bet featuring modern design and compelling visuals that enhance brand visibility and engagement for digital marketing.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed engaging website banner collection with modern design and compelling visuals. The collection maintains brand consistency while creating effective visual communication for digital marketing campaigns.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The website banner collection successfully enhanced brand visibility and engagement for digital marketing. It created compelling visual content that helped drive performance and connect with the target audience across digital platforms.'
-      },
-      deliverables: ['Banner Collection', 'Modern Design', 'Digital Marketing Assets', 'Brand Guidelines']
+      client: 'Finix Bet'
     },
     'havana-plc': {
       image: '/assets/Portfolio/Ui Ux Design for Havana Plc.webp',

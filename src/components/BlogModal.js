@@ -1,28 +1,14 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ModalContext } from '../context/ModalContext';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 
 const BlogModal = () => {
   const { blogModal, closeBlogModal } = useContext(ModalContext);
   const modalRef = useRef(null);
+  const [copied, setCopied] = useState(false);
   useFocusTrap(blogModal?.isOpen, modalRef);
-  
-  // Announce modal opening to screen readers
-  useEffect(() => {
-    if (blogModal?.isOpen && blogModal?.postId) {
-      const post = blogData[blogModal.postId];
-      if (post) {
-        const liveRegion = document.getElementById('live-region');
-        if (liveRegion) {
-          liveRegion.textContent = `Opened blog post: ${post.title}`;
-          setTimeout(() => {
-            liveRegion.textContent = '';
-          }, 1000);
-        }
-      }
-    }
-  }, [blogModal?.isOpen, blogModal?.postId]);
 
+  // Blog post data
   const blogData = {
     'design-principles': {
       image: '/assets/Portfolio/Design principles.webp',
@@ -150,6 +136,7 @@ const BlogModal = () => {
     }
   };
 
+  // Handle escape key and browser back button
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape' && blogModal.isOpen) {
@@ -164,16 +151,36 @@ const BlogModal = () => {
     };
 
     if (blogModal.isOpen) {
+      document.body.style.overflow = 'hidden';
       window.history.pushState({ modal: 'blog' }, '');
       window.addEventListener('popstate', handlePopState);
+    } else {
+      document.body.style.overflow = '';
     }
 
     document.addEventListener('keydown', handleEscape);
     return () => {
       document.removeEventListener('keydown', handleEscape);
       window.removeEventListener('popstate', handlePopState);
+      document.body.style.overflow = '';
     };
   }, [blogModal.isOpen, closeBlogModal]);
+
+  // Announce modal opening to screen readers
+  useEffect(() => {
+    if (blogModal?.isOpen && blogModal?.blogId) {
+      const post = blogData[blogModal.blogId];
+      if (post) {
+        const liveRegion = document.getElementById('live-region');
+        if (liveRegion) {
+          liveRegion.textContent = `Opened blog post: ${post.title}`;
+          setTimeout(() => {
+            liveRegion.textContent = '';
+          }, 1000);
+        }
+      }
+    }
+  }, [blogModal?.isOpen, blogModal?.blogId]);
 
   if (!blogModal.isOpen || !blogModal.blogId) return null;
 
@@ -181,44 +188,61 @@ const BlogModal = () => {
   if (!post) return null;
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const shareTitle = post.title;
+  const shareTitle = encodeURIComponent(post.title);
+
+  const handleCopyLink = async () => {
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    }
+  };
 
   return (
     <div 
       ref={modalRef}
-      className={`case-study-modal ${blogModal.isOpen ? 'active' : ''}`}
+      className={`blog-modal ${blogModal.isOpen ? 'active' : ''}`}
       role="dialog"
-      aria-labelledby="blogModalTitle"
-      aria-describedby="blogModalDescription"
+      aria-labelledby="blog-modal-title"
+      aria-describedby="blog-modal-description"
       aria-modal="true"
+      tabIndex={-1}
     >
-      <div className="modal-overlay" onClick={closeBlogModal}></div>
-      <div className="case-study-modal-container" onClick={(e) => e.stopPropagation()}>
-        <button className="case-study-modal-close" aria-label="Close modal" onClick={closeBlogModal}>
+      <div className="blog-modal-overlay" onClick={closeBlogModal}></div>
+      <div className="blog-modal-container" onClick={(e) => e.stopPropagation()}>
+        <button 
+          className="blog-modal-close" 
+          aria-label="Close modal" 
+          onClick={closeBlogModal}
+        >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
-        <div className="case-study-modal-content">
-          <div className="case-study-modal-header">
-            <div className="case-study-modal-image-wrapper">
+
+        <div className="blog-modal-content">
+          {/* Header Section */}
+          <div className="blog-modal-header">
+            <div className="blog-modal-image-wrapper">
               <img 
-                id="blogModalImage"
                 src={`${process.env.PUBLIC_URL || ''}${post.image}`} 
-                alt={`${post.title} - ${post.category} blog post by Bereket Fikre. ${post.description}`} 
-                className="case-study-modal-image"
+                alt={`${post.title} - ${post.category} blog post by Bereket Fikre`} 
+                className="blog-modal-image"
                 loading="lazy"
                 decoding="async"
-                sizes="(max-width: 768px) 100vw, 90vw"
               />
             </div>
-            <div className="case-study-modal-header-content">
-              <span id="blogModalCategory" className="case-study-modal-category">{post.category}</span>
-              <h2 id="blogModalTitle" className="case-study-modal-title">{post.title}</h2>
-              <div className="case-study-modal-meta">
-                <div className="case-study-meta-item">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <div className="blog-modal-header-content">
+              <span className="blog-modal-category">{post.category}</span>
+              <h2 id="blog-modal-title" className="blog-modal-title">{post.title}</h2>
+              <div className="blog-modal-meta">
+                <div className="blog-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2"/>
                     <line x1="16" y1="2" x2="16" y2="6"/>
                     <line x1="8" y1="2" x2="8" y2="6"/>
@@ -226,15 +250,15 @@ const BlogModal = () => {
                   </svg>
                   <span>{post.date}</span>
                 </div>
-                <div className="case-study-meta-item">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="blog-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                     <circle cx="12" cy="7" r="4"/>
                   </svg>
                   <span>{post.author}</span>
                 </div>
-                <div className="case-study-meta-item">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="blog-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                     <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
                   </svg>
@@ -243,39 +267,45 @@ const BlogModal = () => {
               </div>
             </div>
           </div>
-          <div className="case-study-modal-body">
-            <div className="case-study-modal-intro">
-              <p className="case-study-modal-description">{post.description}</p>
+
+          {/* Body Section */}
+          <div className="blog-modal-body">
+            <div className="blog-modal-intro">
+              <p id="blog-modal-description" className="blog-modal-description">{post.description}</p>
             </div>
-            <div className="case-study-modal-article">
+
+            {/* Article Sections */}
+            <div className="blog-modal-article">
               {post.sections.map((section, index) => (
-                <div key={index} className="case-study-article-section">
-                  <div className="case-study-section-header">
-                    <div className="case-study-section-icon solution-icon">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div key={index} className="blog-article-section">
+                  <div className="blog-section-header">
+                    <div className="blog-section-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                         <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
                       </svg>
                     </div>
-                    <h3 className="case-study-section-heading">{section.heading}</h3>
+                    <h3 className="blog-section-heading">{section.heading}</h3>
                   </div>
-                  <p className="case-study-section-text">{section.text}</p>
+                  <p className="blog-section-text">{section.text}</p>
                 </div>
               ))}
             </div>
+
+            {/* Key Insights */}
             {post.insights && post.insights.length > 0 && (
-              <div className="case-study-modal-deliverables">
-                <h3 className="case-study-deliverables-title">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <div className="blog-modal-insights">
+                <h3 className="blog-insights-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 11l3 3L22 4"/>
                     <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
                   </svg>
                   Key Insights
                 </h3>
-                <ul className="case-study-deliverables-list">
+                <ul className="blog-insights-list">
                   {post.insights.map((insight, index) => (
-                    <li key={index} className="case-study-deliverable-item">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <li key={index} className="blog-insight-item">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12"/>
                       </svg>
                       <span>{insight}</span>
@@ -284,20 +314,79 @@ const BlogModal = () => {
                 </ul>
               </div>
             )}
-            <div className="blog-social-share">
-              <h4 className="blog-share-title">Share this article</h4>
-              <div className="blog-share-buttons">
+
+            {/* Social Share Section */}
+            <div 
+              className="blog-social-share" 
+              style={{ 
+                display: 'block', 
+                visibility: 'visible', 
+                opacity: 1, 
+                marginTop: '3rem', 
+                paddingTop: '2.5rem', 
+                paddingBottom: '2rem',
+                borderTop: '1px solid rgba(180, 232, 201, 0.1)',
+                width: '100%',
+                position: 'relative',
+                zIndex: 10
+              }}
+            >
+              <h4 
+                className="blog-share-title" 
+                style={{ 
+                  display: 'block', 
+                  visibility: 'visible', 
+                  opacity: 1, 
+                  fontSize: '1rem', 
+                  fontWeight: 600, 
+                  color: '#b4e8c9', 
+                  marginBottom: '1.25rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}
+              >
+                Share this article
+              </h4>
+              <div 
+                className="blog-share-buttons" 
+                style={{ 
+                  display: 'flex', 
+                  visibility: 'visible', 
+                  opacity: 1, 
+                  gap: '0.75rem', 
+                  flexWrap: 'wrap',
+                  width: '100%'
+                }}
+              >
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`}
+                  href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${shareTitle}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="blog-share-btn blog-share-twitter"
-                  aria-label="Share on Twitter"
+                  className="blog-share-btn blog-share-telegram"
+                  aria-label="Share on Telegram"
+                  style={{ 
+                    display: 'inline-flex', 
+                    visibility: 'visible', 
+                    opacity: 1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: '0.5rem', 
+                    padding: '0.75rem 1.25rem', 
+                    borderRadius: '8px', 
+                    border: '1px solid rgba(180, 232, 201, 0.2)', 
+                    background: 'rgba(5, 10, 31, 0.8)', 
+                    color: '#b4e8c9', 
+                    textDecoration: 'none', 
+                    cursor: 'pointer',
+                    minWidth: '120px',
+                    fontSize: '0.875rem',
+                    fontWeight: 500
+                  }}
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4e8c9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '20px', height: '20px', display: 'inline-block', flexShrink: 0 }}>
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                   </svg>
-                  <span>Twitter</span>
+                  <span style={{ display: 'inline-block', color: '#b4e8c9' }}>Telegram</span>
                 </a>
                 <a
                   href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
@@ -305,11 +394,31 @@ const BlogModal = () => {
                   rel="noopener noreferrer"
                   className="blog-share-btn blog-share-linkedin"
                   aria-label="Share on LinkedIn"
+                  style={{ 
+                    display: 'inline-flex', 
+                    visibility: 'visible', 
+                    opacity: 1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: '0.5rem', 
+                    padding: '0.75rem 1.25rem', 
+                    borderRadius: '8px', 
+                    border: '1px solid rgba(180, 232, 201, 0.2)', 
+                    background: 'rgba(5, 10, 31, 0.8)', 
+                    color: '#b4e8c9', 
+                    textDecoration: 'none', 
+                    cursor: 'pointer',
+                    minWidth: '120px',
+                    fontSize: '0.875rem',
+                    fontWeight: 500
+                  }}
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4e8c9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '20px', height: '20px', display: 'inline-block', flexShrink: 0 }}>
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                    <rect x="2" y="9" width="4" height="12"/>
+                    <circle cx="4" cy="4" r="2"/>
                   </svg>
-                  <span>LinkedIn</span>
+                  <span style={{ display: 'inline-block', color: '#b4e8c9' }}>LinkedIn</span>
                 </a>
                 <a
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
@@ -317,33 +426,58 @@ const BlogModal = () => {
                   rel="noopener noreferrer"
                   className="blog-share-btn blog-share-facebook"
                   aria-label="Share on Facebook"
+                  style={{ 
+                    display: 'inline-flex', 
+                    visibility: 'visible', 
+                    opacity: 1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: '0.5rem', 
+                    padding: '0.75rem 1.25rem', 
+                    borderRadius: '8px', 
+                    border: '1px solid rgba(180, 232, 201, 0.2)', 
+                    background: 'rgba(5, 10, 31, 0.8)', 
+                    color: '#b4e8c9', 
+                    textDecoration: 'none', 
+                    cursor: 'pointer',
+                    minWidth: '120px',
+                    fontSize: '0.875rem',
+                    fontWeight: 500
+                  }}
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4e8c9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '20px', height: '20px', display: 'inline-block', flexShrink: 0 }}>
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                   </svg>
-                  <span>Facebook</span>
+                  <span style={{ display: 'inline-block', color: '#b4e8c9' }}>Facebook</span>
                 </a>
                 <button
-                  onClick={(e) => {
-                    if (navigator.clipboard) {
-                      navigator.clipboard.writeText(shareUrl);
-                      const btn = e.currentTarget;
-                      const span = btn.querySelector('span');
-                      const originalText = span.textContent;
-                      span.textContent = 'Copied!';
-                      setTimeout(() => {
-                        span.textContent = originalText;
-                      }, 2000);
-                    }
-                  }}
+                  onClick={handleCopyLink}
                   className="blog-share-btn blog-share-copy"
                   aria-label="Copy link"
+                  style={{ 
+                    display: 'inline-flex', 
+                    visibility: 'visible', 
+                    opacity: 1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: '0.5rem', 
+                    padding: '0.75rem 1.25rem', 
+                    borderRadius: '8px', 
+                    border: '1px solid rgba(180, 232, 201, 0.2)', 
+                    background: 'rgba(5, 10, 31, 0.8)', 
+                    color: '#b4e8c9', 
+                    cursor: 'pointer', 
+                    fontFamily: 'inherit', 
+                    fontSize: '0.875rem', 
+                    fontWeight: 500,
+                    minWidth: '120px'
+                  }}
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4e8c9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '20px', height: '20px', display: 'inline-block', flexShrink: 0 }}>
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
                   </svg>
-                  <span>Copy Link</span>
+                  <span style={{ display: 'inline-block', color: '#b4e8c9' }}>{copied ? 'Copied!' : 'Copy Link'}</span>
                 </button>
               </div>
             </div>
@@ -355,4 +489,3 @@ const BlogModal = () => {
 };
 
 export default BlogModal;
-

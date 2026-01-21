@@ -393,15 +393,6 @@ export const portfolioProjects = [
       company: 'Niqat Coffee'
     },
     {
-      id: 'finix-social-10',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet-10.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Content Design - Finix Bet',
-      description: 'Engaging social media content design with modern aesthetics and compelling visuals for digital engagement.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
       id: 'niqat-social-11',
       image: '/assets/Portfolio/Social Media Design for niqat coffee-11.webp',
       category: 'Social Media Design · Digital Marketing',
@@ -489,15 +480,6 @@ export const portfolioProjects = [
       category: 'Web Design · Digital Marketing',
       title: 'Website Banner Series - Finix Bet',
       description: 'Comprehensive website banner series with consistent branding and engaging visual content.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-banner-9',
-      image: '/assets/Portfolio/Website Banner For Finix Bet-9.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Web Banner Design Assets - Finix Bet',
-      description: 'Professional web banner design assets optimized for various screen sizes and digital platforms.',
       service: 'digital-social-media-design',
       company: 'Finix Bet'
     },
@@ -803,6 +785,22 @@ const Portfolio = () => {
     return filtered;
   }, [shuffledProjects, activeFilter]);
 
+  // Separate Digital Design projects into Social Media and Web Banners
+  const digitalDesignGroups = useMemo(() => {
+    if (activeFilter !== 'digital-design') {
+      return { socialMedia: [], webBanners: [] };
+    }
+    
+    const socialMedia = filteredProjects.filter(project => 
+      project.service === 'marketing-campaign-design'
+    );
+    const webBanners = filteredProjects.filter(project => 
+      project.service === 'digital-social-media-design'
+    );
+    
+    return { socialMedia, webBanners };
+  }, [filteredProjects, activeFilter]);
+
   // Scroll active filter into view on mobile
   useEffect(() => {
     const scrollActiveFilter = () => {
@@ -875,65 +873,199 @@ const Portfolio = () => {
           ))}
         </div>
         
-        <div id="portfolio-grid" className="portfolio-grid-modern" role="list" aria-live="polite" aria-atomic="false">
-          {filteredProjects.map((project, index) => (
-            <article 
-              key={project.id} 
-              className="portfolio-item-modern" 
-              data-project={project.id}
-              role="listitem"
-              tabIndex={0}
-              onClick={() => openPortfolioModal(project.id)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  openPortfolioModal(project.id);
-                }
-              }}
-              aria-label={`${project.title} - ${project.category}. Click to view project details`}
-            >
-              <div className="portfolio-image-small">
-                <img 
-                  src={`${process.env.PUBLIC_URL || ''}${project.image}`} 
-                  alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
-                  className="portfolio-thumb" 
-                  loading="lazy" 
-                  width="600" 
-                  height="400"
-                  decoding="async"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  onError={(e) => {
-                    // Fallback: hide broken image gracefully
-                    e.target.style.display = 'none';
-                    const container = e.target.closest('.portfolio-image-small');
-                    if (container) {
-                      container.style.minHeight = '200px';
-                      container.style.background = 'var(--bg-primary)';
-                    }
-                  }}
-                />
+        {activeFilter === 'digital-design' ? (
+          <>
+            {/* Social Media Visuals Section */}
+            {digitalDesignGroups.socialMedia.length > 0 && (
+              <div className="digital-design-section">
+                <h3 className="digital-design-section-title">Social Media Visuals</h3>
+                <div className="portfolio-grid-modern portfolio-grid-square" role="list" aria-live="polite" aria-atomic="false">
+                  {digitalDesignGroups.socialMedia.map((project) => (
+                    <article 
+                      key={project.id} 
+                      className="portfolio-item-modern portfolio-item-square" 
+                      data-project={project.id}
+                      role="listitem"
+                      tabIndex={0}
+                      onClick={() => openPortfolioModal(project.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          openPortfolioModal(project.id);
+                        }
+                      }}
+                      aria-label={`${project.title} - ${project.category}. Click to view project details`}
+                    >
+                      <div className="portfolio-image-small">
+                        <img 
+                          src={`${process.env.PUBLIC_URL || ''}${project.image}`} 
+                          alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
+                          className="portfolio-thumb" 
+                          loading="lazy" 
+                          width="600" 
+                          height="600"
+                          decoding="async"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            const container = e.target.closest('.portfolio-image-small');
+                            if (container) {
+                              container.style.minHeight = '200px';
+                              container.style.background = 'var(--bg-primary)';
+                            }
+                          }}
+                        />
+                      </div>
+                      <div className="portfolio-content">
+                        <span className="portfolio-category-modern">{project.category}</span>
+                        <h3>{project.title}</h3>
+                        <a 
+                          href="#" 
+                          className="portfolio-link-modern"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            openPortfolioModal(project.id);
+                          }}
+                          aria-label={`View ${project.title} project`}
+                        >
+                          <span>View Project</span>
+                          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </a>
+                      </div>
+                    </article>
+                  ))}
+                </div>
               </div>
-              <div className="portfolio-content">
-                <span className="portfolio-category-modern">{project.category}</span>
-                <h3>{project.title}</h3>
-                <a 
-                  href="#" 
-                  className="portfolio-link-modern"
-                  onClick={(e) => {
+            )}
+
+            {/* Web & Campaign Banners Section */}
+            {digitalDesignGroups.webBanners.length > 0 && (
+              <div className="digital-design-section">
+                <h3 className="digital-design-section-title">Web & Campaign Banners</h3>
+                <div className="portfolio-grid-modern portfolio-grid-wide" role="list" aria-live="polite" aria-atomic="false">
+                  {digitalDesignGroups.webBanners.map((project) => (
+                    <article 
+                      key={project.id} 
+                      className="portfolio-item-modern portfolio-item-wide" 
+                      data-project={project.id}
+                      role="listitem"
+                      tabIndex={0}
+                      onClick={() => openPortfolioModal(project.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          openPortfolioModal(project.id);
+                        }
+                      }}
+                      aria-label={`${project.title} - ${project.category}. Click to view project details`}
+                    >
+                      <div className="portfolio-image-small">
+                        <img 
+                          src={`${process.env.PUBLIC_URL || ''}${project.image}`} 
+                          alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
+                          className="portfolio-thumb" 
+                          loading="lazy" 
+                          width="1200" 
+                          height="400"
+                          decoding="async"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 50vw"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            const container = e.target.closest('.portfolio-image-small');
+                            if (container) {
+                              container.style.minHeight = '200px';
+                              container.style.background = 'var(--bg-primary)';
+                            }
+                          }}
+                        />
+                      </div>
+                      <div className="portfolio-content">
+                        <span className="portfolio-category-modern">{project.category}</span>
+                        <h3>{project.title}</h3>
+                        <a 
+                          href="#" 
+                          className="portfolio-link-modern"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            openPortfolioModal(project.id);
+                          }}
+                          aria-label={`View ${project.title} project`}
+                        >
+                          <span>View Project</span>
+                          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </a>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div id="portfolio-grid" className="portfolio-grid-modern" role="list" aria-live="polite" aria-atomic="false">
+            {filteredProjects.map((project, index) => (
+              <article 
+                key={project.id} 
+                className="portfolio-item-modern" 
+                data-project={project.id}
+                role="listitem"
+                tabIndex={0}
+                onClick={() => openPortfolioModal(project.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     openPortfolioModal(project.id);
-                  }}
-                  aria-label={`View ${project.title} project`}
-                >
-                  <span>View Project</span>
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                    <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
+                  }
+                }}
+                aria-label={`${project.title} - ${project.category}. Click to view project details`}
+              >
+                <div className="portfolio-image-small">
+                  <img 
+                    src={`${process.env.PUBLIC_URL || ''}${project.image}`} 
+                    alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
+                    className="portfolio-thumb" 
+                    loading="lazy" 
+                    width="600" 
+                    height="400"
+                    decoding="async"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    onError={(e) => {
+                      // Fallback: hide broken image gracefully
+                      e.target.style.display = 'none';
+                      const container = e.target.closest('.portfolio-image-small');
+                      if (container) {
+                        container.style.minHeight = '200px';
+                        container.style.background = 'var(--bg-primary)';
+                      }
+                    }}
+                  />
+                </div>
+                <div className="portfolio-content">
+                  <span className="portfolio-category-modern">{project.category}</span>
+                  <h3>{project.title}</h3>
+                  <a 
+                    href="#" 
+                    className="portfolio-link-modern"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openPortfolioModal(project.id);
+                    }}
+                    aria-label={`View ${project.title} project`}
+                  >
+                    <span>View Project</span>
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                      <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

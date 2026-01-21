@@ -159,7 +159,6 @@ const Blog = () => {
               <div className="case-study-content">
                 <span className="case-study-category">{post.category}</span>
                 <h3>{post.title}</h3>
-                <p>{post.description}</p>
                 <a 
                   href="#" 
                   className="case-study-link"
