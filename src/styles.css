@@ -1367,6 +1367,26 @@ body:hover .cursor-follower {
   animation-delay: 4s;
 }
 
+/* Floating labels for About section image */
+/* Floating labels for About section image */
+.about-visual-block .floating-label-3 {
+  top: 15%;
+  right: -12%;
+  animation-delay: 1.5s;
+}
+
+.about-visual-block .floating-label-4 {
+  bottom: 20%;
+  left: -12%;
+  animation-delay: 2.5s;
+}
+
+.about-visual-block .floating-label-5 {
+  top: 50%;
+  left: -10%;
+  animation-delay: 5.5s;
+}
+
 @keyframes floatLabel {
   0%, 100% {
     transform: translate(0, 0) rotate(0deg);
@@ -1859,6 +1879,7 @@ section {
 }
 
 .about-visual-block {
+  position: relative;
   animation: fadeInRight 0.8s var(--ease-out-expo) 0.2s both;
   width: 100%;
   box-sizing: border-box;
@@ -5549,7 +5570,7 @@ section {
   color: var(--text-light);
   position: relative;
   overflow: hidden;
-  padding: 8rem 0;
+  padding: 8rem 0 0 0;
 }
 
 .contact-content-wrapper {
@@ -6496,7 +6517,7 @@ section {
 
   .footer-modern {
     padding: 2rem 0;
-    margin-top: 2rem;
+    margin-top: 0;
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -6817,7 +6838,7 @@ section {
 
   /* Contact Section Mobile */
   .contact {
-    padding: 4rem 0 !important;
+    padding: 4rem 0 0 0 !important;
   }
 
   .contact-content-wrapper {

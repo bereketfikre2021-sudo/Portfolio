@@ -14,15 +14,6 @@ export const portfolioProjects = [
       company: 'Swan Clothing'
     },
     {
-      id: 'alta-counseling',
-      image: '/assets/Portfolio/Full brand identity for Alta Counseling.webp',
-      category: 'Stationery Design · Healthcare',
-      title: 'Stationery Design - Alta Counseling',
-      description: 'Complete stationery design including professional letterheads, business cards, envelopes, and folders for a healthcare counseling service.',
-      service: 'print-design',
-      company: 'Alta Counseling'
-    },
-    {
       id: 'dayer-engineering',
       image: '/assets/Portfolio/Full Brand Identity Dayer Enginnering PLC.webp',
       category: 'Brand Identity · Engineering',
@@ -30,15 +21,6 @@ export const portfolioProjects = [
       description: 'Comprehensive brand identity system including logo design, brand guidelines, and corporate materials for an engineering company.',
       service: 'brand-identity-design',
       company: 'Dayer Engineering PLC'
-    },
-    {
-      id: 'blu-hart-karaoke',
-      image: '/assets/Portfolio/karaoke event social media.webp',
-      category: 'Social Media Design · Event Marketing',
-      title: 'Karaoke Event Social Media - Blu Hart',
-      description: 'Social media design collection for a karaoke event, featuring engaging posts and promotional graphics to drive event attendance and engagement.',
-      service: 'marketing-campaign-design',
-      company: 'Blu Hart'
     },
     {
       id: 'zewd-architectural',
@@ -50,15 +32,6 @@ export const portfolioProjects = [
       company: 'Zewd Architectural Designs'
     },
     {
-      id: 'yat-construction',
-      image: '/assets/Portfolio/YAT-Construction-PLC-8e3605ca.webp',
-      category: 'Stationery Design · Corporate',
-      title: 'Stationery Design - Y.A.T Construction PLC',
-      description: 'Complete stationery design including professional letterheads, business cards, envelopes, and folders for cohesive corporate identity.',
-      service: 'print-design',
-      company: 'Y.A.T Construction PLC'
-    },
-    {
       id: 'maleda-coffee',
       image: '/assets/Portfolio/Maleda-Coffee-7b6d183c.webp',
       category: 'Brand Identity · Beverage',
@@ -67,28 +40,28 @@ export const portfolioProjects = [
       service: 'brand-identity-design',
       company: 'Maleda Coffee'
     },
-    // Graphic Design Projects
+    // Print & Marketing Projects - From Print and marketing folder
     {
-      id: 'maleda-packaging',
-      image: '/assets/Portfolio/Packaging For Maleda Coffee.webp',
-      category: 'Packaging Design · Beverage',
-      title: 'Product Packaging Design - Maleda Coffee',
-      description: 'Premium packaging design for coffee products, combining visual appeal with functional design for retail and distribution.',
-      service: 'brand-applications-assets',
-      company: 'Maleda Coffee'
+      id: 'ptgr-flyer',
+      image: '/assets/Portfolio/Print%20and%20marketing/A5%20Flyer%20-%20PTGR.webp',
+      category: 'Print Design · Marketing',
+      title: 'A5 Flyer Design - PTGR',
+      description: 'Professional A5 flyer design featuring modern layouts, compelling visuals, and clear messaging for marketing campaigns.',
+      service: 'print-design',
+      company: 'PTGR'
     },
     {
-      id: 'andegna-signage',
-      image: '/assets/Portfolio/Office Signage For Andegna Furniture.webp',
-      category: 'Environmental Design · Corporate',
-      title: 'Office Signage Design - Andegna Furniture',
-      description: 'Professional office signage design including wall graphics and environmental graphics for impactful corporate communication.',
-      service: 'brand-applications-assets',
-      company: 'Andegna Furniture'
+      id: 'yat-construction-stationery',
+      image: '/assets/Portfolio/Print%20and%20marketing/YAT-Construction-PLC-8e3605ca.webp',
+      category: 'Stationery Design · Corporate',
+      title: 'Stationery Design - Y.A.T Construction PLC',
+      description: 'Complete stationery design including professional letterheads, business cards, envelopes, and folders for cohesive corporate identity.',
+      service: 'print-design',
+      company: 'Y.A.T Construction PLC'
     },
     {
       id: 'medavail-signage',
-      image: '/assets/Portfolio/Office Signage Medavail-.webp',
+      image: '/assets/Portfolio/Print%20and%20marketing/Office%20Signage%20Medavail-.webp',
       category: 'Environmental Design · Healthcare',
       title: 'Office Signage Design - Medavail Pharmaceuticals',
       description: 'Professional office signage design for a pharmaceutical company, creating a cohesive brand experience in the workplace.',
@@ -96,134 +69,45 @@ export const portfolioProjects = [
       company: 'Medavail Pharmaceuticals'
     },
     {
-      id: 'maleda-signage',
-      image: '/assets/Portfolio/Signage for maleda\'.webp',
-      category: 'Environmental Design · Beverage',
-      title: 'Signage Design - Maleda Coffee',
-      description: 'Professional signage design for Maleda Coffee, creating a cohesive brand experience in retail and commercial spaces.',
+      id: 'maleda-packaging',
+      image: '/assets/Portfolio/Print%20and%20marketing/Packaging%20For%20Maleda%20Coffee.webp',
+      category: 'Packaging Design · Beverage',
+      title: 'Product Packaging Design - Maleda Coffee',
+      description: 'Premium packaging design for coffee products, combining visual appeal with functional design for retail and distribution.',
       service: 'brand-applications-assets',
       company: 'Maleda Coffee'
     },
     {
-      id: 'barnas-signage',
-      image: '/assets/Portfolio/Barnas signage.webp',
-      category: 'Environmental Design · Corporate',
-      title: 'Logo Signage Design - Barnas',
-      description: 'Professional logo signage design for Barnas, featuring wall graphics and environmental graphics that create a cohesive brand experience.',
+      id: 'dumas-packaging',
+      image: '/assets/Portfolio/Print%20and%20marketing/Product%20%26%20Packaging%20-%20Dumas.webp',
+      category: 'Packaging Design · Real Estate',
+      title: 'Product & Packaging Design - Dumas Properties',
+      description: 'Professional product and packaging design for real estate materials, creating a cohesive brand experience.',
       service: 'brand-applications-assets',
-      company: 'Barnas'
+      company: 'Dumas Properties'
     },
     {
-      id: 'andegna-tshirt',
-      image: '/assets/Portfolio/Andegna-Tshirt-d5d4e074.webp',
-      category: 'Apparel Design · Corporate Branding',
-      title: 'Corporate Apparel Design – Driver\'s T-Shirt for Andegna Furniture',
-      description: 'Branded t-shirt design for Andegna Furniture\'s delivery team, created to reflect professionalism, brand consistency, and day-to-day wearability.',
+      id: 'raya-packaging',
+      image: '/assets/Portfolio/Print%20and%20marketing/Product%20%26%20Packaging%20-%20Raya.webp',
+      category: 'Packaging Design · Hospitality',
+      title: 'Product & Packaging Design - Raya Hotel',
+      description: 'Elegant product and packaging design for hospitality materials, reflecting brand quality and style.',
       service: 'brand-applications-assets',
-      company: 'Andegna Furniture'
+      company: 'Raya Hotel & Convention Center'
     },
+    // Social Media Design Projects - From Social media folder
     {
-      id: 'lensa-packaging',
-      image: '/assets/Portfolio/Product Packaging for Lensa Fashion.webp',
-      category: 'Packaging Design · Fashion',
-      title: 'Product Packaging Design - Lensa Fashion',
-      description: 'Elegant product packaging design for a fashion brand, creating an unboxing experience that reflects brand quality and style.',
-      service: 'brand-applications-assets',
-      company: 'Lensa Fashion'
-    },
-    {
-      id: 'niqat-apparel',
-      image: '/assets/Portfolio/Apparel Design for Niqat Coffee.webp',
-      category: 'Apparel Design · Coffee',
-      title: 'Apparel Design - Niqat Coffee',
-      description: 'Branded apparel design for Niqat Coffee, including t-shirts and merchandise that reflect the brand\'s identity and coffee culture.',
-      service: 'brand-applications-assets',
-      company: 'Niqat Coffee'
-    },
-    {
-      id: 'alta-apparel',
-      image: '/assets/Portfolio/Apparel Design for Alta conseling.webp',
-      category: 'Apparel Design · Healthcare',
-      title: 'Apparel Design - Alta Counseling',
-      description: 'Professional apparel design for Alta Counseling, featuring branded t-shirts and merchandise that reflect the healthcare organization\'s identity.',
-      service: 'brand-applications-assets',
-      company: 'Alta Counseling'
-    },
-    {
-      id: 'swan-apparel',
-      image: '/assets/Portfolio/Apparel Design for Swan clothing.webp',
-      category: 'Apparel Design · Fashion',
-      title: 'Apparel Design - Swan Clothing',
-      description: 'Fashion-forward apparel design for Swan Clothing, featuring branded t-shirts and merchandise that reflect the fashion brand\'s identity.',
-      service: 'brand-applications-assets',
-      company: 'Swan Clothing'
-    },
-    {
-      id: 'yat-apparel',
-      image: '/assets/Portfolio/Apparel Design for Yat Construction.webp',
-      category: 'Apparel Design · Corporate',
-      title: 'Apparel Design - Y.A.T Construction PLC',
-      description: 'Professional apparel design for Y.A.T Construction PLC, featuring branded t-shirts and merchandise for corporate branding.',
-      service: 'brand-applications-assets',
-      company: 'Y.A.T Construction PLC'
-    },
-    {
-      id: 'alta-apparel-2',
-      image: '/assets/Portfolio/Apparel Design for Alta conseling-2.webp',
-      category: 'Apparel Design · Healthcare',
-      title: 'Apparel Design Collection - Alta Counseling',
-      description: 'Additional apparel design collection for Alta Counseling, including various merchandise items that maintain brand consistency.',
-      service: 'brand-applications-assets',
-      company: 'Alta Counseling'
-    },
-    {
-      id: 'swan-apparel-2',
-      image: '/assets/Portfolio/Apparel Design for Swan clothing-2.webp',
-      category: 'Apparel Design · Fashion',
-      title: 'Apparel Design Series - Swan Clothing',
-      description: 'Additional apparel design series for Swan Clothing, including various merchandise items that maintain brand consistency.',
-      service: 'brand-applications-assets',
-      company: 'Swan Clothing'
-    },
-    {
-      id: 'swan-apparel-3',
-      image: '/assets/Portfolio/Apparel Design for Swan clothing-3.webp',
-      category: 'Apparel Design · Fashion',
-      title: 'Apparel Design Collection - Swan Clothing',
-      description: 'Comprehensive apparel design collection for Swan Clothing, featuring branded merchandise that reflects the fashion brand\'s identity.',
-      service: 'brand-applications-assets',
-      company: 'Swan Clothing'
-    },
-    {
-      id: 'niqat-menu',
-      image: '/assets/Portfolio/Menu & Broshure for niqat coffee.webp',
-      category: 'Menu Design · Print Design',
-      title: 'Cafe Menu & Brochure Design - Niqat Coffee',
-      description: 'Complete cafe menu design including trifold layout and modern typography for an elegant dining experience.',
-      service: 'print-design',
-      company: 'Niqat Coffee'
-    },
-    {
-      id: 'niqat-social',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design - Niqat Coffee',
-      description: 'Comprehensive social media design collection including posts, stories, and promotional graphics for engaging online presence.',
+      id: 'blu-hart-karaoke',
+      image: '/assets/Portfolio/Social%20media/karaoke%20event%20social%20media.webp',
+      category: 'Social Media Design · Event Marketing',
+      title: 'Karaoke Event Social Media - Blu Hart',
+      description: 'Social media design collection for a karaoke event, featuring engaging posts and promotional graphics to drive event attendance and engagement.',
       service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
+      company: 'Blu Hart'
     },
     {
-      id: 'finix-social-1',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design - Finix Bet',
-      description: 'Engaging social media design collection for Finix Bet, including posts, stories, and promotional graphics for online engagement.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'ace-stainless-1',
-      image: '/assets/Portfolio/Social Media Design For Ace Stainless Still.webp',
+      id: 'ace-stainless-social',
+      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Ace%20Stainless%20Still.webp',
       category: 'Social Media Design · Manufacturing',
       title: 'Social Media Design - Ace Stainless Steel',
       description: 'Professional social media design collection for a stainless steel manufacturing company, showcasing products and services.',
@@ -231,134 +115,17 @@ export const portfolioProjects = [
       company: 'Ace Stainless Steel'
     },
     {
-      id: 'niqat-social-2',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-2.webp',
+      id: 'awra-designs-social',
+      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Awra%20Designs.webp',
       category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Series - Niqat Coffee',
-      description: 'Social media design assets featuring promotional graphics and engaging visual content for digital marketing campaigns.',
+      title: 'Social Media Design - Awra Designs',
+      description: 'Professional social media design collection for Awra Designs, featuring engaging posts and promotional graphics for digital marketing campaigns.',
       service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
-    },
-    {
-      id: 'finix-social-2',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet-2.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Series - Finix Bet',
-      description: 'Social media design assets featuring promotional graphics and engaging visual content for digital marketing campaigns.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'niqat-social-3',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-3.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Collection - Niqat Coffee',
-      description: 'Comprehensive social media design collection with various formats and styles for consistent brand communication.',
-      service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
-    },
-    {
-      id: 'finix-social-3',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet-3.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Collection - Finix Bet',
-      description: 'Comprehensive social media design collection with various formats and styles for consistent brand communication.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'ace-stainless-2',
-      image: '/assets/Portfolio/Social Media Design For Ace Stainless Still-2.webp',
-      category: 'Social Media Design · Manufacturing',
-      title: 'Social Media Design Collection - Ace Stainless Steel',
-      description: 'Additional social media design assets including product showcases and promotional graphics for digital marketing campaigns.',
-      service: 'marketing-campaign-design',
-      company: 'Ace Stainless Steel'
-    },
-    {
-      id: 'niqat-social-4',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-4.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Graphics - Niqat Coffee',
-      description: 'Professional social media graphics designed for maximum engagement and brand visibility across digital platforms.',
-      service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
-    },
-    {
-      id: 'finix-social-4',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet-4.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Graphics - Finix Bet',
-      description: 'Professional social media graphics designed for maximum engagement and brand visibility across digital platforms.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'niqat-social-5',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-5.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Assets - Niqat Coffee',
-      description: 'Digital marketing assets including social media posts and promotional graphics for online campaigns.',
-      service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
-    },
-    {
-      id: 'finix-social-5',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet-5.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Assets - Finix Bet',
-      description: 'Digital marketing assets including social media posts and promotional graphics for online campaigns.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'niqat-social-6',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-6.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Content - Niqat Coffee',
-      description: 'Engaging social media content design featuring modern layouts and compelling visuals for digital marketing.',
-      service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
-    },
-    {
-      id: 'finix-social-6',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet-6.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Content - Finix Bet',
-      description: 'Engaging social media content design featuring modern layouts and compelling visuals for digital marketing.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'niqat-social-7',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-7.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Series - Niqat Coffee',
-      description: 'Professional social media design series with consistent branding and engaging visual content.',
-      service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
-    },
-    {
-      id: 'finix-social-7',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet-7.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Series - Finix Bet',
-      description: 'Professional social media design series with consistent branding and engaging visual content.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'niqat-social-8',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-8.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Graphics Collection - Niqat Coffee',
-      description: 'Comprehensive collection of social media graphics designed for various digital marketing campaigns and promotions.',
-      service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
+      company: 'Awra Designs'
     },
     {
       id: 'finix-social-8',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet-8.webp',
+      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Finix%20Bet-8.webp',
       category: 'Social Media Design · Digital Marketing',
       title: 'Social Media Graphics Collection - Finix Bet',
       description: 'Comprehensive collection of social media graphics designed for various digital marketing campaigns and promotions.',
@@ -366,40 +133,40 @@ export const portfolioProjects = [
       company: 'Finix Bet'
     },
     {
-      id: 'niqat-social-9',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-9.webp',
+      id: 'niqat-social-8',
+      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20for%20niqat%20coffee-8.webp',
       category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Assets - Niqat Coffee',
-      description: 'Professional social media design assets featuring promotional graphics and engaging visual content.',
+      title: 'Social Media Graphics Collection - Niqat Coffee',
+      description: 'Comprehensive collection of social media graphics designed for various digital marketing campaigns and promotions.',
       service: 'marketing-campaign-design',
       company: 'Niqat Coffee'
     },
     {
-      id: 'finix-social-9',
-      image: '/assets/Portfolio/Social Media Design For Finix Bet-9.webp',
+      id: 'prime-ethiopia-social',
+      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Prime%20Ethiopia.webp',
       category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design Assets - Finix Bet',
-      description: 'Professional social media design assets featuring promotional graphics and engaging visual content.',
+      title: 'Social Media Design - Prime Ethiopia',
+      description: 'Professional social media design collection for Prime Ethiopia, featuring engaging posts and promotional graphics for digital marketing campaigns.',
       service: 'marketing-campaign-design',
-      company: 'Finix Bet'
+      company: 'Prime Ethiopia'
     },
     {
-      id: 'niqat-social-10',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-10.webp',
+      id: 'ptgr-social-template',
+      image: '/assets/Portfolio/Social%20media/Social%20Media%20Template%20-%20PTGR.webp',
       category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Content Design - Niqat Coffee',
-      description: 'Engaging social media content design with modern aesthetics and compelling visuals for digital engagement.',
+      title: 'Social Media Template - PTGR',
+      description: 'Professional social media template design featuring modern layouts and engaging visual content for consistent brand communication.',
       service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
+      company: 'PTGR'
     },
     {
-      id: 'niqat-social-11',
-      image: '/assets/Portfolio/Social Media Design for niqat coffee-11.webp',
+      id: 'task-plug-social-template-2',
+      image: '/assets/Portfolio/Social%20media/Social%20Media%20Template%20-%20Task%20Plug-2.webp',
       category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design - Niqat Coffee',
-      description: 'Professional social media design collection for Niqat Coffee, featuring engaging posts and promotional graphics for digital marketing campaigns.',
+      title: 'Social Media Template Series - Task Plug',
+      description: 'Additional social media template design featuring promotional graphics and engaging visual content for digital marketing.',
       service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
+      company: 'Task Plug'
     },
     {
       id: 'rollup-banners',
@@ -410,10 +177,10 @@ export const portfolioProjects = [
       service: 'brand-applications-assets',
       company: 'Multiple Clients'
     },
-    // Web Design Projects
+    // Web Banner Projects - From Web banners folder
     {
       id: 'finix-banner-1',
-      image: '/assets/Portfolio/Website Banner For Finix Bet.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet.webp',
       category: 'Web Design · Digital Marketing',
       title: 'Website Banner Design - Finix Bet',
       description: 'Professional website banner design for Finix Bet, optimized for web display and digital marketing campaigns.',
@@ -422,7 +189,7 @@ export const portfolioProjects = [
     },
     {
       id: 'finix-banner-2',
-      image: '/assets/Portfolio/Website Banner For Finix Bet-2.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-2.webp',
       category: 'Web Design · Digital Marketing',
       title: 'Website Banner Collection - Finix Bet',
       description: 'Website banner design featuring modern layouts and engaging visuals for effective online presence.',
@@ -431,7 +198,7 @@ export const portfolioProjects = [
     },
     {
       id: 'finix-banner-3',
-      image: '/assets/Portfolio/Website Banner For Finix Bet-3.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-3.webp',
       category: 'Web Design · Digital Marketing',
       title: 'Web Banner Design - Finix Bet',
       description: 'Professional web banner design optimized for various screen sizes and digital platforms.',
@@ -440,7 +207,7 @@ export const portfolioProjects = [
     },
     {
       id: 'finix-banner-4',
-      image: '/assets/Portfolio/Website Banner For Finix Bet-4.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-4.webp',
       category: 'Web Design · Digital Marketing',
       title: 'Website Banner Series - Finix Bet',
       description: 'Comprehensive website banner series designed for consistent brand communication across digital platforms.',
@@ -449,7 +216,7 @@ export const portfolioProjects = [
     },
     {
       id: 'finix-banner-5',
-      image: '/assets/Portfolio/Website Banner For Finix Bet-5.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-5.webp',
       category: 'Web Design · Digital Marketing',
       title: 'Web Banner Assets - Finix Bet',
       description: 'Professional web banner assets featuring modern design and engaging visuals for digital marketing.',
@@ -457,35 +224,8 @@ export const portfolioProjects = [
       company: 'Finix Bet'
     },
     {
-      id: 'finix-banner-6',
-      image: '/assets/Portfolio/Website Banner For Finix Bet-6.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Website Banner Design - Finix Bet',
-      description: 'Engaging website banner design with compelling visuals and clear messaging for online campaigns.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-banner-7',
-      image: '/assets/Portfolio/Website Banner For Finix Bet-7.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Web Banner Collection - Finix Bet',
-      description: 'Professional web banner collection designed for various digital marketing campaigns and promotions.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-banner-8',
-      image: '/assets/Portfolio/Website Banner For Finix Bet-8.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Website Banner Series - Finix Bet',
-      description: 'Comprehensive website banner series with consistent branding and engaging visual content.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    {
       id: 'finix-banner-10',
-      image: '/assets/Portfolio/Website Banner For Finix Bet-10.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-10.webp',
       category: 'Web Design · Digital Marketing',
       title: 'Website Banner Collection - Finix Bet',
       description: 'Engaging website banner collection featuring modern design and compelling visuals for digital marketing.',
@@ -593,135 +333,7 @@ export const portfolioProjects = [
       service: 'brand-identity-design',
       company: 'Raya Hotel & Convention Center'
     },
-    // New Social Media Template Projects
-    {
-      id: 'ptgr-social-template',
-      image: '/assets/Portfolio/Social Media Template - PTGR.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template - PTGR',
-      description: 'Professional social media template design featuring modern layouts and engaging visual content for consistent brand communication.',
-      service: 'marketing-campaign-design',
-      company: 'PTGR'
-    },
-    {
-      id: 'task-plug-social-template',
-      image: '/assets/Portfolio/Social Media Template - Task Plug.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template - Task Plug',
-      description: 'Engaging social media template design with modern aesthetics and compelling visuals for digital marketing campaigns.',
-      service: 'marketing-campaign-design',
-      company: 'Task Plug'
-    },
-    {
-      id: 'task-plug-social-template-2',
-      image: '/assets/Portfolio/Social Media Template - Task Plug-2.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template Series - Task Plug',
-      description: 'Additional social media template design featuring promotional graphics and engaging visual content for digital marketing.',
-      service: 'marketing-campaign-design',
-      company: 'Task Plug'
-    },
-    {
-      id: 'finix-social-template',
-      image: '/assets/Portfolio/Social Media Template - Finix Bet.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template - Finix Bet',
-      description: 'Professional social media template design for Finix Bet, featuring modern layouts and engaging visual content.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-social-template-2',
-      image: '/assets/Portfolio/Social Media Template - Finix Bet-2.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template Collection - Finix Bet',
-      description: 'Comprehensive social media template collection with various formats and styles for consistent brand communication.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-social-template-3',
-      image: '/assets/Portfolio/Social Media Template - Finix Bet-3.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template Series - Finix Bet',
-      description: 'Professional social media template series featuring promotional graphics and engaging visual content for digital marketing.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-social-template-4',
-      image: '/assets/Portfolio/Social Media Template - Finix Bet-4.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template Assets - Finix Bet',
-      description: 'Digital marketing template assets including social media posts and promotional graphics for online campaigns.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-social-template-5',
-      image: '/assets/Portfolio/Social Media Template - Finix Bet-5.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template Design - Finix Bet',
-      description: 'Engaging social media template design featuring modern layouts and compelling visuals for digital engagement.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-social-template-6',
-      image: '/assets/Portfolio/Social Media Template - Finix Bet-6.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template Collection - Finix Bet',
-      description: 'Professional social media template collection designed for various digital marketing campaigns and promotions.',
-      service: 'marketing-campaign-design',
-      company: 'Finix Bet'
-    },
     // New Print & Layout Projects
-    {
-      id: 'ptgr-flyer',
-      image: '/assets/Portfolio/A5 Flyer - PTGR.webp',
-      category: 'Print Design · Marketing',
-      title: 'A5 Flyer Design - PTGR',
-      description: 'Professional A5 flyer design featuring modern layouts, compelling visuals, and clear messaging for marketing campaigns.',
-      service: 'print-design',
-      company: 'PTGR'
-    },
-    {
-      id: 'dumas-print-layout',
-      image: '/assets/Portfolio/Print & Layout - Dumas.webp',
-      category: 'Print Design · Corporate',
-      title: 'Print & Layout Design - Dumas Properties',
-      description: 'Complete print and layout design including professional materials and corporate communications for brand consistency.',
-      service: 'print-design',
-      company: 'Dumas Properties'
-    },
-    {
-      id: 'raya-print-layout',
-      image: '/assets/Portfolio/Print & Layout - Raya.webp',
-      category: 'Print Design · Hospitality',
-      title: 'Print & Layout Design - Raya Hotel',
-      description: 'Professional print and layout design for hospitality materials, featuring elegant layouts and brand-consistent messaging.',
-      service: 'print-design',
-      company: 'Raya Hotel & Convention Center'
-    },
-    // New Product & Packaging Projects
-    {
-      id: 'dumas-packaging',
-      image: '/assets/Portfolio/Product & Packaging - Dumas.webp',
-      category: 'Packaging Design · Real Estate',
-      title: 'Product & Packaging Design - Dumas Properties',
-      description: 'Professional product and packaging design for real estate materials, creating a cohesive brand experience.',
-      service: 'brand-applications-assets',
-      company: 'Dumas Properties'
-    },
-    {
-      id: 'raya-packaging',
-      image: '/assets/Portfolio/Product & Packaging - Raya.webp',
-      category: 'Packaging Design · Hospitality',
-      title: 'Product & Packaging Design - Raya Hotel',
-      description: 'Elegant product and packaging design for hospitality materials, reflecting brand quality and style.',
-      service: 'brand-applications-assets',
-      company: 'Raya Hotel & Convention Center'
-    },
 ];
 
 const Portfolio = () => {
@@ -745,6 +357,107 @@ const Portfolio = () => {
     }
     return shuffled;
   }, []);
+
+  // Helper function to shuffle projects ensuring no same company items are adjacent
+  const shuffleWithCompanySeparation = (projects) => {
+    if (projects.length <= 1) return projects;
+
+    // Group projects by company
+    const companyGroups = {};
+    projects.forEach(project => {
+      const company = project.company || 'Unknown';
+      if (!companyGroups[company]) {
+        companyGroups[company] = [];
+      }
+      companyGroups[company].push(project);
+    });
+
+    const companies = Object.keys(companyGroups);
+    const shuffled = [];
+    const companyIndices = {};
+    companies.forEach(company => {
+      companyIndices[company] = 0;
+      // Shuffle each company's projects
+      for (let i = companyGroups[company].length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [companyGroups[company][i], companyGroups[company][j]] = [companyGroups[company][j], companyGroups[company][i]];
+      }
+    });
+
+    // Interleave companies to avoid adjacent same-company items
+    let totalItems = projects.length;
+    let lastCompany = null;
+    
+    while (shuffled.length < totalItems) {
+      let found = false;
+      
+      // Try to find a company different from the last one
+      for (const company of companies) {
+        if (companyIndices[company] < companyGroups[company].length && company !== lastCompany) {
+          shuffled.push(companyGroups[company][companyIndices[company]]);
+          companyIndices[company]++;
+          lastCompany = company;
+          found = true;
+          break;
+        }
+      }
+      
+      // If no different company found, use any available company
+      if (!found) {
+        for (const company of companies) {
+          if (companyIndices[company] < companyGroups[company].length) {
+            shuffled.push(companyGroups[company][companyIndices[company]]);
+            companyIndices[company]++;
+            lastCompany = company;
+            break;
+          }
+        }
+      }
+    }
+
+    return shuffled;
+  };
+
+  // Helper function to select max 6 items with company variety
+  const selectWithVariety = (projects, maxItems = 6) => {
+    if (projects.length <= maxItems) {
+      return shuffleWithCompanySeparation(projects);
+    }
+
+    // Group projects by company
+    const companyGroups = {};
+    projects.forEach(project => {
+      const company = project.company || 'Unknown';
+      if (!companyGroups[company]) {
+        companyGroups[company] = [];
+      }
+      companyGroups[company].push(project);
+    });
+
+    const selected = [];
+    const usedCompanies = new Set();
+
+    // First pass: Select one item from each company (max variety)
+    const companies = Object.keys(companyGroups);
+    for (const company of companies) {
+      if (selected.length >= maxItems) break;
+      if (companyGroups[company].length > 0) {
+        selected.push(companyGroups[company][0]);
+        usedCompanies.add(company);
+        companyGroups[company].shift(); // Remove used item
+      }
+    }
+
+    // Second pass: Fill remaining slots from any company if needed
+    if (selected.length < maxItems) {
+      const remaining = projects.filter(p => !selected.includes(p));
+      const needed = maxItems - selected.length;
+      selected.push(...remaining.slice(0, needed));
+    }
+
+    // Shuffle the selected items to avoid same company being adjacent
+    return shuffleWithCompanySeparation(selected.slice(0, maxItems));
+  };
 
   // Filter projects based on active filter category
   const filteredProjects = useMemo(() => {
@@ -782,7 +495,8 @@ const Portfolio = () => {
       );
     }
     
-    return filtered;
+    // Limit to 6 items with company variety (already shuffled to avoid same company adjacent)
+    return selectWithVariety(filtered, 6);
   }, [shuffledProjects, activeFilter]);
 
   // Separate Digital Design projects into Social Media and Web Banners
@@ -791,15 +505,27 @@ const Portfolio = () => {
       return { socialMedia: [], webBanners: [] };
     }
     
-    const socialMedia = filteredProjects.filter(project => 
+    // Get all digital design projects first
+    const allDigital = shuffledProjects.filter(project => 
+      project.service === 'digital-social-media-design' ||
       project.service === 'marketing-campaign-design'
     );
-    const webBanners = filteredProjects.filter(project => 
+    
+    const socialMediaAll = allDigital.filter(project => 
+      project.service === 'marketing-campaign-design'
+    );
+    const webBannersAll = allDigital.filter(project => 
       project.service === 'digital-social-media-design'
     );
     
+    // For Social Media: Show all items shuffled to avoid same company adjacent
+    const socialMedia = shuffleWithCompanySeparation(socialMediaAll);
+    
+    // For Web Banners: Show all items shuffled to avoid same company adjacent
+    const webBanners = shuffleWithCompanySeparation(webBannersAll);
+    
     return { socialMedia, webBanners };
-  }, [filteredProjects, activeFilter]);
+  }, [shuffledProjects, activeFilter]);
 
   // Scroll active filter into view on mobile
   useEffect(() => {

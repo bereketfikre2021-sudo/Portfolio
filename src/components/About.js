@@ -141,30 +141,17 @@ const About = () => {
               />
               <div className="card-accent"></div>
             </div>
-            
-          </div>
-        </div>
-        
-        <div className="about-features-fullwidth desktop-only" data-aos="fade-up" data-aos-delay="300">
-          <div className="feature-item">
-            <div className="feature-icon">✓</div>
-            <div className="feature-content">
-              <h4>Strategic Design</h4>
-              <p>Data-driven decisions meet creative vision</p>
+            <div className="floating-label floating-label-3">
+              <div className="label-dot"></div>
+              <span>Strategic Design</span>
             </div>
-          </div>
-          <div className="feature-item">
-            <div className="feature-icon">✓</div>
-            <div className="feature-content">
-              <h4>Brand Focus</h4>
-              <p>Building memorable brand identities</p>
+            <div className="floating-label floating-label-4">
+              <div className="label-dot"></div>
+              <span>User-Centered</span>
             </div>
-          </div>
-          <div className="feature-item">
-            <div className="feature-icon">✓</div>
-            <div className="feature-content">
-              <h4>User-Centered</h4>
-              <p>Designs that users love and understand</p>
+            <div className="floating-label floating-label-5">
+              <div className="label-dot"></div>
+              <span>Brand Focus</span>
             </div>
           </div>
         </div>
