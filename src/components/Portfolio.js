@@ -42,7 +42,7 @@ export const portfolioProjects = [
     },
     // Print & Marketing Projects - From Print and marketing folder
     {
-      id: 'ptgr-flyer',
+      id: 'ptgr-flyer-a5',
       image: '/assets/Portfolio/Print%20and%20marketing/A5%20Flyer%20-%20PTGR.webp',
       category: 'Print Design · Marketing',
       title: 'A5 Flyer Design - PTGR',
@@ -51,25 +51,25 @@ export const portfolioProjects = [
       company: 'PTGR'
     },
     {
-      id: 'yat-construction-stationery',
-      image: '/assets/Portfolio/Print%20and%20marketing/YAT-Construction-PLC-8e3605ca.webp',
+      id: 'yat-business-card-new',
+      image: '/assets/Portfolio/Print%20and%20marketing/Business%20Card%20YAT%20Business%20Group.webp',
       category: 'Stationery Design · Corporate',
-      title: 'Stationery Design - Y.A.T Construction PLC',
-      description: 'Complete stationery design including professional letterheads, business cards, envelopes, and folders for cohesive corporate identity.',
+      title: 'Business Card Design - YAT Business Group',
+      description: 'Professional business card design featuring modern layouts and clear branding for corporate identity and networking.',
       service: 'print-design',
-      company: 'Y.A.T Construction PLC'
+      company: 'YAT Business Group'
     },
     {
-      id: 'medavail-signage',
-      image: '/assets/Portfolio/Print%20and%20marketing/Office%20Signage%20Medavail-.webp',
-      category: 'Environmental Design · Healthcare',
-      title: 'Office Signage Design - Medavail Pharmaceuticals',
-      description: 'Professional office signage design for a pharmaceutical company, creating a cohesive brand experience in the workplace.',
+      id: 'yat-rollup-banner',
+      image: '/assets/Portfolio/Print%20and%20marketing/YAT%20Bussiness%20Group%20Rollup%20Mockup%20copy.webp',
+      category: 'Environmental Design · Corporate',
+      title: 'Rollup Banner Design - YAT Business Group',
+      description: 'Professional rollup banner mockup design for exhibitions and corporate events, showcasing brand identity and messaging.',
       service: 'brand-applications-assets',
-      company: 'Medavail Pharmaceuticals'
+      company: 'YAT Business Group'
     },
     {
-      id: 'maleda-packaging',
+      id: 'maleda-coffee-packaging',
       image: '/assets/Portfolio/Print%20and%20marketing/Packaging%20For%20Maleda%20Coffee.webp',
       category: 'Packaging Design · Beverage',
       title: 'Product Packaging Design - Maleda Coffee',
@@ -78,7 +78,7 @@ export const portfolioProjects = [
       company: 'Maleda Coffee'
     },
     {
-      id: 'dumas-packaging',
+      id: 'dumas-product-packaging',
       image: '/assets/Portfolio/Print%20and%20marketing/Product%20%26%20Packaging%20-%20Dumas.webp',
       category: 'Packaging Design · Real Estate',
       title: 'Product & Packaging Design - Dumas Properties',
@@ -87,7 +87,7 @@ export const portfolioProjects = [
       company: 'Dumas Properties'
     },
     {
-      id: 'raya-packaging',
+      id: 'raya-product-packaging',
       image: '/assets/Portfolio/Print%20and%20marketing/Product%20%26%20Packaging%20-%20Raya.webp',
       category: 'Packaging Design · Hospitality',
       title: 'Product & Packaging Design - Raya Hotel',
@@ -169,8 +169,8 @@ export const portfolioProjects = [
       company: 'Task Plug'
     },
     {
-      id: 'rollup-banners',
-      image: '/assets/Portfolio/Rollup-Banners-68a13cab.webp',
+      id: 'rollup-banners-yat',
+      image: '/assets/Portfolio/Print%20and%20marketing/YAT%20Bussiness%20Group%20Rollup%20Mockup%20copy.webp',
       category: 'Banner Design · Print Design',
       title: 'Rollup Banners for Different Companies',
       description: 'Professional rollup banner designs for various companies, featuring modern layouts, compelling visuals, and brand-consistent messaging.',
@@ -232,85 +232,58 @@ export const portfolioProjects = [
       service: 'digital-social-media-design',
       company: 'Finix Bet'
     },
-    // Art Direction Projects
+    // Creative Direction Projects - From Creative Direction folder (arranged by file number)
     {
-      id: 'art-direction-1',
-      image: '/assets/Portfolio/Art Direction.webp',
-      category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance - Project 1',
-      description: 'Comprehensive art direction and visual guidance for product presentation, photography, and creative assets. This project involved developing a cohesive visual language across multiple touchpoints, ensuring brand consistency and high-quality execution. The art direction encompassed styling, composition, color palette selection, and overall aesthetic direction for product photography and marketing materials.',
+      id: 'creative-direction-1',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction.webp',
+      category: 'Creative Direction · Visual Guidance',
+      title: 'Creative Direction & Visual Guidance - Project 1',
+      description: 'Comprehensive creative direction and visual guidance for product presentation, photography, and creative assets. This project involved developing a cohesive visual language across multiple touchpoints, ensuring brand consistency and high-quality execution. The creative direction encompassed styling, composition, color palette selection, and overall aesthetic direction for product photography and marketing materials.',
       service: 'art-direction-visual-guidance',
       company: 'Various Clients'
     },
     {
-      id: 'art-direction-2',
-      image: '/assets/Portfolio/Art Direction-1 copy.webp',
-      category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance - Project 2',
-      description: 'Professional art direction and visual guidance for creative campaigns and brand storytelling. This project focused on establishing visual narratives that align with brand identity, including direction for photography shoots, video production, and digital content creation. The guidance ensured all visual elements work harmoniously to communicate the brand message effectively.',
+      id: 'creative-direction-2',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-2.webp',
+      category: 'Creative Direction · Visual Guidance',
+      title: 'Creative Direction & Visual Guidance - Project 2',
+      description: 'Professional creative direction and visual guidance for creative campaigns and brand storytelling. This project focused on establishing visual narratives that align with brand identity, including direction for photography shoots, video production, and digital content creation. The guidance ensured all visual elements work harmoniously to communicate the brand message effectively.',
       service: 'art-direction-visual-guidance',
       company: 'Various Clients'
     },
     {
-      id: 'art-direction-3',
-      image: '/assets/Portfolio/Art Direction-2 copy.webp',
-      category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance - Project 3',
-      description: 'Strategic art direction for product launches and marketing initiatives. This project involved creating comprehensive visual guidelines for product photography, including lighting, composition, background selection, and styling direction. The art direction ensured consistent visual quality across all product presentations and marketing channels.',
+      id: 'creative-direction-3',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-3.webp',
+      category: 'Creative Direction · Visual Guidance',
+      title: 'Creative Direction & Visual Guidance - Project 3',
+      description: 'Strategic creative direction for product launches and marketing initiatives. This project involved creating comprehensive visual guidelines for product photography, including lighting, composition, background selection, and styling direction. The creative direction ensured consistent visual quality across all product presentations and marketing channels.',
       service: 'art-direction-visual-guidance',
       company: 'Various Clients'
     },
     {
-      id: 'art-direction-4',
-      image: '/assets/Portfolio/Art Direction-3 copy.webp',
-      category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance - Project 4',
-      description: 'Comprehensive art direction for brand campaigns and visual communication. This project encompassed developing creative concepts, visual style guides, and direction for photography and videography teams. The guidance ensured all creative assets maintain brand integrity while achieving compelling visual storytelling that resonates with target audiences.',
+      id: 'creative-direction-4',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-4.webp',
+      category: 'Creative Direction · Visual Guidance',
+      title: 'Creative Direction & Visual Guidance - Project 4',
+      description: 'Comprehensive creative direction for brand campaigns and visual communication. This project encompassed developing creative concepts, visual style guides, and direction for photography and videography teams. The guidance ensured all creative assets maintain brand integrity while achieving compelling visual storytelling that resonates with target audiences.',
       service: 'art-direction-visual-guidance',
       company: 'Various Clients'
     },
     {
-      id: 'art-direction-5',
-      image: '/assets/Portfolio/Art Direction-4 copy.webp',
-      category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance - Project 5',
-      description: 'Professional art direction for digital and print marketing materials. This project involved establishing visual direction for social media content, advertising campaigns, and promotional materials. The art direction included color palette selection, typography guidance, layout composition, and overall aesthetic direction to ensure cohesive brand presentation across all platforms.',
+      id: 'creative-direction-5',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-5.webp',
+      category: 'Creative Direction · Visual Guidance',
+      title: 'Creative Direction & Visual Guidance - Project 5',
+      description: 'Professional creative direction for digital and print marketing materials. This project involved establishing visual direction for social media content, advertising campaigns, and promotional materials. The creative direction included color palette selection, typography guidance, layout composition, and overall aesthetic direction to ensure cohesive brand presentation across all platforms.',
       service: 'art-direction-visual-guidance',
       company: 'Various Clients'
     },
     {
-      id: 'art-direction-6',
-      image: '/assets/Portfolio/Art Direction-5 copy.webp',
-      category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance - Project 6',
-      description: 'Strategic art direction for brand identity and visual systems. This project focused on creating comprehensive visual guidelines that extend beyond logo design to encompass photography style, illustration direction, and overall creative execution. The art direction ensured all brand touchpoints maintain visual consistency and brand alignment.',
-      service: 'art-direction-visual-guidance',
-      company: 'Various Clients'
-    },
-    {
-      id: 'art-direction-7',
-      image: '/assets/Portfolio/Art Direction-6 copy.webp',
-      category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance - Project 7',
-      description: 'Comprehensive art direction for creative projects and visual campaigns. This project involved developing visual concepts, directing photography sessions, and providing guidance for post-production processes. The art direction ensured high-quality visual outcomes that align with brand values and effectively communicate the intended message to target audiences.',
-      service: 'art-direction-visual-guidance',
-      company: 'Various Clients'
-    },
-    {
-      id: 'art-direction-8',
-      image: '/assets/Portfolio/Art Direction-7 copy.webp',
-      category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance - Project 8',
-      description: 'Professional art direction for product photography and visual content creation. This project encompassed styling direction, composition guidelines, lighting specifications, and overall aesthetic direction for product shoots. The art direction ensured consistent visual quality and brand alignment across all product imagery used in marketing and e-commerce platforms.',
-      service: 'art-direction-visual-guidance',
-      company: 'Various Clients'
-    },
-    {
-      id: 'art-direction-9',
-      image: '/assets/Portfolio/Art Direction-8 copy.webp',
-      category: 'Art Direction · Visual Guidance',
-      title: 'Art Direction & Visual Guidance - Project 9',
-      description: 'Strategic art direction for brand campaigns and visual storytelling initiatives. This project involved creating comprehensive visual guidelines, directing creative teams, and ensuring brand consistency across all visual touchpoints. The art direction encompassed photography direction, video production guidance, and digital content creation to deliver cohesive and impactful brand experiences.',
+      id: 'creative-direction-6',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-6.webp',
+      category: 'Creative Direction · Visual Guidance',
+      title: 'Creative Direction & Visual Guidance - Project 6',
+      description: 'Strategic creative direction for brand campaigns and visual storytelling initiatives. This project involved creating comprehensive visual guidelines, directing creative teams, and ensuring brand consistency across all visual touchpoints. The creative direction encompassed photography direction, video production guidance, and digital content creation to deliver cohesive and impactful brand experiences.',
       service: 'art-direction-visual-guidance',
       company: 'Various Clients'
     },
@@ -472,15 +445,22 @@ const Portfolio = () => {
       );
     } else if (activeFilter === 'creative-direction') {
       // Creative Direction: Concept development, visual storytelling, art direction
-      filtered = shuffledProjects.filter(project => 
+      // Use original array order (not shuffled) to maintain numerical sequence
+      filtered = portfolioProjects.filter(project => 
         project.service === 'art-direction-visual-guidance'
       );
-      // Sort art direction projects by ID to maintain numerical order (1-9)
+      // Sort creative direction projects by ID to maintain numerical order (1-6)
+      // Projects are already in order in the array, but sort to ensure correct sequence
       filtered.sort((a, b) => {
-        const numA = parseInt(a.id.match(/\d+/)?.[0] || '0');
-        const numB = parseInt(b.id.match(/\d+/)?.[0] || '0');
+        // Extract the number at the end of the ID (e.g., 'creative-direction-1' -> 1)
+        const matchA = a.id.match(/-(\d+)$/);
+        const matchB = b.id.match(/-(\d+)$/);
+        const numA = matchA ? parseInt(matchA[1]) : 0;
+        const numB = matchB ? parseInt(matchB[1]) : 0;
         return numA - numB;
       });
+      // Return sorted array directly for creative direction (no shuffling)
+      return filtered;
     } else if (activeFilter === 'digital-design') {
       // Digital Design: Social media visuals, campaigns, content creation
       filtered = shuffledProjects.filter(project => 
@@ -535,11 +515,16 @@ const Portfolio = () => {
         if (activeButton) {
           // For first filter (Brand Identity), scroll to start, for others center
           const isFirstFilter = activeButton === filtersRef.current.querySelector('.portfolio-filter-btn:first-child');
-          activeButton.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: isFirstFilter ? 'start' : 'center'
-          });
+          if (isFirstFilter) {
+            // Ensure first filter is at the start
+            filtersRef.current.scrollLeft = 0;
+          } else {
+            activeButton.scrollIntoView({
+              behavior: 'smooth',
+              block: 'nearest',
+              inline: 'center'
+            });
+          }
         }
       }
     };
@@ -549,22 +534,30 @@ const Portfolio = () => {
     return () => clearTimeout(timer);
   }, [activeFilter]);
 
-  // Also scroll on initial mount
+  // Also scroll on initial mount - ensure first filter is visible
   useEffect(() => {
     const timer = setTimeout(() => {
       if (filtersRef.current && window.innerWidth <= 768) {
+        // Reset scroll to start to show first filter (Brand Identity)
+        filtersRef.current.scrollLeft = 0;
+        
         const activeButton = filtersRef.current.querySelector('.portfolio-filter-btn.active');
         if (activeButton) {
           // For first filter (Brand Identity), scroll to start
           const isFirstFilter = activeButton === filtersRef.current.querySelector('.portfolio-filter-btn:first-child');
-          activeButton.scrollIntoView({
-            behavior: 'auto',
-            block: 'nearest',
-            inline: isFirstFilter ? 'start' : 'center'
-          });
+          if (isFirstFilter) {
+            // Ensure first filter is at the start
+            filtersRef.current.scrollLeft = 0;
+          } else {
+            activeButton.scrollIntoView({
+              behavior: 'auto',
+              block: 'nearest',
+              inline: 'center'
+            });
+          }
         }
       }
-    }, 500);
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
 
