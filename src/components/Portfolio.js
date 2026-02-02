@@ -6,7 +6,7 @@ export const portfolioProjects = [
     // Brand Identity Projects
     {
       id: 'swan-clothing',
-      image: '/assets/Portfolio/Full brand identity for swan clothing.webp',
+      image: '/assets/Portfolio/Brand%20identity/Full%20brand%20identity%20for%20swan%20clothing.webp',
       category: 'Brand Identity · Fashion',
       title: 'Full Brand Identity - Swan Clothing',
       description: 'Complete brand identity package including logo design, product packaging mockups, and comprehensive brand guidelines for a modern fashion brand.',
@@ -21,15 +21,6 @@ export const portfolioProjects = [
       description: 'Comprehensive brand identity system including logo design, brand guidelines, and corporate materials for an engineering company.',
       service: 'brand-identity-design',
       company: 'Dayer Engineering PLC'
-    },
-    {
-      id: 'zewd-architectural',
-      image: '/assets/Portfolio/Logo Design for Zewd Architectural Designs.webp',
-      category: 'Logo Design · Architecture',
-      title: 'Logo Design - Zewd Architectural Designs',
-      description: 'Professional logo design for an architectural firm, featuring a distinctive mark that reflects precision, creativity, and modern design principles.',
-      service: 'logo-design',
-      company: 'Zewd Architectural Designs'
     },
     {
       id: 'maleda-coffee',
@@ -49,15 +40,6 @@ export const portfolioProjects = [
       description: 'Professional A5 flyer design featuring modern layouts, compelling visuals, and clear messaging for marketing campaigns.',
       service: 'print-design',
       company: 'PTGR'
-    },
-    {
-      id: 'yat-business-card-new',
-      image: '/assets/Portfolio/Print%20and%20marketing/Business%20Card%20YAT%20Business%20Group.webp',
-      category: 'Stationery Design · Corporate',
-      title: 'Business Card Design - YAT Business Group',
-      description: 'Professional business card design featuring modern layouts and clear branding for corporate identity and networking.',
-      service: 'print-design',
-      company: 'YAT Business Group'
     },
     {
       id: 'yat-rollup-banner',
@@ -87,13 +69,13 @@ export const portfolioProjects = [
       company: 'Dumas Properties'
     },
     {
-      id: 'raya-product-packaging',
-      image: '/assets/Portfolio/Print%20and%20marketing/Product%20%26%20Packaging%20-%20Raya.webp',
-      category: 'Packaging Design · Hospitality',
-      title: 'Product & Packaging Design - Raya Hotel',
-      description: 'Elegant product and packaging design for hospitality materials, reflecting brand quality and style.',
-      service: 'brand-applications-assets',
-      company: 'Raya Hotel & Convention Center'
+      id: 'goozam-technologies-company-profile',
+      image: '/assets/Portfolio/Print%20and%20marketing/Company%20Profile%20Goozam%20Technologies.webp',
+      category: 'Print Design · Corporate',
+      title: 'Company Profile - Goozam Technologies',
+      description: 'Professional company profile design for Goozam Technologies, a company located in the USA. The profile showcases brand identity, services, and corporate messaging for print and digital use.',
+      service: 'print-design',
+      company: 'Goozam Technologies'
     },
     // Social Media Design Projects - From Social media folder
     {
@@ -169,13 +151,13 @@ export const portfolioProjects = [
       company: 'Task Plug'
     },
     {
-      id: 'rollup-banners-yat',
-      image: '/assets/Portfolio/Print%20and%20marketing/YAT%20Bussiness%20Group%20Rollup%20Mockup%20copy.webp',
-      category: 'Banner Design · Print Design',
-      title: 'Rollup Banners for Different Companies',
-      description: 'Professional rollup banner designs for various companies, featuring modern layouts, compelling visuals, and brand-consistent messaging.',
-      service: 'brand-applications-assets',
-      company: 'Multiple Clients'
+      id: 'prime-ethiopia-employee-id',
+      image: '/assets/Portfolio/Print%20and%20marketing/Prime%20Ethiopia%20Employee%20ID.webp',
+      category: 'Print Design · Corporate',
+      title: 'Employee ID Design - Prime Ethiopia',
+      description: 'Professional employee ID card design for Prime Ethiopia, featuring clear layout, branding, and print-ready specifications for corporate identification.',
+      service: 'print-design',
+      company: 'Prime Ethiopia'
     },
     // Web Banner Projects - From Web banners folder
     {
@@ -289,17 +271,26 @@ export const portfolioProjects = [
     },
     // New Branding Projects
     {
-      id: 'dumas-properties-branding',
-      image: '/assets/Portfolio/Branding Dumas Properties.webp',
-      category: 'Brand Identity · Real Estate',
-      title: 'Full Brand Identity - Dumas Properties',
-      description: 'Complete brand identity package including logo design, brand guidelines, comprehensive visual identity system, color palette, typography, and brand applications for a real estate company. The identity reflects trust, professionalism, and modern real estate excellence.',
+      id: 'alta-counseling-branding',
+      image: '/assets/Portfolio/Brand%20identity/Company%20Logo%20Rebranding%20-%20Alta%20Counseling%20Ethiopia.webp',
+      category: 'Brand Identity · Counseling',
+      title: 'Company Logo Rebranding - Alta Counseling Ethiopia',
+      description: 'Complete brand identity and logo rebranding for Alta Counseling Ethiopia, including refreshed logo design, brand guidelines, and visual identity system. The identity reflects professionalism, trust, and a modern approach to counseling services.',
       service: 'brand-identity-design',
-      company: 'Dumas Properties'
+      company: 'Alta Counseling Ethiopia'
+    },
+    {
+      id: 'havana-plc-branding',
+      image: '/assets/Portfolio/Brand%20identity/Brand%20Identity%20-%20Havana%20PLC.webp',
+      category: 'Brand Identity · Corporate',
+      title: 'Full Brand Identity - Havana PLC',
+      description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for Havana PLC. The identity conveys professionalism, reliability, and corporate excellence.',
+      service: 'brand-identity-design',
+      company: 'Havana PLC'
     },
     {
       id: 'raya-hotel-branding',
-      image: '/assets/Portfolio/Branding Raya Hotel & Convention Center.webp',
+      image: '/assets/Portfolio/Brand%20identity/Branding%20Raya%20Hotel%20%26%20Convention%20Center.webp',
       category: 'Brand Identity · Hospitality',
       title: 'Full Brand Identity - Raya Hotel & Convention Center',
       description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for a hospitality and convention center. The identity captures elegance, luxury, and exceptional hospitality experiences.',
@@ -309,10 +300,21 @@ export const portfolioProjects = [
     // New Print & Layout Projects
 ];
 
+const MOBILE_BREAKPOINT = 768;
+const WEB_BANNERS_MOBILE_MAX = 3;
+const WEB_BANNERS_MOBILE_IDS = ['finix-banner-1', 'finix-banner-2', 'finix-banner-3'];
+
 const Portfolio = () => {
   const { openPortfolioModal } = useContext(ModalContext);
   const [activeFilter, setActiveFilter] = useState('brand-identity');
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT);
   const filtersRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const services = [
     { id: 'brand-identity', label: 'Brand Identity' },
@@ -443,6 +445,8 @@ const Portfolio = () => {
         project.service === 'logo-design' ||
         project.service === 'visual-identity-systems'
       );
+      // Alta Counseling first in branding category
+      filtered.sort((a, b) => (a.id === 'alta-counseling-branding' ? -1 : b.id === 'alta-counseling-branding' ? 1 : 0));
     } else if (activeFilter === 'creative-direction') {
       // Creative Direction: Concept development, visual storytelling, art direction
       // Use original array order (not shuffled) to maintain numerical sequence
@@ -664,7 +668,12 @@ const Portfolio = () => {
               <div className="digital-design-section">
                 <h3 className="digital-design-section-title">Web & Campaign Banners</h3>
                 <div className="portfolio-grid-modern portfolio-grid-wide" role="list" aria-live="polite" aria-atomic="false">
-                  {digitalDesignGroups.webBanners.map((project) => (
+                  {(isMobile
+                    ? WEB_BANNERS_MOBILE_IDS
+                        .map(id => digitalDesignGroups.webBanners.find(p => p.id === id))
+                        .filter(Boolean)
+                    : digitalDesignGroups.webBanners
+                  ).map((project) => (
                     <article 
                       key={project.id} 
                       className="portfolio-item-modern portfolio-item-wide" 

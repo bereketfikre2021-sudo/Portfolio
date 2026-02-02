@@ -79,7 +79,7 @@ const PortfolioModal = () => {
       deliverables: ['Website Banners', 'Digital Marketing Materials', 'Promotional Graphics', 'Social Media Assets']
     },
     'swan-clothing': {
-      image: '/assets/Portfolio/Full brand identity for swan clothing.webp',
+      image: '/assets/Portfolio/Brand%20identity/Full%20brand%20identity%20for%20swan%20clothing.webp',
       category: 'Fashion',
       title: 'Brand Identity - Swan Clothing',
       description: 'Complete brand identity package including logo design, product packaging mockups, and comprehensive brand guidelines for a modern fashion brand. This project established a strong visual identity that resonates with the target audience and sets the brand apart in the competitive fashion market.',
@@ -122,30 +122,52 @@ const PortfolioModal = () => {
       },
       deliverables: ['Brand Identity', 'Packaging Design', 'Logo Design', 'Brand Guidelines', 'Visual Storytelling']
     },
-    'dumas-properties-branding': {
-      image: '/assets/Portfolio/Branding Dumas Properties.webp',
-      category: 'Real Estate',
-      title: 'Full Brand Identity - Dumas Properties',
-      description: 'Complete brand identity package including logo design, brand guidelines, comprehensive visual identity system, color palette, typography, and brand applications for a real estate company. The identity reflects trust, professionalism, and modern real estate excellence.',
+    'alta-counseling-branding': {
+      image: '/assets/Portfolio/Brand%20identity/Company%20Logo%20Rebranding%20-%20Alta%20Counseling%20Ethiopia.webp',
+      category: 'Counseling',
+      title: 'Company Logo Rebranding - Alta Counseling Ethiopia',
+      description: 'Complete brand identity and logo rebranding for Alta Counseling Ethiopia, including refreshed logo design, brand guidelines, and visual identity system. The identity reflects professionalism, trust, and a modern approach to counseling services.',
       type: 'Brand Identity',
       date: '2024',
-      client: 'Dumas Properties',
+      client: 'Alta Counseling Ethiopia',
       challenge: {
         heading: 'The Challenge',
-        text: 'Create a comprehensive brand identity for a real estate company that builds trust and credibility while standing out in a competitive market. The identity needed to reflect professionalism, reliability, and modern real estate excellence, working effectively across various applications from marketing materials to digital platforms.'
+        text: 'Create a refreshed brand identity and logo rebranding for a counseling service that builds trust and credibility while conveying a modern, professional approach. The identity needed to reflect care, professionalism, and accessibility, working effectively across various applications from digital platforms to print materials.'
       },
       solution: {
         heading: 'The Solution',
-        text: 'I developed a professional, trustworthy brand identity with a sophisticated color palette and typography that reflects the company\'s commitment to excellence. The logo design is versatile and memorable, conveying trust and professionalism. The comprehensive brand guidelines ensure consistent application across all touchpoints, from print materials to digital platforms, creating a cohesive brand experience that builds credibility and trust with clients.'
+        text: 'I developed a professional, approachable brand identity with a refined logo and visual system that reflects the organization\'s commitment to quality counseling services. The logo rebranding is versatile and memorable, conveying trust and professionalism. The brand guidelines ensure consistent application across all touchpoints, creating a cohesive brand experience that builds credibility with clients.'
       },
       results: {
         heading: 'The Results',
-        text: 'The brand identity successfully established a strong, professional presence in the real estate market. It increased brand recognition and created a foundation for consistent brand communication that builds trust with clients. The cohesive visual identity has helped the company stand out in a competitive market and communicate its commitment to excellence in real estate services.'
+        text: 'The brand identity and logo rebranding successfully established a strong, professional presence in the counseling sector. It increased brand recognition and created a foundation for consistent brand communication that builds trust with clients. The cohesive visual identity has helped the organization communicate its commitment to excellence in counseling services.'
+      },
+      deliverables: ['Logo Rebranding', 'Brand Guidelines', 'Visual Identity System', 'Color Palette', 'Typography', 'Brand Applications']
+    },
+    'havana-plc-branding': {
+      image: '/assets/Portfolio/Brand%20identity/Brand%20Identity%20-%20Havana%20PLC.webp',
+      category: 'Corporate',
+      title: 'Full Brand Identity - Havana PLC',
+      description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for Havana PLC. The identity conveys professionalism, reliability, and corporate excellence.',
+      type: 'Brand Identity',
+      date: '2024',
+      client: 'Havana PLC',
+      challenge: {
+        heading: 'The Challenge',
+        text: 'Create a distinctive brand identity for a corporate organization that conveys professionalism, reliability, and excellence while standing out in the market. The identity needed to work across various applications from business materials to digital platforms, creating a memorable and trustworthy brand experience.'
+      },
+      solution: {
+        heading: 'The Solution',
+        text: 'I developed a professional, sophisticated brand identity that captures corporate excellence. The logo design reflects reliability and professionalism, working effectively across different applications. The comprehensive brand system includes a refined color palette and typography that conveys trust and corporate strength. The brand guidelines ensure consistent application across all touchpoints, creating a cohesive brand experience.'
+      },
+      results: {
+        heading: 'The Results',
+        text: 'The brand identity successfully established a strong, professional presence in the corporate market. It increased brand recognition and created a foundation for consistent brand communication. The cohesive visual identity has helped the company convey its commitment to excellence and build trust with stakeholders.'
       },
       deliverables: ['Logo Design', 'Brand Guidelines', 'Visual Identity System', 'Color Palette', 'Typography System', 'Brand Applications']
     },
     'raya-hotel-branding': {
-      image: '/assets/Portfolio/Branding Raya Hotel & Convention Center.webp',
+      image: '/assets/Portfolio/Brand%20identity/Branding%20Raya%20Hotel%20%26%20Convention%20Center.webp',
       category: 'Hospitality',
       title: 'Full Brand Identity - Raya Hotel & Convention Center',
       description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for a hospitality and convention center. The identity captures elegance, luxury, and exceptional hospitality experiences.',
@@ -276,30 +298,52 @@ const PortfolioModal = () => {
       },
       deliverables: ['Calendar Design', 'Brand Integration', 'Print Specifications', 'Layout Guidelines']
     },
-    'rollup-banners': {
-      image: '/assets/Portfolio/Rollup-Banners-68a13cab.webp',
-      category: 'Events',
-      title: 'Rollup Banners for Different Companies',
-      description: 'Professional rollup banner designs for various companies, featuring modern layouts, compelling visuals, and brand-consistent messaging. High-quality print-ready designs that effectively communicate company information and enhance brand visibility at events and exhibitions.',
-      type: 'Banner Design',
+    'prime-ethiopia-employee-id': {
+      image: '/assets/Portfolio/Print%20and%20marketing/Prime%20Ethiopia%20Employee%20ID.webp',
+      category: 'Corporate',
+      title: 'Employee ID Design - Prime Ethiopia',
+      description: 'Professional employee ID card design for Prime Ethiopia, featuring clear layout, branding, and print-ready specifications for corporate identification.',
+      type: 'Print Design',
       date: '2024',
-      client: 'Multiple Clients',
+      client: 'Prime Ethiopia',
       challenge: {
         heading: 'The Challenge',
-        text: 'Create professional rollup banner designs for various companies that effectively communicate their brand message at events and exhibitions. Each banner needed to be visually compelling, brand-consistent, and optimized for print while standing out in crowded event spaces.'
+        text: 'Create a professional employee ID card design for Prime Ethiopia that clearly displays employee information while maintaining brand consistency. The design needed to be print-ready, durable for daily use, and reflect the company\'s corporate identity.'
       },
       solution: {
         heading: 'The Solution',
-        text: 'I developed a collection of professional rollup banner designs with modern layouts and compelling visuals. Each banner was customized to reflect the client\'s brand identity while maintaining effective communication of key information. The designs are optimized for print and create strong visual impact in event environments.'
+        text: 'I developed a clean, professional employee ID design with clear typography and layout for essential information. The design incorporates Prime Ethiopia\'s branding and is optimized for standard ID card dimensions and print specifications.'
       },
       results: {
         heading: 'The Results',
-        text: 'The rollup banner designs successfully enhanced brand visibility at events and exhibitions. They effectively communicated company information and created a professional presence that helped companies stand out in crowded event spaces.'
+        text: 'The employee ID design successfully provided a professional, brand-consistent identification solution for Prime Ethiopia. It enhanced corporate identity and provided clear, functional identification for staff.'
       },
-      deliverables: ['Rollup Banner Designs', 'Print Specifications', 'Brand Guidelines', 'Multiple Variations']
+      deliverables: ['Employee ID Design', 'Print Specifications', 'Brand Integration']
+    },
+    'goozam-technologies-company-profile': {
+      image: '/assets/Portfolio/Print%20and%20marketing/Company%20Profile%20Goozam%20Technologies.webp',
+      category: 'Corporate',
+      title: 'Company Profile - Goozam Technologies',
+      description: 'Professional company profile design for Goozam Technologies, a company located in the USA. The profile showcases brand identity, services, and corporate messaging for print and digital use.',
+      type: 'Print Design',
+      date: '2024',
+      client: 'Goozam Technologies',
+      challenge: {
+        heading: 'The Challenge',
+        text: 'Create a professional company profile for Goozam Technologies, a company located in the USA, that effectively communicates the company\'s offerings and brand identity. The profile needed to work for both print and digital distribution while maintaining a polished, corporate appearance.'
+      },
+      solution: {
+        heading: 'The Solution',
+        text: 'I developed a comprehensive company profile with clear layout, brand-consistent visuals, and professional typography. The design highlights Goozam Technologies\' services and positioning, suitable for client presentations and marketing use.'
+      },
+      results: {
+        heading: 'The Results',
+        text: 'The company profile successfully provided Goozam Technologies with a professional, cohesive document that communicates their brand and services. It is suitable for print and digital use and supports their business development and marketing efforts.'
+      },
+      deliverables: ['Company Profile Design', 'Print Specifications', 'Brand Integration', 'Layout Design']
     },
     'swan-clothing': {
-      image: '/assets/Portfolio/Full brand identity for swan clothing.webp',
+      image: '/assets/Portfolio/Brand%20identity/Full%20brand%20identity%20for%20swan%20clothing.webp',
       category: 'Fashion',
       title: 'Full Brand Identity - Swan Clothing',
       description: 'Complete brand identity package including logo design, product packaging mockups, and comprehensive brand guidelines for a modern fashion brand. This project established a strong visual identity that resonates with the target audience and sets the brand apart in the competitive fashion market.',

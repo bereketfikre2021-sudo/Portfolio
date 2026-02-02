@@ -5,30 +5,30 @@ const CaseStudyModal = () => {
   const { caseStudyModal, closeCaseStudyModal } = useContext(ModalContext);
 
   const caseStudyData = {
-    'andegna-wood-metal': {
-      image: '/assets/Portfolio/Office Signage For Andegna Furniture.webp',
-      category: 'Brand Identity & Logo Design',
-      title: 'Andegna Wood & Metal Works',
-      description: 'Logo and brand identity design for Andegna Wood & Metal Works, creating a strong, professional visual identity aligned with the parent brand.',
-      type: 'Brand Identity',
+    'medavail-pharmaceuticals-company-profile': {
+      image: '/assets/Portfolio/Company%20Profile%20-%20Medavail%20Pharmaceuticals.webp',
+      category: 'Company Profile Design',
+      title: 'Company Profile – Medavail Pharmaceuticals',
+      description: 'Medavail Pharmaceuticals – Company Profile Design\n\nMedavail Pharmaceuticals is a fast-growing, Ethiopia-based pharmaceutical and medical equipment import company committed to ethical marketing, quality healthcare solutions, and reliable distribution. The objective of this company profile was to clearly communicate Medavail\'s vision, credibility, and operational strength to partners, regulators, and stakeholders.\n\nThe profile presents Medavail\'s core mission of improving access to quality pharmaceuticals and medical supplies through integrity, customer-centric service, and strong industry partnerships. It highlights the company\'s leadership team, structured business model, nationwide distribution network, and collaborations with reputable international manufacturers.\n\nDesigned with clarity and professionalism in mind, the profile balances corporate identity with industry trust—showcasing Medavail\'s values, infrastructure, tender expertise, and commitment to ethical pharmaceutical practices. The final outcome is a comprehensive yet accessible document that positions Medavail Pharmaceuticals as a reliable, forward-looking healthcare partner in Ethiopia\'s pharmaceutical sector.',
+      type: 'Company Profile',
       date: '2024',
-      client: 'Andegna Wood & Metal Works',
+      client: 'Medavail Pharmaceuticals',
       challenge: {
         heading: 'Challenge',
-        text: 'No existing brand identity for the sister company. Needed visual distinction without breaking alignment with Andegna Furniture. Brand had to feel durable, professional, and industry-appropriate.'
+        text: 'Create a company profile that clearly communicates Medavail\'s vision, credibility, and operational strength to partners, regulators, and stakeholders—positioning the company as a reliable healthcare partner in Ethiopia\'s pharmaceutical sector.'
       },
       solution: {
         heading: 'Solution',
-        text: 'I designed a logo and brand identity that balanced boldness and simplicity, reflecting the company\'s focus on wood and metal craftsmanship. The visual direction was intentionally clean and structured to ensure versatility across physical and digital applications. The identity was developed to work seamlessly alongside the parent brand while giving Andegna Wood & Metal Works its own recognizable presence.'
+        text: 'I designed a comprehensive company profile that presents Medavail\'s mission, leadership, business model, and nationwide distribution network. The profile balances corporate identity with industry trust, highlighting values, infrastructure, and commitment to ethical pharmaceutical practices.'
       },
       results: {
         heading: 'Outcome',
-        text: 'The new brand identity gave Andegna Wood & Metal Works a clear and professional visual presence. The logo provided a strong foundation for future brand applications while maintaining consistency within the broader Andegna brand family.'
+        text: 'The final outcome is a comprehensive yet accessible document that positions Medavail Pharmaceuticals as a reliable, forward-looking healthcare partner in Ethiopia\'s pharmaceutical sector.'
       },
-      deliverables: ['Brand identity concept development', 'Logo design and refinement', 'Visual system alignment with parent brand', 'Preparation of brand-ready assets']
+      deliverables: ['Company profile design', 'Corporate identity and layout', 'Content structure and hierarchy', 'Print-ready document']
     },
     'alta-counseling': {
-      image: '/assets/Portfolio/Full brand identity for Alta Counseling.webp',
+      image: '/assets/Portfolio/Alta%20Counseling.webp',
       category: 'Brand Identity Redesign',
       title: 'Alta Counseling',
       description: 'Brand identity redesign for Alta Counseling focused on clarity, trust, and consistency through a calm, professional visual system.',

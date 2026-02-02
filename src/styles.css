@@ -3529,6 +3529,7 @@ section {
   color: var(--text-secondary);
   margin: 0;
   font-weight: 400;
+  white-space: pre-line;
 }
 
 .case-study-modal-article {

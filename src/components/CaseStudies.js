@@ -6,15 +6,15 @@ const CaseStudies = () => {
 
   const caseStudies = [
     {
-      id: 'andegna-wood-metal',
-      image: '/assets/Portfolio/Office Signage For Andegna Furniture.webp',
-      category: 'Brand Identity & Logo Design',
-      title: 'Andegna Wood & Metal Works',
-      description: 'Logo and brand identity design for Andegna Wood & Metal Works, creating a strong, professional visual identity aligned with the parent brand.'
+      id: 'medavail-pharmaceuticals-company-profile',
+      image: '/assets/Portfolio/Company%20Profile%20-%20Medavail%20Pharmaceuticals.webp',
+      category: 'Company Profile Design',
+      title: 'Company Profile – Medavail Pharmaceuticals',
+      description: 'Company profile design for Medavail Pharmaceuticals, an Ethiopia-based pharmaceutical and medical equipment import company. The profile communicates Medavail\'s vision, credibility, and operational strength to partners and stakeholders.'
     },
     {
       id: 'alta-counseling',
-      image: '/assets/Portfolio/Full brand identity for Alta Counseling.webp',
+      image: '/assets/Portfolio/Alta%20Counseling.webp',
       category: 'Brand Identity Redesign',
       title: 'Alta Counseling',
       description: 'Brand identity redesign for Alta Counseling focused on clarity, trust, and consistency through a calm, professional visual system.'
