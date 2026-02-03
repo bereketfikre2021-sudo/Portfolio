@@ -197,8 +197,8 @@ const Testimonials = () => {
     <section id="testimonials" className="testimonials" aria-labelledby="testimonials-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number desktop-number">06</span>
-          <span className="section-number mobile-number">04</span>
+          <span className="section-number desktop-number">05</span>
+          <span className="section-number mobile-number">03</span>
           <div className="section-header">
             <span className="section-label">Client Feedback</span>
             <h2 id="testimonials-heading" className="section-title">

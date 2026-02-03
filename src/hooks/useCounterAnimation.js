@@ -62,44 +62,34 @@ export const useCounterAnimation = (target, containerRef) => {
     const checkAndStart = () => {
       const container = containerRef?.current;
       if (!container) {
-        // If container not ready, try again after a short delay
         setTimeout(checkAndStart, 100);
         return;
       }
+      // Read layout in rAF to avoid forced reflow
+      requestAnimationFrame(() => {
+        const el = containerRef?.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
 
-      const rect = container.getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-
-      if (isVisible) {
-        // Element is visible, start animation after a delay
-        setTimeout(() => {
-          startAnimation();
-        }, 1000);
-      } else {
-        // Element not visible, use IntersectionObserver
-        observerRef.current = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting && !hasAnimated.current && !isAnimating.current) {
-                hasAnimated.current = true;
-                if (observerRef.current) {
-                  observerRef.current.disconnect();
+        if (isVisible) {
+          setTimeout(() => startAnimation(), 1000);
+        } else {
+          observerRef.current = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting && !hasAnimated.current && !isAnimating.current) {
+                  hasAnimated.current = true;
+                  if (observerRef.current) observerRef.current.disconnect();
+                  requestAnimationFrame(() => startAnimation());
                 }
-                
-                // Start animation immediately using requestAnimationFrame
-                requestAnimationFrame(() => {
-                  startAnimation();
-                });
-              }
-            });
-          },
-          { threshold: 0.2, rootMargin: '0px' }
-        );
-
-        if (observerRef.current) {
-          observerRef.current.observe(container);
+              });
+            },
+            { threshold: 0.2, rootMargin: '0px' }
+          );
+          if (observerRef.current) observerRef.current.observe(el);
         }
-      }
+      });
     };
 
     // Check visibility after component mounts

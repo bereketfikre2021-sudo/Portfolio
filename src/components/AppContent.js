@@ -1,11 +1,10 @@
-import React, { lazy, Suspense, useEffect, useLayoutEffect, useContext, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useContext, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { ModalContext } from '../context/ModalContext';
 import Navigation from './Navigation';
 import Hero from './Hero';
 import About from './About';
-import Services from './Services';
 import Portfolio from './Portfolio';
 import CallNowButton from './CallNowButton';
 import ScrollToTop from './ScrollToTop';
@@ -76,30 +75,34 @@ function AppContent() {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  // Initialize AOS before first paint so [data-aos] content is visible for FCP / Lighthouse
-  useLayoutEffect(() => {
-    AOS.init({
-      duration: 800,
-      easing: 'ease-out-cubic',
-      once: true,
-      offset: 100,
-      disable: window.innerWidth <= 768 ? 'mobile' : false,
-    });
+  // Defer AOS init to idle time to minimize main-thread work before LCP
+  useEffect(() => {
+    const initAOS = () => {
+      AOS.init({
+        duration: 800,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 100,
+        disable: typeof window !== 'undefined' && window.innerWidth <= 768 ? 'mobile' : false,
+      });
+    };
+    if (typeof requestIdleCallback !== 'undefined') {
+      requestIdleCallback(initAOS, { timeout: 800 });
+    } else {
+      setTimeout(initAOS, 1);
+    }
     const refreshAOS = () => {
       requestAnimationFrame(() => {
         setTimeout(() => AOS.refresh(), 200);
       });
     };
     const debouncedRefresh = debounce(refreshAOS, 300);
-    refreshAOS();
     window.addEventListener('load', debouncedRefresh);
     const mainContent = document.getElementById('main-content');
     const observer = mainContent
       ? new MutationObserver(debouncedRefresh)
       : { observe: () => {}, disconnect: () => {} };
-    if (mainContent) {
-      observer.observe(mainContent, { childList: true, subtree: true });
-    }
+    if (mainContent) observer.observe(mainContent, { childList: true, subtree: true });
     return () => {
       window.removeEventListener('load', debouncedRefresh);
       observer.disconnect();
@@ -132,7 +135,6 @@ function AppContent() {
       <main id="main-content">
         <Hero />
         <About />
-        <Services />
         <Portfolio />
         <Suspense fallback={null}>
           <div className="desktop-only">

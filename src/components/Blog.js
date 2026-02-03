@@ -31,27 +31,22 @@ const Blog = () => {
       return;
     }
     
-    // Desktop: Use AOS animations
+    // Desktop: Use AOS animations (layout read in rAF to avoid forced reflow)
     const refreshAOS = () => {
-      if (window.AOS) {
-        window.AOS.refresh();
-        // Also check if blog section is in viewport and trigger animations
-        const blogSection = document.getElementById('blog');
-        if (blogSection) {
-          const rect = blogSection.getBoundingClientRect();
-          const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-          
-          if (isInViewport) {
-            // If section is already visible, trigger AOS animations immediately
-            const aosElements = blogSection.querySelectorAll('[data-aos]');
-            aosElements.forEach((el) => {
-              if (window.AOS) {
-                window.AOS.animate(el);
-              }
-            });
-          }
+      if (!window.AOS) return;
+      window.AOS.refresh();
+      const blogSection = document.getElementById('blog');
+      if (!blogSection) return;
+      requestAnimationFrame(() => {
+        const rect = blogSection.getBoundingClientRect();
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isInViewport) {
+          const aosElements = blogSection.querySelectorAll('[data-aos]');
+          aosElements.forEach((el) => {
+            if (window.AOS) window.AOS.animate(el);
+          });
         }
-      }
+      });
     };
     
     // Immediate refresh
@@ -117,7 +112,7 @@ const Blog = () => {
     <section id="blog" className="case-studies" aria-labelledby="blog-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number desktop-number">05</span>
+          <span className="section-number desktop-number">04</span>
           <div className="section-header">
             <span className="section-label">Design Insights</span>
             <h2 id="blog-heading" className="section-title">

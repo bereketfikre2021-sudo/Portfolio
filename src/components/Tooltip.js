@@ -26,11 +26,13 @@ const Tooltip = ({ text, children, position = 'top', delay = 200 }) => {
 
   const updateTooltipPosition = () => {
     if (!triggerRef.current || !tooltipRef.current) return;
-
-    const triggerRect = triggerRef.current.getBoundingClientRect();
-    const tooltipRect = tooltipRef.current.getBoundingClientRect();
-    const scrollY = window.scrollY;
-    const scrollX = window.scrollX;
+    // Batch layout reads in rAF to avoid forced reflow (read after any pending layout)
+    requestAnimationFrame(() => {
+      if (!triggerRef.current || !tooltipRef.current) return;
+      const triggerRect = triggerRef.current.getBoundingClientRect();
+      const tooltipRect = tooltipRef.current.getBoundingClientRect();
+      const scrollY = window.scrollY;
+      const scrollX = window.scrollX;
 
     let top = 0;
     let left = 0;
@@ -72,22 +74,33 @@ const Tooltip = ({ text, children, position = 'top', delay = 200 }) => {
     }
 
     setTooltipStyle({ top: `${top}px`, left: `${left}px` });
+    });
   };
 
   useEffect(() => {
     if (isVisible) {
       updateTooltipPosition();
-      window.addEventListener('scroll', updateTooltipPosition, true);
-      window.addEventListener('resize', updateTooltipPosition);
-    }
+      let scrollResizeTicking = false;
+      const onScrollResize = () => {
+        if (!scrollResizeTicking) {
+          requestAnimationFrame(() => {
+            updateTooltipPosition();
+            scrollResizeTicking = false;
+          });
+          scrollResizeTicking = true;
+        }
+      };
+      window.addEventListener('scroll', onScrollResize, { passive: true, capture: true });
+      window.addEventListener('resize', onScrollResize);
 
-    return () => {
-      window.removeEventListener('scroll', updateTooltipPosition, true);
-      window.removeEventListener('resize', updateTooltipPosition);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
+      return () => {
+        window.removeEventListener('scroll', onScrollResize, true);
+        window.removeEventListener('resize', onScrollResize);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+      };
+    }
   }, [isVisible]);
 
   return (

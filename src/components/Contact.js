@@ -38,20 +38,20 @@ const Contact = () => {
     }
 
     const refreshAOS = () => {
-      if (window.AOS) {
-        window.AOS.refresh();
-        const contactSection = document.getElementById('contact');
-        if (contactSection) {
-          const rect = contactSection.getBoundingClientRect();
-          const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-          if (isInViewport) {
-            const aosElements = contactSection.querySelectorAll('[data-aos]');
-            aosElements.forEach((el) => {
-              if (window.AOS) window.AOS.animate(el);
-            });
-          }
+      if (!window.AOS) return;
+      window.AOS.refresh();
+      const contactSection = document.getElementById('contact');
+      if (!contactSection) return;
+      requestAnimationFrame(() => {
+        const rect = contactSection.getBoundingClientRect();
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isInViewport) {
+          const aosElements = contactSection.querySelectorAll('[data-aos]');
+          aosElements.forEach((el) => {
+            if (window.AOS) window.AOS.animate(el);
+          });
         }
-      }
+      });
     };
 
     refreshAOS();
@@ -70,8 +70,8 @@ const Contact = () => {
     <section id="contact" className="contact" aria-labelledby="contact-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number desktop-number">09</span>
-          <span className="section-number mobile-number">06</span>
+          <span className="section-number desktop-number">08</span>
+          <span className="section-number mobile-number">05</span>
           <div className="section-header">
             <span className="section-label">Get in Touch</span>
             <h2 id="contact-heading" className="section-title">

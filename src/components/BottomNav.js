@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
+const moreDropdownItems = [
+  { href: '#case-studies', label: 'Case Studies', section: 'case-studies' },
+  { href: '#blog', label: 'Blog', section: 'blog' }
+];
 
 const BottomNav = () => {
   const [activeSection, setActiveSection] = useState('home');
+  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
+  const moreDropdownRef = useRef(null);
 
   useEffect(() => {
     let ticking = false;
@@ -60,13 +67,23 @@ const BottomNav = () => {
       handleScroll();
     });
     
+    let resizeTicking = false;
+    const handleResize = () => {
+      if (!resizeTicking) {
+        requestAnimationFrame(() => {
+          updateSectionCache();
+          resizeTicking = false;
+        });
+        resizeTicking = true;
+      }
+    };
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', updateSectionCache, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
     handleScroll();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', updateSectionCache);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -74,7 +91,6 @@ const BottomNav = () => {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
-      // Use requestAnimationFrame to batch layout reads
       requestAnimationFrame(() => {
         const isMobile = window.innerWidth <= 768;
         const offsetTop = isMobile ? target.offsetTop - 20 : target.offsetTop - 100;
@@ -85,6 +101,35 @@ const BottomNav = () => {
       });
     }
   };
+
+  const handleMoreItemClick = (e, href) => {
+    setMoreDropdownOpen(false);
+    handleNavClick(e, href);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (moreDropdownRef.current && !moreDropdownRef.current.contains(e.target)) {
+        setMoreDropdownOpen(false);
+      }
+    };
+    if (moreDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [moreDropdownOpen]);
+
+  useEffect(() => {
+    if (moreDropdownOpen) {
+      const closeOnScroll = () => setMoreDropdownOpen(false);
+      window.addEventListener('scroll', closeOnScroll, { passive: true });
+      return () => window.removeEventListener('scroll', closeOnScroll);
+    }
+  }, [moreDropdownOpen]);
 
   const navItems = [
     { href: '#home', label: 'Home', section: 'home', icon: (
@@ -99,16 +144,15 @@ const BottomNav = () => {
         <circle cx="12" cy="7" r="4"/>
       </svg>
     )},
-    { href: '#services', label: 'Services', section: 'services', icon: (
-      <svg className="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-      </svg>
-    )},
     { href: '#portfolio', label: 'Portfolio', section: 'portfolio', icon: (
       <svg className="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
         <path d="M3 9h18M9 21V9"/>
+      </svg>
+    )},
+    { href: '#case-studies', label: 'More', section: 'more', icon: (
+      <svg className="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
       </svg>
     )},
     { href: '#contact', label: 'Contact', section: 'contact', icon: (
@@ -121,19 +165,66 @@ const BottomNav = () => {
 
   return (
     <nav className="bottom-nav" id="bottomNav">
-      {navItems.map((item) => (
-        <a
-          key={item.section}
-          href={item.href}
-          className={`bottom-nav-item ${activeSection === item.section ? 'active' : ''}`}
-          aria-label={`Go to ${item.label}`}
-          aria-current={activeSection === item.section ? 'location' : undefined}
-          onClick={(e) => handleNavClick(e, item.href)}
-        >
-          {item.icon}
-          <span className="bottom-nav-label">{item.label}</span>
-        </a>
-      ))}
+      {navItems.map((item) => {
+        const isActive = activeSection === item.section || (item.section === 'more' && (activeSection === 'case-studies' || activeSection === 'blog'));
+        const isMore = item.section === 'more';
+
+        if (isMore) {
+          return (
+            <div key={item.section} className="bottom-nav-more-wrap" ref={moreDropdownRef}>
+              <button
+                type="button"
+                className={`bottom-nav-item ${isActive ? 'active' : ''} ${moreDropdownOpen ? 'open' : ''}`}
+                aria-label={moreDropdownOpen ? 'Close more menu' : 'Open more menu'}
+                aria-expanded={moreDropdownOpen}
+                aria-haspopup="true"
+                aria-controls="bottom-nav-more-menu"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMoreDropdownOpen((open) => !open);
+                }}
+              >
+                {item.icon}
+                <span className="bottom-nav-label">{item.label}</span>
+              </button>
+              <ul
+                id="bottom-nav-more-menu"
+                className={`bottom-nav-dropdown ${moreDropdownOpen ? 'open' : ''}`}
+                role="menu"
+                aria-label="More sections"
+              >
+                {moreDropdownItems.map((sub) => (
+                  <li key={sub.section} role="none">
+                    <a
+                      href={sub.href}
+                      role="menuitem"
+                      className={`bottom-nav-dropdown-link ${activeSection === sub.section ? 'active' : ''}`}
+                      onClick={(e) => handleMoreItemClick(e, sub.href)}
+                      aria-label={`Go to ${sub.label} section`}
+                    >
+                      {sub.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        }
+
+        return (
+          <a
+            key={item.section}
+            href={item.href}
+            className={`bottom-nav-item ${isActive ? 'active' : ''}`}
+            aria-label={`Go to ${item.label}`}
+            aria-current={isActive ? 'location' : undefined}
+            onClick={(e) => handleNavClick(e, item.href)}
+          >
+            {item.icon}
+            <span className="bottom-nav-label">{item.label}</span>
+          </a>
+        );
+      })}
     </nav>
   );
 };
