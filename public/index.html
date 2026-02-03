@@ -222,6 +222,12 @@
         color: var(--text-primary);
         margin-bottom: 1.5rem;
       }
+      .hero-tagline {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+      }
       .hero-image-container {
         position: relative;
       }
@@ -276,10 +282,13 @@
       </div>
     </noscript>
     <div id="root">
-      <!-- Static LCP image: paints before React runs so LCP is not blocked by JS -->
+      <!-- Static LCP + preview: paints before React so LCP and Netlify/dashboard screenshots show real content -->
       <div class="hero hero-lcp-placeholder" aria-hidden="true">
         <div class="hero-content">
-          <div class="hero-left" style="min-height:1px"></div>
+          <div class="hero-left">
+            <h1 class="hero-title">Bereket Fikre</h1>
+            <p class="hero-tagline">Graphic and brand designer, visual story teller.</p>
+          </div>
           <div class="hero-right">
             <div class="hero-image-container">
               <div class="image-wrapper">
