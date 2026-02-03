@@ -102,6 +102,14 @@ const Blog = () => {
       category: 'Brand Design · Identity',
       title: 'Building Strong Brand Identities: A Complete Guide',
       description: 'Learn how to create cohesive brand identities that resonate with audiences. Discover the essential elements of brand design and how to build memorable visual systems that communicate your brand\'s values and personality.'
+    },
+    {
+      id: 'consistency-luxury-branding',
+      image: '/assets/Portfolio/Consistency.webp',
+      category: 'Brand Design · Strategy',
+      title: 'Why Consistency Is the Real Luxury in Branding',
+      description: 'Consistency is often mistaken for repetition. In reality, it\'s discipline. Strong brands don\'t rely on constant reinvention; they rely on systems that work everywhere.',
+      tabletOnly: true
     }
   ];
 
@@ -123,7 +131,7 @@ const Blog = () => {
           {blogPosts.map((post, index) => (
             <article 
               key={post.id} 
-              className="case-study-card" 
+              className={`case-study-card${post.tabletOnly ? ' blog-card-tablet-only' : ''}`}
               data-project={post.id}
               data-aos="fade-up"
               data-aos-delay={index * 100}

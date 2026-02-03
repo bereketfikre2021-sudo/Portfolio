@@ -25,6 +25,14 @@ const CaseStudies = () => {
       category: 'Social Media Campaign & Brand Presence',
       title: 'Niqat Coffee',
       description: 'Social media campaign and content design for Niqat Coffee, building brand presence, visual consistency, and audience engagement from scratch.'
+    },
+    {
+      id: 'andegna-furniture-catalog',
+      image: '/assets/Portfolio/Andegna Cataloge.webp',
+      category: 'Product Catalog Design',
+      title: 'Andegna Furniture',
+      description: 'Product catalog design and visual direction for Andegna Furniture—clear, professional presentation of a wide range of furniture products for easy browsing and a premium, consistent brand look.',
+      tabletOnly: true
     }
   ];
 
@@ -46,7 +54,7 @@ const CaseStudies = () => {
           {caseStudies.map((caseStudy) => (
             <article 
               key={caseStudy.id} 
-              className="case-study-card" 
+              className={`case-study-card${caseStudy.tabletOnly ? ' case-study-card-tablet-only' : ''}`}
               data-project={caseStudy.id}
               onClick={() => openCaseStudyModal(caseStudy.id)}
             >

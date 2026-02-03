@@ -133,6 +133,40 @@ const BlogModal = () => {
         'Comprehensive brand guidelines maintain quality across all applications',
         'Flexible brand systems adapt to different media while staying consistent'
       ]
+    },
+    'consistency-luxury-branding': {
+      image: '/assets/Portfolio/Consistency.webp',
+      category: 'Brand Design',
+      title: 'Why Consistency Is the Real Luxury in Branding',
+      description: 'Consistency is often mistaken for repetition. In reality, it\'s discipline. Strong brands don\'t rely on constant reinvention; they rely on systems that work everywhere. When a visual identity is consistent, it feels confident. When it isn\'t, it feels unsure. Good branding earns trust not by being loud, but by being reliable across every touchpoint.',
+      date: 'January 2025',
+      author: 'Bereket Fikre',
+      type: 'Brand Strategy',
+      sections: [
+        {
+          heading: 'Consistency vs. Repetition',
+          text: 'Consistency is often mistaken for repetition. In reality, it\'s discipline. Repetition is using the same thing again and again. Consistency is applying the same system—colors, typography, tone, spacing—in a way that feels intentional and coherent. Strong brands don\'t rely on constant reinvention; they rely on systems that work everywhere.'
+        },
+        {
+          heading: 'Confidence Through Coherence',
+          text: 'When a visual identity is consistent, it feels confident. When it isn\'t, it feels unsure. Audiences notice when a brand looks different from one channel to the next. Inconsistency suggests a brand that hasn\'t made up its mind—or doesn\'t have the discipline to stick to one. Consistency signals that the brand knows who it is and isn\'t chasing every trend.'
+        },
+        {
+          heading: 'Trust Through Reliability',
+          text: 'Good branding earns trust not by being loud, but by being reliable across every touchpoint. Every time someone sees your brand—on a website, a business card, packaging, or social media—they should recognize it immediately. That recognition builds familiarity, and familiarity builds trust. Luxury isn\'t about flash; it\'s about the quiet confidence of a brand that shows up the same way, every time.'
+        },
+        {
+          heading: 'Systems That Scale',
+          text: 'The real luxury in branding is having a system so clear that it works everywhere without constant reinvention. Brand guidelines, defined palettes, typography scales, and clear rules for imagery and voice make it possible to stay consistent at scale. That system is an investment—and it pays off in recognition, trust, and a brand that feels premium precisely because it doesn\'t have to try too hard.'
+        }
+      ],
+      insights: [
+        'Consistency is discipline, not repetition—same system, applied everywhere',
+        'A consistent identity feels confident; an inconsistent one feels unsure',
+        'Trust comes from being reliable across every touchpoint',
+        'Good branding is reliable, not loud—recognizable at every encounter',
+        'Systems that scale are the real luxury: one clear system, everywhere'
+      ]
     }
   };
 

@@ -48,9 +48,6 @@ const Testimonials = () => {
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
-  // For mobile: duplicate for seamless loop (4 copies for smooth continuous scroll)
-  const allTestimonials = [...testimonials, ...testimonials, ...testimonials, ...testimonials];
-
   // Ensure testimonials section is visible on mobile when AOS is disabled
   useEffect(() => {
     const checkMobile = () => {
@@ -148,14 +145,53 @@ const Testimonials = () => {
     const distance = touchStartX.current - touchEndX.current;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
-    if (isLeftSwipe) {
-      nextSlide();
-    }
-    if (isRightSwipe) {
-      prevSlide();
+    if (isMobile) {
+      if (isLeftSwipe) setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+      if (isRightSwipe) setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    } else {
+      if (isLeftSwipe) nextSlide();
+      if (isRightSwipe) prevSlide();
     }
   };
 
+
+  const renderTestimonialCard = (testimonial, idx) => (
+    <article key={idx} className="testimonial-card">
+      <div className="testimonial-content">
+        <div className="testimonial-quote">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" fill="currentColor" opacity="0.25"/>
+            <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" fill="currentColor" opacity="0.25"/>
+          </svg>
+        </div>
+        <div className="testimonial-rating">
+          {[...Array(5)].map((_, i) => (
+            <svg key={i} width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          ))}
+        </div>
+        <p className="testimonial-text">{testimonial.text}</p>
+        <div className="testimonial-author">
+          <div className="testimonial-avatar">
+            <img
+              src={`${process.env.PUBLIC_URL || ''}${testimonial.image}`}
+              alt=""
+              className="testimonial-avatar-img"
+              loading="lazy"
+              width="56"
+              height="56"
+              decoding="async"
+            />
+          </div>
+          <div className="testimonial-author-info">
+            <h3>{testimonial.name}</h3>
+            <span>{testimonial.role}</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
 
   return (
     <section id="testimonials" className="testimonials" aria-labelledby="testimonials-heading">
@@ -189,42 +225,7 @@ const Testimonials = () => {
               className="testimonials-carousel-track desktop-carousel"
               style={{ transform: `translateX(-${currentIndex * (100 / slidesToShow)}%)` }}
             >
-              {testimonials.map((testimonial, idx) => (
-                <article key={idx} className="testimonial-card">
-                  <div className="testimonial-image">
-                    <img 
-                      src={`${process.env.PUBLIC_URL || ''}${testimonial.image}`} 
-                      alt={`${testimonial.name}, ${testimonial.role} - Client testimonial`} 
-                      className="testimonial-img" 
-                      loading="lazy" 
-                      width="120" 
-                      height="120"
-                      decoding="async"
-                      sizes="120px"
-                    />
-                  </div>
-                  <div className="testimonial-content">
-                    <div className="testimonial-quote">
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" fill="currentColor" opacity="0.2"/>
-                        <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" fill="currentColor" opacity="0.2"/>
-                      </svg>
-                    </div>
-                    <div className="testimonial-rating">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                      ))}
-                    </div>
-                    <p className="testimonial-text">{testimonial.text}</p>
-                    <div className="testimonial-author">
-                      <h3>{testimonial.name}</h3>
-                      <span>{testimonial.role}</span>
-                    </div>
-                  </div>
-                </article>
-              ))}
+              {testimonials.map((t, idx) => renderTestimonialCard(t, idx))}
             </div>
             
             <button 
@@ -250,44 +251,26 @@ const Testimonials = () => {
             </div>
           </div>
           
-          {/* Mobile: Continuous scrolling */}
-          <div className="testimonials-carousel-track mobile-scroll">
-            {allTestimonials.map((testimonial, idx) => (
-              <article key={idx} className="testimonial-card">
-                <div className="testimonial-image">
-                  <img 
-                    src={`${process.env.PUBLIC_URL || ''}${testimonial.image}`} 
-                    alt={`${testimonial.name}, ${testimonial.role} - Client testimonial`} 
-                    className="testimonial-img" 
-                    loading="lazy" 
-                    width="120" 
-                    height="120"
-                    decoding="async"
-                    sizes="120px"
-                  />
-                </div>
-                <div className="testimonial-content">
-                  <div className="testimonial-quote">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-                      <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" fill="currentColor" opacity="0.2"/>
-                      <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" fill="currentColor" opacity="0.2"/>
-                    </svg>
-                  </div>
-                  <div className="testimonial-rating">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="testimonial-text">{testimonial.text}</p>
-                  <div className="testimonial-author">
-                    <h3>{testimonial.name}</h3>
-                    <span>{testimonial.role}</span>
-                  </div>
-                </div>
-              </article>
-            ))}
+          {/* Mobile: Single card with dots (no horizontal scroll strip) */}
+          <div 
+            className="testimonials-mobile-view mobile-only"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className="testimonials-mobile-track" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+              {testimonials.map((t, idx) => renderTestimonialCard(t, idx))}
+            </div>
+            <div className="testimonials-dots testimonials-dots-mobile">
+              {testimonials.map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`testimonial-dot ${idx === currentIndex ? 'active' : ''}`}
+                  onClick={() => setCurrentIndex(idx)}
+                  aria-label={`Go to testimonial ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>

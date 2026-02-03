@@ -70,6 +70,28 @@ const CaseStudyModal = () => {
         text: 'The campaign established a recognizable brand presence on social media and led to increased engagement through consistent, visually cohesive content. Niqat Coffee gained stronger visibility and interaction with its audience.'
       },
       deliverables: ['Social media account setup', 'Content strategy and visual direction', 'Graphic design for posts and stories', 'Ongoing content creation and optimization']
+    },
+    'andegna-furniture-catalog': {
+      image: '/assets/Portfolio/Andegna Cataloge.webp',
+      category: 'Product Catalog Design',
+      title: 'Andegna Furniture',
+      description: 'Andegna Furniture needed a clear, professional product catalog that could present a wide range of furniture products in a way that was easy for clients to browse, understand, and trust. The goal was to improve product presentation while maintaining a premium, consistent brand look.',
+      type: 'Product Catalog Design',
+      date: '2024',
+      client: 'Andegna Furniture',
+      challenge: {
+        heading: 'Challenge',
+        text: 'Large product range with no clear visual hierarchy. Need for a catalog that was simple, appealing, and practical for client use. Inconsistent product imagery and presentation.'
+      },
+      solution: {
+        heading: 'Solution',
+        text: 'I designed a clean, structured product catalog focused on clarity, consistency, and visual storytelling. The layout system was built to be easy to scan while still feeling premium and brand-aligned. In addition to layout and design, I handled product setup and photography to ensure visual consistency across all pages.'
+      },
+      results: {
+        heading: 'Outcome',
+        text: 'The final catalog presented Andegna\'s products in a more professional and cohesive way, making it easier for clients to browse offerings and understand product details. The improved presentation strengthened brand perception and supported sales conversations.'
+      },
+      deliverables: ['Concept and layout design', 'Visual hierarchy and typography', 'Product setup and photography', 'Print-ready production']
     }
   };
 

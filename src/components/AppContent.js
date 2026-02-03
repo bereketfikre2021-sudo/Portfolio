@@ -140,9 +140,7 @@ function AppContent() {
             <Blog />
           </div>
           <Testimonials />
-          <div className="desktop-only">
-            <TrustedBy />
-          </div>
+          <TrustedBy />
           <FAQ />
           <Contact />
           <Footer />
