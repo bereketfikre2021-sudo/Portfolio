@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- LCP: Preload hero image first so it can paint before JS runs -->
+    <link rel="preload" href="%PUBLIC_URL%/assets/Bereket-Fikre-1.webp" as="image" type="image/webp" fetchpriority="high">
     
     <!-- Early Resource Hints - Reduce connection time and chain length -->
     <!-- DNS prefetch and preconnect should be as early as possible to establish connections in parallel -->
@@ -18,7 +20,7 @@
     <!-- Primary Meta Tags -->
     <title>Bereket Fikre | Graphic Designer, Brand Builder & Educator | Brand Identity Specialist | Addis Ababa, Ethiopia</title>
     <meta name="title" content="Bereket Fikre | Graphic Designer, Brand Builder & Educator | Brand Identity Specialist | Addis Ababa, Ethiopia">
-    <meta name="description" content="Graphic Designer, Brand Builder & Educator. Creating intentional, strategic visual identities that help brands communicate clearly and consistently across digital and print platforms.">
+    <meta name="description" content="Graphic and brand designer, visual story teller.">
     <meta name="image" content="https://bereketfikre.com/assets/Bereket-Fikre.webp">
     <meta name="keywords" content="senior graphic designer Ethiopia, brand builder, brand identity designer, visual identity designer, logo design, print design, digital design, art direction, brand applications, creative designer Addis Ababa, freelance designer Ethiopia, Bereket Fikre, portfolio designer, professional designer, brand consultant, visual systems designer">
     <meta name="author" content="Bereket Fikre">
@@ -46,13 +48,13 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bereketfikre.com/">
     <meta property="og:title" content="Bereket Fikre | Senior Graphic Designer & Brand Builder | Brand Identity Specialist">
-    <meta property="og:description" content="Graphic Designer, Brand Builder & Educator. Creating intentional, strategic visual identities that help brands communicate clearly and consistently across digital and print platforms.">
+    <meta property="og:description" content="Graphic and brand designer, visual story teller.">
     <meta property="og:image" content="https://bereketfikre.com/assets/Bereket-Fikre.webp">
     <meta property="og:image:secure_url" content="https://bereketfikre.com/assets/Bereket-Fikre.webp">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="1600">
     <meta property="og:image:type" content="image/webp">
-    <meta property="og:image:alt" content="Bereket Fikre - Graphic Designer, Brand Builder & Educator specializing in brand identity, logo design, visual systems, and creative direction">
+    <meta property="og:image:alt" content="Bereket Fikre - Graphic and brand designer, visual story teller">
     <meta property="og:site_name" content="Bereket Fikre Portfolio">
     <meta property="og:locale" content="en_US">
     <meta property="og:locale:alternate" content="am_ET">
@@ -73,9 +75,9 @@
     <meta name="twitter:creator" content="@bereketfikre">
     <meta name="twitter:url" content="https://bereketfikre.com/">
     <meta name="twitter:title" content="Bereket Fikre | Graphic Designer, Brand Builder & Educator">
-    <meta name="twitter:description" content="Graphic Designer, Brand Builder & Educator. Creating intentional, strategic visual identities that help brands communicate clearly and consistently across digital and print platforms.">
+    <meta name="twitter:description" content="Graphic and brand designer, visual story teller.">
     <meta name="twitter:image" content="https://bereketfikre.com/assets/Bereket-Fikre.webp">
-    <meta name="twitter:image:alt" content="Bereket Fikre - Graphic Designer, Brand Builder & Educator specializing in brand identity, logo design, visual systems, and creative direction">
+    <meta name="twitter:image:alt" content="Bereket Fikre - Graphic and brand designer, visual story teller">
     <meta name="twitter:domain" content="bereketfikre.com">
     <meta name="twitter:label1" content="Location">
     <meta name="twitter:data1" content="Addis Ababa, Ethiopia">
@@ -107,9 +109,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     
     
-    <!-- Preload critical resources for LCP - highest priority -->
-    <!-- Hero image is the LCP element - load immediately, in parallel with other resources -->
-    <link rel="preload" href="%PUBLIC_URL%/assets/Bereket-Fikre-1.webp" as="image" type="image/webp" fetchpriority="high">
+    <!-- Preload logo (hero image preload is at top of head for earliest discovery) -->
     <link rel="preload" href="%PUBLIC_URL%/assets/Logo.svg" as="image" type="image/svg+xml" fetchpriority="high">
     
     <!-- Prefetch next likely resources - lower priority, don't block LCP or critical chain -->
@@ -156,7 +156,7 @@
     <meta name="DC.title" content="Bereket Fikre Portfolio">
     <meta name="DC.creator" content="Bereket Fikre">
     <meta name="DC.subject" content="Creative Design Portfolio">
-    <meta name="DC.description" content="Senior Graphic Designer and Brand & Visual Identity Designer offering logo design, branding, visual systems, and creative direction. Helping businesses build clear, consistent, and professional brand identities across digital and print.">
+    <meta name="DC.description" content="Graphic and brand designer, visual story teller.">
     <meta name="DC.publisher" content="Bereket Fikre">
     <meta name="DC.contributor" content="Bereket Fikre">
       <meta name="DC.date" content="2026-01-01">
@@ -270,12 +270,26 @@
   <body>
     <noscript>
       <div style="padding: 2rem; text-align: center; background: #050a1f; color: #b4e8c9; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
-        <h1 style="margin-bottom: 1rem;">Bereket Fikre - Senior Graphic Designer & Brand Builder</h1>
+        <h1 style="margin-bottom: 1rem;">Bereket Fikre - Graphic and brand designer, visual story teller</h1>
         <p style="margin-bottom: 1rem;">You need to enable JavaScript to run this app.</p>
         <p>Please enable JavaScript in your browser settings to view the full portfolio experience.</p>
       </div>
     </noscript>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static LCP image: paints before React runs so LCP is not blocked by JS -->
+      <div class="hero hero-lcp-placeholder" aria-hidden="true">
+        <div class="hero-content">
+          <div class="hero-left" style="min-height:1px"></div>
+          <div class="hero-right">
+            <div class="hero-image-container">
+              <div class="image-wrapper">
+                <img src="%PUBLIC_URL%/assets/Bereket-Fikre-1.webp" alt="Bereket Fikre, Graphic and brand designer, visual story teller" class="hero-image" width="800" height="1000" fetchpriority="high" decoding="async">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Live region for screen reader announcements -->
     <div id="live-region" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
     
@@ -285,7 +299,7 @@
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Bereket Fikre",
-      "jobTitle": "Graphic Designer, Brand Builder & Educator",
+      "jobTitle": "Graphic and brand designer, visual story teller",
       "url": "https://bereketfikre.com",
       "sameAs": [
         "https://instagram.com/bereketfikre.ig",
@@ -316,7 +330,7 @@
         "Brand Applications",
         "Campaign Design"
       ],
-      "description": "Graphic Designer, Brand Builder & Educator. Creating intentional, strategic visual identities that help brands communicate clearly and consistently across digital and print platforms.",
+      "description": "Graphic and brand designer, visual story teller.",
       "email": "bereketfikre2021@gmail.com",
       "telephone": "+251923988838",
       "workLocation": {
@@ -337,7 +351,7 @@
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
       "name": "Bereket Fikre - Creative Design Services",
-      "description": "Graphic Designer, Brand Builder & Educator. Creating intentional, strategic visual identities that help brands communicate clearly and consistently across digital and print platforms.",
+      "description": "Graphic and brand designer, visual story teller.",
       "url": "https://bereketfikre.com",
       "image": {
         "@type": "ImageObject",
@@ -405,7 +419,7 @@
       "name": "Bereket Fikre Portfolio",
       "alternateName": "Bereket Fikre Creative Designer",
       "url": "https://bereketfikre.com",
-      "description": "Graphic Designer, Brand Builder & Educator. Creating intentional, strategic visual identities that help brands communicate clearly and consistently across digital and print platforms.",
+      "description": "Graphic and brand designer, visual story teller.",
       "inLanguage": "en-US",
       "publisher": {
         "@type": "Person",
@@ -469,7 +483,7 @@
         "height": 200
       },
       "image": "https://bereketfikre.com/assets/Bereket-Fikre.webp",
-      "description": "Graphic Designer, Brand Builder & Educator. Creating intentional, strategic visual identities that help brands communicate clearly and consistently across digital and print platforms.",
+      "description": "Graphic and brand designer, visual story teller.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Addis Ababa",
@@ -497,7 +511,7 @@
       "@context": "https://schema.org",
       "@type": "CreativeWork",
       "name": "Bereket Fikre Portfolio",
-      "description": "Graphic Designer, Brand Builder & Educator. Creating intentional, strategic visual identities that help brands communicate clearly and consistently across digital and print platforms.",
+      "description": "Graphic and brand designer, visual story teller.",
       "image": "https://bereketfikre.com/assets/Bereket-Fikre.webp",
       "author": {
         "@type": "Person",

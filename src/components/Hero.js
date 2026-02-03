@@ -106,7 +106,7 @@ const Hero = () => {
             <div className="image-wrapper">
               <img 
                 src={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp`} 
-                alt="Bereket Fikre, Senior Graphic Designer and Brand Builder, specializing in brand identity design, visual systems, logo design, print design, digital design, and art direction" 
+                alt="Bereket Fikre, Graphic and brand designer, visual story teller" 
                 className="hero-image" 
                 width="800" 
                 height="1000" 
