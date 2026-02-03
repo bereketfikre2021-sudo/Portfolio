@@ -888,7 +888,7 @@ body:hover .cursor-follower {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 120px 2rem 2rem;
+  padding: 0 2rem 2rem;
   overflow: hidden;
   z-index: 2;
   background: var(--bg-light);
@@ -2836,37 +2836,37 @@ section {
   will-change: transform;
 }
 
-/* 4th case study (Andegna Furniture): visible only on tablet (768px–1024px) */
+/* 4th case study (Andegna Furniture): visible on tablet and desktop (hidden on mobile only) */
 .case-study-card-tablet-only {
   display: none !important;
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) {
   .case-study-card-tablet-only {
     display: flex !important;
   }
 }
 
-@media (min-width: 1025px) {
-  .case-study-card-tablet-only {
-    display: none !important;
-  }
-}
-
-/* 4th blog post: visible only on tablet (768px–1024px) */
+/* 4th blog post: visible on tablet and desktop (hidden on mobile only) */
 #blog .blog-card-tablet-only {
   display: none !important;
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) {
   #blog .blog-card-tablet-only {
     display: flex !important;
   }
 }
 
+/* Desktop: 4 items in 4x1 grid (one row) for case studies and blog */
 @media (min-width: 1025px) {
-  #blog .blog-card-tablet-only {
-    display: none !important;
+  #case-studies .case-studies-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  #blog .case-studies-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
   }
 }
 
@@ -8298,9 +8298,36 @@ a, button, [role="button"], [tabindex="0"] {
   will-change: auto;
 }
 
+/* Blog section: no upper padding (same as hero) */
+#blog {
+  padding-top: 0;
+}
+
+/* Blog cards: tighter padding and gaps (image, tag, title closer together; cards closer) */
+#blog .case-study-content {
+  padding: 0.5rem 1.25rem 1rem;
+  padding-top: 0;
+  gap: 0.375rem;
+}
+#blog .case-study-link {
+  margin-top: 0.25rem;
+}
+
 /* Ensure blog section content is visible - fallback if AOS doesn't work */
 #blog .case-studies-grid {
   min-height: 400px;
+}
+
+/* Blog cards: fit images without cropping (contain), align to top to remove upper gap */
+#blog .case-study-image {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: var(--bg-primary);
+}
+#blog .case-study-thumb {
+  object-fit: contain;
+  object-position: top center;
 }
 
 /* Force visibility for blog cards after component loads */

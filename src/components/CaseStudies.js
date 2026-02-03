@@ -74,7 +74,6 @@ const CaseStudies = () => {
               <div className="case-study-content">
                 <span className="case-study-category">{caseStudy.category}</span>
                 <h3>{caseStudy.title}</h3>
-                <p>{caseStudy.description}</p>
                 <a 
                   href="#" 
                   className="case-study-link"

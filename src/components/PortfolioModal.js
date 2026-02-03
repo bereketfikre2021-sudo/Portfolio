@@ -300,47 +300,21 @@ const PortfolioModal = () => {
     },
     'prime-ethiopia-employee-id': {
       image: '/assets/Portfolio/Print%20and%20marketing/Prime%20Ethiopia%20Employee%20ID.webp',
-      category: 'Corporate',
+      category: 'Print Design · Corporate',
       title: 'Employee ID Design - Prime Ethiopia',
       description: 'Professional employee ID card design for Prime Ethiopia, featuring clear layout, branding, and print-ready specifications for corporate identification.',
       type: 'Print Design',
       date: '2024',
-      client: 'Prime Ethiopia',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create a professional employee ID card design for Prime Ethiopia that clearly displays employee information while maintaining brand consistency. The design needed to be print-ready, durable for daily use, and reflect the company\'s corporate identity.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed a clean, professional employee ID design with clear typography and layout for essential information. The design incorporates Prime Ethiopia\'s branding and is optimized for standard ID card dimensions and print specifications.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The employee ID design successfully provided a professional, brand-consistent identification solution for Prime Ethiopia. It enhanced corporate identity and provided clear, functional identification for staff.'
-      },
-      deliverables: ['Employee ID Design', 'Print Specifications', 'Brand Integration']
+      client: 'Prime Ethiopia'
     },
     'goozam-technologies-company-profile': {
       image: '/assets/Portfolio/Print%20and%20marketing/Company%20Profile%20Goozam%20Technologies.webp',
-      category: 'Corporate',
+      category: 'Print Design · Corporate',
       title: 'Company Profile - Goozam Technologies',
-      description: 'Professional company profile design for Goozam Technologies, a company located in the USA. The profile showcases brand identity, services, and corporate messaging for print and digital use.',
+      description: 'Professional company profile design for Goozam Technologies. The profile showcases brand identity, services, and corporate messaging for print and digital use.',
       type: 'Print Design',
       date: '2024',
-      client: 'Goozam Technologies',
-      challenge: {
-        heading: 'The Challenge',
-        text: 'Create a professional company profile for Goozam Technologies, a company located in the USA, that effectively communicates the company\'s offerings and brand identity. The profile needed to work for both print and digital distribution while maintaining a polished, corporate appearance.'
-      },
-      solution: {
-        heading: 'The Solution',
-        text: 'I developed a comprehensive company profile with clear layout, brand-consistent visuals, and professional typography. The design highlights Goozam Technologies\' services and positioning, suitable for client presentations and marketing use.'
-      },
-      results: {
-        heading: 'The Results',
-        text: 'The company profile successfully provided Goozam Technologies with a professional, cohesive document that communicates their brand and services. It is suitable for print and digital use and supports their business development and marketing efforts.'
-      },
-      deliverables: ['Company Profile Design', 'Print Specifications', 'Brand Integration', 'Layout Design']
+      client: 'Goozam Technologies'
     },
     'swan-clothing': {
       image: '/assets/Portfolio/Brand%20identity/Full%20brand%20identity%20for%20swan%20clothing.webp',
