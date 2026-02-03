@@ -88,8 +88,8 @@ const FAQ = () => {
     <section id="faq" className="faq" aria-labelledby="faq-heading">
       <div className="container">
         <div className="section-intro">
-          <span className="section-number desktop-number">07</span>
-          <span className="section-number mobile-number">04</span>
+          <span className="section-number desktop-number">08</span>
+          <span className="section-number mobile-number">05</span>
           <div className="section-header">
             <span className="section-label">Common Questions</span>
             <h2 id="faq-heading" className="section-title">

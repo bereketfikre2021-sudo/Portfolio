@@ -43,7 +43,7 @@ const TrustedBy = () => {
     <section id="trusted-by" className="trusted-by" aria-labelledby="trusted-by-heading">
       <div className="container">
         <div className="section-intro">
-          <span className="section-number desktop-number">06</span>
+          <span className="section-number desktop-number">07</span>
           <div className="section-header">
             <span className="section-label">Our Partners</span>
             <h2 id="trusted-by-heading" className="section-title">

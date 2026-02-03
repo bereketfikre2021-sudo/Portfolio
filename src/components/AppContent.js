@@ -5,6 +5,7 @@ import { ModalContext } from '../context/ModalContext';
 import Navigation from './Navigation';
 import Hero from './Hero';
 import About from './About';
+import Services from './Services';
 import Portfolio from './Portfolio';
 import CallNowButton from './CallNowButton';
 import ScrollToTop from './ScrollToTop';
@@ -135,6 +136,7 @@ function AppContent() {
       <main id="main-content">
         <Hero />
         <About />
+        <Services />
         <Portfolio />
         <Suspense fallback={null}>
           <div className="desktop-only">

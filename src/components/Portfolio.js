@@ -569,8 +569,8 @@ const Portfolio = () => {
     <section id="portfolio" className="portfolio" aria-labelledby="portfolio-heading">
       <div className="container">
         <div className="section-intro">
-          <span className="section-number desktop-number">02</span>
-          <span className="section-number mobile-number">02</span>
+          <span className="section-number desktop-number">03</span>
+          <span className="section-number mobile-number">03</span>
           <div className="section-header">
             <span className="section-label">Selected Work</span>
             <h2 id="portfolio-heading" className="section-title">

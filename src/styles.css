@@ -2340,15 +2340,6 @@ section {
   font-weight: 500;
   font-size: 0.9375rem;
   transition: all 0.3s ease;
-  /* Reset when used as button (e.g. in About section) - avoid white rectangle on mobile */
-  border: none;
-  background: transparent;
-  font-family: inherit;
-  cursor: pointer;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-  appearance: none;
-  -webkit-appearance: none;
   opacity: 0;
   transform: translateX(-10px);
 }
@@ -8648,8 +8639,7 @@ a, button, [role="button"], [tabindex="0"] {
     display: flex !important;
   }
   
-  #services .services-list-minimal,
-  #about .about-services .services-list-minimal {
+  #services .services-list-minimal {
     opacity: 1 !important;
     visibility: visible !important;
     display: flex !important;
@@ -9013,73 +9003,6 @@ html {
 
 .bottom-nav-item.active .bottom-nav-label {
   font-weight: 600;
-}
-
-/* More item wrapper + dropdown (mobile) */
-.bottom-nav-more-wrap {
-  position: relative;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  min-width: 0;
-}
-
-.bottom-nav-more-wrap .bottom-nav-item {
-  flex: none;
-  min-width: 0;
-  border: none;
-  background: transparent;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.bottom-nav-dropdown {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  margin: 0 0 0.5rem 0;
-  padding: 0.5rem 0;
-  min-width: 160px;
-  background: rgba(5, 10, 31, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--color-light-20);
-  border-radius: var(--radius-md);
-  box-shadow: 0 -4px 20px rgba(8, 18, 44, 0.4);
-  list-style: none;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-  z-index: 10;
-}
-
-.bottom-nav-dropdown.open {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(-8px);
-}
-
-.bottom-nav-dropdown-link {
-  display: block;
-  padding: 0.625rem 1.25rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: background 0.2s ease, color 0.2s ease;
-  white-space: nowrap;
-}
-
-.bottom-nav-dropdown-link:hover,
-.bottom-nav-dropdown-link:focus,
-.bottom-nav-dropdown-link.active {
-  background: var(--color-light-10);
-  color: var(--color-light);
 }
 
 /* Desktop: Hide bottom nav */

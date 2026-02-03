@@ -112,7 +112,7 @@ const Blog = () => {
     <section id="blog" className="case-studies" aria-labelledby="blog-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number desktop-number">04</span>
+          <span className="section-number desktop-number">05</span>
           <div className="section-header">
             <span className="section-label">Design Insights</span>
             <h2 id="blog-heading" className="section-title">

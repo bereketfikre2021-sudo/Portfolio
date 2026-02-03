@@ -3,8 +3,8 @@ import React, { useEffect, useState, useRef } from 'react';
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
-  const moreDropdownRef = useRef(null);
+  const [portfolioDropdownOpen, setPortfolioDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     let ticking = false;
@@ -91,19 +91,19 @@ const Navigation = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (moreDropdownRef.current && !moreDropdownRef.current.contains(event.target)) {
-        setMoreDropdownOpen(false);
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setPortfolioDropdownOpen(false);
       }
     };
 
-    if (moreDropdownOpen) {
+    if (portfolioDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [moreDropdownOpen]);
+  }, [portfolioDropdownOpen]);
 
   const handleNavClick = (e, href) => {
     e.preventDefault();
@@ -126,13 +126,14 @@ const Navigation = () => {
   const navLinks = [
     { href: '#home', label: 'Home', section: 'home' },
     { href: '#about', label: 'About', section: 'about' },
-    { href: '#portfolio', label: 'Portfolio', section: 'portfolio' },
-    {
-      href: '#case-studies',
-      label: 'More',
-      section: 'more',
+    { href: '#services', label: 'Services', section: 'services' },
+    { 
+      href: '#portfolio', 
+      label: 'Portfolio', 
+      section: 'portfolio',
       hasDropdown: true,
       dropdownItems: [
+        { href: '#portfolio', label: 'Featured Works', section: 'portfolio' },
         { href: '#case-studies', label: 'Case Studies', section: 'case-studies' },
         { href: '#blog', label: 'Blog', section: 'blog' }
       ]
@@ -167,22 +168,22 @@ const Navigation = () => {
               <li 
                 key={link.section} 
                 className={link.hasDropdown ? 'nav-item-dropdown' : ''}
-                ref={link.hasDropdown ? moreDropdownRef : null}
+                ref={link.hasDropdown && index === 3 ? dropdownRef : null}
               >
                 {link.hasDropdown ? (
                   <>
                     <a 
                       href={link.href} 
-                      className={`nav-link ${activeSection === 'blog' || activeSection === 'case-studies' ? 'active' : ''}`}
+                      className={`nav-link ${activeSection === link.section || activeSection === 'blog' || activeSection === 'case-studies' ? 'active' : ''}`}
                       onClick={(e) => {
                         e.preventDefault();
-                        setMoreDropdownOpen(!moreDropdownOpen);
+                        setPortfolioDropdownOpen(!portfolioDropdownOpen);
                       }}
-                      onMouseEnter={() => setMoreDropdownOpen(true)}
+                      onMouseEnter={() => setPortfolioDropdownOpen(true)}
                       aria-label={`${link.label} submenu`}
-                      aria-expanded={moreDropdownOpen}
+                      aria-expanded={portfolioDropdownOpen}
                       aria-haspopup="true"
-                      aria-controls="more-dropdown-menu"
+                      aria-controls="portfolio-dropdown-menu"
                     >
                       <span>{link.label}</span>
                       <svg 
@@ -190,13 +191,13 @@ const Navigation = () => {
                         height="12" 
                         viewBox="0 0 12 12" 
                         fill="none" 
-                        className={`dropdown-arrow ${moreDropdownOpen ? 'open' : ''}`}
+                        className={`dropdown-arrow ${portfolioDropdownOpen ? 'open' : ''}`}
                         aria-hidden="true"
                       >
                         <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </a>
-                    <ul id="more-dropdown-menu" className={`nav-dropdown ${moreDropdownOpen ? 'open' : ''}`} role="menu" aria-label="More sections">
+                    <ul id="portfolio-dropdown-menu" className={`nav-dropdown ${portfolioDropdownOpen ? 'open' : ''}`} role="menu" aria-label="Portfolio sections">
                       {link.dropdownItems.map(dropdownItem => (
                         <li key={dropdownItem.section} role="none">
                           <a 
@@ -205,7 +206,7 @@ const Navigation = () => {
                             className={`nav-dropdown-link ${activeSection === dropdownItem.section ? 'active' : ''}`}
                             onClick={(e) => {
                               handleNavClick(e, dropdownItem.href);
-                              setMoreDropdownOpen(false);
+                              setPortfolioDropdownOpen(false);
                             }}
                             aria-label={`Go to ${dropdownItem.label} section`}
                           >
