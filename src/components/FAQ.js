@@ -85,7 +85,7 @@ const FAQ = () => {
   }, [isAutoPlaying, faqs.length, currentSlide]);
 
   return (
-    <section id="faq" className="faq">
+    <section id="faq" className="faq" aria-labelledby="faq-heading">
       <div className="container">
         <div className="section-intro">
           <span className="section-number desktop-number">08</span>
@@ -99,22 +99,26 @@ const FAQ = () => {
           </div>
         </div>
         
-        <div className="faq-wrapper">
+        <div className="faq-wrapper" role="region" aria-roledescription="carousel" aria-label="Frequently asked questions">
           <div className="faq-carousel-container">
             <div 
               className="faq-carousel-track"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
               {faqs.map((faq, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="faq-carousel-slide"
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`Question ${index + 1} of ${faqs.length}`}
+                  aria-hidden={index !== currentSlide}
                 >
                   <div className="faq-item active">
                     <div className="faq-question active">
                       <span className="faq-question-text">{faq.question}</span>
                     </div>
-                    <div className="faq-answer">
+                    <div className="faq-answer" aria-live="polite">
                       <div className="faq-answer-content">
                         <p>{faq.answer}</p>
                       </div>
@@ -125,17 +129,19 @@ const FAQ = () => {
             </div>
             
             {/* Navigation dots */}
-            <div className="faq-carousel-dots">
+            <div className="faq-carousel-dots" role="group" aria-label="Question navigation">
               {faqs.map((_, index) => (
                 <button
                   key={index}
+                  type="button"
                   className={`faq-dot ${index === currentSlide ? 'active' : ''}`}
                   onClick={() => {
                     userInteractedRef.current = true;
                     setIsAutoPlaying(false);
                     goToSlide(index);
                   }}
-                  aria-label={`Go to question ${index + 1}`}
+                  aria-label={`Go to question ${index + 1}: ${faqs[index].question}`}
+                  aria-current={index === currentSlide ? 'true' : undefined}
                 />
               ))}
             </div>

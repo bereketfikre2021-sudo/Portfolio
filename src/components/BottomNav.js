@@ -126,7 +126,8 @@ const BottomNav = () => {
           key={item.section}
           href={item.href}
           className={`bottom-nav-item ${activeSection === item.section ? 'active' : ''}`}
-          aria-label={item.label}
+          aria-label={`Go to ${item.label}`}
+          aria-current={activeSection === item.section ? 'location' : undefined}
           onClick={(e) => handleNavClick(e, item.href)}
         >
           {item.icon}

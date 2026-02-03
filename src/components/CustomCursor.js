@@ -15,6 +15,7 @@ const CustomCursor = () => {
     let cursorX = 0, cursorY = 0;
     let followerX = 0, followerY = 0;
     let animationFrameId;
+    let isVisible = true;
 
     const handleMouseMove = (e) => {
       mouseX = e.clientX;
@@ -22,6 +23,10 @@ const CustomCursor = () => {
     };
 
     const animate = () => {
+      if (!isVisible) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
       cursorX += (mouseX - cursorX) * 0.15;
       cursorY += (mouseY - cursorY) * 0.15;
       followerX += (mouseX - followerX) * 0.08;
@@ -38,6 +43,11 @@ const CustomCursor = () => {
 
       animationFrameId = requestAnimationFrame(animate);
     };
+
+    const handleVisibilityChange = () => {
+      isVisible = document.visibilityState === 'visible';
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     animate();
 
@@ -60,6 +70,7 @@ const CustomCursor = () => {
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
       interactiveElements.forEach(el => {

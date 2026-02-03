@@ -46,7 +46,7 @@ const TrustedBy = () => {
           <span className="section-number desktop-number">07</span>
           <div className="section-header">
             <span className="section-label">Our Partners</span>
-            <h2 className="section-title">
+            <h2 id="trusted-by-heading" className="section-title">
               <span className="title-main">Trusted</span>
               <span className="title-accent">By</span>
             </h2>
@@ -79,11 +79,17 @@ const TrustedBy = () => {
               return (
                 <div key={idx} className="trusted-by-card">
                   {company.url ? (
-                    <a href={company.url} target="_blank" rel="noopener noreferrer" className="trusted-card-link">
+                    <a
+                      href={company.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="trusted-card-link"
+                      aria-label={`Visit ${company.name} website (opens in new window)`}
+                    >
                       {content}
                     </a>
                   ) : (
-                    <div className="trusted-card-link">
+                    <div className="trusted-card-link" aria-label={`${company.name} - Trusted partner`}>
                       {content}
                     </div>
                   )}

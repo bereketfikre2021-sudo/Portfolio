@@ -86,7 +86,12 @@ const ParticleCanvas = () => {
       }
     };
 
+    let isVisible = true;
     const animate = () => {
+      if (!isVisible) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       particles.forEach(particle => {
         particle.update();
@@ -94,6 +99,11 @@ const ParticleCanvas = () => {
       });
       animationFrameId = requestAnimationFrame(animate);
     };
+
+    const handleVisibilityChange = () => {
+      isVisible = document.visibilityState === 'visible';
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     initParticles();
     animate();
@@ -116,6 +126,7 @@ const ParticleCanvas = () => {
     window.addEventListener('resize', handleResize);
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);

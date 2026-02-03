@@ -176,7 +176,7 @@ const Testimonials = () => {
           <div className="testimonial-avatar">
             <img
               src={`${process.env.PUBLIC_URL || ''}${testimonial.image}`}
-              alt=""
+              alt={`${testimonial.name}, ${testimonial.role}`}
               className="testimonial-avatar-img"
               loading="lazy"
               width="56"
@@ -201,7 +201,7 @@ const Testimonials = () => {
           <span className="section-number mobile-number">04</span>
           <div className="section-header">
             <span className="section-label">Client Feedback</span>
-            <h2 className="section-title">
+            <h2 id="testimonials-heading" className="section-title">
               <span className="title-main">What</span>
               <span className="title-accent">Clients Say</span>
             </h2>

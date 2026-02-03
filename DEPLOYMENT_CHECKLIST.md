@@ -56,7 +56,7 @@
 ## 📋 Pre-Deployment Checklist
 
 ### Before Building
-- [ ] Test all forms (contact form submission)
+- [ ] Test project request form (Get Quote / modal)
 - [ ] Test all modals (portfolio, case studies, blog)
 - [ ] Test keyboard navigation throughout site
 - [ ] Test with screen reader (NVDA/JAWS/VoiceOver)

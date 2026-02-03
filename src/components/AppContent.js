@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useContext } from 'react';
+import React, { lazy, Suspense, useEffect, useLayoutEffect, useContext, useState } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { ModalContext } from '../context/ModalContext';
@@ -55,11 +55,29 @@ const LoadingFallback = () => (
   </section>
 );
 
+// Debounce helper - limits how often AOS.refresh runs
+function debounce(fn, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
 function AppContent() {
   const { openProjectRequestModal } = useContext(ModalContext);
+  const [deferEffects, setDeferEffects] = useState(false);
 
-  // Initialize AOS (Animate On Scroll)
+  // Defer decorative effects until after first paint to prioritize LCP and FCP
   useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setDeferEffects(true));
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  // Initialize AOS before first paint so [data-aos] content is visible for FCP / Lighthouse
+  useLayoutEffect(() => {
     AOS.init({
       duration: 800,
       easing: 'ease-out-cubic',
@@ -67,39 +85,23 @@ function AppContent() {
       offset: 100,
       disable: window.innerWidth <= 768 ? 'mobile' : false,
     });
-    
-    // Refresh AOS when lazy-loaded components mount
     const refreshAOS = () => {
-      // Use requestAnimationFrame to ensure DOM is ready
       requestAnimationFrame(() => {
-        setTimeout(() => {
-          AOS.refresh();
-        }, 200);
+        setTimeout(() => AOS.refresh(), 200);
       });
     };
-    
-    // Refresh AOS after initial load
+    const debouncedRefresh = debounce(refreshAOS, 300);
     refreshAOS();
-    
-    // Also refresh on window load to catch any late-loading elements
-    window.addEventListener('load', refreshAOS);
-    
-    // Use MutationObserver to refresh AOS when new elements are added
-    const observer = new MutationObserver(() => {
-      refreshAOS();
-    });
-    
-    // Observe the main content area for changes
+    window.addEventListener('load', debouncedRefresh);
     const mainContent = document.getElementById('main-content');
+    const observer = mainContent
+      ? new MutationObserver(debouncedRefresh)
+      : { observe: () => {}, disconnect: () => {} };
     if (mainContent) {
-      observer.observe(mainContent, {
-        childList: true,
-        subtree: true
-      });
+      observer.observe(mainContent, { childList: true, subtree: true });
     }
-    
     return () => {
-      window.removeEventListener('load', refreshAOS);
+      window.removeEventListener('load', debouncedRefresh);
       observer.disconnect();
     };
   }, []);
@@ -119,11 +121,13 @@ function AppContent() {
         Skip to main content
       </a>
       <CallNowButton />
-      <Suspense fallback={null}>
-        <ScrollPattern />
-        <ParticleCanvas />
-        <CustomCursor />
-      </Suspense>
+      {deferEffects && (
+        <Suspense fallback={null}>
+          <ScrollPattern />
+          <ParticleCanvas />
+          <CustomCursor />
+        </Suspense>
+      )}
       <Navigation />
       <main id="main-content">
         <Hero />

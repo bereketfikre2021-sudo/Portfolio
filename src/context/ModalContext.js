@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useCallback, useMemo } from 'react';
 
 export const ModalContext = createContext();
 
@@ -11,103 +11,124 @@ export const ModalProvider = ({ children }) => {
   const [privacyTermsModal, setPrivacyTermsModal] = useState({ isOpen: false, type: null });
   const [projectRequestModal, setProjectRequestModal] = useState({ isOpen: false });
 
-  const openPortfolioModal = (projectId) => {
+  const openPortfolioModal = useCallback((projectId) => {
     setPortfolioModal({ isOpen: true, projectId });
     document.body.style.overflow = 'hidden';
-  };
+  }, []);
 
-  const closePortfolioModal = () => {
+  const closePortfolioModal = useCallback(() => {
     setPortfolioModal({ isOpen: false, projectId: null });
     document.body.style.overflow = '';
-  };
+  }, []);
 
-  const openCaseStudyModal = (caseStudyId) => {
+  const openCaseStudyModal = useCallback((caseStudyId) => {
     setCaseStudyModal({ isOpen: true, caseStudyId });
     document.body.style.overflow = 'hidden';
-  };
+  }, []);
 
-  const closeCaseStudyModal = () => {
+  const closeCaseStudyModal = useCallback(() => {
     setCaseStudyModal({ isOpen: false, caseStudyId: null });
     document.body.style.overflow = '';
-  };
+  }, []);
 
-  const openServiceModal = (serviceId) => {
+  const openServiceModal = useCallback((serviceId) => {
     setServiceModal({ isOpen: true, serviceId });
     document.body.style.overflow = 'hidden';
-  };
+  }, []);
 
-  const closeServiceModal = () => {
+  const closeServiceModal = useCallback(() => {
     setServiceModal({ isOpen: false, serviceId: null });
     document.body.style.overflow = '';
-  };
+  }, []);
 
-  const showFormModal = (type, message) => {
+  const showFormModal = useCallback((type, message) => {
     setFormModal({ type, message });
     document.body.style.overflow = 'hidden';
-  };
+  }, []);
 
-  const closeFormModal = () => {
+  const closeFormModal = useCallback(() => {
     setFormModal({ type: null, message: null });
     document.body.style.overflow = '';
-  };
+  }, []);
 
-  const openBlogModal = (blogId) => {
+  const openBlogModal = useCallback((blogId) => {
     setBlogModal({ isOpen: true, blogId });
     document.body.style.overflow = 'hidden';
-  };
+  }, []);
 
-  const closeBlogModal = () => {
+  const closeBlogModal = useCallback(() => {
     setBlogModal({ isOpen: false, blogId: null });
     document.body.style.overflow = '';
-  };
+  }, []);
 
-
-  const openPrivacyTermsModal = (type) => {
+  const openPrivacyTermsModal = useCallback((type) => {
     setPrivacyTermsModal({ isOpen: true, type });
     document.body.style.overflow = 'hidden';
-  };
+  }, []);
 
-  const closePrivacyTermsModal = () => {
+  const closePrivacyTermsModal = useCallback(() => {
     setPrivacyTermsModal({ isOpen: false, type: null });
     document.body.style.overflow = '';
-  };
+  }, []);
 
-  const openProjectRequestModal = () => {
+  const openProjectRequestModal = useCallback(() => {
     setProjectRequestModal({ isOpen: true });
     document.body.style.overflow = 'hidden';
-  };
+  }, []);
 
-  const closeProjectRequestModal = () => {
+  const closeProjectRequestModal = useCallback(() => {
     setProjectRequestModal({ isOpen: false });
     document.body.style.overflow = '';
-  };
+  }, []);
+
+  const value = useMemo(() => ({
+    portfolioModal,
+    openPortfolioModal,
+    closePortfolioModal,
+    caseStudyModal,
+    openCaseStudyModal,
+    closeCaseStudyModal,
+    serviceModal,
+    openServiceModal,
+    closeServiceModal,
+    formModal,
+    showFormModal,
+    closeFormModal,
+    blogModal,
+    openBlogModal,
+    closeBlogModal,
+    privacyTermsModal,
+    openPrivacyTermsModal,
+    closePrivacyTermsModal,
+    projectRequestModal,
+    openProjectRequestModal,
+    closeProjectRequestModal
+  }), [
+    portfolioModal,
+    caseStudyModal,
+    serviceModal,
+    formModal,
+    blogModal,
+    privacyTermsModal,
+    projectRequestModal,
+    openPortfolioModal,
+    closePortfolioModal,
+    openCaseStudyModal,
+    closeCaseStudyModal,
+    openServiceModal,
+    closeServiceModal,
+    showFormModal,
+    closeFormModal,
+    openBlogModal,
+    closeBlogModal,
+    openPrivacyTermsModal,
+    closePrivacyTermsModal,
+    openProjectRequestModal,
+    closeProjectRequestModal
+  ]);
 
   return (
-    <ModalContext.Provider
-      value={{
-        portfolioModal,
-        openPortfolioModal,
-        closePortfolioModal,
-        caseStudyModal,
-        openCaseStudyModal,
-        closeCaseStudyModal,
-        serviceModal,
-        openServiceModal,
-        closeServiceModal,
-        formModal,
-        showFormModal,
-        closeFormModal,
-        blogModal,
-        openBlogModal,
-        closeBlogModal,
-        privacyTermsModal,
-        openPrivacyTermsModal,
-        closePrivacyTermsModal,
-        projectRequestModal,
-        openProjectRequestModal,
-        closeProjectRequestModal
-      }}
-    >
+    <ModalContext.Provider value={value}>
       {children}
     </ModalContext.Provider>
   );

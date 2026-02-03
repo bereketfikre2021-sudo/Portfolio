@@ -132,7 +132,7 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} id="navbar">
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} id="navbar" aria-label="Main navigation">
       <div className="nav-container">
         <div className="nav-logo">
           <a 
@@ -170,9 +170,10 @@ const Navigation = () => {
                         setPortfolioDropdownOpen(!portfolioDropdownOpen);
                       }}
                       onMouseEnter={() => setPortfolioDropdownOpen(true)}
-                      aria-label={`${link.label} menu`}
+                      aria-label={`${link.label} submenu`}
                       aria-expanded={portfolioDropdownOpen}
                       aria-haspopup="true"
+                      aria-controls="portfolio-dropdown-menu"
                     >
                       <span>{link.label}</span>
                       <svg 
@@ -186,11 +187,12 @@ const Navigation = () => {
                         <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </a>
-                    <ul className={`nav-dropdown ${portfolioDropdownOpen ? 'open' : ''}`}>
+                    <ul id="portfolio-dropdown-menu" className={`nav-dropdown ${portfolioDropdownOpen ? 'open' : ''}`} role="menu" aria-label="Portfolio sections">
                       {link.dropdownItems.map(dropdownItem => (
-                        <li key={dropdownItem.section}>
+                        <li key={dropdownItem.section} role="none">
                           <a 
                             href={dropdownItem.href} 
+                            role="menuitem"
                             className={`nav-dropdown-link ${activeSection === dropdownItem.section ? 'active' : ''}`}
                             onClick={(e) => {
                               handleNavClick(e, dropdownItem.href);
