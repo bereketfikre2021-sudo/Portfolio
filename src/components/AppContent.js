@@ -1,5 +1,4 @@
-import React, { lazy, Suspense, useEffect, useContext, useState } from 'react';
-import AOS from 'aos';
+import React, { lazy, Suspense, useEffect, useContext, useState, useRef } from 'react';
 import 'aos/dist/aos.css';
 import { ModalContext } from '../context/ModalContext';
 import Navigation from './Navigation';
@@ -76,15 +75,19 @@ function AppContent() {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  // Defer AOS init to idle time to minimize main-thread work before LCP
+  // Lazy-load AOS to reduce main bundle and parse time; init in idle to avoid blocking LCP
+  const aosRef = useRef(null);
   useEffect(() => {
     const initAOS = () => {
-      AOS.init({
-        duration: 800,
-        easing: 'ease-out-cubic',
-        once: true,
-        offset: 100,
-        disable: typeof window !== 'undefined' && window.innerWidth <= 768 ? 'mobile' : false,
+      import('aos').then(({ default: AOS }) => {
+        aosRef.current = AOS;
+        AOS.init({
+          duration: 800,
+          easing: 'ease-out-cubic',
+          once: true,
+          offset: 100,
+          disable: typeof window !== 'undefined' && window.innerWidth <= 768 ? 'mobile' : false,
+        });
       });
     };
     if (typeof requestIdleCallback !== 'undefined') {
@@ -94,7 +97,7 @@ function AppContent() {
     }
     const refreshAOS = () => {
       requestAnimationFrame(() => {
-        setTimeout(() => AOS.refresh(), 200);
+        setTimeout(() => aosRef.current?.refresh(), 200);
       });
     };
     const debouncedRefresh = debounce(refreshAOS, 300);

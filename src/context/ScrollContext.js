@@ -27,6 +27,10 @@ export function ScrollProvider({ children }) {
       cachedClientHeight = window.innerHeight || docEl.clientHeight;
     };
 
+    // Only update React state when values change meaningfully to reduce re-renders (helps FCP/INP)
+    const lastStateRef = { scrollPercent: -1, isScrollToTopVisible: null };
+    const PERCENT_THRESHOLD = 1.5;
+
     const updateProgress = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
@@ -47,11 +51,18 @@ export function ScrollProvider({ children }) {
           const scrollPercent = scrollable > 0
             ? Math.min(100, Math.max(0, (scrollTop / scrollable) * 100))
             : 0;
-          setState({
-            scrollPercent,
-            scrollY: scrollTop,
-            isScrollToTopVisible: scrollTop > 300,
-          });
+          const isScrollToTopVisible = scrollTop > 300;
+          const percentChanged = Math.abs(scrollPercent - lastStateRef.scrollPercent) > PERCENT_THRESHOLD;
+          const visibilityChanged = lastStateRef.isScrollToTopVisible !== isScrollToTopVisible;
+          if (percentChanged || visibilityChanged || lastStateRef.scrollPercent < 0) {
+            lastStateRef.scrollPercent = scrollPercent;
+            lastStateRef.isScrollToTopVisible = isScrollToTopVisible;
+            setState({
+              scrollPercent,
+              scrollY: scrollTop,
+              isScrollToTopVisible,
+            });
+          }
           ticking = false;
         });
         ticking = true;
