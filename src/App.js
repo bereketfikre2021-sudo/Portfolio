@@ -3,8 +3,13 @@ import { ModalProvider } from './context/ModalContext';
 import { ScrollProvider } from './context/ScrollContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import AppContent from './components/AppContent';
+import { initGoogleAnalytics } from './utils/analytics';
 
 function App() {
+  useEffect(() => {
+    initGoogleAnalytics();
+  }, []);
+
   useEffect(() => {
     if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
       const registerSW = () => {
