@@ -120,11 +120,11 @@ const Hero = () => {
             </div>
             <div className="floating-label floating-label-1">
               <div className="label-dot"></div>
-              <span>Brand Builder</span>
+              <span>Graphic & Brand Designer</span>
             </div>
-            <div className="floating-label floating-label-2">
+            <div className="floating-label floating-label-3">
               <div className="label-dot"></div>
-              <span>Senior Graphic Designer</span>
+              <span>Visual Storyteller</span>
             </div>
           </div>
         </div>

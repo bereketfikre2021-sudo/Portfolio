@@ -11,7 +11,7 @@ const BlogModal = () => {
   // Blog post data
   const blogData = {
     'design-principles': {
-      image: '/assets/Portfolio/Design principles.webp',
+      image: '/assets/Portfolio/Blog/Design%20principles.webp',
       category: 'Design Principles',
       title: 'Essential Graphic Design Principles Every Designer Should Master',
       description: 'Graphic design is built on fundamental principles that guide visual communication. These core concepts help designers create effective, aesthetically pleasing, and functional designs that communicate messages clearly and powerfully.',
@@ -59,7 +59,7 @@ const BlogModal = () => {
       ]
     },
     'design-trends-2026': {
-      image: '/assets/Portfolio/Graphic Design Trends 2025.webp',
+      image: '/assets/Portfolio/Blog/Graphic%20Design%20Trends%202025.webp',
       category: 'Design Trends',
       title: 'Graphic Design Trends 2026: What\'s Shaping the Future',
       description: 'The graphic design landscape continues to evolve, with 2026 bringing fresh perspectives on visual communication. From bold typography to sustainable design practices, these trends reflect our changing world and the ways designers are responding to new challenges and opportunities.',
@@ -97,7 +97,7 @@ const BlogModal = () => {
       ]
     },
     'brand-identity': {
-      image: '/assets/Portfolio/Branding.webp',
+      image: '/assets/Portfolio/Blog/Branding.webp',
       category: 'Brand Design',
       title: 'Building Strong Brand Identities: A Complete Guide',
       description: 'A strong brand identity is the foundation of successful businesses. It goes beyond logos and colors to create a cohesive visual system that communicates your brand\'s values, personality, and promise. Learn how to build memorable brand identities that resonate with audiences and stand the test of time.',
@@ -135,7 +135,7 @@ const BlogModal = () => {
       ]
     },
     'consistency-luxury-branding': {
-      image: '/assets/Portfolio/Consistency.webp',
+      image: '/assets/Portfolio/Blog/Consistency.webp',
       category: 'Brand Design',
       title: 'Why Consistency Is the Real Luxury in Branding',
       description: 'Consistency is often mistaken for repetition. In reality, it\'s discipline. Strong brands don\'t rely on constant reinvention; they rely on systems that work everywhere. When a visual identity is consistent, it feels confident. When it isn\'t, it feels unsure. Good branding earns trust not by being loud, but by being reliable across every touchpoint.',

@@ -79,28 +79,28 @@ const Blog = () => {
   const blogPosts = [
     {
       id: 'design-principles',
-      image: '/assets/Portfolio/Design principles.webp',
+      image: '/assets/Portfolio/Blog/Design%20principles.webp',
       category: 'Design Principles · Fundamentals',
       title: 'Essential Graphic Design Principles Every Designer Should Master',
       description: 'Explore the 7 fundamental principles of graphic design including balance, contrast, hierarchy, alignment, repetition, proportion, and movement. Learn how these core concepts form the foundation of effective visual communication.'
     },
     {
       id: 'design-trends-2026',
-      image: '/assets/Portfolio/Graphic Design Trends 2025.webp',
+      image: '/assets/Portfolio/Blog/Graphic%20Design%20Trends%202025.webp',
       category: 'Trends · 2026',
       title: 'Graphic Design Trends 2026: What\'s Shaping the Future',
       description: 'Discover the latest graphic design trends for 2026, from bold typography to sustainable design practices. Stay ahead with insights into emerging visual styles and techniques.'
     },
     {
       id: 'brand-identity',
-      image: '/assets/Portfolio/Branding.webp',
+      image: '/assets/Portfolio/Blog/Branding.webp',
       category: 'Brand Design · Identity',
       title: 'Building Strong Brand Identities: A Complete Guide',
       description: 'Learn how to create cohesive brand identities that resonate with audiences. Discover the essential elements of brand design and how to build memorable visual systems that communicate your brand\'s values and personality.'
     },
     {
       id: 'consistency-luxury-branding',
-      image: '/assets/Portfolio/Consistency.webp',
+      image: '/assets/Portfolio/Blog/Consistency.webp',
       category: 'Brand Design · Strategy',
       title: 'Why Consistency Is the Real Luxury in Branding',
       description: 'Consistency is often mistaken for repetition. In reality, it\'s discipline. Strong brands don\'t rely on constant reinvention; they rely on systems that work everywhere.',
@@ -109,7 +109,7 @@ const Blog = () => {
   ];
 
   return (
-    <section id="blog" className="case-studies" aria-labelledby="blog-heading">
+    <section id="blog" className="case-studies blog-section" aria-labelledby="blog-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
           <span className="section-number desktop-number">05</span>
@@ -122,11 +122,11 @@ const Blog = () => {
           </div>
         </div>
         
-        <div className="case-studies-grid">
+        <div className="blog-grid">
           {blogPosts.map((post, index) => (
             <article 
               key={post.id} 
-              className={`case-study-card${post.tabletOnly ? ' blog-card-tablet-only' : ''}`}
+              className={`blog-card${post.tabletOnly ? ' blog-card-tablet-only' : ''}`}
               data-project={post.id}
               data-aos="fade-up"
               data-aos-delay={index * 100}
@@ -142,29 +142,28 @@ const Blog = () => {
                 }
               }}
             >
-              <div className="case-study-image">
+              <div className="blog-card-image">
                 <img 
                   src={`${process.env.PUBLIC_URL || ''}${post.image}`} 
                   alt={`${post.title} - ${post.category} blog post by Bereket Fikre`} 
-                  className="case-study-thumb" 
+                  className="blog-card-thumb" 
                   loading="lazy" 
                   width="600" 
                   height="400"
                   decoding="async"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   onError={(e) => {
-                    // Fallback: hide broken image gracefully
                     e.target.style.display = 'none';
                   }}
                 />
-                <div className="case-study-overlay"></div>
+                <div className="blog-card-overlay"></div>
               </div>
-              <div className="case-study-content">
-                <span className="case-study-category">{post.category}</span>
+              <div className="blog-card-content">
+                <span className="blog-card-category">{post.category}</span>
                 <h3>{post.title}</h3>
                 <a 
                   href="#" 
-                  className="case-study-link"
+                  className="blog-card-link"
                   onClick={(e) => {
                     e.preventDefault();
                     try {

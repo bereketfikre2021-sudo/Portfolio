@@ -1392,10 +1392,13 @@ body:hover .cursor-follower {
 
 .floating-label {
   position: absolute;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.625rem;
   padding: 0.625rem 1rem;
+  width: max-content;
+  max-width: 100%;
+  white-space: nowrap;
   background: rgba(5, 10, 31, 0.8);
   backdrop-filter: blur(20px);
   border: 1px solid var(--color-dark-30);
@@ -1424,6 +1427,12 @@ body:hover .cursor-follower {
   bottom: 20%;
   left: -15%;
   animation-delay: 4s;
+}
+
+.floating-label-3 {
+  top: 50%;
+  left: -12%;
+  animation-delay: 2s;
 }
 
 /* Floating labels for About section image */
@@ -2895,17 +2904,6 @@ section {
   will-change: transform;
 }
 
-/* 4th case study (Andegna Furniture): visible on tablet and desktop (hidden on mobile only) */
-.case-study-card-tablet-only {
-  display: none !important;
-}
-
-@media (min-width: 768px) {
-  .case-study-card-tablet-only {
-    display: flex !important;
-  }
-}
-
 /* 4th blog post: visible on tablet and desktop (hidden on mobile only) */
 #blog .blog-card-tablet-only {
   display: none !important;
@@ -2917,47 +2915,382 @@ section {
   }
 }
 
+/* ============================================
+   BLOG SECTION - Distinct card style (editorial / article feel)
+   ============================================ */
+.blog-section .blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  min-height: 400px;
+}
+
+.blog-card {
+  position: relative;
+  border-radius: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--color-light-10);
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo), border-color 0.35s ease;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  box-shadow: 0 4px 24px rgba(5, 10, 31, 0.25);
+}
+
+.blog-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-light), var(--color-light-50));
+  opacity: 0.7;
+  z-index: 1;
+  transition: opacity 0.35s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-6px) translateZ(0);
+  border-color: var(--color-light-20);
+  box-shadow: 0 12px 40px rgba(5, 10, 31, 0.35), 0 0 24px rgba(180, 232, 201, 0.08);
+}
+
+.blog-card:hover::before {
+  opacity: 1;
+}
+
+.blog-card-image {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  min-height: 200px;
+  overflow: hidden;
+  background: var(--bg-primary);
+  border-radius: 1rem 1rem 0 0;
+}
+
+.blog-card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+
+.blog-card:hover .blog-card-thumb {
+  transform: scale(1.05) translateZ(0);
+}
+
+.blog-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(5, 10, 31, 0.4) 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.blog-card:hover .blog-card-overlay {
+  opacity: 1;
+}
+
+.blog-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  flex: 1;
+}
+
+.blog-card-category {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--color-light-50);
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.blog-card:hover .blog-card-category {
+  color: var(--color-light);
+}
+
+.blog-card-content h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.35;
+  transition: color 0.3s ease;
+}
+
+.blog-card:hover .blog-card-content h3 {
+  color: var(--color-light);
+}
+
+.blog-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-light-80);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  width: fit-content;
+  transition: gap 0.3s ease, color 0.3s ease;
+}
+
+.blog-card-link svg {
+  transition: transform 0.3s ease;
+}
+
+.blog-card:hover .blog-card-link {
+  color: var(--color-light);
+  gap: 0.75rem;
+}
+
+.blog-card:hover .blog-card-link svg {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   CASE STUDIES SECTION - Distinct tile style (showcase / report feel)
+   ============================================ */
+#case-studies .case-studies-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+#case-studies .case-study-tile {
+  position: relative;
+  border-radius: 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--color-light-20);
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s ease, border-color 0.35s ease;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  box-shadow: 0 6px 28px rgba(5, 10, 31, 0.3);
+}
+
+#case-studies .case-study-tile::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--color-light), var(--color-light-40));
+  opacity: 0.8;
+  z-index: 1;
+  transition: opacity 0.35s ease, width 0.35s ease;
+}
+
+#case-studies .case-study-tile:hover {
+  transform: translateY(-6px) translateZ(0);
+  border-color: var(--color-light-30);
+  box-shadow: 0 16px 48px rgba(5, 10, 31, 0.4), 0 0 0 1px var(--color-light-10);
+}
+
+#case-studies .case-study-tile:hover::before {
+  opacity: 1;
+  width: 5px;
+}
+
+#case-studies .case-study-tile-image {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  min-height: 260px;
+  overflow: hidden;
+  background: var(--bg-primary);
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+#case-studies .case-study-tile-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+
+#case-studies .case-study-tile:hover .case-study-tile-thumb {
+  transform: scale(1.06) translateZ(0);
+}
+
+#case-studies .case-study-tile-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 30%, rgba(5, 10, 31, 0.5) 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+#case-studies .case-study-tile:hover .case-study-tile-overlay {
+  opacity: 1;
+}
+
+#case-studies .case-study-tile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem 1.75rem;
+  flex: 1;
+}
+
+#case-studies .case-study-tile-category {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--color-light-50);
+  padding: 0.35rem 0.75rem;
+  background: var(--color-light-05);
+  border: 1px solid var(--color-light-20);
+  border-radius: var(--radius-full);
+  width: fit-content;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+#case-studies .case-study-tile:hover .case-study-tile-category {
+  background: var(--color-light-10);
+  border-color: var(--color-light-30);
+  color: var(--color-light);
+}
+
+#case-studies .case-study-tile-content h3 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.3;
+  transition: color 0.3s ease;
+}
+
+#case-studies .case-study-tile:hover .case-study-tile-content h3 {
+  color: var(--color-light);
+}
+
+#case-studies .case-study-tile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--color-light-80);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin-top: 0.25rem;
+  width: fit-content;
+  transition: gap 0.3s ease, color 0.3s ease;
+}
+
+#case-studies .case-study-tile-link svg {
+  transition: transform 0.3s ease;
+}
+
+#case-studies .case-study-tile:hover .case-study-tile-link {
+  color: var(--color-light);
+  gap: 0.9rem;
+}
+
+#case-studies .case-study-tile:hover .case-study-tile-link svg {
+  transform: translateX(5px);
+}
+
+/* 4th case study (Andegna Furniture): visible on tablet and desktop (hidden on mobile only) */
+#case-studies .case-study-tile-tablet-only {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  #case-studies .case-study-tile-tablet-only {
+    display: flex !important;
+  }
+}
+
 /* Desktop: 4 items in 4x1 grid (one row) for case studies and blog */
 @media (min-width: 1025px) {
-  #case-studies .case-studies-grid {
+  #case-studies .case-studies-cards-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
   }
-  #blog .case-studies-grid {
+  #blog .blog-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    gap: 1.25rem;
   }
 }
 
 @media (max-width: 1024px) {
-  .case-studies-grid {
+  .blog-section .blog-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
-
-  .case-study-image {
-    height: 260px;
-    min-height: 260px;
+  .blog-card-image {
+    height: 180px;
+    min-height: 180px;
   }
 }
 
 @media (max-width: 768px) {
-  .case-studies-grid {
+  .blog-section .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .blog-card-image {
+    height: 200px;
+    min-height: 200px;
+  }
+  .blog-card-content {
+    padding: 1rem 1.25rem;
+  }
+  .blog-card-content h3 {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  #case-studies .case-studies-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  #case-studies .case-study-tile-image {
+    height: 240px;
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  #case-studies .case-studies-cards-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
-  .case-study-image {
-    height: 240px;
-    min-height: 240px;
+  #case-studies .case-study-tile-image {
+    height: 220px;
+    min-height: 220px;
   }
 
-  .case-study-content {
-    padding: 1.5rem;
+  #case-studies .case-study-tile-content {
+    padding: 1.25rem 1.5rem;
   }
 
-  .case-study-content h3 {
-    font-size: 1.5rem;
+  #case-studies .case-study-tile-content h3 {
+    font-size: 1.35rem;
   }
 }
 
@@ -8372,49 +8705,21 @@ a, button, [role="button"], [tabindex="0"] {
   padding-top: 0;
 }
 
-/* Blog cards: tighter padding and gaps (image, tag, title closer together; cards closer) */
-#blog .case-study-content {
-  padding: 0.5rem 1.25rem 1rem;
-  padding-top: 0;
-  gap: 0.375rem;
-}
-#blog .case-study-link {
-  margin-top: 0.25rem;
-}
-
-/* Ensure blog section content is visible - fallback if AOS doesn't work */
-#blog .case-studies-grid {
-  min-height: 400px;
-}
-
-/* Blog cards: fit images without cropping (contain), align to top to remove upper gap */
-#blog .case-study-image {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  background: var(--bg-primary);
-}
-#blog .case-study-thumb {
-  object-fit: contain;
-  object-position: top center;
-}
-
-/* Force visibility for blog cards after component loads */
-#blog .case-studies-grid [data-aos] {
+/* Force visibility for blog cards after component loads (AOS) */
+#blog .blog-grid [data-aos] {
   min-height: 1px;
 }
 
-/* Fallback: show content if AOS hasn't animated after 2 seconds */
+#blog .blog-grid [data-aos]:not(.aos-animate) {
+  animation: forceVisible 0.1s 2s forwards;
+}
+
 @keyframes forceVisible {
   to {
     opacity: 1 !important;
     visibility: visible !important;
     transform: none !important;
   }
-}
-
-#blog .case-studies-grid [data-aos]:not(.aos-animate) {
-  animation: forceVisible 0.1s 2s forwards;
 }
 
 /* Mobile: Ensure blog section is always visible when AOS is disabled */
@@ -8426,13 +8731,13 @@ a, button, [role="button"], [tabindex="0"] {
     pointer-events: auto !important;
   }
   
-  #blog .case-studies-grid {
+  #blog .blog-grid {
     display: grid !important;
     grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
+    gap: 1.25rem !important;
   }
   
-  #blog .case-study-card {
+  #blog .blog-card {
     opacity: 1 !important;
     visibility: visible !important;
     display: flex !important;

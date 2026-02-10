@@ -6,9 +6,9 @@ const CaseStudyModal = () => {
 
   const caseStudyData = {
     'medavail-pharmaceuticals-company-profile': {
-      image: '/assets/Portfolio/Company%20Profile%20-%20Medavail%20Pharmaceuticals.webp',
+      image: '/assets/Portfolio/Case%20Studies/Company%20Profile%20-%20Medavail%20Pharmaceuticals.webp',
       category: 'Company Profile Design',
-      title: 'Company Profile – Medavail Pharmaceuticals',
+      title: 'Medavail Pharmaceuticals',
       description: 'Medavail Pharmaceuticals – Company Profile Design\n\nMedavail Pharmaceuticals is a fast-growing, Ethiopia-based pharmaceutical and medical equipment import company committed to ethical marketing, quality healthcare solutions, and reliable distribution. The objective of this company profile was to clearly communicate Medavail\'s vision, credibility, and operational strength to partners, regulators, and stakeholders.\n\nThe profile presents Medavail\'s core mission of improving access to quality pharmaceuticals and medical supplies through integrity, customer-centric service, and strong industry partnerships. It highlights the company\'s leadership team, structured business model, nationwide distribution network, and collaborations with reputable international manufacturers.\n\nDesigned with clarity and professionalism in mind, the profile balances corporate identity with industry trust—showcasing Medavail\'s values, infrastructure, tender expertise, and commitment to ethical pharmaceutical practices. The final outcome is a comprehensive yet accessible document that positions Medavail Pharmaceuticals as a reliable, forward-looking healthcare partner in Ethiopia\'s pharmaceutical sector.',
       type: 'Company Profile',
       date: '2024',
@@ -28,7 +28,7 @@ const CaseStudyModal = () => {
       deliverables: ['Company profile design', 'Corporate identity and layout', 'Content structure and hierarchy', 'Print-ready document']
     },
     'alta-counseling': {
-      image: '/assets/Portfolio/Alta%20Counseling.webp',
+      image: '/assets/Portfolio/Case%20Studies/Alta%20Counseling.webp',
       category: 'Brand Identity Redesign',
       title: 'Alta Counseling',
       description: 'Brand identity redesign for Alta Counseling focused on clarity, trust, and consistency through a calm, professional visual system.',
@@ -50,7 +50,7 @@ const CaseStudyModal = () => {
       deliverables: ['Brand identity concept development', 'Logo design and visual system', 'Color palette and typography selection', 'Brand consistency across applications']
     },
     'niqat-coffee': {
-      image: '/assets/Portfolio/Social Media Design for niqat coffee.webp',
+      image: '/assets/Portfolio/Case%20Studies/Social%20Media%20Design%20for%20niqat%20coffee.webp',
       category: 'Social Media Campaign & Brand Presence',
       title: 'Niqat Coffee',
       description: 'Social media campaign and content design for Niqat Coffee, building brand presence, visual consistency, and audience engagement from scratch.',
@@ -72,7 +72,7 @@ const CaseStudyModal = () => {
       deliverables: ['Social media account setup', 'Content strategy and visual direction', 'Graphic design for posts and stories', 'Ongoing content creation and optimization']
     },
     'andegna-furniture-catalog': {
-      image: '/assets/Portfolio/Andegna Cataloge.webp',
+      image: '/assets/Portfolio/Case%20Studies/Andegna%20Cataloge.webp',
       category: 'Product Catalog Design',
       title: 'Andegna Furniture',
       description: 'Andegna Furniture needed a clear, professional product catalog that could present a wide range of furniture products in a way that was easy for clients to browse, understand, and trust. The goal was to improve product presentation while maintaining a premium, consistent brand look.',

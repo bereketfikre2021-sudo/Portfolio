@@ -735,7 +735,7 @@ const Portfolio = () => {
           </>
         ) : (
           <div id="portfolio-grid" className="portfolio-grid-modern" role="list" aria-live="polite" aria-atomic="false">
-            {filteredProjects.map((project, index) => (
+            {(activeFilter === 'creative-direction' && isMobile ? filteredProjects.slice(0, 3) : filteredProjects).map((project, index) => (
               <article 
                 key={project.id} 
                 className="portfolio-item-modern" 
