@@ -86,7 +86,7 @@ const Blog = () => {
     },
     {
       id: 'design-trends-2026',
-      image: '/assets/Portfolio/Blog/Graphic%20Design%20Trends%202025.webp',
+      image: '/assets/Portfolio/Blog/Graphic%20Design%20Trends%202026.webp',
       category: 'Trends · 2026',
       title: 'Graphic Design Trends 2026: What\'s Shaping the Future',
       description: 'Discover the latest graphic design trends for 2026, from bold typography to sustainable design practices. Stay ahead with insights into emerging visual styles and techniques.'
@@ -112,7 +112,7 @@ const Blog = () => {
     <section id="blog" className="case-studies blog-section" aria-labelledby="blog-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number desktop-number">05</span>
+          <span className="section-number desktop-number">06</span>
           <div className="section-header">
             <span className="section-label">Design Insights</span>
             <h2 id="blog-heading" className="section-title">

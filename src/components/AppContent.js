@@ -5,6 +5,7 @@ import Navigation from './Navigation';
 import Hero from './Hero';
 import About from './About';
 import Services from './Services';
+import Process from './Process';
 import Portfolio from './Portfolio';
 import CallNowButton from './CallNowButton';
 import ScrollToTop from './ScrollToTop';
@@ -41,7 +42,7 @@ const LoadingFallback = () => (
   <section id="blog" className="case-studies" style={{ minHeight: '400px' }}>
     <div className="container">
       <div className="section-intro">
-        <span className="section-number">04</span>
+        <span className="section-number">06</span>
         <div className="section-header">
           <span className="section-label">Design Insights</span>
           <h2 className="section-title">
@@ -140,6 +141,7 @@ function AppContent() {
         <Hero />
         <About />
         <Services />
+        <Process />
         <Portfolio />
         <Suspense fallback={null}>
           <div className="desktop-only">

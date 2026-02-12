@@ -31,17 +31,17 @@ const FormModals = () => {
   const renderModal = () => {
     if (formModal.type === 'success') {
       return (
-        <div className="form-modal active" role="alert" aria-live="polite">
+        <div className="form-modal form-modal-success active" role="alert" aria-live="polite">
           <div className="form-modal-overlay" onClick={closeFormModal}></div>
-          <div className="form-modal-container" onClick={(e) => e.stopPropagation()}>
-            <div className="form-modal-icon success-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="20 6 9 17 4 12"/>
+          <div className="form-modal-container form-modal-success-container" onClick={(e) => e.stopPropagation()}>
+            <div className="form-modal-icon success-icon form-success-icon">
+              <svg className="form-success-checkmark" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 6L9 17l-5-5"/>
               </svg>
             </div>
             <div className="form-modal-content">
-              <h3 className="form-modal-title">Message Sent Successfully!</h3>
-              <p className="form-modal-message">Thank you for reaching out. I'll get back to you as soon as possible.</p>
+              <h3 className="form-modal-title">Message sent</h3>
+              <p className="form-modal-message">Thank you for reaching out. I’ll get back to you as soon as possible.</p>
             </div>
             <button className="form-modal-close" aria-label="Close modal" onClick={closeFormModal}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

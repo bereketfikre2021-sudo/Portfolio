@@ -68,12 +68,15 @@ const Hero = () => {
               <div className="btn-shine"></div>
             </a>
             <a 
-              href="tel:+251923988838" 
-              className="btn btn-outline" 
-              aria-label="Call me to discuss your project"
+              href={`${process.env.PUBLIC_URL || ''}/Bereket-Fikre-CV.pdf`}
+              className="btn btn-outline btn-cv"
+              download="Bereket-Fikre-CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Download Bereket Fikre CV (PDF)"
             >
-              <span className="btn-text">Let's Talk</span>
-              <span className="btn-arrow" aria-hidden="true">→</span>
+              <span className="btn-text">Download CV</span>
+              <span className="btn-arrow" aria-hidden="true">↓</span>
             </a>
           </div>
           

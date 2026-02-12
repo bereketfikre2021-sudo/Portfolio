@@ -59,7 +59,7 @@ const BlogModal = () => {
       ]
     },
     'design-trends-2026': {
-      image: '/assets/Portfolio/Blog/Graphic%20Design%20Trends%202025.webp',
+      image: '/assets/Portfolio/Blog/Graphic%20Design%20Trends%202026.webp',
       category: 'Design Trends',
       title: 'Graphic Design Trends 2026: What\'s Shaping the Future',
       description: 'The graphic design landscape continues to evolve, with 2026 bringing fresh perspectives on visual communication. From bold typography to sustainable design practices, these trends reflect our changing world and the ways designers are responding to new challenges and opportunities.',

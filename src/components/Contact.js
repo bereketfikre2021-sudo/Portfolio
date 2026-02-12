@@ -70,8 +70,8 @@ const Contact = () => {
     <section id="contact" className="contact" aria-labelledby="contact-heading">
       <div className="container">
         <div className="section-intro" data-aos="fade-up">
-          <span className="section-number desktop-number">09</span>
-          <span className="section-number mobile-number">06</span>
+          <span className="section-number desktop-number">10</span>
+          <span className="section-number mobile-number">07</span>
           <div className="section-header">
             <span className="section-label">Get in Touch</span>
             <h2 id="contact-heading" className="section-title">
