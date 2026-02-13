@@ -51,13 +51,13 @@ export const portfolioProjects = [
       company: 'YAT Business Group'
     },
     {
-      id: 'maleda-coffee-packaging',
-      image: '/assets/Portfolio/Print%20and%20marketing/Packaging%20For%20Maleda%20Coffee.webp',
+      id: 'toco-speciality-coffee-packaging',
+      image: '/assets/Portfolio/Print%20and%20marketing/Coffee%20Packaging%20Bag%20-%20Toca%20Speciality%20Coffee%20.webp',
       category: 'Packaging Design · Beverage',
-      title: 'Product Packaging Design - Maleda Coffee',
+      title: 'Product Packaging Design - Toco Speciality Coffee',
       description: 'Premium packaging design for coffee products, combining visual appeal with functional design for retail and distribution.',
       service: 'brand-applications-assets',
-      company: 'Maleda Coffee'
+      company: 'Toco Speciality Coffee'
     },
     {
       id: 'dumas-product-packaging',

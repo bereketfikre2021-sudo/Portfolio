@@ -888,17 +888,17 @@ const PortfolioModal = () => {
       },
       deliverables: ['Social Media Posts', 'Promotional Graphics', 'Campaign Assets', 'Content Guidelines']
     },
-    'maleda-packaging': {
-      image: '/assets/Portfolio/Packaging For Maleda Coffee.webp',
+    'toco-speciality-coffee-packaging': {
+      image: '/assets/Portfolio/Print%20and%20marketing/Coffee%20Packaging%20Bag%20-%20Toca%20Speciality%20Coffee%20.webp',
       category: 'Beverage',
-      title: 'Product Packaging Design - Maleda Coffee',
+      title: 'Product Packaging Design - Toco Speciality Coffee',
       description: 'Premium packaging design for coffee products, combining visual appeal with functional design for retail and distribution. The packaging reflects the brand\'s commitment to quality and Ethiopian coffee heritage.',
       type: 'Packaging Design',
       date: '2024',
-      client: 'Maleda Coffee',
+      client: 'Toco Speciality Coffee',
       challenge: {
         heading: 'The Challenge',
-        text: 'Create premium packaging design for Maleda Coffee that honors Ethiopian coffee heritage while appealing to modern consumers. The packaging needed to be functional for retail and distribution while standing out on shelves.'
+        text: 'Create premium packaging design for Toco Speciality Coffee that honors Ethiopian coffee heritage while appealing to modern consumers. The packaging needed to be functional for retail and distribution while standing out on shelves.'
       },
       solution: {
         heading: 'The Solution',
