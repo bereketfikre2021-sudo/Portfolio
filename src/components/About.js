@@ -1,78 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 const CORE_SKILLS = [
-  { id: 1, name: 'Brand Identity & Logo Design' },
-  { id: 2, name: 'Visual Systems & Brand Consistency' },
-  { id: 3, name: 'Creative Direction & Visual Storytelling' },
-  { id: 4, name: 'Strategic Design Thinking' },
+  'Brand Identity',
+  'Logo Design',
+  'Creative Direction',
+  'Strategic Design',
+];
+
+const TOOLS = [
+  { name: 'Photoshop', percent: 95, icon: 'adobephotoshop' },
+  { name: 'Illustrator', percent: 98, icon: 'adobeillustrator' },
+  { name: 'InDesign', percent: 92, icon: 'adobeindesign' },
+  { name: 'Figma', percent: 80, icon: 'figma' },
+  { name: 'Framer', percent: 85, icon: 'framer' },
+  { name: 'Affinity Designer', percent: 90, icon: 'affinitydesigner' },
 ];
 
 const About = () => {
-  const toolsRef = useRef(null);
-  const [skillsActiveIndex, setSkillsActiveIndex] = useState(0);
-
-  useEffect(() => {
-    const toolBars = toolsRef.current?.querySelectorAll('.tool-progress');
-    if (!toolBars) return;
-
-    const toolObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const progress = entry.target;
-            const targetWidth = progress.getAttribute('data-width') || '100%';
-            
-            const animateWidth = () => {
-              progress.style.width = '0%';
-              requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                  progress.style.width = targetWidth;
-                });
-              });
-            };
-            
-            if (typeof requestIdleCallback !== 'undefined') {
-              requestIdleCallback(animateWidth, { timeout: 1000 });
-            } else {
-              requestAnimationFrame(animateWidth);
-            }
-            toolObserver.unobserve(progress);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    toolBars.forEach((bar) => toolObserver.observe(bar));
-
-    return () => {
-      toolBars.forEach((bar) => toolObserver.unobserve(bar));
-    };
-  }, []);
-
-  // Auto-slide Core Expertise carousel on desktop/tablet
-  useEffect(() => {
-    const slideCount = 2;
-    const startInterval = () => {
-      if (typeof window !== 'undefined' && window.innerWidth > 768) {
-        return setInterval(() => {
-          setSkillsActiveIndex((prev) => (prev + 1) % slideCount);
-        }, 4000);
-      }
-      return null;
-    };
-    let id = startInterval();
-    const onResize = () => {
-      if (id) clearInterval(id);
-      id = startInterval();
-    };
-    window.addEventListener('resize', onResize);
-    return () => {
-      window.removeEventListener('resize', onResize);
-      if (id) clearInterval(id);
-    };
-  }, []);
-
   return (
     <section id="about" className="about" aria-labelledby="about-heading">
       <div className="container">
@@ -89,7 +33,7 @@ const About = () => {
         </div>
         
         <div className="about-grid">
-          <div className="about-text-block" data-aos="fade-right" data-aos-delay="100">
+          <div className="about-text-block" data-aos="fade-up" data-aos-delay="100">
             <div className="text-block-header desktop-only">
               <h3>Hello, I'm Bereket</h3>
               <div className="divider-short"></div>
@@ -112,109 +56,105 @@ const About = () => {
                 decoding="async"
               />
             </div>
-            
-            <div className="tools-showcase desktop-only" ref={toolsRef} data-aos="fade-up" data-aos-delay="150">
-              <h4 className="tools-title">Tools</h4>
-              <div className="tools-list">
-                <div className="tool-item" data-tool="Adobe Photoshop">
-                  <span className="tool-name">Adobe Photoshop</span>
-                  <div className="tool-bar">
-                    <div className="tool-progress" data-width="95%" style={{ width: '95%' }}></div>
+          </div>
+          
+          <div className="about-bottom-row desktop-only">
+            <div className="skills-showcase skills-minimal" data-aos="fade-up" data-aos-delay="150" role="region" aria-label="Core expertise">
+              <span className="skills-minimal-label">Core Expertise</span>
+              <div className="skills-minimal-tags">
+                {CORE_SKILLS.map((skill, i) => (
+                  <span key={i} className="skill-tag">{skill}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="tools-showcase tools-minimal" data-aos="fade-up" data-aos-delay="200" role="region" aria-label="Design tools">
+              <span className="tools-minimal-label">Tools</span>
+              <div className="tools-circles">
+                {TOOLS.map((tool, i) => (
+                  <div key={i} className="tool-circle-item" title={`${tool.name} ${tool.percent}%`}>
+                    <div className="tool-circle-wrap">
+                      <svg className="tool-circle-svg" viewBox="0 0 36 36">
+                        <defs>
+                          <linearGradient id={`tool-gradient-${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#b4e8c9" />
+                            <stop offset="100%" stopColor="#7dd4a8" />
+                          </linearGradient>
+                        </defs>
+                        <path
+                          className="tool-circle-bg"
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path
+                          className="tool-circle-progress"
+                          stroke={`url(#tool-gradient-${i})`}
+                          strokeDasharray={`${tool.percent}, 100`}
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                      </svg>
+                      <span className="tool-circle-percent">{tool.percent}%</span>
+                    </div>
+                    <img
+                      src={`${process.env.PUBLIC_URL || ''}/assets/Tools/${tool.icon}.svg`}
+                      alt={tool.name}
+                      className="tool-circle-logo"
+                      width="20"
+                      height="20"
+                      loading="lazy"
+                    />
                   </div>
-                </div>
-                <div className="tool-item" data-tool="Adobe Illustrator">
-                  <span className="tool-name">Adobe Illustrator</span>
-                  <div className="tool-bar">
-                    <div className="tool-progress" data-width="98%" style={{ width: '98%' }}></div>
-                  </div>
-                </div>
-                <div className="tool-item" data-tool="Adobe InDesign">
-                  <span className="tool-name">Adobe InDesign</span>
-                  <div className="tool-bar">
-                    <div className="tool-progress" data-width="92%" style={{ width: '92%' }}></div>
-                  </div>
-                </div>
-                <div className="tool-item" data-tool="Affinity Designer">
-                  <span className="tool-name">Affinity Designer</span>
-                  <div className="tool-bar">
-                    <div className="tool-progress" data-width="90%" style={{ width: '90%' }}></div>
-                  </div>
-                </div>
-                <div className="tool-item" data-tool="Framer">
-                  <span className="tool-name">Framer</span>
-                  <div className="tool-bar">
-                    <div className="tool-progress" data-width="85%" style={{ width: '85%' }}></div>
-                  </div>
-                </div>
-                <div className="tool-item" data-tool="Figma">
-                  <span className="tool-name">Figma</span>
-                  <div className="tool-bar">
-                    <div className="tool-progress" data-width="80%" style={{ width: '80%' }}></div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
-          
-          <div className="about-visual-block" data-aos="fade-left" data-aos-delay="200">
-            <div className="image-card-modern">
-              <div className="card-backdrop"></div>
-              <img 
-                src={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp`} 
-                alt="Bereket Fikre, Senior Graphic Designer and Brand Builder, working on brand identity and visual design projects in Addis Ababa, Ethiopia" 
-                className="card-image" 
-                width="600" 
-                height="800" 
-                loading="lazy"
-                decoding="async"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                srcSet={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp 600w, ${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp 1200w`}
-              />
-              <div className="card-accent"></div>
+
+          <div className="about-bottom-row-mobile mobile-only">
+            <div className="skills-mobile">
+              <span className="skills-mobile-label">Core Expertise</span>
+              <div className="skills-mobile-tags">
+                {CORE_SKILLS.map((skill, i) => (
+                  <span key={i} className="skill-tag-mobile">{skill}</span>
+                ))}
+              </div>
             </div>
-            <div className="floating-label floating-label-3">
-              <div className="label-dot"></div>
-              <span>Strategic Design</span>
+            <div className="tools-mobile">
+              <span className="tools-mobile-label">Tools</span>
+              <div className="tools-mobile-circles">
+                {TOOLS.map((tool, i) => (
+                  <div key={i} className="tool-circle-item" title={`${tool.name} ${tool.percent}%`}>
+                    <div className="tool-circle-wrap">
+                      <svg className="tool-circle-svg" viewBox="0 0 36 36">
+                        <defs>
+                          <linearGradient id={`tool-mobile-gradient-${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="#b4e8c9" />
+                            <stop offset="100%" stopColor="#7dd4a8" />
+                          </linearGradient>
+                        </defs>
+                        <path
+                          className="tool-circle-bg"
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path
+                          className="tool-circle-progress"
+                          stroke={`url(#tool-mobile-gradient-${i})`}
+                          strokeDasharray={`${tool.percent}, 100`}
+                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                      </svg>
+                      <span className="tool-circle-percent">{tool.percent}%</span>
+                    </div>
+                    <img
+                      src={`${process.env.PUBLIC_URL || ''}/assets/Tools/${tool.icon}.svg`}
+                      alt={tool.name}
+                      className="tool-circle-logo"
+                      width="16"
+                      height="16"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="floating-label floating-label-4">
-              <div className="label-dot"></div>
-              <span>User-Centered</span>
-            </div>
-            <div className="floating-label floating-label-5">
-              <div className="label-dot"></div>
-              <span>Brand Focus</span>
-            </div>
-          </div>
-        </div>
-        
-        <div className="skills-showcase skills-carousel desktop-only" data-aos="fade-up" data-aos-delay="300" role="region" aria-roledescription="carousel" aria-label="Core expertise">
-          <h4 className="skills-title">Core Expertise</h4>
-          <div className="skills-carousel-track" style={{ transform: `translateX(-${skillsActiveIndex * 100}%)` }}>
-            <div className="skills-carousel-slide">
-              {CORE_SKILLS.slice(0, 2).map((skill) => (
-                <div key={skill.id} className="skill-item">
-                  <span className="skill-name">{skill.name}</span>
-                </div>
-              ))}
-            </div>
-            <div className="skills-carousel-slide">
-              {CORE_SKILLS.slice(2, 4).map((skill) => (
-                <div key={skill.id} className="skill-item">
-                  <span className="skill-name">{skill.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="skills-carousel-dots" aria-hidden="true">
-            {[0, 1].map((index) => (
-              <button
-                key={index}
-                type="button"
-                className={`skills-carousel-dot ${index === skillsActiveIndex ? 'active' : ''}`}
-                onClick={() => setSkillsActiveIndex(index)}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
           </div>
         </div>
       </div>

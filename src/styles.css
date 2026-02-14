@@ -1602,14 +1602,51 @@ section {
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  grid-template-columns: 1fr;
+  gap: 3rem;
   align-items: start;
+}
+
+/* Desktop: two-row layout - intro full width, then Tools + Core Expertise side by side */
+@media (min-width: 769px) {
+  .about-grid {
+    gap: 3.5rem;
+    max-width: none;
+  }
+
+  .about-text-block {
+    max-width: 640px;
+  }
+
+  .about-bottom-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 4rem;
+    row-gap: 2rem;
+    width: 100%;
+    align-items: start;
+  }
+
+  .about-bottom-row .tools-showcase,
+  .about-bottom-row .skills-showcase {
+    margin-top: 0;
+    min-width: 0;
+    padding: 1.5rem 2rem;
+  }
 }
 
 @media (min-width: 1400px) {
   .about-grid {
-    gap: 6rem;
+    gap: 4rem;
+  }
+
+  .about-bottom-row {
+    column-gap: 4.5rem;
+  }
+
+  .about-bottom-row .tools-showcase,
+  .about-bottom-row .skills-showcase {
+    padding: 1.75rem 2.25rem;
   }
 }
 
@@ -1673,6 +1710,70 @@ section {
   
   .mobile-only {
     display: block !important;
+  }
+
+  /* About: Tools + Core Expertise - mobile minimal only */
+  .about-bottom-row-mobile {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .about-bottom-row-mobile .tools-mobile,
+  .about-bottom-row-mobile .skills-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .about-bottom-row-mobile .tools-mobile-label,
+  .about-bottom-row-mobile .skills-mobile-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--color-light-50);
+  }
+
+  .about-bottom-row-mobile .tools-mobile-circles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .about-bottom-row-mobile .tool-circle-wrap {
+    width: 36px;
+    height: 36px;
+    padding: 2px;
+  }
+
+  .about-bottom-row-mobile .tool-circle-percent {
+    font-size: 0.5rem;
+  }
+
+  .about-bottom-row-mobile .tool-circle-logo {
+    width: 16px;
+    height: 16px;
+  }
+
+  .about-bottom-row-mobile .skills-mobile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .about-bottom-row-mobile .skill-tag-mobile {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.625rem;
+    background: transparent;
+    border: 1px solid var(--color-light-10);
+    color: var(--color-light-70);
+    border-radius: var(--radius-full);
   }
 }
 
@@ -2014,6 +2115,11 @@ section {
   margin-top: 4rem;
 }
 
+.skills-showcase.skills-minimal {
+  padding: 1.25rem 1.75rem;
+  margin-top: 3rem;
+}
+
 .skills-title {
   font-size: 1.25rem;
   font-weight: 700;
@@ -2021,7 +2127,84 @@ section {
   margin-bottom: 2rem;
 }
 
-/* Core Expertise carousel - desktop & tablet */
+/* Core Expertise minimal - desktop & tablet */
+.skills-minimal {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 1.75rem;
+}
+
+.skills-minimal-label {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-light-60);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.skills-minimal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: center;
+  flex: 1;
+  justify-content: space-evenly;
+}
+
+.skill-tag {
+  font-size: 0.9375rem;
+  color: var(--color-light-80);
+  padding: 0.5rem 1.25rem;
+  background: var(--color-dark-10);
+  border: 1px solid var(--color-light-10);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  display: inline-block;
+  box-sizing: border-box;
+  line-height: 1.3;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .skills-showcase.skills-minimal,
+  .tools-showcase.tools-minimal {
+    padding: 1rem 1.5rem;
+  }
+
+  .about-bottom-row .tools-showcase.tools-minimal,
+  .about-bottom-row .skills-showcase.skills-minimal {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .skill-tag {
+    font-size: 0.875rem;
+    padding: 0.45rem 1rem;
+  }
+
+  .tool-circle-wrap {
+    width: 42px;
+    height: 42px;
+  }
+
+  .tool-circle-svg {
+    width: 42px;
+    height: 42px;
+  }
+
+  .tool-circle-percent {
+    font-size: 0.5625rem;
+  }
+
+  .tool-circle-logo {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Legacy carousel styles - kept for mobile if needed */
 .skills-carousel {
   overflow: hidden;
 }
@@ -2243,6 +2426,98 @@ section {
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-light-10);
   margin-top: 2rem;
+}
+
+/* Tools minimal - desktop, matches Core Expertise style */
+.tools-minimal {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 1.75rem;
+  margin-top: 0;
+}
+
+.tools-minimal-label {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-light-60);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tools-circles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: center;
+  flex: 1;
+  justify-content: space-evenly;
+}
+
+.tool-circle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.tool-circle-item:hover {
+  transform: scale(1.08);
+}
+
+.tool-circle-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  padding: 4px;
+  background: linear-gradient(135deg, rgba(180, 232, 201, 0.08) 0%, rgba(125, 212, 168, 0.04) 100%);
+  border-radius: 50%;
+  border: 1px solid rgba(180, 232, 201, 0.15);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.tool-circle-item:hover .tool-circle-wrap {
+  box-shadow: 0 0 20px rgba(180, 232, 201, 0.25);
+  border-color: rgba(180, 232, 201, 0.3);
+}
+
+.tool-circle-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.tool-circle-bg {
+  fill: none;
+  stroke: rgba(180, 232, 201, 0.12);
+  stroke-width: 3;
+}
+
+.tool-circle-progress {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 1s var(--ease-out-expo);
+}
+
+.tool-circle-percent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--color-light);
+}
+
+.tool-circle-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .tools-title {
