@@ -89,7 +89,7 @@ const FAQ = () => {
       <div className="container">
         <div className="section-intro">
           <span className="section-number desktop-number">09</span>
-          <span className="section-number mobile-number">06</span>
+          <span className="section-number mobile-number">07</span>
           <div className="section-header">
             <span className="section-label">Common Questions</span>
             <h2 id="faq-heading" className="section-title">

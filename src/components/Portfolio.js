@@ -1,6 +1,16 @@
 import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
+// Latest project IDs - shown when "Latest" filter is selected (from Latest folder)
+const RECENT_PROJECT_IDS = [
+  'toco-premium-coffee-packaging',
+  'toco-rollup-banner',
+  'prime-ethiopia-flyer',
+  'ptgr-trifold',
+  'company-profile-cci-utop-goozam',
+  'course-outline-cci',
+];
+
 // Projects array - exported for use in PortfolioModal
 export const portfolioProjects = [
     // Brand Identity Projects
@@ -51,13 +61,13 @@ export const portfolioProjects = [
       company: 'YAT Business Group'
     },
     {
-      id: 'toco-speciality-coffee-packaging',
-      image: '/assets/Portfolio/Print%20and%20marketing/Coffee%20Packaging%20Bag%20-%20Toca%20Speciality%20Coffee%20.webp',
-      category: 'Packaging Design · Beverage',
-      title: 'Product Packaging Design - Toco Speciality Coffee',
-      description: 'Premium packaging design for coffee products, combining visual appeal with functional design for retail and distribution.',
-      service: 'brand-applications-assets',
-      company: 'Toco Speciality Coffee'
+      id: 'yat-business-card',
+      image: '/assets/Portfolio/Print%20and%20marketing/Business%20Card%20-%20YAT%20Business%20Group.webp',
+      category: 'Print Design · Corporate',
+      title: 'Business Card Design - YAT Business Group',
+      description: 'Professional business card design for YAT Business Group, featuring clean layout and corporate branding for business communications.',
+      service: 'print-design',
+      company: 'YAT Business Group'
     },
     {
       id: 'dumas-product-packaging',
@@ -67,15 +77,6 @@ export const portfolioProjects = [
       description: 'Professional product and packaging design for real estate materials, creating a cohesive brand experience.',
       service: 'brand-applications-assets',
       company: 'Dumas Properties'
-    },
-    {
-      id: 'goozam-technologies-company-profile',
-      image: '/assets/Portfolio/Print%20and%20marketing/Company%20Profile%20Goozam%20Technologies.webp',
-      category: 'Print Design · Corporate',
-      title: 'Company Profile - Goozam Technologies',
-      description: 'Professional company profile design for Goozam Technologies, a company located in the USA. The profile showcases brand identity, services, and corporate messaging for print and digital use.',
-      service: 'print-design',
-      company: 'Goozam Technologies'
     },
     // Social Media Design Projects - From Social media folder
     {
@@ -156,6 +157,15 @@ export const portfolioProjects = [
       category: 'Print Design · Corporate',
       title: 'Employee ID Design - Prime Ethiopia',
       description: 'Professional employee ID card design for Prime Ethiopia, featuring clear layout, branding, and print-ready specifications for corporate identification.',
+      service: 'print-design',
+      company: 'Prime Ethiopia'
+    },
+    {
+      id: 'prime-ethiopia-business-profile',
+      image: '/assets/Portfolio/Print%20and%20marketing/Business%20Profile%20Cover%20Prime%20Ethiopia%20.webp',
+      category: 'Print Design · Corporate',
+      title: 'Business Profile Cover - Prime Ethiopia',
+      description: 'Professional business profile cover design for Prime Ethiopia, featuring modern layout and corporate branding for company profile documents.',
       service: 'print-design',
       company: 'Prime Ethiopia'
     },
@@ -297,6 +307,61 @@ export const portfolioProjects = [
       service: 'brand-identity-design',
       company: 'Raya Hotel & Convention Center'
     },
+    // Latest Projects - from Latest folder
+    {
+      id: 'prime-ethiopia-flyer',
+      image: '/assets/Portfolio/Latest/Flyer%20Prime%20Ethiopia%20copy.webp',
+      category: 'Print Design · Marketing',
+      title: 'Flyer Design - Prime Ethiopia',
+      description: 'Professional flyer design for Prime Ethiopia, featuring compelling visuals and clear messaging for marketing campaigns.',
+      service: 'print-design',
+      company: 'Prime Ethiopia'
+    },
+    {
+      id: 'toco-premium-coffee-packaging',
+      image: '/assets/Portfolio/Latest/Premium%20Coffee%20Packaging%20Design%20-%20Toco%20Speciality%20Coffee.webp',
+      category: 'Packaging Design · Beverage',
+      title: 'Premium Coffee Packaging - Toco Speciality Coffee',
+      description: 'Premium packaging design for Toco Speciality Coffee, combining visual appeal with functional design for retail and distribution.',
+      service: 'brand-applications-assets',
+      company: 'Toco Speciality Coffee'
+    },
+    {
+      id: 'toco-rollup-banner',
+      image: '/assets/Portfolio/Latest/Toco%20Speciality%20Coffee%20Rollup%20Banner.webp',
+      category: 'Environmental Design · Beverage',
+      title: 'Rollup Banner - Toco Speciality Coffee',
+      description: 'Professional rollup banner design for Toco Speciality Coffee, showcasing brand identity for exhibitions and retail environments.',
+      service: 'brand-applications-assets',
+      company: 'Toco Speciality Coffee'
+    },
+    {
+      id: 'ptgr-trifold',
+      image: '/assets/Portfolio/Latest/Trifold%20PTGR.webp',
+      category: 'Print Design · Marketing',
+      title: 'Trifold Brochure - PTGR',
+      description: 'Professional trifold brochure design for PTGR, featuring modern layouts and engaging visual content for marketing materials.',
+      service: 'print-design',
+      company: 'PTGR'
+    },
+    {
+      id: 'company-profile-cci-utop-goozam',
+      image: '/assets/Portfolio/Latest/Company%20Profile%20%28CCI%2C%20Utop%20%26%20Goozam%20Technologies%29.webp',
+      category: 'Print Design · Corporate',
+      title: 'Company Profile - CCI, Utop & Goozam Technologies',
+      description: 'Professional company profile design for CCI, Utop and Goozam Technologies, showcasing brand identity, services, and corporate messaging for print and digital use.',
+      service: 'print-design',
+      company: 'CCI, Utop & Goozam Technologies'
+    },
+    {
+      id: 'course-outline-cci',
+      image: '/assets/Portfolio/Latest/Course%20Outline%20-%20Center%20For%20Computer%20Intelligence%20%28CCI%29%20%28USA%29.webp',
+      category: 'Print Design · Corporate',
+      title: 'Course Outline - Center For Computer Intelligence (CCI)',
+      description: 'Professional course outline design for Center For Computer Intelligence (CCI) USA, featuring clear structure and engaging layout for educational materials.',
+      service: 'print-design',
+      company: 'Center For Computer Intelligence (CCI)'
+    },
     // New Print & Layout Projects
 ];
 
@@ -306,7 +371,7 @@ const WEB_BANNERS_MOBILE_IDS = ['finix-banner-1', 'finix-banner-2', 'finix-banne
 
 const Portfolio = () => {
   const { openPortfolioModal } = useContext(ModalContext);
-  const [activeFilter, setActiveFilter] = useState('brand-identity');
+  const [activeFilter, setActiveFilter] = useState('recent');
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT);
   const filtersRef = useRef(null);
 
@@ -317,6 +382,7 @@ const Portfolio = () => {
   }, []);
 
   const services = [
+    { id: 'recent', label: 'Latest' },
     { id: 'brand-identity', label: 'Brand Identity' },
     { id: 'digital-design', label: 'Digital Design' },
     { id: 'print-marketing', label: 'Print & Marketing' },
@@ -438,19 +504,25 @@ const Portfolio = () => {
   const filteredProjects = useMemo(() => {
     let filtered = [];
     
-    if (activeFilter === 'brand-identity') {
-      // Brand Identity: Logo design, visual systems, brand consistency
+    if (activeFilter === 'recent') {
+      filtered = RECENT_PROJECT_IDS.map((id) =>
+        portfolioProjects.find((p) => p.id === id)
+      ).filter(Boolean);
+      return filtered;
+    } else if (activeFilter === 'brand-identity') {
+      // Brand Identity: Logo design, visual systems, brand consistency (exclude Latest-only projects)
       filtered = shuffledProjects.filter(project => 
-        project.service === 'brand-identity-design' ||
+        !RECENT_PROJECT_IDS.includes(project.id) &&
+        (project.service === 'brand-identity-design' ||
         project.service === 'logo-design' ||
-        project.service === 'visual-identity-systems'
+        project.service === 'visual-identity-systems')
       );
       // Alta Counseling first in branding category
       filtered.sort((a, b) => (a.id === 'alta-counseling-branding' ? -1 : b.id === 'alta-counseling-branding' ? 1 : 0));
     } else if (activeFilter === 'creative-direction') {
-      // Creative Direction: Concept development, visual storytelling, art direction
-      // Use original array order (not shuffled) to maintain numerical sequence
+      // Creative Direction: Concept development, visual storytelling, art direction (exclude Latest-only projects)
       filtered = portfolioProjects.filter(project => 
+        !RECENT_PROJECT_IDS.includes(project.id) &&
         project.service === 'art-direction-visual-guidance'
       );
       // Sort creative direction projects by ID to maintain numerical order (1-6)
@@ -466,17 +538,28 @@ const Portfolio = () => {
       // Return sorted array directly for creative direction (no shuffling)
       return filtered;
     } else if (activeFilter === 'digital-design') {
-      // Digital Design: Social media visuals, campaigns, content creation
+      // Digital Design: Social media visuals, campaigns, content creation (exclude Latest-only projects)
       filtered = shuffledProjects.filter(project => 
-        project.service === 'digital-social-media-design' ||
-        project.service === 'marketing-campaign-design'
+        !RECENT_PROJECT_IDS.includes(project.id) &&
+        (project.service === 'digital-social-media-design' ||
+        project.service === 'marketing-campaign-design')
       );
     } else if (activeFilter === 'print-marketing') {
-      // Print & Marketing: Catalogs, brochures, brand collateral
+      // Print & Marketing: Catalogs, brochures, brand collateral (exclude Latest-only projects)
       filtered = shuffledProjects.filter(project => 
-        project.service === 'print-design' ||
-        project.service === 'brand-applications-assets'
+        !RECENT_PROJECT_IDS.includes(project.id) &&
+        (project.service === 'print-design' ||
+        project.service === 'brand-applications-assets')
       );
+      // Ensure prime-ethiopia-business-profile is 6th, yat-business-card is last (7th)
+      const businessProfile = filtered.find(p => p.id === 'prime-ethiopia-business-profile');
+      const yatBusinessCard = filtered.find(p => p.id === 'yat-business-card');
+      const others = filtered.filter(p => p.id !== 'prime-ethiopia-business-profile' && p.id !== 'yat-business-card');
+      const five = selectWithVariety(others, 5);
+      const result = [...five];
+      if (businessProfile) result.push(businessProfile);
+      if (yatBusinessCard) result.push(yatBusinessCard);
+      return result.length > 0 ? result : selectWithVariety(filtered, 6);
     }
     
     // Limit to 6 items with company variety (already shuffled to avoid same company adjacent)
@@ -489,10 +572,11 @@ const Portfolio = () => {
       return { socialMedia: [], webBanners: [] };
     }
     
-    // Get all digital design projects first
+    // Get all digital design projects first (exclude Latest-only projects)
     const allDigital = shuffledProjects.filter(project => 
-      project.service === 'digital-social-media-design' ||
-      project.service === 'marketing-campaign-design'
+      !RECENT_PROJECT_IDS.includes(project.id) &&
+      (project.service === 'digital-social-media-design' ||
+      project.service === 'marketing-campaign-design')
     );
     
     const socialMediaAll = allDigital.filter(project => 
@@ -642,6 +726,7 @@ const Portfolio = () => {
                       <div className="portfolio-content">
                         <span className="portfolio-category-modern">{project.category}</span>
                         <h3>{project.title}</h3>
+                        <p className="portfolio-card-description">{project.description}</p>
                         <a 
                           href="#" 
                           className="portfolio-link-modern"
@@ -712,6 +797,7 @@ const Portfolio = () => {
                       <div className="portfolio-content">
                         <span className="portfolio-category-modern">{project.category}</span>
                         <h3>{project.title}</h3>
+                        <p className="portfolio-card-description">{project.description}</p>
                         <a 
                           href="#" 
                           className="portfolio-link-modern"
@@ -775,6 +861,7 @@ const Portfolio = () => {
                 <div className="portfolio-content">
                   <span className="portfolio-category-modern">{project.category}</span>
                   <h3>{project.title}</h3>
+                  <p className="portfolio-card-description">{project.description}</p>
                   <a 
                     href="#" 
                     className="portfolio-link-modern"

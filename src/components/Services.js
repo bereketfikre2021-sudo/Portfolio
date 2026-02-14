@@ -1,8 +1,23 @@
-import React, { useContext } from 'react';
-import { ModalContext } from '../context/ModalContext';
+import React, { useState, useEffect } from 'react';
 
 const Services = () => {
-  const { openServiceModal } = useContext(ModalContext);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % 4);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isMobile]);
 
   const services = [
     {
@@ -69,51 +84,51 @@ const Services = () => {
           </div>
         </div>
         
-        <div className="services-list-minimal">
-          {services.map((service, index) => (
-            <article 
-              key={service.id} 
-              className="service-item-minimal" 
-              data-service={service.id} 
-              data-aos="fade-up" 
-              data-aos-delay={index * 100}
-              onClick={() => {
-                if (openServiceModal) {
-                  openServiceModal(service.id);
-                }
-              }}
-            >
-              <div className="service-item-content">
-                <div className="service-item-left">
-                  <span className="service-item-number">{service.number}</span>
-                  <div className="service-item-icon">
-                    {service.icon}
+        <div className={`services-list-minimal ${isMobile ? 'services-carousel' : ''}`}>
+          <div 
+            className="services-carousel-track" 
+            style={isMobile ? { transform: `translateX(-${activeIndex * 100}%)` } : undefined}
+          >
+            {services.map((service, index) => (
+              <article 
+                key={service.id} 
+                className="service-item-minimal" 
+                data-service={service.id} 
+                data-aos={!isMobile ? 'fade-up' : undefined} 
+                data-aos-delay={!isMobile ? index * 100 : undefined}
+              >
+                <div className="service-item-content">
+                  <div className="service-item-left">
+                    <span className="service-item-number">{service.number}</span>
+                    <div className="service-item-icon">
+                      {service.icon}
+                    </div>
+                    <h3 className="service-item-title">{service.title}</h3>
                   </div>
-                  <h3 className="service-item-title">{service.title}</h3>
+                  <div className="service-item-right">
+                    <ul className="service-item-description-list">
+                      {service.description.split(',').map((item, i) => (
+                        <li key={i}>{item.trim()}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <div className="service-item-right">
-                  <a 
-                    href="#" 
-                    className="service-item-link" 
-                    data-service-link={service.id} 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      if (openServiceModal) {
-                        openServiceModal(service.id);
-                      }
-                    }}
-                    aria-label={`Learn more about ${service.title} service`}
-                  >
-                    <span>Learn More</span>
-                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                      <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
+          {isMobile && (
+            <div className="services-carousel-dots" aria-hidden="true">
+              {services.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`services-carousel-dot ${index === activeIndex ? 'active' : ''}`}
+                  onClick={() => setActiveIndex(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -1504,8 +1504,18 @@ body:hover .cursor-follower {
    ============================================ */
 section {
   position: relative;
-  padding: var(--space-32) 0;
+  padding: var(--space-12) 0;
   z-index: 2;
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: var(--space-8) 0;
+  }
+
+  .section-intro {
+    margin-bottom: var(--space-8);
+  }
 }
 
 .container {
@@ -2011,6 +2021,52 @@ section {
   margin-bottom: 2rem;
 }
 
+/* Core Expertise carousel - desktop & tablet */
+.skills-carousel {
+  overflow: hidden;
+}
+
+.skills-carousel-track {
+  display: flex;
+  flex-direction: row;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.skills-carousel-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.skills-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.skills-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-light-30);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.skills-carousel-dot:hover {
+  background: var(--color-light-50);
+}
+
+.skills-carousel-dot.active {
+  background: var(--color-light);
+  transform: scale(1.2);
+}
+
 @media (min-width: 769px) {
   .skills-list {
     display: grid;
@@ -2166,6 +2222,10 @@ section {
     padding: 3rem 2.5rem;
   }
 
+  .skills-carousel-slide {
+    gap: 1rem;
+  }
+
   .skills-list {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem;
@@ -2235,6 +2295,11 @@ section {
   overflow: hidden;
 }
 
+/* Carousel track - transparent on desktop so grid works */
+.services-carousel-track {
+  display: contents;
+}
+
 /* Minimal Services List Style */
 .services-list-minimal {
   display: grid;
@@ -2250,7 +2315,6 @@ section {
   position: relative;
   border-right: 1px solid var(--color-light-10);
   border-bottom: 1px solid var(--color-light-10);
-  cursor: pointer;
   transition: all 0.3s ease;
   background: transparent;
 }
@@ -2274,17 +2338,17 @@ section {
 
 .service-item-content {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
   padding: 2.5rem 0;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .service-item-left {
   display: flex;
   align-items: center;
   gap: 2rem;
-  flex: 1;
+  width: 100%;
 }
 
 .service-item-number {
@@ -2336,35 +2400,30 @@ section {
 
 .service-item-right {
   display: flex;
-  align-items: center;
-  flex-shrink: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 }
 
-.service-item-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--color-light-50);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9375rem;
-  transition: all 0.3s ease;
-  opacity: 0;
-  transform: translateX(-10px);
+.service-item-description-list {
+  margin: 0 0 0 6rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-light-80);
 }
 
-.service-item-minimal:hover .service-item-link {
-  opacity: 1;
-  transform: translateX(0);
-  color: var(--color-light);
+.service-item-description-list li {
+  margin-bottom: 0.25rem;
 }
 
-.service-item-link svg {
-  transition: transform 0.3s ease;
+.service-item-description-list li:last-child {
+  margin-bottom: 0;
 }
 
-.service-item-minimal:hover .service-item-link svg {
-  transform: translateX(4px);
+.service-item-minimal:hover .service-item-description-list {
+  color: var(--color-light-90);
 }
 
 /* Responsive adjustments for minimal services */
@@ -2427,11 +2486,67 @@ section {
 
   .service-item-right {
     width: 100%;
+    align-items: flex-start;
   }
 
-  .service-item-link {
-    opacity: 1;
-    transform: translateX(0);
+  .service-item-description-list {
+    max-width: none;
+    margin-left: 6rem;
+  }
+
+  /* Auto-slide carousel - mobile only */
+  .services-list-minimal.services-carousel {
+    display: flex !important;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid var(--color-light-10);
+  }
+
+  .services-carousel .services-carousel-track {
+    display: flex;
+    flex-direction: row;
+    /* Override display:contents from desktop */
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  .services-carousel .service-item-minimal {
+    flex: 0 0 100%;
+    min-width: 100%;
+    border-bottom: none;
+    border-right: none;
+  }
+
+  .services-carousel .service-item-minimal:nth-child(n+3) {
+    border-bottom: none;
+  }
+
+  .services-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.25rem 0;
+  }
+
+  .services-carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-light-30);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .services-carousel-dot:hover {
+    background: var(--color-light-50);
+  }
+
+  .services-carousel-dot.active {
+    background: var(--color-light);
+    transform: scale(1.2);
   }
 }
 
@@ -2442,7 +2557,7 @@ section {
   background: var(--bg-primary);
   color: var(--text-light);
   position: relative;
-  padding: var(--space-24) 0;
+  padding: var(--space-12) 0;
 }
 
 .process .section-title .title-main {
@@ -2554,6 +2669,11 @@ section {
   height: 100%;
 }
 
+/* Carousel track - transparent on desktop so grid works */
+.process-carousel-track {
+  display: contents;
+}
+
 @media (max-width: 1024px) {
   .process-steps {
     grid-template-columns: repeat(2, 1fr);
@@ -2570,12 +2690,12 @@ section {
 
 @media (max-width: 768px) {
   .process {
-    padding: var(--space-16) 0;
+    padding: var(--space-8) 0;
   }
 
   .process-steps {
     grid-template-columns: 1fr;
-    margin-top: 2rem;
+    margin-top: 1rem;
     border-left: none;
     border-right: none;
   }
@@ -2614,6 +2734,60 @@ section {
   .process-step-description {
     font-size: 0.875rem;
   }
+
+  /* Auto-slide carousel - mobile only */
+  #process .process-steps.process-carousel,
+  .process-steps.process-carousel {
+    display: flex !important;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .process-carousel .process-carousel-track {
+    display: flex;
+    flex-direction: row;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  .process-carousel .process-step {
+    flex: 0 0 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .process-carousel .process-step:last-child {
+    border-bottom: none;
+  }
+
+  .process-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.25rem 0;
+  }
+
+  .process-carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-light-30);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .process-carousel-dot:hover {
+    background: var(--color-light-50);
+  }
+
+  .process-carousel-dot.active {
+    background: var(--color-light);
+    transform: scale(1.2);
+  }
 }
 
 /* ============================================
@@ -2624,7 +2798,7 @@ section {
   color: var(--text-light);
   position: relative;
   overflow: hidden;
-  padding-bottom: var(--space-32);
+  padding-bottom: var(--space-12);
 }
 
 .portfolio .section-title .title-main {
@@ -2883,12 +3057,20 @@ section {
 
 /* Removed hover animation to prevent glitches */
 
-.portfolio-content p {
-  color: var(--text-on-dark);
-  opacity: 0.85;
+.portfolio-content p,
+.portfolio-card-description {
+  color: var(--text-secondary);
+  opacity: 0.9;
   margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.6;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.portfolio-card-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .portfolio-link-modern {
@@ -6083,7 +6265,7 @@ section {
 
 @media (max-width: 768px) {
   .faq {
-    padding: 6rem 0;
+    padding: 2rem 0;
   }
 
   .faq-wrapper {
@@ -6600,14 +6782,14 @@ section {
 .contact-links-vertical {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.625rem;
 }
 
 .contact-link-vertical {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
   background: rgba(185, 234, 201, 0.05);
   border: 1px solid var(--color-light-10);
   border-radius: var(--radius-md);
@@ -6624,9 +6806,9 @@ section {
 }
 
 .contact-link-icon {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6647,11 +6829,11 @@ section {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.125rem;
 }
 
 .contact-link-label {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -6659,7 +6841,7 @@ section {
 }
 
 .contact-link-value {
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--color-light);
   overflow: hidden;
@@ -7411,7 +7593,7 @@ section {
 
   /* About Section Mobile */
   .about {
-    padding: 4rem 0 !important;
+    padding: 2rem 0 !important;
   }
 
   .about-grid {
@@ -7495,12 +7677,12 @@ section {
 
   /* Services Section Mobile */
   .services {
-    padding: 4rem 0 !important;
+    padding: var(--space-8) 0 !important;
   }
 
   /* Portfolio Section Mobile */
   .portfolio {
-    padding: 4rem 0 !important;
+    padding: var(--space-8) 0 !important;
   }
 
   #portfolio .portfolio-filters,
@@ -7702,7 +7884,7 @@ section {
 
   /* Testimonials Section Mobile */
   .testimonials {
-    padding: 3rem 0 !important;
+    padding: 2rem 0 !important;
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -7728,12 +7910,12 @@ section {
 
   /* FAQ Section Mobile */
   .faq {
-    padding: 3rem 0 !important;
+    padding: 2rem 0 !important;
   }
 
   /* Contact Section Mobile */
   .contact {
-    padding: 4rem 0 0 0 !important;
+    padding: 2rem 0 0 0 !important;
   }
 
   .contact-content-wrapper {
@@ -7747,7 +7929,7 @@ section {
 
   /* Trusted By Section Mobile */
   .trusted-by {
-    padding: 4rem 0 !important;
+    padding: 2rem 0 !important;
   }
 
   /* Container Mobile */
@@ -7757,7 +7939,7 @@ section {
 
   /* Section Mobile Padding */
   section {
-    padding: 4rem 0 !important;
+    padding: var(--space-8) 0 !important;
   }
 
   .section-intro {

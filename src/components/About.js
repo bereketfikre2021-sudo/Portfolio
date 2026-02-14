@@ -1,7 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
+const CORE_SKILLS = [
+  { id: 1, name: 'Brand Identity & Logo Design' },
+  { id: 2, name: 'Visual Systems & Brand Consistency' },
+  { id: 3, name: 'Creative Direction & Visual Storytelling' },
+  { id: 4, name: 'Strategic Design Thinking' },
+];
 
 const About = () => {
   const toolsRef = useRef(null);
+  const [skillsActiveIndex, setSkillsActiveIndex] = useState(0);
 
   useEffect(() => {
     const toolBars = toolsRef.current?.querySelectorAll('.tool-progress');
@@ -39,6 +47,29 @@ const About = () => {
 
     return () => {
       toolBars.forEach((bar) => toolObserver.unobserve(bar));
+    };
+  }, []);
+
+  // Auto-slide Core Expertise carousel on desktop/tablet
+  useEffect(() => {
+    const slideCount = 2;
+    const startInterval = () => {
+      if (typeof window !== 'undefined' && window.innerWidth > 768) {
+        return setInterval(() => {
+          setSkillsActiveIndex((prev) => (prev + 1) % slideCount);
+        }, 4000);
+      }
+      return null;
+    };
+    let id = startInterval();
+    const onResize = () => {
+      if (id) clearInterval(id);
+      id = startInterval();
+    };
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      if (id) clearInterval(id);
     };
   }, []);
 
@@ -156,21 +187,34 @@ const About = () => {
           </div>
         </div>
         
-        <div className="skills-showcase desktop-only" data-aos="fade-up" data-aos-delay="300">
+        <div className="skills-showcase skills-carousel desktop-only" data-aos="fade-up" data-aos-delay="300" role="region" aria-roledescription="carousel" aria-label="Core expertise">
           <h4 className="skills-title">Core Expertise</h4>
-          <div className="skills-list">
-            <div className="skill-item">
-              <span className="skill-name">Brand Identity & Logo Design</span>
+          <div className="skills-carousel-track" style={{ transform: `translateX(-${skillsActiveIndex * 100}%)` }}>
+            <div className="skills-carousel-slide">
+              {CORE_SKILLS.slice(0, 2).map((skill) => (
+                <div key={skill.id} className="skill-item">
+                  <span className="skill-name">{skill.name}</span>
+                </div>
+              ))}
             </div>
-            <div className="skill-item">
-              <span className="skill-name">Visual Systems & Brand Consistency</span>
+            <div className="skills-carousel-slide">
+              {CORE_SKILLS.slice(2, 4).map((skill) => (
+                <div key={skill.id} className="skill-item">
+                  <span className="skill-name">{skill.name}</span>
+                </div>
+              ))}
             </div>
-            <div className="skill-item">
-              <span className="skill-name">Creative Direction & Visual Storytelling</span>
-            </div>
-            <div className="skill-item">
-              <span className="skill-name">Strategic Design Thinking</span>
-            </div>
+          </div>
+          <div className="skills-carousel-dots" aria-hidden="true">
+            {[0, 1].map((index) => (
+              <button
+                key={index}
+                type="button"
+                className={`skills-carousel-dot ${index === skillsActiveIndex ? 'active' : ''}`}
+                onClick={() => setSkillsActiveIndex(index)}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
       </div>

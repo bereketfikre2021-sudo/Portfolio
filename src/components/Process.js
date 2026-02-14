@@ -1,6 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Process = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % 4);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isMobile]);
+
   const steps = [
     {
       number: '01',
@@ -63,15 +81,19 @@ const Process = () => {
           </div>
         </div>
 
-        <div className="process-steps" role="list">
-          {steps.map((step, index) => (
-            <article
-              key={step.number}
-              className="process-step"
-              data-aos="fade-up"
-              data-aos-delay={index * 100}
-              role="listitem"
-            >
+        <div className={`process-steps ${isMobile ? 'process-carousel' : ''}`} role="list">
+          <div
+            className="process-carousel-track"
+            style={isMobile ? { transform: `translateX(-${activeIndex * 100}%)` } : undefined}
+          >
+            {steps.map((step, index) => (
+              <article
+                key={step.number}
+                className="process-step"
+                data-aos={!isMobile ? 'fade-up' : undefined}
+                data-aos-delay={!isMobile ? index * 100 : undefined}
+                role="listitem"
+              >
               <div className="process-step-inner">
                 <div className="process-step-header">
                   <span className="process-step-number" aria-hidden="true">{step.number}</span>
@@ -87,8 +109,22 @@ const Process = () => {
                   </svg>
                 </div>
               )}
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
+          {isMobile && (
+            <div className="process-carousel-dots" aria-hidden="true">
+              {steps.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`process-carousel-dot ${index === activeIndex ? 'active' : ''}`}
+                  onClick={() => setActiveIndex(index)}
+                  aria-label={`Go to step ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>

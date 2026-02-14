@@ -42,6 +42,20 @@
 - Ensure images are in `public/assets/` folder
 - Check that paths don't have double slashes
 
+### Issue 6: MIME Type Errors (Refused to apply style / execute script)
+**Error**: `Refused to apply style from '.../main.xxx.css' because its MIME type ('text/html') is not a supported stylesheet MIME type`
+
+**Cause**: Cached `index.html` references old asset hashes that no longer exist. When the browser requests them, Netlify's SPA fallback serves `index.html` instead, causing wrong MIME type.
+
+**Solution**:
+1. **Service worker fix (v1.0.1)**: The service worker was caching `index.html` and serving it first, causing users to get stale HTML with old asset hashes. It now uses **network-first** for HTML so users always get fresh content after deploys.
+2. **Clear Netlify build cache**: Site Settings → Build & Deploy → Clear cache and retry deploy
+3. **Trigger a fresh deploy**: Deploys → Trigger deploy → Deploy site
+4. **Unregister old service worker**: After deploying, users with the old SW need to either:
+   - Hard refresh (Ctrl+Shift+R / Cmd+Shift+R) twice, or
+   - DevTools → Application → Service Workers → Unregister, then refresh
+5. The `netlify.toml` has `force = false` on the SPA redirect and no-cache headers on `index.html`
+
 ## Current Configuration
 
 **Build Command**: `npm run build`

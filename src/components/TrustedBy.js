@@ -44,6 +44,7 @@ const TrustedBy = () => {
       <div className="container">
         <div className="section-intro">
           <span className="section-number desktop-number">08</span>
+          <span className="section-number mobile-number">06</span>
           <div className="section-header">
             <span className="section-label">Our Partners</span>
             <h2 id="trusted-by-heading" className="section-title">
