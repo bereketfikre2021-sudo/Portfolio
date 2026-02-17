@@ -1,6 +1,7 @@
 # Netlify config for deployed static site (main branch = build output only, no npm build)
+# command = "true" is a no-op that succeeds - repo has pre-built files only, no package.json
 [build]
-  command = ""
+  command = "true"
   publish = "."
 
 # SPA fallback: only apply when no static file exists (force=false is default)
