@@ -1,0 +1,5 @@
+# Explicit headers for Open Graph image - ensures social crawlers get correct Content-Type
+/assets/og-image.png
+  Content-Type: image/png
+  Cache-Control: public, max-age=86400
+  X-Robots-Tag: all

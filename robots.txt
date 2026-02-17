@@ -1,0 +1,44 @@
+# Robots.txt for Bereket Fikre Portfolio
+# https://www.robotstxt.org/
+
+User-agent: *
+Allow: /
+# Allow assets for better SEO (images, fonts, etc.)
+Allow: /assets/
+Disallow: /assets/*.json$
+Disallow: /build/
+Disallow: /node_modules/
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Sogou
+Allow: /
+
+User-agent: Exabot
+Allow: /
+
+User-agent: facebot
+Allow: /
+
+User-agent: ia_archiver
+Allow: /
+
+# Sitemaps
+Sitemap: https://bereketfikre.com/sitemap.xml
