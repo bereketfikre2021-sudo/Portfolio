@@ -4,6 +4,7 @@ node_modules/
 
 # Build outputs
 dist/
+deploy-to-main/
 # Note: build/ folder is needed for GitHub Pages deployment
 # Uncomment the line below if you want to exclude build folder from git
 # build/
@@ -25,6 +26,7 @@ desktop.ini
 .env
 .env.local
 .env.*.local
+.env.deploy
 
 # Temporary files
 *.tmp

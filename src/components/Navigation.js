@@ -124,13 +124,14 @@ const Navigation = () => {
   };
 
   const navLinks = [
-    { href: '#home', label: 'Home', section: 'home' },
-    { href: '#about', label: 'About', section: 'about' },
-    { href: '#services', label: 'Services', section: 'services' },
+    { href: '#home', label: 'Home', section: 'home', number: '01' },
+    { href: '#about', label: 'About', section: 'about', number: '02' },
+    { href: '#services', label: 'Services', section: 'services', number: '03' },
     { 
       href: '#portfolio', 
       label: 'Portfolio', 
       section: 'portfolio',
+      number: '04',
       hasDropdown: true,
       dropdownItems: [
         { href: '#portfolio', label: 'Featured Works', section: 'portfolio' },
@@ -138,7 +139,7 @@ const Navigation = () => {
         { href: '#blog', label: 'Blog', section: 'blog' }
       ]
     },
-    { href: '#contact', label: 'Contact', section: 'contact' }
+    { href: '#contact', label: 'Contact', section: 'contact', number: '05' }
   ];
 
   return (
@@ -185,6 +186,7 @@ const Navigation = () => {
                       aria-haspopup="true"
                       aria-controls="portfolio-dropdown-menu"
                     >
+                      <span className="nav-number">{link.number}</span>
                       <span>{link.label}</span>
                       <svg 
                         width="12" 
@@ -223,6 +225,7 @@ const Navigation = () => {
                     onClick={(e) => handleNavClick(e, link.href)}
                     aria-label={`Go to ${link.label} section`}
                   >
+                    <span className="nav-number">{link.number}</span>
                     <span>{link.label}</span>
                   </a>
                 )}

@@ -616,6 +616,13 @@ body:hover .cursor-follower {
   z-index: 1;
 }
 
+.nav-link .nav-number {
+  font-size: 0.75em;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-right: 0.35em;
+}
+
 .nav-link::before {
   content: '';
   position: absolute;
@@ -10203,6 +10210,13 @@ html {
 .bottom-nav-item.active .bottom-nav-icon {
   transform: scale(1.1);
   stroke-width: 2.5;
+}
+
+.bottom-nav-number {
+  font-size: 0.85em;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-right: 0.2em;
 }
 
 .bottom-nav-label {

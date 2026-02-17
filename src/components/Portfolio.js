@@ -161,11 +161,11 @@ export const portfolioProjects = [
       company: 'Prime Ethiopia'
     },
     {
-      id: 'prime-ethiopia-business-profile',
-      image: '/assets/Portfolio/Print%20and%20marketing/Business%20Profile%20Cover%20Prime%20Ethiopia%20.webp',
+      id: 'prime-ethiopia-business-proposal',
+      image: '/assets/Portfolio/Print%20and%20marketing/Prime%20Ethiopia%20Business%20Poposal%20Cover.webp',
       category: 'Print Design · Corporate',
-      title: 'Business Profile Cover - Prime Ethiopia',
-      description: 'Professional business profile cover design for Prime Ethiopia, featuring modern layout and corporate branding for company profile documents.',
+      title: 'Prime Ethiopia Business Poposal Cover',
+      description: 'Professional business proposal cover design for Prime Ethiopia, featuring modern layout and corporate branding for company proposal documents.',
       service: 'print-design',
       company: 'Prime Ethiopia'
     },
@@ -551,10 +551,10 @@ const Portfolio = () => {
         (project.service === 'print-design' ||
         project.service === 'brand-applications-assets')
       );
-      // Ensure prime-ethiopia-business-profile is 6th, yat-business-card is last (7th)
-      const businessProfile = filtered.find(p => p.id === 'prime-ethiopia-business-profile');
+      // Ensure prime-ethiopia-business-proposal is 6th, yat-business-card is last (7th)
+      const businessProfile = filtered.find(p => p.id === 'prime-ethiopia-business-proposal');
       const yatBusinessCard = filtered.find(p => p.id === 'yat-business-card');
-      const others = filtered.filter(p => p.id !== 'prime-ethiopia-business-profile' && p.id !== 'yat-business-card');
+      const others = filtered.filter(p => p.id !== 'prime-ethiopia-business-proposal' && p.id !== 'yat-business-card');
       const five = selectWithVariety(others, 5);
       const result = [...five];
       if (businessProfile) result.push(businessProfile);
