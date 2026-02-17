@@ -3,13 +3,6 @@
   command = ""
   publish = "."
 
-# Direct path for og-image - some social crawlers prefer root-level paths
-[[redirects]]
-  from = "/og-image.png"
-  to = "/assets/og-image.png"
-  status = 200
-  force = true
-
 # SPA fallback: only apply when no static file exists (force=false is default)
 [[redirects]]
   from = "/*"
