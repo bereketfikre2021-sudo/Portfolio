@@ -1,9 +1,7 @@
+# Netlify config for deployed static site (main branch = build output only, no npm build)
 [build]
-  publish = "build"
-  command = "npm run build"
-
-[build.environment]
-  NODE_VERSION = "18"
+  command = ""
+  publish = "."
 
 # Direct path for og-image - some social crawlers prefer root-level paths
 [[redirects]]
@@ -13,7 +11,6 @@
   force = true
 
 # SPA fallback: only apply when no static file exists (force=false is default)
-# This ensures /static/css/* and /static/js/* are served correctly when they exist
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -53,7 +50,6 @@
     Content-Type = "image/png"
     Cache-Control = "public, max-age=86400"
 
-# PNG images - ensure correct MIME type for crawlers
 [[headers]]
   for = "/*.png"
   [headers.values]
@@ -66,7 +62,7 @@
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
 
-# HTML - never cache so users always get latest assets after deploy
+# HTML - never cache so users always get latest
 [[headers]]
   for = "/index.html"
   [headers.values]
@@ -79,7 +75,7 @@
     Cache-Control = "no-cache, no-store, must-revalidate"
     Pragma = "no-cache"
 
-# Compression headers for better performance
+# Compression headers
 [[headers]]
   for = "/*"
   [headers.values]
