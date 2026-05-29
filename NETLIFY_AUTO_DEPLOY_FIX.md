@@ -4,6 +4,20 @@ If Netlify doesn't trigger a deploy when you push to GitHub, use one of these so
 
 ---
 
+## "Site not found" Error – Fix
+
+If you see Netlify's "Site not found" page:
+
+1. **Netlify Dashboard** → **Site configuration** → **Build & deploy** → **Build settings**
+2. **Override** these to match our deploy (main branch has pre-built files only):
+   - **Build command:** `true` (or leave empty – the repo's `netlify.toml` sets this)
+   - **Publish directory:** `.` (current directory)
+   - **Base directory:** leave empty
+3. **Production branch:** must be `main`
+4. **Trigger deploy** manually: **Deploys** → **Trigger deploy** → **Deploy site**
+
+---
+
 ## Solution 1: Netlify Build Hook (Recommended)
 
 This triggers a Netlify deploy right after your script pushes to GitHub.

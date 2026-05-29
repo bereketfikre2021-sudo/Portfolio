@@ -158,8 +158,8 @@ const Contact = () => {
         </div>
 
         <div className="contact-content-wrapper">
-          {/* Social/Contact Links - Left side (desktop/tablet only) */}
-          <div className="contact-info-wrapper desktop-only" data-aos="fade-right">
+          {/* Contact links + channels */}
+          <div className="contact-info-wrapper" data-aos="fade-right">
             <div className="contact-links-vertical">
               <a href="tel:+251923988838" className="contact-link-vertical" aria-label="Call +251 923 988 838">
                 <div className="contact-link-icon">
@@ -245,8 +245,8 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Contact Form - Right side (desktop/tablet only) */}
-          <div className="contact-form-wrapper desktop-only" data-aos="fade-left">
+          {/* Contact Form — visible on all breakpoints */}
+          <div className="contact-form-wrapper" data-aos="fade-left">
             {showSuccessState && (
               <div className="contact-form-success-inline" role="status" aria-live="polite">
                 <span className="contact-form-success-check">✓</span>

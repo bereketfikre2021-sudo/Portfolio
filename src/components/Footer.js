@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="container">
         <div className="footer-content-modern">
           <div className="footer-left">
-            <p>&copy; 2024 Bereket Fikre. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Bereket Fikre. All rights reserved.</p>
           </div>
           <div className="footer-social">
             <div className="social-modern">

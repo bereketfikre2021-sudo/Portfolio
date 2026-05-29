@@ -7,6 +7,8 @@ const ParticleCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     // Disable on mobile for better performance
     const isMobile = window.innerWidth <= 768;
     if (isMobile) return;

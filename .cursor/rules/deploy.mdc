@@ -1,0 +1,17 @@
+---
+description: Deploy workflow - push only built site, never full project
+alwaysApply: true
+---
+
+# Deploy to Production
+
+**Never** run `git add`, `git commit`, or `git push` from the project root to deploy.
+
+The `main` branch contains only the built site output. Use the deploy script:
+
+```bash
+npm run build
+node scripts/deploy-to-main.js
+```
+
+This copies `build/` to `deploy-to-main/`, commits only changed files there, and pushes to `origin main`.

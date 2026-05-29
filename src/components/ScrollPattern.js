@@ -28,7 +28,7 @@ const ScrollPattern = () => {
   }, []);
 
   return (
-    <div className={`scroll-pattern ${isActive ? 'active' : ''}`} id="scrollPattern">
+    <div className={`scroll-pattern ${isActive ? 'active' : ''}`} id="scrollPattern" aria-hidden="true">
       <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
         <path className="scroll-pattern-shape" d="M0,300 Q400,200 800,250 T1600,300 L1920,300 L1920,0 L0,0 Z" />
         <path className="scroll-pattern-shape" d="M0,600 Q600,500 1200,550 T1920,600 L1920,400 L0,400 Z" />

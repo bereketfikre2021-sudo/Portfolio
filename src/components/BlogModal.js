@@ -6,6 +6,7 @@ const BlogModal = () => {
   const { blogModal, closeBlogModal } = useContext(ModalContext);
   const modalRef = useRef(null);
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState('');
   useFocusTrap(blogModal?.isOpen, modalRef);
 
   // Blog post data
@@ -216,6 +217,10 @@ const BlogModal = () => {
     }
   }, [blogModal?.isOpen, blogModal?.blogId]);
 
+  useEffect(() => {
+    if (blogModal?.isOpen) setCopyError('');
+  }, [blogModal?.isOpen, blogModal?.blogId]);
+
   if (!blogModal.isOpen || !blogModal.blogId) return null;
 
   const post = blogData[blogModal.blogId];
@@ -225,15 +230,44 @@ const BlogModal = () => {
   const shareTitle = encodeURIComponent(post.title);
 
   const handleCopyLink = async () => {
-    if (navigator.clipboard) {
-      try {
-        await navigator.clipboard.writeText(shareUrl);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      } catch (err) {
-        console.error('Failed to copy:', err);
+    setCopyError('');
+    const url = shareUrl;
+
+    const markCopied = () => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    };
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(url);
+        markCopied();
+        return;
       }
+    } catch (err) {
+      /* try legacy fallback */
     }
+
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (ok) {
+        markCopied();
+        return;
+      }
+    } catch (err) {
+      /* show user-visible message below */
+    }
+
+    setCopyError("Could not copy the link. Copy the address from your browser's address bar, or select the URL and copy manually.");
   };
 
   return (
@@ -381,6 +415,24 @@ const BlogModal = () => {
               >
                 Share this article
               </h4>
+              {copyError ? (
+                <p
+                  role="status"
+                  className="blog-copy-error"
+                  style={{
+                    margin: '0 0 1rem 0',
+                    padding: '0.75rem 1rem',
+                    fontSize: '0.875rem',
+                    lineHeight: 1.5,
+                    color: '#b4e8c9',
+                    background: 'rgba(180, 232, 201, 0.12)',
+                    border: '1px solid rgba(180, 232, 201, 0.25)',
+                    borderRadius: '8px'
+                  }}
+                >
+                  {copyError}
+                </p>
+              ) : null}
               <div 
                 className="blog-share-buttons" 
                 style={{ 

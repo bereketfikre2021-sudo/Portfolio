@@ -7,8 +7,7 @@ import About from './About';
 import Services from './Services';
 import Process from './Process';
 import Portfolio from './Portfolio';
-import CallNowButton from './CallNowButton';
-import ScrollToTop from './ScrollToTop';
+import FitnessAppFloatingButton from './FitnessAppButton';
 import KeyboardShortcuts from './KeyboardShortcuts';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
@@ -67,6 +66,10 @@ function debounce(fn, delay) {
 function AppContent() {
   const { openProjectRequestModal } = useContext(ModalContext);
   const [deferEffects, setDeferEffects] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
 
   // Defer decorative effects until after first paint to prioritize LCP and FCP
   useEffect(() => {
@@ -74,6 +77,13 @@ function AppContent() {
       requestAnimationFrame(() => setDeferEffects(true));
     });
     return () => cancelAnimationFrame(id);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onChange = () => setPrefersReducedMotion(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
   }, []);
 
   // Lazy-load AOS to reduce main bundle and parse time; init in idle to avoid blocking LCP
@@ -87,7 +97,15 @@ function AppContent() {
           easing: 'ease-out-cubic',
           once: true,
           offset: 100,
-          disable: typeof window !== 'undefined' && window.innerWidth <= 768 ? 'mobile' : false,
+          disable: () => {
+            if (typeof window === 'undefined') return false;
+            try {
+              if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
+            } catch (e) {
+              /* ignore */
+            }
+            return window.innerWidth <= 768;
+          },
         });
       });
     };
@@ -128,8 +146,8 @@ function AppContent() {
       <a href="#main-content" className="skip-to-main-content">
         Skip to main content
       </a>
-      <CallNowButton />
-      {deferEffects && (
+      <FitnessAppFloatingButton />
+      {deferEffects && !prefersReducedMotion && (
         <Suspense fallback={null}>
           <ScrollPattern />
           <ParticleCanvas />
@@ -144,14 +162,12 @@ function AppContent() {
         <Process />
         <Portfolio />
         <Suspense fallback={null}>
-          <div className="desktop-only">
-            <CaseStudies />
-          </div>
+          <CaseStudies />
         </Suspense>
         <Suspense fallback={<LoadingFallback />}>
-          <div className="desktop-only">
-            <Blog />
-          </div>
+          <Blog />
+        </Suspense>
+        <Suspense fallback={null}>
           <Testimonials />
           <TrustedBy />
           <FAQ />
@@ -160,7 +176,6 @@ function AppContent() {
           <BottomNav />
         </Suspense>
       </main>
-      <ScrollToTop />
       <KeyboardShortcuts />
       <Suspense fallback={null}>
         <PortfolioModal />

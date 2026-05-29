@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useTextTypingAnimation } from '../hooks/useTextTypingAnimation';
+import { FITNESS_APP_URL } from './FitnessAppButton';
 
 const Hero = () => {
   const titleRef = useRef(null);
@@ -67,18 +68,26 @@ const Hero = () => {
               <span className="btn-arrow" aria-hidden="true">→</span>
               <div className="btn-shine"></div>
             </a>
-            <a 
-              href={`${process.env.PUBLIC_URL || ''}/Bereket-Fikre-CV.pdf`}
-              className="btn btn-outline btn-cv"
-              download="Bereket-Fikre-CV.pdf"
+          </div>
+
+          <aside className="hero-fitness-promo" aria-labelledby="hero-fitness-heading">
+            <h2 id="hero-fitness-heading" className="hero-fitness-promo-title">
+              Track Your Fitness Journey
+            </h2>
+            <p className="hero-fitness-promo-text">
+              Use my custom workout tracking app.
+            </p>
+            <a
+              href={FITNESS_APP_URL}
+              className="btn btn-outline btn-fitness-app"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Download Bereket Fikre CV (PDF)"
+              aria-label="Open Fitness App (opens in new window)"
             >
-              <span className="btn-text">Download CV</span>
-              <span className="btn-arrow" aria-hidden="true">↓</span>
+              <span className="btn-text">Open Fitness App</span>
+              <span className="btn-arrow" aria-hidden="true">→</span>
             </a>
-          </div>
+          </aside>
           
           <div className="hero-stats">
             <div className="stat-box">

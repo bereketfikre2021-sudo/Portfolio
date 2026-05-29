@@ -61,22 +61,22 @@ export const portfolioProjects = [
       company: 'YAT Business Group'
     },
     {
-      id: 'yat-business-card',
-      image: '/assets/Portfolio/Print%20and%20marketing/Business%20Card%20-%20YAT%20Business%20Group.webp',
+      id: 'digital-deresegn-business-card',
+      image: '/assets/Portfolio/Print%20and%20marketing/Digital%20Deresegn%20Business%20Card.webp',
       category: 'Print Design · Corporate',
-      title: 'Business Card Design - YAT Business Group',
-      description: 'Professional business card design for YAT Business Group, featuring clean layout and corporate branding for business communications.',
+      title: 'Business Card Design - Digital Deresegn',
+      description: 'Professional business card design for Digital Deresegn with a clean, brand-consistent layout optimized for clear contact communication.',
       service: 'print-design',
-      company: 'YAT Business Group'
+      company: 'Digital Deresegn'
     },
     {
-      id: 'dumas-product-packaging',
-      image: '/assets/Portfolio/Print%20and%20marketing/Product%20%26%20Packaging%20-%20Dumas.webp',
-      category: 'Packaging Design · Real Estate',
-      title: 'Product & Packaging Design - Dumas Properties',
-      description: 'Professional product and packaging design for real estate materials, creating a cohesive brand experience.',
-      service: 'brand-applications-assets',
-      company: 'Dumas Properties'
+      id: 'digital-deresegn-flyer',
+      image: '/assets/Portfolio/Print%20and%20marketing/Digital%20Deresegn%20Flyer.webp',
+      category: 'Print Design · Marketing',
+      title: 'Flyer Design - Digital Deresegn',
+      description: 'Marketing flyer design for Digital Deresegn focused on strong hierarchy, clear messaging, and visual impact for campaign distribution.',
+      service: 'print-design',
+      company: 'Digital Deresegn'
     },
     // Social Media Design Projects - From Social media folder
     {
@@ -107,13 +107,13 @@ export const portfolioProjects = [
       company: 'Awra Designs'
     },
     {
-      id: 'finix-social-8',
-      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Finix%20Bet-8.webp',
+      id: 'digital-deresegn-social-post',
+      image: '/assets/Portfolio/Social%20media/Digital%20Deresegn%20Social%20Media%20Post.webp',
       category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Graphics Collection - Finix Bet',
-      description: 'Comprehensive collection of social media graphics designed for various digital marketing campaigns and promotions.',
+      title: 'Social Media Post Design - Digital Deresegn',
+      description: 'Social media post design for Digital Deresegn built for brand consistency, strong engagement, and campaign-ready digital publishing.',
       service: 'marketing-campaign-design',
-      company: 'Finix Bet'
+      company: 'Digital Deresegn'
     },
     {
       id: 'niqat-social-8',
@@ -126,7 +126,7 @@ export const portfolioProjects = [
     },
     {
       id: 'prime-ethiopia-social',
-      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Prime%20Ethiopia.webp',
+      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Prime%20Ethiopia%20copy.webp',
       category: 'Social Media Design · Digital Marketing',
       title: 'Social Media Design - Prime Ethiopia',
       description: 'Professional social media design collection for Prime Ethiopia, featuring engaging posts and promotional graphics for digital marketing campaigns.',
@@ -134,13 +134,13 @@ export const portfolioProjects = [
       company: 'Prime Ethiopia'
     },
     {
-      id: 'ptgr-social-template',
-      image: '/assets/Portfolio/Social%20media/Social%20Media%20Template%20-%20PTGR.webp',
+      id: 'prime-ethiopia-social-8',
+      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Prime%20Ethiopia.webp',
       category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template - PTGR',
-      description: 'Professional social media template design featuring modern layouts and engaging visual content for consistent brand communication.',
+      title: 'Social Media Design For Prime Ethiopia',
+      description: 'Campaign social media visual for Prime Ethiopia designed for strong reach, fast readability, and consistent brand presentation.',
       service: 'marketing-campaign-design',
-      company: 'PTGR'
+      company: 'Prime Ethiopia'
     },
     {
       id: 'task-plug-social-template-2',
@@ -290,13 +290,40 @@ export const portfolioProjects = [
       company: 'Alta Counseling Ethiopia'
     },
     {
-      id: 'havana-plc-branding',
-      image: '/assets/Portfolio/Brand%20identity/Brand%20Identity%20-%20Havana%20PLC.webp',
-      category: 'Brand Identity · Corporate',
-      title: 'Full Brand Identity - Havana PLC',
-      description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for Havana PLC. The identity conveys professionalism, reliability, and corporate excellence.',
+      id: 'basha-bekele-branding',
+      image: '/assets/Portfolio/Brand%20identity/Basha%20Bekele%20Specialty%20Coffee%20Producer%20%26%20Exporter.webp',
+      category: 'Brand Identity · Coffee',
+      title: 'Brand Identity - Basha Bekele Specialty Coffee Producer & Exporter',
+      description: 'Brand identity design for Basha Bekele Specialty Coffee Producer & Exporter, crafted to communicate quality, origin, and a premium export-ready brand presence.',
       service: 'brand-identity-design',
-      company: 'Havana PLC'
+      company: 'Basha Bekele Specialty Coffee Producer & Exporter'
+    },
+    {
+      id: 'criterion-home-care-branding',
+      image: '/assets/Portfolio/Brand%20identity/Criterion%20In%20Home%20Care%20-%20USA.webp',
+      category: 'Brand Identity · Healthcare',
+      title: 'Brand Identity - Criterion In Home Care (USA)',
+      description: 'Professional brand identity for Criterion In Home Care (USA) focused on trust, care, and a clean visual system for service communication.',
+      service: 'brand-identity-design',
+      company: 'Criterion In Home Care'
+    },
+    {
+      id: 'digital-deresegn-branding',
+      image: '/assets/Portfolio/Brand%20identity/Digital%20Deresegn.webp',
+      category: 'Brand Identity · Corporate',
+      title: 'Brand Identity - Digital Deresegn',
+      description: 'Complete visual identity direction for Digital Deresegn, including brand look-and-feel, design consistency, and adaptable brand assets.',
+      service: 'brand-identity-design',
+      company: 'Digital Deresegn'
+    },
+    {
+      id: 'medavail-wholesale-branding',
+      image: '/assets/Portfolio/Brand%20identity/Medavail%20Pharmaceutical%20Import%20%26%20Wholesale.webp',
+      category: 'Brand Identity · Pharmaceutical',
+      title: 'Brand Identity - Medavail Pharmaceutical Import & Wholesale',
+      description: 'Brand identity development for Medavail Pharmaceutical Import & Wholesale to strengthen credibility, recognition, and professional market presence.',
+      service: 'brand-identity-design',
+      company: 'Medavail Pharmaceutical Import & Wholesale'
     },
     {
       id: 'raya-hotel-branding',
@@ -368,6 +395,16 @@ export const portfolioProjects = [
 const MOBILE_BREAKPOINT = 768;
 const WEB_BANNERS_MOBILE_MAX = 3;
 const WEB_BANNERS_MOBILE_IDS = ['finix-banner-1', 'finix-banner-2', 'finix-banner-3'];
+const SOCIAL_MEDIA_ORDER = [
+  'blu-hart-karaoke',
+  'ace-stainless-social',
+  'awra-designs-social',
+  'digital-deresegn-social-post',
+  'niqat-social-8',
+  'task-plug-social-template-2',
+  'prime-ethiopia-social',
+  'prime-ethiopia-social-8'
+];
 
 const Portfolio = () => {
   const { openPortfolioModal } = useContext(ModalContext);
@@ -551,14 +588,12 @@ const Portfolio = () => {
         (project.service === 'print-design' ||
         project.service === 'brand-applications-assets')
       );
-      // Ensure prime-ethiopia-business-proposal is 6th, yat-business-card is last (7th)
+      // Ensure prime-ethiopia-business-proposal appears near the end
       const businessProfile = filtered.find(p => p.id === 'prime-ethiopia-business-proposal');
-      const yatBusinessCard = filtered.find(p => p.id === 'yat-business-card');
-      const others = filtered.filter(p => p.id !== 'prime-ethiopia-business-proposal' && p.id !== 'yat-business-card');
+      const others = filtered.filter(p => p.id !== 'prime-ethiopia-business-proposal');
       const five = selectWithVariety(others, 5);
       const result = [...five];
       if (businessProfile) result.push(businessProfile);
-      if (yatBusinessCard) result.push(yatBusinessCard);
       return result.length > 0 ? result : selectWithVariety(filtered, 6);
     }
     
@@ -586,8 +621,11 @@ const Portfolio = () => {
       project.service === 'digital-social-media-design'
     );
     
-    // For Social Media: Show all items shuffled to avoid same company adjacent
-    const socialMedia = shuffleWithCompanySeparation(socialMediaAll);
+    // Keep social media ordering stable and ensure key items are always visible.
+    const socialMedia = [
+      ...SOCIAL_MEDIA_ORDER.map((id) => socialMediaAll.find((p) => p.id === id)).filter(Boolean),
+      ...socialMediaAll.filter((p) => !SOCIAL_MEDIA_ORDER.includes(p.id))
+    ];
     
     // For Web Banners: Show all items shuffled to avoid same company adjacent
     const webBanners = shuffleWithCompanySeparation(webBannersAll);
@@ -664,16 +702,14 @@ const Portfolio = () => {
           </div>
         </div>
 
-        <div ref={filtersRef} className="portfolio-filters" role="tablist" aria-label="Filter portfolio projects by service">
+        <div ref={filtersRef} className="portfolio-filters" role="group" aria-label="Filter portfolio projects by service">
           {services.map((service) => (
             <button
               key={service.id}
+              type="button"
               className={`portfolio-filter-btn ${activeFilter === service.id ? 'active' : ''}`}
               onClick={() => setActiveFilter(service.id)}
-              role="tab"
-              aria-selected={activeFilter === service.id}
-              aria-controls="portfolio-grid"
-              tabIndex={activeFilter === service.id ? 0 : -1}
+              aria-pressed={activeFilter === service.id}
             >
               {service.label}
             </button>

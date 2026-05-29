@@ -5,6 +5,7 @@ const CustomCursor = () => {
   const followerRef = useRef(null);
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (window.innerWidth <= 768) return;
 
     const cursor = cursorRef.current;
@@ -82,8 +83,8 @@ const CustomCursor = () => {
 
   return (
     <>
-      <div ref={cursorRef} className="custom-cursor"></div>
-      <div ref={followerRef} className="cursor-follower"></div>
+      <div ref={cursorRef} className="custom-cursor" aria-hidden="true"></div>
+      <div ref={followerRef} className="cursor-follower" aria-hidden="true"></div>
     </>
   );
 };

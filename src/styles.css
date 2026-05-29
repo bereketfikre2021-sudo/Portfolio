@@ -425,75 +425,244 @@ body:hover .cursor-follower {
 
 
 /* ============================================
-   CALL NOW BUTTON (Bottom Right - Full Circle)
+   FITNESS APP FLOAT (Bottom center — card pill)
    ============================================ */
-.call-now-button {
+
+
+.fitness-app-float {
+  --fitness-float-radius: 18px;
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 64px;
-  height: 64px;
-  background: rgba(5, 10, 31, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--color-light-30);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-light);
+  left: 50%;
+  right: auto;
+  bottom: 1.5rem;
+  max-width: min(22rem, calc(100vw - 2rem));
+  z-index: 9999;
   text-decoration: none;
-  z-index: 9998;
-  transition: all 0.4s var(--ease-out-expo);
-  box-shadow: 
-    0 4px 20px rgba(8, 18, 44, 0.4),
-    0 0 20px rgba(185, 234, 209, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(20px);
+  transition:
+    opacity 0.5s var(--ease-out-expo),
+    transform 0.5s var(--ease-out-expo),
+    visibility 0.5s;
+  pointer-events: none;
 }
 
-.call-now-button:hover {
-  background: var(--color-light);
-  border-color: var(--color-light);
-  color: var(--color-dark);
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 
-    0 8px 30px rgba(185, 234, 209, 0.4),
-    0 0 40px rgba(185, 234, 209, 0.3),
-    0 0 60px rgba(185, 234, 209, 0.2);
+.fitness-app-float.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
 }
 
-.call-now-button:active {
-  transform: translateY(-2px) scale(1.02);
+.fitness-app-float.is-visible .fitness-app-float-body {
+  animation: fitness-float-bob 5s ease-in-out infinite;
 }
 
-.call-now-button:focus-visible {
-  outline: 3px solid var(--color-light);
-  outline-offset: 2px;
+.fitness-app-float::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--fitness-float-radius) + 2px);
+  padding: 2px;
+  background: linear-gradient(
+    120deg,
+    var(--color-light),
+    #7dd4a8,
+    rgba(180, 232, 201, 0.15),
+    var(--color-light)
+  );
+  background-size: 220% 220%;
+  animation: fitness-float-border 4s ease infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
-.call-now-icon {
+.fitness-app-float-glow {
+  position: absolute;
+  inset: 8px -12px -16px -12px;
+  background: radial-gradient(ellipse at center, rgba(180, 232, 201, 0.35), transparent 70%);
+  filter: blur(14px);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.4s var(--ease-out-expo);
+}
+
+.fitness-app-float-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem 0.5rem 0.5rem;
+  border-radius: var(--fitness-float-radius);
+  background: linear-gradient(145deg, rgba(5, 10, 31, 0.98) 0%, rgba(14, 26, 56, 0.96) 100%);
+  box-shadow:
+    0 12px 40px rgba(5, 10, 31, 0.55),
+    0 0 0 1px rgba(180, 232, 201, 0.12) inset;
+  transition:
+    transform 0.4s var(--ease-out-expo),
+    box-shadow 0.4s var(--ease-out-expo);
+}
+
+.fitness-app-float-logo-wrap {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transform: rotate(-4deg);
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.fitness-app-float-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fitness-app-float-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.fitness-app-float-kicker {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-light);
+  opacity: 0.65;
+  line-height: 1;
+}
+
+.fitness-app-float-name {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-light);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.fitness-app-float-arrow {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(180, 232, 201, 0.12);
+  color: var(--color-light);
+  transition:
+    background 0.35s var(--ease-out-expo),
+    color 0.35s var(--ease-out-expo),
+    transform 0.35s var(--ease-out-expo);
 }
 
-.call-now-text {
-  display: none;
+.fitness-app-float:hover .fitness-app-float-body {
+  transform: translateY(-3px);
+  box-shadow:
+    0 18px 48px rgba(5, 10, 31, 0.6),
+    0 0 0 1px rgba(180, 232, 201, 0.28) inset,
+    0 0 32px rgba(180, 232, 201, 0.15);
+}
+
+.fitness-app-float:hover .fitness-app-float-glow {
+  opacity: 1;
+}
+
+.fitness-app-float:hover .fitness-app-float-logo-wrap {
+  transform: rotate(0deg) scale(1.04);
+}
+
+.fitness-app-float:hover .fitness-app-float-arrow {
+  background: var(--color-light);
+  color: var(--color-dark);
+  transform: translate(2px, -2px);
+}
+
+.fitness-app-float:active .fitness-app-float-body {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.fitness-app-float:focus-visible {
+  outline: 3px solid var(--color-light);
+  outline-offset: 4px;
+}
+
+@keyframes fitness-float-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes fitness-float-border {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 @media (max-width: 768px) {
-  .call-now-button {
-    bottom: calc(5rem + env(safe-area-inset-bottom)) !important;
-    right: 1.5rem !important;
-    width: 56px !important;
-    height: 56px !important;
-    z-index: 10000 !important;
+
+
+  .fitness-app-float {
+    bottom: calc(4.75rem + env(safe-area-inset-bottom)) !important;
+    left: 50% !important;
+    right: auto !important;
+    max-width: min(20rem, calc(100vw - 1.5rem));
+    --fitness-float-radius: 14px;
   }
-  
-  .call-now-icon {
-    width: 20px;
-    height: 20px;
+
+  .fitness-app-float.is-visible {
+    transform: translateX(-50%) translateY(0) !important;
+  }
+
+  .fitness-app-float-body {
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem 0.375rem 0.375rem;
+  }
+
+  .fitness-app-float-logo-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+
+  .fitness-app-float-kicker {
+    display: none;
+  }
+
+  .fitness-app-float-name {
+    font-size: 0.8125rem;
+  }
+
+  .fitness-app-float-arrow {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fitness-app-float.is-visible .fitness-app-float-body {
+    animation: none;
+  }
+
+  .fitness-app-float::before {
+    animation: none;
   }
 }
 
@@ -1100,6 +1269,37 @@ body:hover .cursor-follower {
 .hero-actions .btn {
   flex: 0 1 auto;
   min-width: 140px;
+}
+
+.hero-fitness-promo {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  padding: 1.5rem 1.75rem;
+  max-width: 28rem;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-dark-20);
+  background: var(--color-dark-05);
+}
+
+.hero-fitness-promo-title {
+  font-family: var(--font-sans);
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+  font-weight: 700;
+  color: var(--text-on-light);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.hero-fitness-promo-text {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-on-light);
+  opacity: 0.75;
+  margin-bottom: 1.25rem;
+}
+
+.hero-fitness-promo .btn-fitness-app {
+  margin: 0;
 }
 
 .btn {
@@ -7165,7 +7365,7 @@ section {
 }
 
 @media (max-width: 768px) {
-  /* Single column on mobile - form hidden, full cards only */
+  /* Single column on mobile: contact links + form stacked */
   #contact .contact-content-wrapper {
     grid-template-columns: 1fr !important;
   }
@@ -7865,6 +8065,20 @@ section {
     padding: 0.5rem 1rem !important;
     font-size: 0.8125rem !important;
     gap: 0.375rem !important;
+  }
+
+  .hero-fitness-promo {
+    margin-top: 1.25rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.25rem 1.25rem;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .hero-fitness-promo .btn-fitness-app {
+    width: 100%;
+    justify-content: center;
   }
 
   .hero-stats {
@@ -9780,10 +9994,6 @@ a, button, [role="button"], [tabindex="0"] {
     grid-template-columns: 1fr !important;
   }
   
-  #contact .contact-form-wrapper.desktop-only {
-    display: none !important;
-  }
-  
   #contact .contact-info-wrapper {
     opacity: 1 !important;
     visibility: visible !important;
@@ -9986,159 +10196,6 @@ html {
 }
 
 /* ============================================
-   SCROLL TO TOP BUTTON WITH PROGRESS
-   ============================================ */
-.scroll-to-top {
-  position: fixed;
-  bottom: 2rem;
-  left: 2rem;
-  width: 64px;
-  height: 64px;
-  background: rgba(5, 10, 31, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid var(--color-light-30);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 9998;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(20px) scale(0.9);
-  transition: all 0.4s var(--ease-out-expo);
-  color: var(--color-light);
-  box-shadow: 
-    0 4px 20px rgba(8, 18, 44, 0.4),
-    0 0 20px rgba(185, 234, 209, 0.2);
-}
-
-.scroll-to-top.visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0) scale(1);
-}
-
-.scroll-to-top:hover {
-  background: var(--color-light);
-  border-color: var(--color-light);
-  color: var(--color-dark);
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 
-    0 8px 30px rgba(185, 234, 209, 0.4),
-    0 0 40px rgba(185, 234, 209, 0.3),
-    0 0 60px rgba(185, 234, 209, 0.2);
-}
-
-.scroll-to-top:active {
-  transform: translateY(-2px) scale(1.02);
-}
-
-.scroll-to-top:focus-visible {
-  outline: 3px solid var(--color-light);
-  outline-offset: 2px;
-}
-
-.scroll-progress-circle {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.progress-ring {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-  transition: all 0.3s var(--ease-out-expo);
-}
-
-.progress-ring-circle {
-  stroke: var(--color-light);
-  stroke-dasharray: 163.36;
-  stroke-dashoffset: 163.36;
-  transition: stroke-dashoffset 0.3s var(--ease-out-expo);
-  stroke-linecap: round;
-}
-
-.scroll-to-top:hover .progress-ring-circle {
-  stroke: var(--color-dark);
-}
-
-.scroll-percentage {
-  position: relative;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: var(--color-light);
-  transition: color 0.3s var(--ease-out-expo);
-  z-index: 1;
-  font-family: var(--font-sans);
-  line-height: 1;
-}
-
-.scroll-to-top:hover .scroll-percentage {
-  color: var(--color-dark);
-}
-
-.scroll-arrow {
-  position: absolute;
-  bottom: 8px;
-  width: 18px;
-  height: 18px;
-  color: var(--color-light);
-  transition: all 0.3s var(--ease-out-expo);
-  z-index: 2;
-}
-
-.scroll-to-top:hover .scroll-arrow {
-  color: var(--color-dark);
-  transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-  .scroll-to-top {
-    bottom: calc(5rem + env(safe-area-inset-bottom)) !important;
-    left: 1.5rem !important;
-    width: 56px !important;
-    height: 56px !important;
-    z-index: 10000 !important;
-    display: flex !important;
-  }
-  
-  .scroll-to-top.visible {
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) scale(1) !important;
-  }
-
-  .progress-ring {
-    width: 56px;
-    height: 56px;
-  }
-
-  .progress-ring-circle {
-    stroke-dasharray: 144.51;
-    stroke-dashoffset: 144.51;
-  }
-
-  .scroll-percentage {
-    font-size: 0.5625rem;
-  }
-
-  .scroll-arrow {
-    width: 16px;
-    height: 16px;
-    bottom: 6px;
-  }
-}
-
-/* ============================================
    BOTTOM NAVIGATION MENU
    ============================================ */
 .bottom-nav {
@@ -10245,7 +10302,7 @@ html {
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .footer-modern {
-    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+    padding-bottom: calc(7rem + env(safe-area-inset-bottom));
   }
   
   body {

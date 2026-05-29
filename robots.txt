@@ -38,7 +38,7 @@ User-agent: ia_archiver
 Allow: /
 
 # Sitemaps
-Sitemap: https://bereketfikre.com/sitemap.xml
+Sitemap: https://bereketfikre.et/sitemap.xml
 
 # Crawl-delay (optional, adjust as needed)
 Crawl-delay: 1
