@@ -22,7 +22,7 @@ const apps = [
   },
   {
     id: 'dating',
-    name: 'Dating Pro',
+    name: 'Dating Invitation Pro',
     url: DATING_APP_URL,
     logo: (
       <span className="app-row-logo app-row-logo--heart" aria-hidden="true">

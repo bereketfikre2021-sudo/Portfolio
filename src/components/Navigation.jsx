@@ -98,7 +98,7 @@ const Navigation = () => {
         { href: '#blog',         label: 'Blog',          section: 'blog' },
         { divider: true },
         { href: FITNESS_APP_URL, label: 'Fitness Track Pro', external: true, icon: 'fitness' },
-        { href: DATING_APP_URL,  label: 'Dating Pro',        external: true, icon: 'heart'   },
+        { href: DATING_APP_URL,  label: 'Dating Invitation Pro', external: true, icon: 'heart'   },
       ],
     },
     { href: '#contact', label: 'Contact', section: 'contact', number: '05' },

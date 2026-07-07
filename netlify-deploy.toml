@@ -4,6 +4,13 @@
   command = "true"
   publish = "."
 
+# Direct path for og-image - some social crawlers prefer root-level paths
+[[redirects]]
+  from = "/og-image.png"
+  to = "/assets/og-image.png"
+  status = 200
+  force = true
+
 # SPA fallback: only apply when no static file exists (force=false is default)
 [[redirects]]
   from = "/*"
@@ -36,6 +43,13 @@
   for = "/*.svg"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Self-hosted fonts — long cache, immutable
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
 
 # Open Graph image - explicit Content-Type for social media crawlers
 [[headers]]
