@@ -1,0 +1,577 @@
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { ModalContext } from '../context/ModalContext';
+import { useFocusTrap } from '../hooks/useFocusTrap';
+
+const BlogModal = () => {
+  const { blogModal, closeBlogModal } = useContext(ModalContext);
+  const modalRef = useRef(null);
+  const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState('');
+  useFocusTrap(blogModal?.isOpen, modalRef);
+
+  // Blog post data
+  const blogData = {
+    'design-principles': {
+      image: '/assets/Portfolio/Blog/Design%20principles.webp',
+      category: 'Design Principles',
+      title: 'Essential Graphic Design Principles Every Designer Should Master',
+      description: 'Graphic design is built on fundamental principles that guide visual communication. These core concepts help designers create effective, aesthetically pleasing, and functional designs that communicate messages clearly and powerfully.',
+      date: 'January 2025',
+      author: 'Bereket Fikre',
+      type: 'Design Education',
+      sections: [
+        {
+          heading: 'Balance: Creating Visual Stability',
+          text: 'Balance is the distribution of visual weight in a design. Whether symmetrical or asymmetrical, balance ensures that elements don\'t feel lopsided or overwhelming. Symmetrical balance creates formal, stable compositions, while asymmetrical balance uses contrast to create dynamic, engaging layouts that still feel harmonious.'
+        },
+        {
+          heading: 'Contrast: Making Elements Stand Out',
+          text: 'Contrast is one of the most powerful tools in a designer\'s toolkit. By using contrasting colors, sizes, shapes, or textures, designers can create visual hierarchy and draw attention to key elements. High contrast ensures readability and helps important information stand out, while subtle contrast can create depth and sophistication.'
+        },
+        {
+          heading: 'Hierarchy: Guiding the Eye',
+          text: 'Visual hierarchy determines the order in which the human eye perceives information. Through size, color, spacing, and positioning, designers guide viewers through content in a logical sequence. Effective hierarchy ensures that the most important information is noticed first, creating a clear path for the viewer\'s attention.'
+        },
+        {
+          heading: 'Alignment: Creating Order',
+          text: 'Alignment creates visual connections between elements, making designs appear organized and cohesive. Proper alignment creates a clean, professional look and helps establish relationships between different parts of a design. Consistent alignment throughout a project creates unity and makes content easier to scan and understand.'
+        },
+        {
+          heading: 'Repetition: Building Consistency',
+          text: 'Repetition strengthens designs by creating consistency and unity. Repeating visual elements like colors, fonts, shapes, or patterns creates rhythm and helps establish brand identity. Consistent repetition makes designs feel cohesive and professional, while strategic variation keeps them interesting and dynamic.'
+        },
+        {
+          heading: 'Proportion: Creating Visual Relationships',
+          text: 'Proportion refers to the size relationship between elements in a design. Effective use of proportion creates visual harmony and helps establish importance. Large elements draw attention, while smaller elements provide supporting details. The golden ratio and rule of thirds are classic proportional systems that help designers create balanced, aesthetically pleasing compositions that feel natural to the human eye.'
+        },
+        {
+          heading: 'Movement: Guiding Visual Flow',
+          text: 'Movement in design guides the viewer\'s eye through a composition in a deliberate path. This can be achieved through lines, shapes, color gradients, or the positioning of elements. Effective movement creates a visual journey that leads viewers from the most important information to supporting details, ensuring that messages are communicated in the intended order and that nothing important is overlooked.'
+        }
+      ],
+      insights: [
+        'Mastering these principles is the foundation of great design',
+        'Balance and contrast work together to create visual interest',
+        'Hierarchy is essential for effective communication',
+        'Consistent alignment creates professional, polished designs',
+        'Repetition builds brand recognition and visual consistency',
+        'Proportion creates harmonious relationships between elements',
+        'Movement guides viewers through your design in a deliberate flow'
+      ]
+    },
+    'design-trends-2026': {
+      image: '/assets/Portfolio/Blog/Graphic%20Design%20Trends%202026.webp',
+      category: 'Design Trends',
+      title: 'Graphic Design Trends 2026: What\'s Shaping the Future',
+      description: 'The graphic design landscape continues to evolve, with 2026 bringing fresh perspectives on visual communication. From bold typography to sustainable design practices, these trends reflect our changing world and the ways designers are responding to new challenges and opportunities.',
+      date: 'January 2026',
+      author: 'Bereket Fikre',
+      type: 'Trend Analysis',
+      sections: [
+        {
+          heading: 'Bold Typography and Expressive Letterforms',
+          text: '2026 sees a return to bold, expressive typography that makes a statement. Designers are embracing custom letterforms, oversized text, and typography as the primary visual element. This trend reflects a desire for authenticity and personality in brand communication, moving away from safe, generic type choices toward more distinctive and memorable typographic solutions.'
+        },
+        {
+          heading: 'Sustainable and Eco-Conscious Design',
+          text: 'Environmental awareness is driving design decisions, with brands prioritizing sustainable materials, minimal packaging, and eco-friendly production methods. Designers are creating visuals that communicate environmental values while maintaining aesthetic appeal. This includes using earth tones, natural textures, and imagery that connects brands to sustainability narratives.'
+        },
+        {
+          heading: 'Nostalgic Retro Aesthetics',
+          text: 'Nostalgia continues to influence design, with 90s and early 2000s aesthetics making a comeback. This includes vibrant color palettes, pixel art, and design elements that evoke memories of earlier digital eras. However, modern designers are reinterpreting these styles with contemporary sensibilities, creating fresh takes on familiar visual languages.'
+        },
+        {
+          heading: 'Minimalism with Purpose',
+          text: 'While minimalism remains popular, 2026 sees a shift toward purposeful minimalism—designs that are clean and simple but with intentional, meaningful elements. Every element serves a function, and white space is used strategically to create focus and breathing room. This approach values clarity and user experience over decorative elements.'
+        },
+        {
+          heading: 'Dynamic Motion and Animation',
+          text: 'As digital platforms continue to dominate, motion design becomes increasingly important. Subtle animations, micro-interactions, and dynamic graphics help brands stand out in crowded digital spaces. Motion adds personality and engagement, making static designs feel alive and responsive to user interaction.'
+        }
+      ],
+      insights: [
+        'Typography is becoming the hero element in many designs',
+        'Sustainability is no longer optional—it\'s essential',
+        'Nostalgia creates emotional connections with audiences',
+        'Purposeful minimalism focuses on clarity and function',
+        'Motion design adds personality and engagement to digital experiences'
+      ]
+    },
+    'brand-identity': {
+      image: '/assets/Portfolio/Blog/Branding.webp',
+      category: 'Brand Design',
+      title: 'Building Strong Brand Identities: A Complete Guide',
+      description: 'A strong brand identity is the foundation of successful businesses. It goes beyond logos and colors to create a cohesive visual system that communicates your brand\'s values, personality, and promise. Learn how to build memorable brand identities that resonate with audiences and stand the test of time.',
+      date: 'January 2025',
+      author: 'Bereket Fikre',
+      type: 'Brand Strategy',
+      sections: [
+        {
+          heading: 'Understanding Brand Identity vs. Brand Image',
+          text: 'Brand identity is what you create—the visual and verbal elements that represent your brand, including logos, colors, typography, and messaging. Brand image is how audiences perceive your brand based on their experiences. A successful brand identity aligns these two, ensuring that what you communicate matches how you\'re perceived. This alignment builds trust and creates lasting connections with your audience.'
+        },
+        {
+          heading: 'The Core Elements of Brand Identity',
+          text: 'Every strong brand identity consists of essential elements working together: the logo serves as the visual anchor, typography establishes voice and personality, color palette evokes emotions and associations, imagery style creates visual consistency, and brand voice communicates your unique perspective. These elements must work harmoniously across all touchpoints to create a unified brand experience that audiences recognize and remember.'
+        },
+        {
+          heading: 'Research and Strategy: The Foundation',
+          text: 'Before designing, thorough research is essential. Understand your target audience, analyze competitors, define your brand\'s unique value proposition, and clarify your brand personality. This strategic foundation ensures that every design decision serves a purpose and connects with your intended audience. Without strategy, even beautiful designs can miss the mark and fail to communicate effectively.'
+        },
+        {
+          heading: 'Creating Visual Consistency',
+          text: 'Consistency is key to building brand recognition. Develop comprehensive brand guidelines that document logo usage, color specifications, typography rules, spacing guidelines, and application examples. These guidelines ensure that your brand looks cohesive whether it appears on a business card, website, or billboard. Consistent application builds trust and makes your brand instantly recognizable across all platforms and touchpoints.'
+        },
+        {
+          heading: 'Adapting Across Media and Platforms',
+          text: 'Modern brands exist across multiple platforms—from print materials to digital interfaces, social media to physical spaces. A flexible brand identity adapts to different contexts while maintaining core visual elements. This might mean creating logo variations for different sizes, adapting color palettes for digital vs. print, or developing platform-specific guidelines. The goal is maintaining brand recognition while optimizing for each medium\'s unique requirements and constraints.'
+        }
+      ],
+      insights: [
+        'Brand identity is what you create; brand image is how you\'re perceived',
+        'Strategic research ensures design decisions serve a clear purpose',
+        'Visual consistency builds recognition and trust over time',
+        'Comprehensive brand guidelines maintain quality across all applications',
+        'Flexible brand systems adapt to different media while staying consistent'
+      ]
+    },
+    'consistency-luxury-branding': {
+      image: '/assets/Portfolio/Blog/Consistency.webp',
+      category: 'Brand Design',
+      title: 'Why Consistency Is the Real Luxury in Branding',
+      description: 'Consistency is often mistaken for repetition. In reality, it\'s discipline. Strong brands don\'t rely on constant reinvention; they rely on systems that work everywhere. When a visual identity is consistent, it feels confident. When it isn\'t, it feels unsure. Good branding earns trust not by being loud, but by being reliable across every touchpoint.',
+      date: 'January 2025',
+      author: 'Bereket Fikre',
+      type: 'Brand Strategy',
+      sections: [
+        {
+          heading: 'Consistency vs. Repetition',
+          text: 'Consistency is often mistaken for repetition. In reality, it\'s discipline. Repetition is using the same thing again and again. Consistency is applying the same system—colors, typography, tone, spacing—in a way that feels intentional and coherent. Strong brands don\'t rely on constant reinvention; they rely on systems that work everywhere.'
+        },
+        {
+          heading: 'Confidence Through Coherence',
+          text: 'When a visual identity is consistent, it feels confident. When it isn\'t, it feels unsure. Audiences notice when a brand looks different from one channel to the next. Inconsistency suggests a brand that hasn\'t made up its mind—or doesn\'t have the discipline to stick to one. Consistency signals that the brand knows who it is and isn\'t chasing every trend.'
+        },
+        {
+          heading: 'Trust Through Reliability',
+          text: 'Good branding earns trust not by being loud, but by being reliable across every touchpoint. Every time someone sees your brand—on a website, a business card, packaging, or social media—they should recognize it immediately. That recognition builds familiarity, and familiarity builds trust. Luxury isn\'t about flash; it\'s about the quiet confidence of a brand that shows up the same way, every time.'
+        },
+        {
+          heading: 'Systems That Scale',
+          text: 'The real luxury in branding is having a system so clear that it works everywhere without constant reinvention. Brand guidelines, defined palettes, typography scales, and clear rules for imagery and voice make it possible to stay consistent at scale. That system is an investment—and it pays off in recognition, trust, and a brand that feels premium precisely because it doesn\'t have to try too hard.'
+        }
+      ],
+      insights: [
+        'Consistency is discipline, not repetition—same system, applied everywhere',
+        'A consistent identity feels confident; an inconsistent one feels unsure',
+        'Trust comes from being reliable across every touchpoint',
+        'Good branding is reliable, not loud—recognizable at every encounter',
+        'Systems that scale are the real luxury: one clear system, everywhere'
+      ]
+    }
+  };
+
+  // Handle escape key and browser back button
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && blogModal.isOpen) {
+        closeBlogModal();
+      }
+    };
+
+    const handlePopState = () => {
+      if (blogModal.isOpen) {
+        closeBlogModal();
+      }
+    };
+
+    if (blogModal.isOpen) {
+      document.body.style.overflow = 'hidden';
+      window.history.pushState({ modal: 'blog' }, '');
+      window.addEventListener('popstate', handlePopState);
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('popstate', handlePopState);
+      document.body.style.overflow = '';
+    };
+  }, [blogModal.isOpen, closeBlogModal]);
+
+  // Announce modal opening to screen readers
+  useEffect(() => {
+    if (blogModal?.isOpen && blogModal?.blogId) {
+      const post = blogData[blogModal.blogId];
+      if (post) {
+        const liveRegion = document.getElementById('live-region');
+        if (liveRegion) {
+          liveRegion.textContent = `Opened blog post: ${post.title}`;
+          setTimeout(() => {
+            liveRegion.textContent = '';
+          }, 1000);
+        }
+      }
+    }
+  }, [blogModal?.isOpen, blogModal?.blogId]);
+
+  useEffect(() => {
+    if (blogModal?.isOpen) setCopyError('');
+  }, [blogModal?.isOpen, blogModal?.blogId]);
+
+  if (!blogModal.isOpen || !blogModal.blogId) return null;
+
+  const post = blogData[blogModal.blogId];
+  if (!post) return null;
+
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareTitle = encodeURIComponent(post.title);
+
+  const handleCopyLink = async () => {
+    setCopyError('');
+    const url = shareUrl;
+
+    const markCopied = () => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    };
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(url);
+        markCopied();
+        return;
+      }
+    } catch (err) {
+      /* try legacy fallback */
+    }
+
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = url;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (ok) {
+        markCopied();
+        return;
+      }
+    } catch (err) {
+      /* show user-visible message below */
+    }
+
+    setCopyError("Could not copy the link. Copy the address from your browser's address bar, or select the URL and copy manually.");
+  };
+
+  return (
+    <div 
+      ref={modalRef}
+      className={`blog-modal ${blogModal.isOpen ? 'active' : ''}`}
+      role="dialog"
+      aria-labelledby="blog-modal-title"
+      aria-describedby="blog-modal-description"
+      aria-modal="true"
+      tabIndex={-1}
+    >
+      <div className="blog-modal-overlay" onClick={closeBlogModal}></div>
+      <div className="blog-modal-container" onClick={(e) => e.stopPropagation()}>
+        <button 
+          className="blog-modal-close" 
+          aria-label="Close modal" 
+          onClick={closeBlogModal}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+
+        <div className="blog-modal-content">
+          {/* Header Section */}
+          <div className="blog-modal-header">
+            <div className="blog-modal-image-wrapper">
+              <img 
+                src={`${process.env.PUBLIC_URL || ''}${post.image}`} 
+                alt={`${post.title} - ${post.category} blog post by Bereket Fikre`} 
+                className="blog-modal-image"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div className="blog-modal-header-content">
+              <span className="blog-modal-category">{post.category}</span>
+              <h2 id="blog-modal-title" className="blog-modal-title">{post.title}</h2>
+              <div className="blog-modal-meta">
+                <div className="blog-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span>{post.date}</span>
+                </div>
+                <div className="blog-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <span>{post.author}</span>
+                </div>
+                <div className="blog-meta-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                  </svg>
+                  <span>{post.type}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Body Section */}
+          <div className="blog-modal-body">
+            <div className="blog-modal-intro">
+              <p id="blog-modal-description" className="blog-modal-description">{post.description}</p>
+            </div>
+
+            {/* Article Sections */}
+            <div className="blog-modal-article">
+              {post.sections.map((section, index) => (
+                <div key={index} className="blog-article-section">
+                  <div className="blog-section-header">
+                    <div className="blog-section-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                      </svg>
+                    </div>
+                    <h3 className="blog-section-heading">{section.heading}</h3>
+                  </div>
+                  <p className="blog-section-text">{section.text}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Key Insights */}
+            {post.insights && post.insights.length > 0 && (
+              <div className="blog-modal-insights">
+                <h3 className="blog-insights-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 11l3 3L22 4"/>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                  </svg>
+                  Key Insights
+                </h3>
+                <ul className="blog-insights-list">
+                  {post.insights.map((insight, index) => (
+                    <li key={index} className="blog-insight-item">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      <span>{insight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Social Share Section */}
+            <div 
+              className="blog-social-share" 
+              style={{ 
+                display: 'block', 
+                visibility: 'visible', 
+                opacity: 1, 
+                marginTop: '3rem', 
+                paddingTop: '2.5rem', 
+                paddingBottom: '2rem',
+                borderTop: '1px solid rgba(180, 232, 201, 0.1)',
+                width: '100%',
+                position: 'relative',
+                zIndex: 10
+              }}
+            >
+              <h4 
+                className="blog-share-title" 
+                style={{ 
+                  display: 'block', 
+                  visibility: 'visible', 
+                  opacity: 1, 
+                  fontSize: '1rem', 
+                  fontWeight: 600, 
+                  color: '#b4e8c9', 
+                  marginBottom: '1.25rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}
+              >
+                Share this article
+              </h4>
+              {copyError ? (
+                <p
+                  role="status"
+                  className="blog-copy-error"
+                  style={{
+                    margin: '0 0 1rem 0',
+                    padding: '0.75rem 1rem',
+                    fontSize: '0.875rem',
+                    lineHeight: 1.5,
+                    color: '#b4e8c9',
+                    background: 'rgba(180, 232, 201, 0.12)',
+                    border: '1px solid rgba(180, 232, 201, 0.25)',
+                    borderRadius: '8px'
+                  }}
+                >
+                  {copyError}
+                </p>
+              ) : null}
+              <div 
+                className="blog-share-buttons" 
+                style={{ 
+                  display: 'flex', 
+                  visibility: 'visible', 
+                  opacity: 1, 
+                  gap: '0.75rem', 
+                  flexWrap: 'wrap',
+                  width: '100%'
+                }}
+              >
+                <a
+                  href={`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${shareTitle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="blog-share-btn blog-share-telegram"
+                  aria-label="Share on Telegram"
+                  style={{ 
+                    display: 'inline-flex', 
+                    visibility: 'visible', 
+                    opacity: 1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: '0.5rem', 
+                    padding: '0.75rem 1.25rem', 
+                    borderRadius: '8px', 
+                    border: '1px solid rgba(180, 232, 201, 0.2)', 
+                    background: 'rgba(5, 10, 31, 0.8)', 
+                    color: '#b4e8c9', 
+                    textDecoration: 'none', 
+                    cursor: 'pointer',
+                    minWidth: '120px',
+                    fontSize: '0.875rem',
+                    fontWeight: 500
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4e8c9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '20px', height: '20px', display: 'inline-block', flexShrink: 0 }}>
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  <span style={{ display: 'inline-block', color: '#b4e8c9' }}>Telegram</span>
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="blog-share-btn blog-share-linkedin"
+                  aria-label="Share on LinkedIn"
+                  style={{ 
+                    display: 'inline-flex', 
+                    visibility: 'visible', 
+                    opacity: 1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: '0.5rem', 
+                    padding: '0.75rem 1.25rem', 
+                    borderRadius: '8px', 
+                    border: '1px solid rgba(180, 232, 201, 0.2)', 
+                    background: 'rgba(5, 10, 31, 0.8)', 
+                    color: '#b4e8c9', 
+                    textDecoration: 'none', 
+                    cursor: 'pointer',
+                    minWidth: '120px',
+                    fontSize: '0.875rem',
+                    fontWeight: 500
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4e8c9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '20px', height: '20px', display: 'inline-block', flexShrink: 0 }}>
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                    <rect x="2" y="9" width="4" height="12"/>
+                    <circle cx="4" cy="4" r="2"/>
+                  </svg>
+                  <span style={{ display: 'inline-block', color: '#b4e8c9' }}>LinkedIn</span>
+                </a>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="blog-share-btn blog-share-facebook"
+                  aria-label="Share on Facebook"
+                  style={{ 
+                    display: 'inline-flex', 
+                    visibility: 'visible', 
+                    opacity: 1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: '0.5rem', 
+                    padding: '0.75rem 1.25rem', 
+                    borderRadius: '8px', 
+                    border: '1px solid rgba(180, 232, 201, 0.2)', 
+                    background: 'rgba(5, 10, 31, 0.8)', 
+                    color: '#b4e8c9', 
+                    textDecoration: 'none', 
+                    cursor: 'pointer',
+                    minWidth: '120px',
+                    fontSize: '0.875rem',
+                    fontWeight: 500
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4e8c9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '20px', height: '20px', display: 'inline-block', flexShrink: 0 }}>
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                  </svg>
+                  <span style={{ display: 'inline-block', color: '#b4e8c9' }}>Facebook</span>
+                </a>
+                <button
+                  onClick={handleCopyLink}
+                  className="blog-share-btn blog-share-copy"
+                  aria-label="Copy link"
+                  style={{ 
+                    display: 'inline-flex', 
+                    visibility: 'visible', 
+                    opacity: 1, 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    gap: '0.5rem', 
+                    padding: '0.75rem 1.25rem', 
+                    borderRadius: '8px', 
+                    border: '1px solid rgba(180, 232, 201, 0.2)', 
+                    background: 'rgba(5, 10, 31, 0.8)', 
+                    color: '#b4e8c9', 
+                    cursor: 'pointer', 
+                    fontFamily: 'inherit', 
+                    fontSize: '0.875rem', 
+                    fontWeight: 500,
+                    minWidth: '120px'
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b4e8c9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '20px', height: '20px', display: 'inline-block', flexShrink: 0 }}>
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                  <span style={{ display: 'inline-block', color: '#b4e8c9' }}>{copied ? 'Copied!' : 'Copy Link'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BlogModal;

@@ -1,0 +1,79 @@
+# Netlify config for deployed static site (main branch = build output only, no npm build)
+# command = "true" is a no-op that succeeds - repo has pre-built files only, no package.json
+[build]
+  command = "true"
+  publish = "."
+
+# SPA fallback: only apply when no static file exists (force=false is default)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Headers for better performance and security
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Open Graph image - explicit Content-Type for social media crawlers
+[[headers]]
+  for = "/assets/og-image.png"
+  [headers.values]
+    Content-Type = "image/png"
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Content-Type = "image/png"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Service worker - short cache so updates propagate
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+# HTML - never cache so users always get latest
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+
+# Compression headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"

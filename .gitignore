@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+# package-lock.json should be tracked in Git for consistent dependency versions
+
+# Build outputs (regenerate with npm run build)
+dist/
+build/
+deploy-to-main/
+# Legacy CRA duplicates — do not re-add
+/static/
+/assets/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.deploy
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Netlify/Vercel
+.netlify/
+.vercel/
+
+# Other
+*.orig
+*.bak
+
+
+
+
+
+

@@ -1,0 +1,86 @@
+{
+
+  "name": "bereket-fikre-portfolio",
+
+  "version": "1.0.0",
+
+  "description": "Bereket Fikre Portfolio Website",
+
+  "homepage": "/",
+
+  "scripts": {
+
+    "create-og-image": "node scripts/create-og-image.js",
+
+    "prebuild": "npm run create-og-image",
+
+    "dev": "vite",
+
+    "start": "vite",
+
+    "build": "vite build",
+
+    "preview": "vite preview",
+
+    "postbuild": "node -e \"require('fs').copyFileSync('netlify-deploy.toml', 'build/netlify.toml')\"",
+
+    "test": "echo \"No tests configured\" && exit 0",
+
+    "predeploy": "npm run build",
+
+    "deploy": "gh-pages -d build"
+
+  },
+
+  "keywords": [
+
+    "portfolio",
+
+    "react",
+
+    "vite",
+
+    "tailwindcss",
+
+    "website"
+
+  ],
+
+  "author": "Bereket Fikre",
+
+  "license": "MIT",
+
+  "dependencies": {
+
+    "aos": "^2.3.4",
+
+    "react": "^18.2.0",
+
+    "react-dom": "^18.2.0"
+
+  },
+
+  "devDependencies": {
+
+    "@types/react": "^18.2.0",
+
+    "@types/react-dom": "^18.2.0",
+
+    "@vitejs/plugin-react": "^4.3.4",
+
+    "autoprefixer": "^10.4.20",
+
+    "gh-pages": "^6.3.0",
+
+    "postcss": "^8.4.49",
+
+    "sharp": "^0.33.5",
+
+    "tailwindcss": "^3.4.17",
+
+    "vite": "^6.0.3"
+
+  }
+
+}
+
