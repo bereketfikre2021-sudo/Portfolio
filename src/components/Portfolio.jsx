@@ -291,7 +291,7 @@ export const portfolioProjects = [
     },
     {
       id: 'basha-bekele-branding',
-      image: '/assets/Portfolio/Brand%20identity/Basha%20Bekele%20Specialty%20Coffee%20Producer%20%26%20Exporter.webp',
+      image: '/assets/Portfolio/Brand%20identity/Basha%20Bekele%20Specialty%20Coffee%20Producer%20and%20Exporter.webp',
       category: 'Brand Identity · Coffee',
       title: 'Brand Identity - Basha Bekele Specialty Coffee Producer & Exporter',
       description: 'Brand identity design for Basha Bekele Specialty Coffee Producer & Exporter, crafted to communicate quality, origin, and a premium export-ready brand presence.',
@@ -318,7 +318,7 @@ export const portfolioProjects = [
     },
     {
       id: 'medavail-wholesale-branding',
-      image: '/assets/Portfolio/Brand%20identity/Medavail%20Pharmaceutical%20Import%20%26%20Wholesale.webp',
+      image: '/assets/Portfolio/Brand%20identity/Medavail%20Pharmaceutical%20Import%20and%20Wholesale.webp',
       category: 'Brand Identity · Pharmaceutical',
       title: 'Brand Identity - Medavail Pharmaceutical Import & Wholesale',
       description: 'Brand identity development for Medavail Pharmaceutical Import & Wholesale to strengthen credibility, recognition, and professional market presence.',
@@ -327,7 +327,7 @@ export const portfolioProjects = [
     },
     {
       id: 'raya-hotel-branding',
-      image: '/assets/Portfolio/Brand%20identity/Branding%20Raya%20Hotel%20%26%20Convention%20Center.webp',
+      image: '/assets/Portfolio/Brand%20identity/Branding%20Raya%20Hotel%20and%20Convention%20Center.webp',
       category: 'Brand Identity · Hospitality',
       title: 'Full Brand Identity - Raya Hotel & Convention Center',
       description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for a hospitality and convention center. The identity captures elegance, luxury, and exceptional hospitality experiences.',
@@ -556,6 +556,8 @@ const Portfolio = () => {
       );
       // Alta Counseling first in branding category
       filtered.sort((a, b) => (a.id === 'alta-counseling-branding' ? -1 : b.id === 'alta-counseling-branding' ? 1 : 0));
+      // Show all brand identity projects (no cap)
+      return filtered;
     } else if (activeFilter === 'creative-direction') {
       // Creative Direction: Concept development, visual storytelling, art direction (exclude Latest-only projects)
       filtered = portfolioProjects.filter(project => 

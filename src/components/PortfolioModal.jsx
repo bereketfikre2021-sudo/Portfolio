@@ -167,7 +167,7 @@ const PortfolioModal = () => {
       deliverables: ['Logo Design', 'Brand Guidelines', 'Visual Identity System', 'Color Palette', 'Typography System', 'Brand Applications']
     },
     'raya-hotel-branding': {
-      image: '/assets/Portfolio/Brand%20identity/Branding%20Raya%20Hotel%20%26%20Convention%20Center.webp',
+      image: '/assets/Portfolio/Brand%20identity/Branding%20Raya%20Hotel%20and%20Convention%20Center.webp',
       category: 'Hospitality',
       title: 'Full Brand Identity - Raya Hotel & Convention Center',
       description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for a hospitality and convention center. The identity captures elegance, luxury, and exceptional hospitality experiences.',
@@ -255,7 +255,7 @@ const PortfolioModal = () => {
       deliverables: ['Office Signage', 'Wall Graphics', 'Signage Guidelines', 'Installation Specifications']
     },
     'niqat-menu': {
-      image: '/assets/Portfolio/Menu & Broshure for niqat coffee.webp',
+      image: '/assets/Portfolio/Menu and Broshure for niqat coffee.webp',
       category: 'Cafe',
       title: 'Cafe Menu & Brochure Design - Niqat Coffee',
       description: 'Complete cafe menu design including trifold layout and modern typography. Professional menu design that enhances customer experience with elegant print presentation and clear visual hierarchy.',
