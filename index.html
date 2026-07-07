@@ -11,17 +11,13 @@
     <meta property="og:image:type" content="image/png">
     <!-- LCP: Preload hero image first so it can paint before JS runs -->
     <link rel="preload" href="/assets/Bereket-Fikre-1.webp" as="image" type="image/webp" fetchpriority="high">
+    <!-- Preload logo — visible immediately on nav render -->
+    <link rel="preload" href="/assets/Logo.svg" as="image" type="image/svg+xml">
     
-    <!-- Early Resource Hints - Reduce connection time and chain length -->
-    <!-- DNS prefetch and preconnect should be as early as possible to establish connections in parallel -->
-    <meta http-equiv="x-dns-prefetch-control" content="on">
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://bereketfikre.et" crossorigin>
-    
-    <!-- Performance: Preload critical resources -->
+    <!-- No Google Fonts — fonts are self-hosted in /fonts/ -->
+    <!-- Preload the two most-used latin woff2 files so they're ready before first paint -->
+    <link rel="preload" href="/fonts/nunito-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
     
     <!-- Primary Meta Tags -->
     <title>Bereket Fikre | Senior Graphic Designer & Brand Builder</title>
@@ -110,16 +106,8 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     
     
-    <!-- Preload logo (hero image preload is at top of head for earliest discovery) -->
-    <link rel="prefetch" href="/assets/Logo.svg" as="image" type="image/svg+xml">
-    
-    <!-- Prefetch next likely resources - lower priority, don't block LCP or critical chain -->
+    <!-- Preload second hero image for smooth swap -->
     <link rel="prefetch" href="/assets/Bereket-Fikre-2.webp" as="image" type="image/webp">
-    
-    <!-- Fonts loaded asynchronously to prevent render blocking with font-display: swap -->
-    <!-- Preload font CSS to reduce chain length - loads in parallel with other critical resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"></noscript>
     
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">

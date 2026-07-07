@@ -10,15 +10,46 @@ export default defineConfig(({ mode }) => {
     base: '/',
     build: {
       outDir: 'build',
-      // Disable sourcemaps in production — saves ~300 KB of network overhead
       sourcemap: !isProd,
-      // Warn if any chunk exceeds 500 KB
       chunkSizeWarningLimit: 500,
+      // Minify with esbuild (default, fastest)
+      minify: 'esbuild',
+      // Keep CSS together but minified
+      cssMinify: true,
       rollupOptions: {
         output: {
-          manualChunks: {
-            'vendor-react': ['react', 'react-dom'],
-            'vendor-aos': ['aos'],
+          // Split vendor libs so they can be cached independently
+          manualChunks(id) {
+            if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('node_modules/aos')) {
+              return 'vendor-aos';
+            }
+            // Bundle all modal components together — only loaded on demand
+            if (
+              id.includes('PortfolioModal') ||
+              id.includes('CaseStudyModal') ||
+              id.includes('BlogModal') ||
+              id.includes('ServicesModal') ||
+              id.includes('FormModals') ||
+              id.includes('PrivacyTermsModal') ||
+              id.includes('ProjectRequestModal') ||
+              id.includes('LightboxGallery')
+            ) {
+              return 'chunk-modals';
+            }
+            // Bundle below-fold content sections together
+            if (
+              id.includes('/Insights') ||
+              id.includes('/Partners') ||
+              id.includes('/FAQ') ||
+              id.includes('/Contact') ||
+              id.includes('/Footer') ||
+              id.includes('/BottomNav')
+            ) {
+              return 'chunk-below-fold';
+            }
           },
         },
       },

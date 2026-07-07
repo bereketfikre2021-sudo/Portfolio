@@ -2,53 +2,42 @@ import React, { lazy, Suspense, useEffect, useContext, useState, useRef } from '
 import { ModalContext } from '../context/ModalContext';
 import Navigation from './Navigation';
 import Hero from './Hero';
-import About from './About';
-import Services from './Services';
-import Process from './Process';
-import Portfolio from './Portfolio';
-import FitnessAppFloatingButton from './FitnessAppButton';
-import PwaInstallPrompt from './PwaInstallPrompt';
-import ScrollProgress from './ScrollProgress';
-import KeyboardShortcuts from './KeyboardShortcuts';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 // Defer non-critical visual effects to not block LCP
 const CustomCursor = lazy(() => import('./CustomCursor'));
 
+// Lazy load everything below the fold — improves FCP/LCP dramatically
+const About       = lazy(() => import('./About'));
+const Services    = lazy(() => import('./Services'));
+const Process     = lazy(() => import('./Process'));
+const Portfolio   = lazy(() => import('./Portfolio'));
+const Insights    = lazy(() => import('./Insights'));
+const Partners    = lazy(() => import('./Partners'));
+const FAQ         = lazy(() => import('./FAQ'));
+const Contact     = lazy(() => import('./Contact'));
+const Footer      = lazy(() => import('./Footer'));
+const BottomNav   = lazy(() => import('./BottomNav'));
+
 // Lazy load modals - they're not needed until user interaction
-const PortfolioModal = lazy(() => import('./PortfolioModal'));
-const CaseStudyModal = lazy(() => import('./CaseStudyModal'));
-const BlogModal = lazy(() => import('./BlogModal'));
-const ServicesModal = lazy(() => import('./ServicesModal'));
-const FormModals = lazy(() => import('./FormModals'));
-const PrivacyTermsModal = lazy(() => import('./PrivacyTermsModal'));
+const PortfolioModal      = lazy(() => import('./PortfolioModal'));
+const CaseStudyModal      = lazy(() => import('./CaseStudyModal'));
+const BlogModal           = lazy(() => import('./BlogModal'));
+const ServicesModal       = lazy(() => import('./ServicesModal'));
+const FormModals          = lazy(() => import('./FormModals'));
+const PrivacyTermsModal   = lazy(() => import('./PrivacyTermsModal'));
 const ProjectRequestModal = lazy(() => import('./ProjectRequestModal'));
-const LightboxGallery = lazy(() => import('./LightboxGallery'));
+const LightboxGallery     = lazy(() => import('./LightboxGallery'));
 
-// Lazy load below-the-fold components to reduce initial bundle size and improve performance
-const Insights = lazy(() => import('./Insights'));
-const Partners = lazy(() => import('./Partners'));
-const FAQ = lazy(() => import('./FAQ'));
-const Contact = lazy(() => import('./Contact'));
-const Footer = lazy(() => import('./Footer'));
-const BottomNav = lazy(() => import('./BottomNav'));
+// Lazy load non-critical UI
+const ScrollProgress      = lazy(() => import('./ScrollProgress'));
+const PwaInstallPrompt    = lazy(() => import('./PwaInstallPrompt'));
+const KeyboardShortcuts   = lazy(() => import('./KeyboardShortcuts'));
+const FitnessAppFloatingButton = lazy(() => import('./FitnessAppButton'));
 
-// Loading fallback — minimal placeholder to prevent layout shift
-const LoadingFallback = () => (
-  <section id="insights" className="insights case-studies" style={{ minHeight: '400px' }}>
-    <div className="container">
-      <div className="section-intro">
-        <span className="section-number">05</span>
-        <div className="section-header">
-          <span className="section-label">Design Insights</span>
-          <h2 className="section-title">
-            <span className="title-main">Project</span>
-            <span className="title-accent">Insights</span>
-          </h2>
-        </div>
-      </div>
-    </div>
-  </section>
+// Minimal skeleton — prevents layout shift while lazy sections load
+const SectionSkeleton = () => (
+  <section style={{ minHeight: '30vh' }} aria-hidden="true" />
 );
 
 // Debounce helper
@@ -83,11 +72,14 @@ function AppContent() {
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
-  // Lazy-load AOS to reduce main bundle and parse time; init in idle to avoid blocking LCP
+  // Lazy-load AOS only on desktop — mobile doesn't use it, no point downloading 40 KB
   const aosRef = useRef(null);
   useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isMobile || reducedMotion) return; // skip entirely — saves 15 KB JS + 26 KB CSS
+
     const initAOS = () => {
-      // Dynamically import both AOS and its CSS together so neither blocks the main thread
       Promise.all([
         import('aos'),
         import('aos/dist/aos.css'),
@@ -98,21 +90,16 @@ function AppContent() {
           easing: 'ease-out-cubic',
           once: true,
           offset: 80,
-          disable: () => {
-            if (typeof window === 'undefined') return false;
-            try {
-              if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
-            } catch (e) { /* ignore */ }
-            return window.innerWidth <= 768;
-          },
         });
       });
     };
+
     if (typeof requestIdleCallback !== 'undefined') {
       requestIdleCallback(initAOS, { timeout: 800 });
     } else {
-      setTimeout(initAOS, 1);
+      setTimeout(initAOS, 100);
     }
+
     const refreshAOS = () => {
       requestAnimationFrame(() => {
         setTimeout(() => aosRef.current?.refresh(), 200);
@@ -145,22 +132,42 @@ function AppContent() {
       <a href="#main-content" className="skip-to-main-content">
         Skip to main content
       </a>
-      <ScrollProgress />
-      <PwaInstallPrompt />
-      <FitnessAppFloatingButton />
+
+      {/* Non-blocking utility UI — defer until after first paint */}
+      <Suspense fallback={null}>
+        <ScrollProgress />
+        <PwaInstallPrompt />
+        <FitnessAppFloatingButton />
+        <KeyboardShortcuts />
+      </Suspense>
+
       {deferEffects && !prefersReducedMotion && (
         <Suspense fallback={null}>
           <CustomCursor />
         </Suspense>
       )}
+
+      {/* Navigation is critical — render eagerly */}
       <Navigation />
+
       <main id="main-content">
+        {/* Hero is critical — render eagerly */}
         <Hero />
-        <About />
-        <Services />
-        <Process />
-        <Portfolio />
-        <Suspense fallback={<LoadingFallback />}>
+
+        {/* Below-fold sections — each in its own Suspense so they load independently */}
+        <Suspense fallback={<SectionSkeleton />}>
+          <About />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <Services />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <Process />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <Portfolio />
+        </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
           <Insights />
         </Suspense>
         <Suspense fallback={null}>
@@ -171,7 +178,8 @@ function AppContent() {
           <BottomNav />
         </Suspense>
       </main>
-      <KeyboardShortcuts />
+
+      {/* Modals — only loaded on demand */}
       <Suspense fallback={null}>
         <PortfolioModal />
         <CaseStudyModal />

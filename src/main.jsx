@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './tailwind.css';
 import './styles.css';
+// Self-hosted fonts — no Google Fonts request
+import '../public/fonts/fonts.css';
 import App from './App.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

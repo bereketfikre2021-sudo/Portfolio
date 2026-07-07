@@ -535,11 +535,10 @@ body:hover .cursor-follower {
 }
 
 /* ============================================
-   FITNESS APP SIDE TAB (right edge — panel on click)
+   APPS FLOATING TAB — minimal
    ============================================ */
 
-.fitness-app-side {
-  --fitness-side-radius: 14px;
+.apps-float {
   position: fixed;
   right: 0;
   top: 50%;
@@ -547,264 +546,206 @@ body:hover .cursor-follower {
   display: flex;
   align-items: center;
   flex-direction: row-reverse;
-  transform: translateY(-50%) translateX(calc(100% - 3.25rem));
+  transform: translateY(-50%) translateX(calc(100% - 2.75rem));
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
-    opacity 0.45s var(--ease-out-expo),
-    visibility 0.45s,
-    transform 0.5s var(--ease-out-expo);
+    opacity 0.35s var(--ease-out-expo),
+    visibility 0.35s,
+    transform 0.4s var(--ease-out-expo);
 }
 
-.fitness-app-side.is-visible {
+.apps-float.is-visible {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-.fitness-app-side.is-open {
+.apps-float.is-open {
   transform: translateY(-50%) translateX(0);
 }
 
-.fitness-app-side-tab {
+/* ---- Tab ---- */
+.apps-float-tab {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
-  width: 3.25rem;
-  padding: 0.5rem 0.35rem 0.5rem 0.5rem;
+  width: 2.75rem;
+  padding: 0.7rem 0.4rem 0.7rem 0.5rem;
   border: none;
-  border-radius: var(--fitness-side-radius) 0 0 var(--fitness-side-radius);
-  background: linear-gradient(160deg, rgba(5, 10, 31, 0.98) 0%, rgba(14, 26, 56, 0.96) 100%);
-  box-shadow:
-    -6px 0 24px rgba(5, 10, 31, 0.35),
-    0 0 0 1px rgba(180, 232, 201, 0.15) inset;
+  border-radius: 10px 0 0 10px;
+  background: rgba(5, 10, 31, 0.92);
+  border-left: 1px solid rgba(180, 232, 201, 0.12);
+  border-top: 1px solid rgba(180, 232, 201, 0.12);
+  border-bottom: 1px solid rgba(180, 232, 201, 0.12);
+  color: var(--color-light);
   cursor: pointer;
-  transition:
-    background 0.35s var(--ease-out-expo),
-    box-shadow 0.35s var(--ease-out-expo);
+  transition: background 0.25s ease, border-color 0.25s ease;
 }
 
-.fitness-app-side-tab:hover {
-  box-shadow:
-    -8px 0 28px rgba(5, 10, 31, 0.45),
-    0 0 0 1px rgba(180, 232, 201, 0.28) inset;
+.apps-float-tab:hover {
+  background: rgba(14, 26, 56, 0.97);
+  border-color: rgba(180, 232, 201, 0.22);
 }
 
-.fitness-app-side-tab:focus-visible {
-  outline: 3px solid var(--color-light);
+.apps-float-tab:focus-visible {
+  outline: 2px solid var(--color-light);
   outline-offset: 2px;
 }
 
-.fitness-app-side-tab-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  object-fit: cover;
-  display: block;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.fitness-app-side-tab-chevron {
-  display: flex;
+.apps-float-tab-label {
+  font-family: var(--font-sans);
+  font-size: 0.475rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--color-light);
-  opacity: 0.75;
-  transition: transform 0.4s var(--ease-out-expo);
+  opacity: 0.55;
+  line-height: 1;
 }
 
-.fitness-app-side.is-open .fitness-app-side-tab-chevron {
+.apps-float-tab-chevron {
+  display: flex;
+  opacity: 0.45;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.apps-float.is-open .apps-float-tab-chevron {
   transform: rotate(180deg);
 }
 
-.fitness-app-side-panel {
-  width: 0;
-  max-width: 0;
+/* ---- Panel ---- */
+.apps-float-panel {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  max-width: 0;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
-    max-width 0.45s var(--ease-out-expo),
-    opacity 0.35s var(--ease-out-expo),
-    visibility 0.35s;
+    max-width 0.35s var(--ease-out-expo),
+    opacity 0.25s var(--ease-out-expo),
+    visibility 0.25s;
 }
 
-.fitness-app-side.is-open .fitness-app-side-panel {
-  width: min(17.5rem, calc(100vw - 4.5rem));
-  max-width: min(17.5rem, calc(100vw - 4.5rem));
+.apps-float.is-open .apps-float-panel {
+  max-width: 220px;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-.fitness-app-side-panel-inner {
-  position: relative;
-  width: min(17.5rem, calc(100vw - 4.5rem));
-  margin-right: 0.5rem;
-  padding: 1rem 1.125rem 1.125rem;
-  border-radius: var(--fitness-side-radius);
-  background: linear-gradient(145deg, rgba(5, 10, 31, 0.98) 0%, rgba(14, 26, 56, 0.96) 100%);
-  box-shadow:
-    0 12px 40px rgba(5, 10, 31, 0.5),
-    0 0 0 1px rgba(180, 232, 201, 0.12) inset;
-}
-
-.fitness-app-side-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+/* ---- App rows ---- */
+.apps-float-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: none;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  margin-right: 0.375rem;
   border-radius: 8px;
-  background: rgba(180, 232, 201, 0.1);
+  background: rgba(5, 10, 31, 0.92);
+  border: 1px solid rgba(180, 232, 201, 0.1);
+  text-decoration: none;
   color: var(--color-light);
-  cursor: pointer;
-  transition: background 0.3s var(--ease-out-expo);
+  white-space: nowrap;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.fitness-app-side-close:hover {
-  background: rgba(180, 232, 201, 0.22);
+.apps-float-row + .apps-float-row {
+  margin-top: 0.3rem;
 }
 
-.fitness-app-side-close:focus-visible {
+.apps-float-row:hover {
+  background: rgba(14, 26, 56, 0.97);
+  border-color: rgba(180, 232, 201, 0.25);
+}
+
+.apps-float-row:focus-visible {
   outline: 2px solid var(--color-light);
   outline-offset: 2px;
 }
 
-.fitness-app-side-panel-head {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
-  padding-right: 1.5rem;
-}
-
-.fitness-app-side-panel-logo {
+/* Logo — image */
+.app-row-logo {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+}
+
+.app-row-logo--img {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
   object-fit: cover;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  display: block;
 }
 
-.fitness-app-side-panel-copy {
+/* Logo — heart icon */
+.app-row-logo--heart {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #ff6b8a, #e8305a);
+  color: #fff;
   display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-  min-width: 0;
-}
-
-.fitness-app-side-kicker {
-  font-family: var(--font-sans);
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-light);
-  opacity: 0.65;
-  line-height: 1;
-}
-
-.fitness-app-side-name {
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-light);
-  line-height: 1.2;
-  margin: 0;
-}
-
-.fitness-app-side-desc {
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--color-light);
-  opacity: 0.75;
-  margin: 0 0 1rem;
-}
-
-.fitness-app-side-cta {
-  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.625rem 1rem;
-  border-radius: var(--radius-full);
-  background: var(--color-light);
-  color: var(--color-dark);
+}
+
+.apps-float-row-name {
+  flex: 1;
   font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition:
-    transform 0.35s var(--ease-out-expo),
-    box-shadow 0.35s var(--ease-out-expo);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--color-light);
+  opacity: 0.9;
 }
 
-.fitness-app-side-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(180, 232, 201, 0.35);
-}
-
-.fitness-app-side-cta:focus-visible {
-  outline: 3px solid var(--color-light);
-  outline-offset: 3px;
-}
-
-.fitness-app-side-cta-arrow {
+.apps-float-row-arrow {
   display: flex;
+  opacity: 0.35;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
+.apps-float-row:hover .apps-float-row-arrow {
+  opacity: 0.8;
+  transform: translate(1px, -1px);
+}
+
+/* ---- Mobile ---- */
 @media (max-width: 768px) {
-  .fitness-app-side {
+  .apps-float {
     top: auto;
     bottom: calc(5.25rem + env(safe-area-inset-bottom));
-    transform: translateY(0) translateX(calc(100% - 3rem));
+    transform: translateY(0) translateX(calc(100% - 2.5rem));
   }
 
-  .fitness-app-side.is-visible {
-    transform: translateY(0) translateX(calc(100% - 3rem));
+  .apps-float.is-visible {
+    transform: translateY(0) translateX(calc(100% - 2.5rem));
   }
 
-  .fitness-app-side.is-open {
+  .apps-float.is-open {
     transform: translateY(0) translateX(0);
   }
 
-  .fitness-app-side-tab {
-    width: 3rem;
-    padding: 0.4rem 0.3rem 0.4rem 0.45rem;
+  .apps-float-tab {
+    width: 2.5rem;
+    padding: 0.6rem 0.35rem 0.6rem 0.45rem;
   }
 
-  .fitness-app-side-tab-logo {
-    width: 36px;
-    height: 36px;
-  }
-
-  .fitness-app-side.is-open .fitness-app-side-panel {
-    width: min(16rem, calc(100vw - 3.75rem));
-    max-width: min(16rem, calc(100vw - 3.75rem));
-  }
-
-  .fitness-app-side-panel-inner {
-    width: min(16rem, calc(100vw - 3.75rem));
-    padding: 0.875rem 1rem 1rem;
+  .apps-float.is-open .apps-float-panel {
+    max-width: min(200px, calc(100vw - 3.25rem));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fitness-app-side,
-  .fitness-app-side-panel,
-  .fitness-app-side-tab-chevron {
+  .apps-float,
+  .apps-float-panel,
+  .apps-float-tab-chevron {
     transition: none;
   }
 }
@@ -830,7 +771,7 @@ body:hover .cursor-follower {
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-bottom: 1px solid rgba(180, 232, 201, 0.06);
   transition: all 0.4s var(--ease-out-expo);
-  padding: 1.125rem 0;
+  padding: 0.75rem 0;
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
@@ -838,7 +779,7 @@ body:hover .cursor-follower {
 
 .navbar.scrolled {
   background: rgba(5, 10, 31, 0.95);
-  padding: 0.875rem 0;
+  padding: 0.625rem 0;
   border-bottom-color: rgba(180, 232, 201, 0.1);
 }
 
@@ -870,7 +811,7 @@ body:hover .cursor-follower {
 }
 
 .logo-image {
-  height: 48px;
+  height: 36px;
   width: auto;
   transition: all 0.3s var(--ease-out-expo);
   display: block;
@@ -910,7 +851,7 @@ body:hover .cursor-follower {
   color: rgba(180, 232, 201, 0.65);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   position: relative;
   transition: color 0.3s var(--ease-out-expo);
   display: flex;
@@ -1055,6 +996,52 @@ body:hover .cursor-follower {
 .nav-dropdown-link:hover::before,
 .nav-dropdown-link.active::before {
   opacity: 1;
+}
+
+/* Divider between nav sections and app links */
+.nav-dropdown-divider {
+  height: 1px;
+  margin: 0.35rem 1rem;
+  background: rgba(180, 232, 201, 0.12);
+}
+
+/* App link rows */
+.nav-dropdown-link--app {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-dropdown-app-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+}
+
+.nav-dropdown-app-icon--heart {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #ff6b8a, #e8305a);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-dropdown-external-icon {
+  margin-left: auto;
+  opacity: 0.35;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.nav-dropdown-link--app:hover .nav-dropdown-external-icon {
+  opacity: 0.8;
+  transform: translate(1px, -1px);
 }
 
 @media (max-width: 768px) {
@@ -1203,7 +1190,7 @@ body:hover .cursor-follower {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0 2rem 2rem;
+  padding: 6rem 2rem 2rem;
   overflow: hidden;
   z-index: 2;
   background: var(--bg-primary);
@@ -6600,7 +6587,7 @@ section {
 
 .trusted-by-card {
   flex-shrink: 0;
-  width: 160px;
+  width: 110px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -6640,8 +6627,8 @@ section {
 
 .trusted-card-inner {
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: 110px;
+  height: 110px;
   aspect-ratio: 1;
   border-radius: 50%;
   display: block;
@@ -6736,12 +6723,12 @@ section {
 
 @media (max-width: 1024px) {
   .trusted-by-card {
-    width: 140px;
+    width: 95px;
   }
 
   .trusted-card-inner {
-    width: 140px;
-    height: 140px;
+    width: 95px;
+    height: 95px;
   }
 
   .trusted-by-track {
@@ -6751,12 +6738,12 @@ section {
 
 @media (max-width: 768px) {
   .trusted-by-card {
-    width: 120px;
+    width: 85px;
   }
 
   .trusted-card-inner {
-    width: 120px;
-    height: 120px;
+    width: 85px;
+    height: 85px;
   }
 
   .trusted-company-name {
@@ -6779,12 +6766,12 @@ section {
 
 @media (max-width: 480px) {
   .trusted-by-card {
-    width: 100px;
+    width: 70px;
   }
 
   .trusted-card-inner {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
   }
 
   .trusted-company-name {
