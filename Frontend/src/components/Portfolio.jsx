@@ -81,7 +81,7 @@ export const portfolioProjects = [
     // Social Media Design Projects - From Social media folder
     {
       id: 'blu-hart-karaoke',
-      image: '/assets/Portfolio/Social%20media/karaoke%20event%20social%20media.webp',
+      image: '/assets/Portfolio/karaoke%20event%20social%20media.webp',
       category: 'Social Media Design · Event Marketing',
       title: 'Karaoke Event Social Media - Blu Hart',
       description: 'Social media design collection for a karaoke event, featuring engaging posts and promotional graphics to drive event attendance and engagement.',
@@ -217,7 +217,7 @@ export const portfolioProjects = [
     },
     {
       id: 'finix-banner-10',
-      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-10.webp',
+      image: '/assets/Portfolio/Website%20Banner%20For%20Finix%20Bet-10.webp',
       category: 'Web Design · Digital Marketing',
       title: 'Website Banner Collection - Finix Bet',
       description: 'Engaging website banner collection featuring modern design and compelling visuals for digital marketing.',
@@ -227,7 +227,7 @@ export const portfolioProjects = [
     // Creative Direction Projects - From Creative Direction folder (arranged by file number)
     {
       id: 'creative-direction-1',
-      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-1.webp',
       category: 'Creative Direction · Visual Guidance',
       title: 'Creative Direction & Visual Guidance - Project 1',
       description: 'Comprehensive creative direction and visual guidance for product presentation, photography, and creative assets. This project involved developing a cohesive visual language across multiple touchpoints, ensuring brand consistency and high-quality execution. The creative direction encompassed styling, composition, color palette selection, and overall aesthetic direction for product photography and marketing materials.',

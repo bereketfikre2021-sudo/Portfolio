@@ -145,7 +145,7 @@ const PortfolioModal = () => {
       deliverables: ['Logo Rebranding', 'Brand Guidelines', 'Visual Identity System', 'Color Palette', 'Typography', 'Brand Applications']
     },
     'havana-plc-branding': {
-      image: '/assets/Portfolio/Brand%20identity/Brand%20Identity%20-%20Havana%20PLC.webp',
+      image: '/assets/Portfolio/Ui%20Ux%20Design%20for%20Havana%20Plc.webp',
       category: 'Corporate',
       title: 'Full Brand Identity - Havana PLC',
       description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for Havana PLC. The identity conveys professionalism, reliability, and corporate excellence.',
@@ -189,7 +189,7 @@ const PortfolioModal = () => {
       deliverables: ['Logo Design', 'Brand Guidelines', 'Visual Identity System', 'Color Palette', 'Typography System', 'Hotel Signage', 'Brand Applications']
     },
     'yat-construction': {
-      image: '/assets/Portfolio/YAT-Construction-PLC-8e3605ca.webp',
+      image: '/assets/Portfolio/Stationary%20Design%20YAT-Construction-PLC-.webp',
       category: 'Corporate',
       title: 'Stationery Design - Y.A.T Construction PLC',
       description: 'Complete stationery design including professional letterheads, business cards, envelopes, and folders for cohesive corporate identity. This project created a professional stationery system that enhances brand communication across all business touchpoints.',
@@ -308,7 +308,7 @@ const PortfolioModal = () => {
       client: 'Prime Ethiopia'
     },
     'goozam-technologies-company-profile': {
-      image: '/assets/Portfolio/Print%20and%20marketing/Company%20Profile%20Goozam%20Technologies.webp',
+      image: '/assets/Portfolio/Latest/company-profile-cci-utop-goozam.webp',
       category: 'Print Design · Corporate',
       title: 'Company Profile - Goozam Technologies',
       description: 'Professional company profile design for Goozam Technologies. The profile showcases brand identity, services, and corporate messaging for print and digital use.',
@@ -634,7 +634,7 @@ const PortfolioModal = () => {
       deliverables: ['T-Shirt Design', 'Apparel Variations', 'Brand Guidelines', 'Print Specifications']
     },
     'niqat-social': {
-      image: '/assets/Portfolio/Social Media Design for niqat coffee.webp',
+      image: '/assets/Portfolio/Social%20Media%20Design%20for%20niqat%20coffee-2.webp',
       category: 'Coffee',
       title: 'Social Media Design - Niqat Coffee',
       description: 'Comprehensive social media design collection including posts, stories, and promotional graphics for engaging online presence. The designs reflect the brand\'s coffee culture and create consistent digital communication.',
@@ -1184,7 +1184,7 @@ const PortfolioModal = () => {
       deliverables: ['Social Media Content', 'Modern Aesthetics', 'Visual Assets', 'Content Guidelines']
     },
     'finix-banner-1': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Design - Finix Bet',
       description: 'Professional website banner design optimized for web display and digital marketing campaigns.',
@@ -1193,7 +1193,7 @@ const PortfolioModal = () => {
       client: 'Finix Bet'
     },
     'finix-banner-2': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet-2.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-2.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Collection - Finix Bet',
       description: 'Website banner design featuring modern layouts and engaging visuals for effective online presence.',
@@ -1202,7 +1202,7 @@ const PortfolioModal = () => {
       client: 'Finix Bet'
     },
     'finix-banner-3': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet-3.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-3.webp',
       category: 'Digital Marketing',
       title: 'Web Banner Design - Finix Bet',
       description: 'Professional web banner design optimized for various screen sizes and digital platforms.',
@@ -1211,7 +1211,7 @@ const PortfolioModal = () => {
       client: 'Finix Bet'
     },
     'finix-banner-4': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet-4.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-4.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Series - Finix Bet',
       description: 'Comprehensive website banner series designed for consistent brand communication across digital platforms.',
@@ -1220,7 +1220,7 @@ const PortfolioModal = () => {
       client: 'Finix Bet'
     },
     'finix-banner-5': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet-5.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-5.webp',
       category: 'Digital Marketing',
       title: 'Web Banner Assets - Finix Bet',
       description: 'Professional web banner assets featuring modern design and engaging visuals for digital marketing.',
@@ -1229,7 +1229,7 @@ const PortfolioModal = () => {
       client: 'Finix Bet'
     },
     'finix-banner-6': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet-6.webp',
+      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-6.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Design - Finix Bet',
       description: 'Engaging website banner design with compelling visuals and clear messaging for online campaigns.',
@@ -1238,7 +1238,7 @@ const PortfolioModal = () => {
       client: 'Finix Bet'
     },
     'finix-banner-7': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet-7.webp',
+      image: '/assets/Portfolio/Website%20Banner%20For%20Finix%20Bet-7.webp',
       category: 'Digital Marketing',
       title: 'Web Banner Collection - Finix Bet',
       description: 'Professional web banner collection designed for various digital marketing campaigns and promotions.',
@@ -1247,7 +1247,7 @@ const PortfolioModal = () => {
       client: 'Finix Bet'
     },
     'finix-banner-8': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet-8.webp',
+      image: '/assets/Portfolio/Website%20Banner%20For%20Finix%20Bet-8.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Series - Finix Bet',
       description: 'Comprehensive website banner series with consistent branding and engaging visual content.',
@@ -1256,7 +1256,7 @@ const PortfolioModal = () => {
       client: 'Finix Bet'
     },
     'finix-banner-10': {
-      image: '/assets/Portfolio/Website Banner For Finix Bet-10.webp',
+      image: '/assets/Portfolio/Website%20Banner%20For%20Finix%20Bet-10.webp',
       category: 'Digital Marketing',
       title: 'Website Banner Collection - Finix Bet',
       description: 'Engaging website banner collection featuring modern design and compelling visuals for digital marketing.',
@@ -1309,7 +1309,7 @@ const PortfolioModal = () => {
       deliverables: ['Social Media Posts', 'Event Promotional Graphics', 'Story Templates', 'Content Guidelines']
     },
     'art-direction-1': {
-      image: '/assets/Portfolio/Art Direction.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-1.webp',
       category: 'Art Direction · Visual Guidance',
       title: 'Art Direction & Visual Guidance - Project 1',
       description: 'Comprehensive art direction and visual guidance for product presentation, photography, and creative assets. This project involved developing a cohesive visual language across multiple touchpoints, ensuring brand consistency and high-quality execution. The art direction encompassed styling, composition, color palette selection, and overall aesthetic direction for product photography and marketing materials.',
@@ -1319,7 +1319,7 @@ const PortfolioModal = () => {
       deliverables: ['Visual Style Guide', 'Photography Direction', 'Color Palette', 'Composition Guidelines', 'Brand Consistency Guidelines']
     },
     'art-direction-2': {
-      image: '/assets/Portfolio/Art Direction-1 copy.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-2.webp',
       category: 'Art Direction · Visual Guidance',
       title: 'Art Direction & Visual Guidance - Project 2',
       description: 'Professional art direction and visual guidance for creative campaigns and brand storytelling. This project focused on establishing visual narratives that align with brand identity, including direction for photography shoots, video production, and digital content creation. The guidance ensured all visual elements work harmoniously to communicate the brand message effectively.',
@@ -1329,7 +1329,7 @@ const PortfolioModal = () => {
       deliverables: ['Visual Narrative Guide', 'Photography Direction', 'Video Production Guidelines', 'Digital Content Standards', 'Brand Storytelling Framework']
     },
     'art-direction-3': {
-      image: '/assets/Portfolio/Art Direction-2 copy.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-3.webp',
       category: 'Art Direction · Visual Guidance',
       title: 'Art Direction & Visual Guidance - Project 3',
       description: 'Strategic art direction for product launches and marketing initiatives. This project involved creating comprehensive visual guidelines for product photography, including lighting, composition, background selection, and styling direction. The art direction ensured consistent visual quality across all product presentations and marketing channels.',
@@ -1339,7 +1339,7 @@ const PortfolioModal = () => {
       deliverables: ['Product Photography Guidelines', 'Lighting Specifications', 'Composition Standards', 'Styling Direction', 'Marketing Visual Standards']
     },
     'art-direction-4': {
-      image: '/assets/Portfolio/Art Direction-3 copy.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-4.webp',
       category: 'Art Direction · Visual Guidance',
       title: 'Art Direction & Visual Guidance - Project 4',
       description: 'Comprehensive art direction for brand campaigns and visual communication. This project encompassed developing creative concepts, visual style guides, and direction for photography and videography teams. The guidance ensured all creative assets maintain brand integrity while achieving compelling visual storytelling that resonates with target audiences.',
@@ -1349,7 +1349,7 @@ const PortfolioModal = () => {
       deliverables: ['Creative Concept Development', 'Visual Style Guide', 'Photography Direction', 'Videography Guidelines', 'Brand Campaign Standards']
     },
     'art-direction-5': {
-      image: '/assets/Portfolio/Art Direction-4 copy.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-5.webp',
       category: 'Art Direction · Visual Guidance',
       title: 'Art Direction & Visual Guidance - Project 5',
       description: 'Professional art direction for digital and print marketing materials. This project involved establishing visual direction for social media content, advertising campaigns, and promotional materials. The art direction included color palette selection, typography guidance, layout composition, and overall aesthetic direction to ensure cohesive brand presentation across all platforms.',
@@ -1359,7 +1359,7 @@ const PortfolioModal = () => {
       deliverables: ['Digital Marketing Guidelines', 'Print Design Standards', 'Social Media Visual Direction', 'Typography Guidelines', 'Color Palette Specifications']
     },
     'art-direction-6': {
-      image: '/assets/Portfolio/Art Direction-5 copy.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-6.webp',
       category: 'Art Direction · Visual Guidance',
       title: 'Art Direction & Visual Guidance - Project 6',
       description: 'Strategic art direction for brand identity and visual systems. This project focused on creating comprehensive visual guidelines that extend beyond logo design to encompass photography style, illustration direction, and overall creative execution. The art direction ensured all brand touchpoints maintain visual consistency and brand alignment.',
@@ -1369,7 +1369,7 @@ const PortfolioModal = () => {
       deliverables: ['Brand Visual System', 'Photography Style Guide', 'Illustration Direction', 'Creative Execution Standards', 'Brand Consistency Framework']
     },
     'art-direction-7': {
-      image: '/assets/Portfolio/Art Direction-6 copy.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-7.webp',
       category: 'Art Direction · Visual Guidance',
       title: 'Art Direction & Visual Guidance - Project 7',
       description: 'Comprehensive art direction for creative projects and visual campaigns. This project involved developing visual concepts, directing photography sessions, and providing guidance for post-production processes. The art direction ensured high-quality visual outcomes that align with brand values and effectively communicate the intended message to target audiences.',
@@ -1379,7 +1379,7 @@ const PortfolioModal = () => {
       deliverables: ['Visual Concept Development', 'Photography Session Direction', 'Post-Production Guidelines', 'Quality Standards', 'Brand Alignment Framework']
     },
     'art-direction-8': {
-      image: '/assets/Portfolio/Art Direction-7 copy.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-8.webp',
       category: 'Art Direction · Visual Guidance',
       title: 'Art Direction & Visual Guidance - Project 8',
       description: 'Professional art direction for product photography and visual content creation. This project encompassed styling direction, composition guidelines, lighting specifications, and overall aesthetic direction for product shoots. The art direction ensured consistent visual quality and brand alignment across all product imagery used in marketing and e-commerce platforms.',
@@ -1389,7 +1389,7 @@ const PortfolioModal = () => {
       deliverables: ['Product Photography Direction', 'Styling Guidelines', 'Composition Standards', 'Lighting Specifications', 'E-commerce Visual Standards']
     },
     'art-direction-9': {
-      image: '/assets/Portfolio/Art Direction-8 copy.webp',
+      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-8.webp',
       category: 'Art Direction · Visual Guidance',
       title: 'Art Direction & Visual Guidance - Project 9',
       description: 'Strategic art direction for brand campaigns and visual storytelling initiatives. This project involved creating comprehensive visual guidelines, directing creative teams, and ensuring brand consistency across all visual touchpoints. The art direction encompassed photography direction, video production guidance, and digital content creation to deliver cohesive and impactful brand experiences.',
