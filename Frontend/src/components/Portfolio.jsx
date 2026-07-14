@@ -1,17 +1,7 @@
 ﻿import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
 import apiFetch from '../utils/api';
-
-// Latest project IDs - shown when "Latest" filter is selected (from Latest folder)
-// These are the FALLBACK slugs — replaced by featured:true from API
-const RECENT_PROJECT_IDS = [
-  'toco-premium-coffee-packaging',
-  'toco-rollup-banner',
-  'prime-ethiopia-flyer',
-  'ptgr-trifold',
-  'company-profile-cci-utop-goozam',
-  'course-outline-cci',
-];
+import { STATIC_PROJECTS } from '../data/staticProjects';
 
 // Map admin category values → frontend service filter keys
 const CATEGORY_TO_SERVICE = {
@@ -21,7 +11,6 @@ const CATEGORY_TO_SERVICE = {
   'Print & Marketing':               'print-design',
   'Creative Direction':              'art-direction-visual-guidance',
   'Recent Projects':                 'recent-project',
-  // Legacy service key pass-through (for items already using service keys)
   'brand-identity-design':           'brand-identity-design',
   'marketing-campaign-design':       'marketing-campaign-design',
   'digital-social-media-media':      'digital-social-media-design',
@@ -30,51 +19,61 @@ const CATEGORY_TO_SERVICE = {
   'art-direction-visual-guidance':   'art-direction-visual-guidance',
 };
 
-// Resolve image src — handles both Cloudinary URLs and local /assets/ paths
-const resolveImage = (thumbnail, localPath) => {
-  if (thumbnail && thumbnail.startsWith('http')) return thumbnail;
-  return localPath || thumbnail || '';
-};
-
 // Projects array - exported for use in PortfolioModal
-// Starts as empty array; populated from API on mount; PortfolioModal reads this
-export let portfolioProjects = [];
+export let portfolioProjects = [...STATIC_PROJECTS];
 
 const MOBILE_BREAKPOINT = 768;
-const WEB_BANNERS_MOBILE_MAX = 3;
 const WEB_BANNERS_MOBILE_IDS = ['finix-banner-1', 'finix-banner-2', 'finix-banner-3'];
 const SOCIAL_MEDIA_ORDER = [
-  'blu-hart-karaoke',
-  'ace-stainless-social',
-  'awra-designs-social',
-  'digital-deresegn-social-post',
-  'niqat-social-8',
-  'task-plug-social-template-2',
-  'prime-ethiopia-social',
-  'prime-ethiopia-social-8'
+  'blu-hart-karaoke', 'ace-stainless-social', 'awra-designs-social',
+  'digital-deresegn-social-post', 'niqat-social-8', 'task-plug-social-template-2',
+  'prime-ethiopia-social', 'prime-ethiopia-social-8',
 ];
 
 const Portfolio = () => {
   const { openPortfolioModal } = useContext(ModalContext);
   const [activeFilter, setActiveFilter] = useState('recent');
-  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT);
-  const [allProjects, setAllProjects] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [fetchError, setFetchError] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT
+  );
+  // Start with static data — always visible immediately
+  const [allProjects, setAllProjects] = useState(STATIC_PROJECTS);
+  const [apiLoaded, setApiLoaded] = useState(false);
   const filtersRef = useRef(null);
 
-  // Fetch all published projects from backend, with one retry for Render cold-start
+  // Silently fetch from API and upgrade static data when available.
+  // Uses AbortController so each attempt times out after 15 s rather than
+  // hanging indefinitely. Retries up to 5 times with increasing delays to
+  // cover Render's free-tier cold-start (can be 30–90 s).
   useEffect(() => {
+    if (apiLoaded) return;
     let cancelled = false;
+    const DELAYS = [0, 8000, 15000, 20000, 25000]; // total ~68 s of retries
 
-    const fetchProjects = async (attempt = 1) => {
+    const attempt = async (idx) => {
+      if (cancelled || idx >= DELAYS.length) return;
+      if (DELAYS[idx] > 0) {
+        await new Promise((r) => setTimeout(r, DELAYS[idx]));
+      }
+      if (cancelled) return;
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000); // 15 s timeout per attempt
+
       try {
-        const data = await apiFetch('/projects?status=PUBLISHED&limit=100&sortBy=displayOrder&order=asc');
+        const res = await fetch(
+          `${
+            (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
+            'https://bereket-fikre-backend.onrender.com/api'
+          }/projects?status=PUBLISHED&limit=100&sortBy=displayOrder&order=asc`,
+          { signal: controller.signal, headers: { 'Content-Type': 'application/json' } }
+        );
+        clearTimeout(timer);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const data = json.data;
         if (cancelled) return;
-        if (!Array.isArray(data) || data.length === 0) {
-          setIsLoading(false);
-          return;
-        }
+        if (!Array.isArray(data) || data.length === 0) return; // keep static
         const mapped = data.map((p) => ({
           id:          p.slug,
           image:       p.thumbnail || '',
@@ -86,27 +85,20 @@ const Portfolio = () => {
           featured:    p.featured,
           _apiId:      p.id,
         }));
-        // Update the exported array so PortfolioModal can read it
         portfolioProjects.length = 0;
         mapped.forEach((p) => portfolioProjects.push(p));
         setAllProjects(mapped);
-        setIsLoading(false);
+        setApiLoaded(true);
       } catch {
+        clearTimeout(timer);
         if (cancelled) return;
-        // Retry once after 4 s (covers Render free-tier cold-start ~30–60 s on first load,
-        // but a second attempt often hits the now-warm instance quickly)
-        if (attempt === 1) {
-          setTimeout(() => fetchProjects(2), 4000);
-        } else {
-          setFetchError(true);
-          setIsLoading(false);
-        }
+        attempt(idx + 1); // retry
       }
     };
 
-    fetchProjects();
+    attempt(0);
     return () => { cancelled = true; };
-  }, []);
+  }, [apiLoaded]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
@@ -115,14 +107,13 @@ const Portfolio = () => {
   }, []);
 
   const services = [
-    { id: 'recent', label: 'Recent Projects' },
-    { id: 'brand-identity', label: 'Brand Identity' },
-    { id: 'digital-design', label: 'Digital Design' },
-    { id: 'print-marketing', label: 'Print & Marketing' },
-    { id: 'creative-direction', label: 'Creative Direction' }
+    { id: 'recent',             label: 'Recent Projects'    },
+    { id: 'brand-identity',     label: 'Brand Identity'     },
+    { id: 'digital-design',     label: 'Digital Design'     },
+    { id: 'print-marketing',    label: 'Print & Marketing'  },
+    { id: 'creative-direction', label: 'Creative Direction' },
   ];
 
-  // Shuffle function to randomize project order (re-runs when allProjects loads from API)
   const shuffledProjects = useMemo(() => {
     const shuffled = [...allProjects];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -132,252 +123,181 @@ const Portfolio = () => {
     return shuffled;
   }, [allProjects]);
 
-  // Helper function to shuffle projects ensuring no same company items are adjacent
   const shuffleWithCompanySeparation = (projects) => {
     if (projects.length <= 1) return projects;
-
-    // Group projects by company
     const companyGroups = {};
-    projects.forEach(project => {
-      const company = project.company || 'Unknown';
-      if (!companyGroups[company]) {
-        companyGroups[company] = [];
-      }
-      companyGroups[company].push(project);
+    projects.forEach((p) => {
+      const c = p.company || 'Unknown';
+      if (!companyGroups[c]) companyGroups[c] = [];
+      companyGroups[c].push(p);
     });
-
     const companies = Object.keys(companyGroups);
-    const shuffled = [];
     const companyIndices = {};
-    companies.forEach(company => {
-      companyIndices[company] = 0;
-      // Shuffle each company's projects
-      for (let i = companyGroups[company].length - 1; i > 0; i--) {
+    companies.forEach((c) => {
+      companyIndices[c] = 0;
+      for (let i = companyGroups[c].length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [companyGroups[company][i], companyGroups[company][j]] = [companyGroups[company][j], companyGroups[company][i]];
+        [companyGroups[c][i], companyGroups[c][j]] = [companyGroups[c][j], companyGroups[c][i]];
       }
     });
-
-    // Interleave companies to avoid adjacent same-company items
-    let totalItems = projects.length;
+    const shuffled = [];
     let lastCompany = null;
-    
-    while (shuffled.length < totalItems) {
+    while (shuffled.length < projects.length) {
       let found = false;
-      
-      // Try to find a company different from the last one
-      for (const company of companies) {
-        if (companyIndices[company] < companyGroups[company].length && company !== lastCompany) {
-          shuffled.push(companyGroups[company][companyIndices[company]]);
-          companyIndices[company]++;
-          lastCompany = company;
-          found = true;
-          break;
+      for (const c of companies) {
+        if (companyIndices[c] < companyGroups[c].length && c !== lastCompany) {
+          shuffled.push(companyGroups[c][companyIndices[c]++]);
+          lastCompany = c; found = true; break;
         }
       }
-      
-      // If no different company found, use any available company
       if (!found) {
-        for (const company of companies) {
-          if (companyIndices[company] < companyGroups[company].length) {
-            shuffled.push(companyGroups[company][companyIndices[company]]);
-            companyIndices[company]++;
-            lastCompany = company;
-            break;
+        for (const c of companies) {
+          if (companyIndices[c] < companyGroups[c].length) {
+            shuffled.push(companyGroups[c][companyIndices[c]++]);
+            lastCompany = c; break;
           }
         }
       }
     }
-
     return shuffled;
   };
 
-  // Helper function to select max 6 items with company variety
   const selectWithVariety = (projects, maxItems = 6) => {
-    if (projects.length <= maxItems) {
-      return shuffleWithCompanySeparation(projects);
-    }
-
-    // Group projects by company
+    if (projects.length <= maxItems) return shuffleWithCompanySeparation(projects);
     const companyGroups = {};
-    projects.forEach(project => {
-      const company = project.company || 'Unknown';
-      if (!companyGroups[company]) {
-        companyGroups[company] = [];
-      }
-      companyGroups[company].push(project);
+    projects.forEach((p) => {
+      const c = p.company || 'Unknown';
+      if (!companyGroups[c]) companyGroups[c] = [];
+      companyGroups[c].push(p);
     });
-
     const selected = [];
-    const usedCompanies = new Set();
-
-    // First pass: Select one item from each company (max variety)
-    const companies = Object.keys(companyGroups);
-    for (const company of companies) {
+    for (const c of Object.keys(companyGroups)) {
       if (selected.length >= maxItems) break;
-      if (companyGroups[company].length > 0) {
-        selected.push(companyGroups[company][0]);
-        usedCompanies.add(company);
-        companyGroups[company].shift(); // Remove used item
-      }
+      selected.push(companyGroups[c].shift());
     }
-
-    // Second pass: Fill remaining slots from any company if needed
     if (selected.length < maxItems) {
-      const remaining = projects.filter(p => !selected.includes(p));
-      const needed = maxItems - selected.length;
-      selected.push(...remaining.slice(0, needed));
+      const remaining = projects.filter((p) => !selected.includes(p));
+      selected.push(...remaining.slice(0, maxItems - selected.length));
     }
-
-    // Shuffle the selected items to avoid same company being adjacent
     return shuffleWithCompanySeparation(selected.slice(0, maxItems));
   };
 
-  // Filter projects based on active filter category
   const filteredProjects = useMemo(() => {
-    let filtered = [];
-    
     if (activeFilter === 'recent') {
-      // Show projects marked as featured (Recent Projects) from API
-      // Fall back to RECENT_PROJECT_IDS order if available
-      const featuredProjects = allProjects.filter(p => p.featured);
-      if (featuredProjects.length > 0) return featuredProjects;
-      filtered = RECENT_PROJECT_IDS.map((id) =>
-        allProjects.find((p) => p.id === id)
-      ).filter(Boolean);
-      return filtered;
-    } else if (activeFilter === 'brand-identity') {
-      // Brand Identity: Logo design, visual systems, brand consistency (exclude Recent Projects)
-      filtered = shuffledProjects.filter(project => 
-        !project.featured &&
-        (project.service === 'brand-identity-design' ||
-        project.service === 'logo-design' ||
-        project.service === 'visual-identity-systems')
-      );
-      // Show all brand identity projects (no cap)
-      return filtered;
-    } else if (activeFilter === 'creative-direction') {
-      // Creative Direction: Concept development, visual storytelling, art direction (exclude Latest-only projects)
-      filtered = allProjects.filter(project => 
-        !project.featured &&
-        project.service === 'art-direction-visual-guidance'
-      );
-      // Sort creative direction projects by ID to maintain numerical order (1-6)
-      // Projects are already in order in the array, but sort to ensure correct sequence
-      filtered.sort((a, b) => {
-        // Extract the number at the end of the ID (e.g., 'creative-direction-1' -> 1)
-        const matchA = a.id.match(/-(\d+)$/);
-        const matchB = b.id.match(/-(\d+)$/);
-        const numA = matchA ? parseInt(matchA[1]) : 0;
-        const numB = matchB ? parseInt(matchB[1]) : 0;
-        return numA - numB;
-      });
-      // Return sorted array directly for creative direction (no shuffling)
-      return filtered;
-    } else if (activeFilter === 'digital-design') {
-      // Digital Design: Social media visuals, campaigns, content creation (exclude Recent Projects)
-      filtered = shuffledProjects.filter(project => 
-        !project.featured &&
-        (project.service === 'digital-social-media-design' ||
-        project.service === 'marketing-campaign-design')
-      );
-    } else if (activeFilter === 'print-marketing') {
-      // Print & Marketing: Catalogs, brochures, brand collateral (exclude Recent Projects)
-      filtered = shuffledProjects.filter(project => 
-        !project.featured &&
-        (project.service === 'print-design' ||
-        project.service === 'brand-applications-assets')
+      const featured = allProjects.filter((p) => p.featured);
+      return featured.length > 0 ? featured : allProjects.slice(0, 6);
+    }
+    if (activeFilter === 'brand-identity') {
+      return shuffledProjects.filter(
+        (p) => !p.featured &&
+          (p.service === 'brand-identity-design' || p.service === 'logo-design' || p.service === 'visual-identity-systems')
       );
     }
-    
-    // Limit to 6 items with company variety
-    return selectWithVariety(filtered, 6);
+    if (activeFilter === 'creative-direction') {
+      const filtered = allProjects.filter((p) => !p.featured && p.service === 'art-direction-visual-guidance');
+      filtered.sort((a, b) => {
+        const n = (s) => { const m = s.id.match(/-(\d+)$/); return m ? parseInt(m[1]) : 0; };
+        return n(a) - n(b);
+      });
+      return filtered;
+    }
+    if (activeFilter === 'digital-design') {
+      return selectWithVariety(
+        shuffledProjects.filter((p) => !p.featured &&
+          (p.service === 'digital-social-media-design' || p.service === 'marketing-campaign-design')), 6
+      );
+    }
+    if (activeFilter === 'print-marketing') {
+      return selectWithVariety(
+        shuffledProjects.filter((p) => !p.featured &&
+          (p.service === 'print-design' || p.service === 'brand-applications-assets')), 6
+      );
+    }
+    return [];
   }, [shuffledProjects, activeFilter, allProjects]);
 
-  // Separate Digital Design projects into Social Media and Web Banners
   const digitalDesignGroups = useMemo(() => {
-    if (activeFilter !== 'digital-design') {
-      return { socialMedia: [], webBanners: [] };
-    }
-    
-    // Get all digital design projects (exclude Recent Projects)
-    const allDigital = shuffledProjects.filter(project => 
-      !project.featured &&
-      (project.service === 'digital-social-media-design' ||
-      project.service === 'marketing-campaign-design')
+    if (activeFilter !== 'digital-design') return { socialMedia: [], webBanners: [] };
+    const allDigital = shuffledProjects.filter(
+      (p) => !p.featured &&
+        (p.service === 'digital-social-media-design' || p.service === 'marketing-campaign-design')
     );
-    
-    const socialMediaAll = allDigital.filter(project => 
-      project.service === 'marketing-campaign-design'
-    );
-    const webBannersAll = allDigital.filter(project => 
-      project.service === 'digital-social-media-design'
-    );
-    
-    // Keep social media ordering stable
+    const socialMediaAll = allDigital.filter((p) => p.service === 'marketing-campaign-design');
+    const webBannersAll  = allDigital.filter((p) => p.service === 'digital-social-media-design');
     const socialMedia = [
       ...SOCIAL_MEDIA_ORDER.map((id) => socialMediaAll.find((p) => p.id === id)).filter(Boolean),
-      ...socialMediaAll.filter((p) => !SOCIAL_MEDIA_ORDER.includes(p.id))
+      ...socialMediaAll.filter((p) => !SOCIAL_MEDIA_ORDER.includes(p.id)),
     ];
-    
-    const webBanners = shuffleWithCompanySeparation(webBannersAll);
-    
-    return { socialMedia, webBanners };
+    return { socialMedia, webBanners: shuffleWithCompanySeparation(webBannersAll) };
   }, [shuffledProjects, activeFilter]);
 
-  // Scroll active filter into view on mobile
-  useEffect(() => {
-    const scrollActiveFilter = () => {
-      if (filtersRef.current && window.innerWidth <= 768) {
-        const activeButton = filtersRef.current.querySelector('.portfolio-filter-btn.active');
-        if (activeButton) {
-          // For first filter (Brand Identity), scroll to start, for others center
-          const isFirstFilter = activeButton === filtersRef.current.querySelector('.portfolio-filter-btn:first-child');
-          if (isFirstFilter) {
-            // Ensure first filter is at the start
-            filtersRef.current.scrollLeft = 0;
-          } else {
-            activeButton.scrollIntoView({
-              behavior: 'smooth',
-              block: 'nearest',
-              inline: 'center'
-            });
-          }
-        }
-      }
-    };
-
-    // Scroll on mount and when filter changes
-    const timer = setTimeout(scrollActiveFilter, 300);
-    return () => clearTimeout(timer);
-  }, [activeFilter]);
-
-  // Also scroll on initial mount - ensure first filter is visible
+  // Scroll active filter button into view on mobile
   useEffect(() => {
     const timer = setTimeout(() => {
       if (filtersRef.current && window.innerWidth <= 768) {
-        // Reset scroll to start to show first filter (Brand Identity)
-        filtersRef.current.scrollLeft = 0;
-        
-        const activeButton = filtersRef.current.querySelector('.portfolio-filter-btn.active');
-        if (activeButton) {
-          // For first filter (Brand Identity), scroll to start
-          const isFirstFilter = activeButton === filtersRef.current.querySelector('.portfolio-filter-btn:first-child');
-          if (isFirstFilter) {
-            // Ensure first filter is at the start
-            filtersRef.current.scrollLeft = 0;
-          } else {
-            activeButton.scrollIntoView({
-              behavior: 'auto',
-              block: 'nearest',
-              inline: 'center'
-            });
-          }
+        const btn = filtersRef.current.querySelector('.portfolio-filter-btn.active');
+        if (btn) {
+          const isFirst = btn === filtersRef.current.querySelector('.portfolio-filter-btn:first-child');
+          if (isFirst) filtersRef.current.scrollLeft = 0;
+          else btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
       }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [activeFilter]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (filtersRef.current && window.innerWidth <= 768) filtersRef.current.scrollLeft = 0;
     }, 100);
     return () => clearTimeout(timer);
   }, []);
+
+  // Reusable project card renderer
+  const renderCard = (project, extraClass = '') => (
+    <article
+      key={project.id}
+      className={`portfolio-item-modern ${extraClass}`}
+      data-project={project.id}
+      role="listitem"
+      tabIndex={0}
+      onClick={() => openPortfolioModal(project.id)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPortfolioModal(project.id); } }}
+      aria-label={`${project.title} - ${project.category}. Click to view project details`}
+    >
+      <div className="portfolio-image-small">
+        <img
+          src={project.image && project.image.startsWith('http') ? project.image : project.image}
+          alt={`${project.title} - ${project.category} project by Bereket Fikre`}
+          className="portfolio-thumb"
+          loading="lazy"
+          width="600"
+          height="400"
+          decoding="async"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            const c = e.target.closest('.portfolio-image-small');
+            if (c) { c.style.minHeight = '200px'; c.style.background = 'var(--bg-primary)'; }
+          }}
+        />
+      </div>
+      <div className="portfolio-content">
+        <span className="portfolio-category-modern">{project.category}</span>
+        <h3>{project.title}</h3>
+        <p className="portfolio-card-description">{project.description}</p>
+        <a href="#" className="portfolio-link-modern"
+          onClick={(e) => { e.preventDefault(); openPortfolioModal(project.id); }}
+          aria-label={`View ${project.title} project`}
+        >
+          <span>View Project</span>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </article>
+  );
 
   return (
     <section id="portfolio" className="portfolio" aria-labelledby="portfolio-heading">
@@ -407,239 +327,36 @@ const Portfolio = () => {
             </button>
           ))}
         </div>
-        
-        {/* Loading skeletons */}
-        {isLoading && (
-          <div className="portfolio-grid-modern" role="list" aria-label="Loading projects" aria-busy="true">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="portfolio-item-modern portfolio-skeleton" aria-hidden="true">
-                <div className="portfolio-skeleton-image" />
-                <div className="portfolio-skeleton-content">
-                  <div className="portfolio-skeleton-line portfolio-skeleton-line--short" />
-                  <div className="portfolio-skeleton-line" />
-                  <div className="portfolio-skeleton-line portfolio-skeleton-line--medium" />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
 
-        {/* Error state */}
-        {!isLoading && fetchError && (
-          <div className="portfolio-empty-state" role="alert">
-            <p>Couldn't load projects right now. Please refresh the page to try again.</p>
-          </div>
-        )}
-
-        {/* Empty state (API returned no data) */}
-        {!isLoading && !fetchError && allProjects.length === 0 && (
-          <div className="portfolio-empty-state">
-            <p>No projects available at the moment.</p>
-          </div>
-        )}
-
-        {!isLoading && !fetchError && allProjects.length > 0 && (
-          activeFilter === 'digital-design' ? (
+        {activeFilter === 'digital-design' ? (
           <>
-            {/* Social Media Visuals Section */}
             {digitalDesignGroups.socialMedia.length > 0 && (
               <div className="digital-design-section">
                 <h3 className="digital-design-section-title">Social Media Visuals</h3>
                 <div className="portfolio-grid-modern portfolio-grid-square" role="list" aria-live="polite" aria-atomic="false">
-                  {digitalDesignGroups.socialMedia.map((project) => (
-                    <article 
-                      key={project.id} 
-                      className="portfolio-item-modern portfolio-item-square" 
-                      data-project={project.id}
-                      role="listitem"
-                      tabIndex={0}
-                      onClick={() => openPortfolioModal(project.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          openPortfolioModal(project.id);
-                        }
-                      }}
-                      aria-label={`${project.title} - ${project.category}. Click to view project details`}
-                    >
-                      <div className="portfolio-image-small">
-                        <img 
-                          src={project.image && project.image.startsWith('http') ? project.image : `${process.env.PUBLIC_URL || ''}${project.image}`} 
-                          alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
-                          className="portfolio-thumb" 
-                          loading="lazy" 
-                          width="600" 
-                          height="600"
-                          decoding="async"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            const container = e.target.closest('.portfolio-image-small');
-                            if (container) {
-                              container.style.minHeight = '200px';
-                              container.style.background = 'var(--bg-primary)';
-                            }
-                          }}
-                        />
-                      </div>
-                      <div className="portfolio-content">
-                        <span className="portfolio-category-modern">{project.category}</span>
-                        <h3>{project.title}</h3>
-                        <p className="portfolio-card-description">{project.description}</p>
-                        <a 
-                          href="#" 
-                          className="portfolio-link-modern"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            openPortfolioModal(project.id);
-                          }}
-                          aria-label={`View ${project.title} project`}
-                        >
-                          <span>View Project</span>
-                          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </a>
-                      </div>
-                    </article>
-                  ))}
+                  {digitalDesignGroups.socialMedia.map((p) => renderCard(p, 'portfolio-item-square'))}
                 </div>
               </div>
             )}
-
-            {/* Web & Campaign Banners Section */}
             {digitalDesignGroups.webBanners.length > 0 && (
               <div className="digital-design-section">
                 <h3 className="digital-design-section-title">Web & Campaign Banners</h3>
                 <div className="portfolio-grid-modern portfolio-grid-wide" role="list" aria-live="polite" aria-atomic="false">
                   {(isMobile
-                    ? WEB_BANNERS_MOBILE_IDS
-                        .map(id => digitalDesignGroups.webBanners.find(p => p.id === id))
-                        .filter(Boolean)
+                    ? WEB_BANNERS_MOBILE_IDS.map((id) => digitalDesignGroups.webBanners.find((p) => p.id === id)).filter(Boolean)
                     : digitalDesignGroups.webBanners
-                  ).map((project) => (
-                    <article 
-                      key={project.id} 
-                      className="portfolio-item-modern portfolio-item-wide" 
-                      data-project={project.id}
-                      role="listitem"
-                      tabIndex={0}
-                      onClick={() => openPortfolioModal(project.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          openPortfolioModal(project.id);
-                        }
-                      }}
-                      aria-label={`${project.title} - ${project.category}. Click to view project details`}
-                    >
-                      <div className="portfolio-image-small">
-                        <img 
-                          src={project.image && project.image.startsWith('http') ? project.image : `${process.env.PUBLIC_URL || ''}${project.image}`} 
-                          alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
-                          className="portfolio-thumb" 
-                          loading="lazy" 
-                          width="1200" 
-                          height="400"
-                          decoding="async"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 50vw"
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            const container = e.target.closest('.portfolio-image-small');
-                            if (container) {
-                              container.style.minHeight = '200px';
-                              container.style.background = 'var(--bg-primary)';
-                            }
-                          }}
-                        />
-                      </div>
-                      <div className="portfolio-content">
-                        <span className="portfolio-category-modern">{project.category}</span>
-                        <h3>{project.title}</h3>
-                        <p className="portfolio-card-description">{project.description}</p>
-                        <a 
-                          href="#" 
-                          className="portfolio-link-modern"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            openPortfolioModal(project.id);
-                          }}
-                          aria-label={`View ${project.title} project`}
-                        >
-                          <span>View Project</span>
-                          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </a>
-                      </div>
-                    </article>
-                  ))}
+                  ).map((p) => renderCard(p, 'portfolio-item-wide'))}
                 </div>
               </div>
             )}
           </>
         ) : (
           <div id="portfolio-grid" className="portfolio-grid-modern" role="list" aria-live="polite" aria-atomic="false">
-            {(activeFilter === 'creative-direction' && isMobile ? filteredProjects.slice(0, 3) : filteredProjects).map((project, index) => (
-              <article 
-                key={project.id} 
-                className="portfolio-item-modern" 
-                data-project={project.id}
-                role="listitem"
-                tabIndex={0}
-                onClick={() => openPortfolioModal(project.id)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openPortfolioModal(project.id);
-                  }
-                }}
-                aria-label={`${project.title} - ${project.category}. Click to view project details`}
-              >
-                <div className="portfolio-image-small">
-                  <img 
-                    src={project.image && project.image.startsWith('http') ? project.image : `${process.env.PUBLIC_URL || ''}${project.image}`} 
-                    alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
-                    className="portfolio-thumb" 
-                    loading="lazy" 
-                    width="600" 
-                    height="400"
-                    decoding="async"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    onError={(e) => {
-                      // Fallback: hide broken image gracefully
-                      e.target.style.display = 'none';
-                      const container = e.target.closest('.portfolio-image-small');
-                      if (container) {
-                        container.style.minHeight = '200px';
-                        container.style.background = 'var(--bg-primary)';
-                      }
-                    }}
-                  />
-                </div>
-                <div className="portfolio-content">
-                  <span className="portfolio-category-modern">{project.category}</span>
-                  <h3>{project.title}</h3>
-                  <p className="portfolio-card-description">{project.description}</p>
-                  <a 
-                    href="#" 
-                    className="portfolio-link-modern"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openPortfolioModal(project.id);
-                    }}
-                    aria-label={`View ${project.title} project`}
-                  >
-                    <span>View Project</span>
-                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                      <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </a>
-                </div>
-              </article>
-            ))}
+            {(activeFilter === 'creative-direction' && isMobile
+              ? filteredProjects.slice(0, 3)
+              : filteredProjects
+            ).map((p) => renderCard(p))}
           </div>
-          )
         )}
       </div>
     </section>
@@ -647,5 +364,3 @@ const Portfolio = () => {
 };
 
 export default Portfolio;
-
-
