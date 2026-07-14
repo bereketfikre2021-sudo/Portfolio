@@ -3,6 +3,7 @@ import { ModalContext } from '../context/ModalContext';
 import LightboxGallery from './LightboxGallery';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { portfolioProjects } from './Portfolio';
+import apiFetch from '../utils/api';
 
 const PortfolioModal = () => {
   const { portfolioModal, closePortfolioModal } = useContext(ModalContext);
@@ -10,6 +11,34 @@ const PortfolioModal = () => {
   const [lightboxImages, setLightboxImages] = useState([]);
   const modalRef = useRef(null);
   useFocusTrap(portfolioModal?.isOpen, modalRef);
+
+  // Live project data fetched from API when modal opens
+  const [liveProject, setLiveProject] = useState(null);
+
+  useEffect(() => {
+    if (!portfolioModal?.isOpen || !portfolioModal?.projectId) {
+      setLiveProject(null);
+      return;
+    }
+    // Fetch full project detail from backend by slug
+    apiFetch(`/projects/${portfolioModal.projectId}`)
+      .then((p) => {
+        if (!p) return;
+        // Map API fields to the shape getProjectData expects
+        setLiveProject({
+          image:       p.thumbnail && p.thumbnail.startsWith('http') ? p.thumbnail : null,
+          category:    p.category,
+          title:       p.title,
+          description: p.fullDescription || p.shortDescription,
+          type:        p.category,
+          date:        p.createdAt ? new Date(p.createdAt).getFullYear().toString() : '2024',
+          client:      p.title.split(' - ').pop() || 'Client',
+          // Gallery images from admin uploads
+          galleryImages: Array.isArray(p.galleryImages) ? p.galleryImages.map(img => img.url) : [],
+        });
+      })
+      .catch(() => setLiveProject(null));
+  }, [portfolioModal?.isOpen, portfolioModal?.projectId]);
   
   const projectData = {
     'andegna-tshirt': {
@@ -1400,20 +1429,23 @@ const PortfolioModal = () => {
     }
   };
 
-  // Helper function to get project data (with fallback)
+  // Helper function to get project data (API data first, then hardcoded fallback)
   const getProjectData = (projectId) => {
+    // 1. Use live API data if available
+    if (liveProject) return liveProject;
+    // 2. Fall back to hardcoded detailed data
     let project = projectData[projectId];
     if (!project) {
       const basicProject = portfolioProjects.find(p => p.id === projectId);
       if (basicProject) {
         project = {
-          image: basicProject.image,
-          category: basicProject.category,
-          title: basicProject.title,
+          image:       basicProject.image,
+          category:    basicProject.category,
+          title:       basicProject.title,
           description: basicProject.description,
-          type: basicProject.category.split(' · ')[0] || 'Design',
-          date: '2024',
-          client: basicProject.company || 'Client'
+          type:        basicProject.category.split(' · ')[0] || 'Design',
+          date:        '2024',
+          client:      basicProject.company || 'Client'
         };
       }
     }

@@ -1,22 +1,47 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { trustedCompanies } from '../data/trustedCompanies';
-
-const testimonials = trustedCompanies.filter((company) => company.testimonial);
-
-const logoMarquee = [
-  ...trustedCompanies,
-  ...trustedCompanies,
-  ...trustedCompanies,
-  ...trustedCompanies,
-];
+import { trustedCompanies as FALLBACK_COMPANIES } from '../data/trustedCompanies';
+import apiFetch from '../utils/api';
 
 const Partners = () => {
+  const [companies, setCompanies] = useState(FALLBACK_COMPANIES);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [slidesToShow, setSlidesToShow] = useState(3);
   const [isMobile, setIsMobile] = useState(false);
   const autoPlayInterval = useRef(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+
+  // Fetch partners + testimonials from backend — fall back to hardcoded data
+  useEffect(() => {
+    Promise.all([
+      apiFetch('/partners?limit=50&isActive=true'),
+      apiFetch('/testimonials?limit=50&isActive=true'),
+    ])
+      .then(([partnersData, testimonialsData]) => {
+        if (!Array.isArray(partnersData) || partnersData.length === 0) return;
+        // Merge: build companies array matching the shape the JSX expects
+        const merged = partnersData.map((p) => {
+          // Find matching testimonial by company name
+          const t = Array.isArray(testimonialsData)
+            ? testimonialsData.find((t) => t.company === p.companyName || t.clientName.includes(p.companyName))
+            : null;
+          return {
+            name:        p.companyName,
+            logo:        p.logo || null,      // Cloudinary URL or null (falls back to local path)
+            url:         p.website || null,
+            testimonial: t ? t.testimonial : undefined,
+          };
+        });
+        setCompanies(merged);
+      })
+      .catch(() => {
+        // API unavailable — silently keep the hardcoded fallback
+      });
+  }, []);
+
+  // Derived from state (replaces module-level const)
+  const testimonials = companies.filter((c) => c.testimonial);
+  const logoMarquee  = [...companies, ...companies, ...companies, ...companies];
 
   useEffect(() => {
     const checkMobile = () => {
@@ -147,7 +172,7 @@ const Partners = () => {
         <div className="testimonial-author testimonial-author--company">
           <div className="testimonial-avatar testimonial-avatar--logo">
             <img
-              src={`${process.env.PUBLIC_URL || ''}${company.logo}`}
+              src={company.logo && company.logo.startsWith('http') ? company.logo : `${process.env.PUBLIC_URL || ''}${company.logo}`}
               alt={`${company.name} logo`}
               className="testimonial-avatar-img testimonial-avatar-img--logo"
               loading="lazy"
@@ -170,7 +195,7 @@ const Partners = () => {
         <div className="trusted-card-inner">
           <div className="trusted-logo-wrapper">
             <img
-              src={`${process.env.PUBLIC_URL || ''}${company.logo}`}
+              src={company.logo && company.logo.startsWith('http') ? company.logo : `${process.env.PUBLIC_URL || ''}${company.logo}`}
               alt={`${company.name} company logo - Trusted partner of Bereket Fikre`}
               className="trusted-logo"
               loading="lazy"

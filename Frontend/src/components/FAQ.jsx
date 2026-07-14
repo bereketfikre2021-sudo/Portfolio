@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { faqItems } from '../data/faqContent';
+import { faqItems as FALLBACK_FAQS } from '../data/faqContent';
+import apiFetch from '../utils/api';
 
 const FAQ = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -7,16 +8,28 @@ const FAQ = () => {
   const intervalRef = useRef(null);
   const userInteractedRef = useRef(false);
   const [direction, setDirection] = useState('next');
+  const [faqs, setFaqs] = useState(FALLBACK_FAQS);
 
-  const faqs = faqItems;
+  // Fetch FAQs from backend — fall back to hardcoded data if fetch fails
+  useEffect(() => {
+    apiFetch('/faqs?limit=50&isActive=true')
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setFaqs(data.map((f) => ({ question: f.question, answer: f.answer })));
+        }
+      })
+      .catch(() => {
+        // API unavailable — silently keep the hardcoded fallback
+      });
+  }, []);
 
-  // FAQPage JSON-LD for search rich results (injected client-side for single source of truth with faqItems)
+  // FAQPage JSON-LD for search rich results (injected client-side for single source of truth with faqs)
   useEffect(() => {
     const id = 'jsonld-faq-page';
     const payload = {
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: faqItems.map((item) => ({
+      mainEntity: faqs.map((item) => ({
         '@type': 'Question',
         name: item.question,
         acceptedAnswer: {
@@ -33,7 +46,7 @@ const FAQ = () => {
       document.head.appendChild(el);
     }
     el.textContent = JSON.stringify(payload);
-  }, []);
+  }, [faqs]);
 
   const goToSlide = (index) => {
     if (index < 0) {

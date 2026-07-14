@@ -1,7 +1,9 @@
-import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
+﻿import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
+import apiFetch from '../utils/api';
 
 // Latest project IDs - shown when "Latest" filter is selected (from Latest folder)
+// These are the FALLBACK slugs — replaced by featured:true from API
 const RECENT_PROJECT_IDS = [
   'toco-premium-coffee-packaging',
   'toco-rollup-banner',
@@ -11,386 +13,32 @@ const RECENT_PROJECT_IDS = [
   'course-outline-cci',
 ];
 
+// Map admin category values → frontend service filter keys
+const CATEGORY_TO_SERVICE = {
+  'Brand Identity':                  'brand-identity-design',
+  'Digital Design · Social Media':   'marketing-campaign-design',
+  'Digital Design · Web Banners':    'digital-social-media-design',
+  'Print & Marketing':               'print-design',
+  'Creative Direction':              'art-direction-visual-guidance',
+  'Recent Projects':                 'recent-project',
+  // Legacy service key pass-through (for items already using service keys)
+  'brand-identity-design':           'brand-identity-design',
+  'marketing-campaign-design':       'marketing-campaign-design',
+  'digital-social-media-media':      'digital-social-media-design',
+  'print-design':                    'print-design',
+  'brand-applications-assets':       'brand-applications-assets',
+  'art-direction-visual-guidance':   'art-direction-visual-guidance',
+};
+
+// Resolve image src — handles both Cloudinary URLs and local /assets/ paths
+const resolveImage = (thumbnail, localPath) => {
+  if (thumbnail && thumbnail.startsWith('http')) return thumbnail;
+  return localPath || thumbnail || '';
+};
+
 // Projects array - exported for use in PortfolioModal
-export const portfolioProjects = [
-    // Brand Identity Projects
-    {
-      id: 'swan-clothing',
-      image: '/assets/Portfolio/Brand%20identity/Full%20brand%20identity%20for%20swan%20clothing.webp',
-      category: 'Brand Identity · Fashion',
-      title: 'Full Brand Identity - Swan Clothing',
-      description: 'Complete brand identity package including logo design, product packaging mockups, and comprehensive brand guidelines for a modern fashion brand.',
-      service: 'brand-identity-design',
-      company: 'Swan Clothing'
-    },
-    {
-      id: 'dayer-engineering',
-      image: '/assets/Portfolio/Full Brand Identity Dayer Enginnering PLC.webp',
-      category: 'Brand Identity · Engineering',
-      title: 'Full Brand Identity - Dayer Engineering PLC',
-      description: 'Comprehensive brand identity system including logo design, brand guidelines, and corporate materials for an engineering company.',
-      service: 'brand-identity-design',
-      company: 'Dayer Engineering PLC'
-    },
-    {
-      id: 'maleda-coffee',
-      image: '/assets/Portfolio/Maleda-Coffee-7b6d183c.webp',
-      category: 'Brand Identity · Beverage',
-      title: 'Brand Identity - Maleda Coffee',
-      description: 'Premium coffee brand identity with rich visual storytelling, packaging design, and complete brand experience from bean to cup.',
-      service: 'brand-identity-design',
-      company: 'Maleda Coffee'
-    },
-    // Print & Marketing Projects - From Print and marketing folder
-    {
-      id: 'ptgr-flyer-a5',
-      image: '/assets/Portfolio/Print%20and%20marketing/A5%20Flyer%20-%20PTGR.webp',
-      category: 'Print Design · Marketing',
-      title: 'A5 Flyer Design - PTGR',
-      description: 'Professional A5 flyer design featuring modern layouts, compelling visuals, and clear messaging for marketing campaigns.',
-      service: 'print-design',
-      company: 'PTGR'
-    },
-    {
-      id: 'yat-rollup-banner',
-      image: '/assets/Portfolio/Print%20and%20marketing/YAT%20Bussiness%20Group%20Rollup%20Mockup%20copy.webp',
-      category: 'Environmental Design · Corporate',
-      title: 'Rollup Banner Design - YAT Business Group',
-      description: 'Professional rollup banner mockup design for exhibitions and corporate events, showcasing brand identity and messaging.',
-      service: 'brand-applications-assets',
-      company: 'YAT Business Group'
-    },
-    {
-      id: 'digital-deresegn-business-card',
-      image: '/assets/Portfolio/Print%20and%20marketing/Digital%20Deresegn%20Business%20Card.webp',
-      category: 'Print Design · Corporate',
-      title: 'Business Card Design - Digital Deresegn',
-      description: 'Professional business card design for Digital Deresegn with a clean, brand-consistent layout optimized for clear contact communication.',
-      service: 'print-design',
-      company: 'Digital Deresegn'
-    },
-    {
-      id: 'digital-deresegn-flyer',
-      image: '/assets/Portfolio/Print%20and%20marketing/Digital%20Deresegn%20Flyer.webp',
-      category: 'Print Design · Marketing',
-      title: 'Flyer Design - Digital Deresegn',
-      description: 'Marketing flyer design for Digital Deresegn focused on strong hierarchy, clear messaging, and visual impact for campaign distribution.',
-      service: 'print-design',
-      company: 'Digital Deresegn'
-    },
-    // Social Media Design Projects - From Social media folder
-    {
-      id: 'blu-hart-karaoke',
-      image: '/assets/Portfolio/karaoke%20event%20social%20media.webp',
-      category: 'Social Media Design · Event Marketing',
-      title: 'Karaoke Event Social Media - Blu Hart',
-      description: 'Social media design collection for a karaoke event, featuring engaging posts and promotional graphics to drive event attendance and engagement.',
-      service: 'marketing-campaign-design',
-      company: 'Blu Hart'
-    },
-    {
-      id: 'ace-stainless-social',
-      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Ace%20Stainless%20Still.webp',
-      category: 'Social Media Design · Manufacturing',
-      title: 'Social Media Design - Ace Stainless Steel',
-      description: 'Professional social media design collection for a stainless steel manufacturing company, showcasing products and services.',
-      service: 'marketing-campaign-design',
-      company: 'Ace Stainless Steel'
-    },
-    {
-      id: 'awra-designs-social',
-      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Awra%20Designs.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design - Awra Designs',
-      description: 'Professional social media design collection for Awra Designs, featuring engaging posts and promotional graphics for digital marketing campaigns.',
-      service: 'marketing-campaign-design',
-      company: 'Awra Designs'
-    },
-    {
-      id: 'digital-deresegn-social-post',
-      image: '/assets/Portfolio/Social%20media/Digital%20Deresegn%20Social%20Media%20Post.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Post Design - Digital Deresegn',
-      description: 'Social media post design for Digital Deresegn built for brand consistency, strong engagement, and campaign-ready digital publishing.',
-      service: 'marketing-campaign-design',
-      company: 'Digital Deresegn'
-    },
-    {
-      id: 'niqat-social-8',
-      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20for%20niqat%20coffee-8.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Graphics Collection - Niqat Coffee',
-      description: 'Comprehensive collection of social media graphics designed for various digital marketing campaigns and promotions.',
-      service: 'marketing-campaign-design',
-      company: 'Niqat Coffee'
-    },
-    {
-      id: 'prime-ethiopia-social',
-      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Prime%20Ethiopia%20copy.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design - Prime Ethiopia',
-      description: 'Professional social media design collection for Prime Ethiopia, featuring engaging posts and promotional graphics for digital marketing campaigns.',
-      service: 'marketing-campaign-design',
-      company: 'Prime Ethiopia'
-    },
-    {
-      id: 'prime-ethiopia-social-8',
-      image: '/assets/Portfolio/Social%20media/Social%20Media%20Design%20For%20Prime%20Ethiopia.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Design For Prime Ethiopia',
-      description: 'Campaign social media visual for Prime Ethiopia designed for strong reach, fast readability, and consistent brand presentation.',
-      service: 'marketing-campaign-design',
-      company: 'Prime Ethiopia'
-    },
-    {
-      id: 'task-plug-social-template-2',
-      image: '/assets/Portfolio/Social%20media/Social%20Media%20Template%20-%20Task%20Plug-2.webp',
-      category: 'Social Media Design · Digital Marketing',
-      title: 'Social Media Template Series - Task Plug',
-      description: 'Additional social media template design featuring promotional graphics and engaging visual content for digital marketing.',
-      service: 'marketing-campaign-design',
-      company: 'Task Plug'
-    },
-    {
-      id: 'prime-ethiopia-employee-id',
-      image: '/assets/Portfolio/Print%20and%20marketing/Prime%20Ethiopia%20Employee%20ID.webp',
-      category: 'Print Design · Corporate',
-      title: 'Employee ID Design - Prime Ethiopia',
-      description: 'Professional employee ID card design for Prime Ethiopia, featuring clear layout, branding, and print-ready specifications for corporate identification.',
-      service: 'print-design',
-      company: 'Prime Ethiopia'
-    },
-    {
-      id: 'prime-ethiopia-business-proposal',
-      image: '/assets/Portfolio/Print%20and%20marketing/Prime%20Ethiopia%20Business%20Poposal%20Cover.webp',
-      category: 'Print Design · Corporate',
-      title: 'Prime Ethiopia Business Poposal Cover',
-      description: 'Professional business proposal cover design for Prime Ethiopia, featuring modern layout and corporate branding for company proposal documents.',
-      service: 'print-design',
-      company: 'Prime Ethiopia'
-    },
-    // Web Banner Projects - From Web banners folder
-    {
-      id: 'finix-banner-1',
-      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Website Banner Design - Finix Bet',
-      description: 'Professional website banner design for Finix Bet, optimized for web display and digital marketing campaigns.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-banner-2',
-      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-2.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Website Banner Collection - Finix Bet',
-      description: 'Website banner design featuring modern layouts and engaging visuals for effective online presence.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-banner-3',
-      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-3.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Web Banner Design - Finix Bet',
-      description: 'Professional web banner design optimized for various screen sizes and digital platforms.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-banner-4',
-      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-4.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Website Banner Series - Finix Bet',
-      description: 'Comprehensive website banner series designed for consistent brand communication across digital platforms.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-banner-5',
-      image: '/assets/Portfolio/Web%20banners/Website%20Banner%20For%20Finix%20Bet-5.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Web Banner Assets - Finix Bet',
-      description: 'Professional web banner assets featuring modern design and engaging visuals for digital marketing.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    {
-      id: 'finix-banner-10',
-      image: '/assets/Portfolio/Website%20Banner%20For%20Finix%20Bet-10.webp',
-      category: 'Web Design · Digital Marketing',
-      title: 'Website Banner Collection - Finix Bet',
-      description: 'Engaging website banner collection featuring modern design and compelling visuals for digital marketing.',
-      service: 'digital-social-media-design',
-      company: 'Finix Bet'
-    },
-    // Creative Direction Projects - From Creative Direction folder (arranged by file number)
-    {
-      id: 'creative-direction-1',
-      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-1.webp',
-      category: 'Creative Direction · Visual Guidance',
-      title: 'Creative Direction & Visual Guidance - Project 1',
-      description: 'Comprehensive creative direction and visual guidance for product presentation, photography, and creative assets. This project involved developing a cohesive visual language across multiple touchpoints, ensuring brand consistency and high-quality execution. The creative direction encompassed styling, composition, color palette selection, and overall aesthetic direction for product photography and marketing materials.',
-      service: 'art-direction-visual-guidance',
-      company: 'Various Clients'
-    },
-    {
-      id: 'creative-direction-2',
-      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-2.webp',
-      category: 'Creative Direction · Visual Guidance',
-      title: 'Creative Direction & Visual Guidance - Project 2',
-      description: 'Professional creative direction and visual guidance for creative campaigns and brand storytelling. This project focused on establishing visual narratives that align with brand identity, including direction for photography shoots, video production, and digital content creation. The guidance ensured all visual elements work harmoniously to communicate the brand message effectively.',
-      service: 'art-direction-visual-guidance',
-      company: 'Various Clients'
-    },
-    {
-      id: 'creative-direction-3',
-      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-3.webp',
-      category: 'Creative Direction · Visual Guidance',
-      title: 'Creative Direction & Visual Guidance - Project 3',
-      description: 'Strategic creative direction for product launches and marketing initiatives. This project involved creating comprehensive visual guidelines for product photography, including lighting, composition, background selection, and styling direction. The creative direction ensured consistent visual quality across all product presentations and marketing channels.',
-      service: 'art-direction-visual-guidance',
-      company: 'Various Clients'
-    },
-    {
-      id: 'creative-direction-4',
-      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-4.webp',
-      category: 'Creative Direction · Visual Guidance',
-      title: 'Creative Direction & Visual Guidance - Project 4',
-      description: 'Comprehensive creative direction for brand campaigns and visual communication. This project encompassed developing creative concepts, visual style guides, and direction for photography and videography teams. The guidance ensured all creative assets maintain brand integrity while achieving compelling visual storytelling that resonates with target audiences.',
-      service: 'art-direction-visual-guidance',
-      company: 'Various Clients'
-    },
-    {
-      id: 'creative-direction-5',
-      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-5.webp',
-      category: 'Creative Direction · Visual Guidance',
-      title: 'Creative Direction & Visual Guidance - Project 5',
-      description: 'Professional creative direction for digital and print marketing materials. This project involved establishing visual direction for social media content, advertising campaigns, and promotional materials. The creative direction included color palette selection, typography guidance, layout composition, and overall aesthetic direction to ensure cohesive brand presentation across all platforms.',
-      service: 'art-direction-visual-guidance',
-      company: 'Various Clients'
-    },
-    {
-      id: 'creative-direction-6',
-      image: '/assets/Portfolio/Creative%20Direction/Art%20Direction-6.webp',
-      category: 'Creative Direction · Visual Guidance',
-      title: 'Creative Direction & Visual Guidance - Project 6',
-      description: 'Strategic creative direction for brand campaigns and visual storytelling initiatives. This project involved creating comprehensive visual guidelines, directing creative teams, and ensuring brand consistency across all visual touchpoints. The creative direction encompassed photography direction, video production guidance, and digital content creation to deliver cohesive and impactful brand experiences.',
-      service: 'art-direction-visual-guidance',
-      company: 'Various Clients'
-    },
-    // New Branding Projects
-    {
-      id: 'alta-counseling-branding',
-      image: '/assets/Portfolio/Brand%20identity/Company%20Logo%20Rebranding%20-%20Alta%20Counseling%20Ethiopia.webp',
-      category: 'Brand Identity · Counseling',
-      title: 'Company Logo Rebranding - Alta Counseling Ethiopia',
-      description: 'Complete brand identity and logo rebranding for Alta Counseling Ethiopia, including refreshed logo design, brand guidelines, and visual identity system. The identity reflects professionalism, trust, and a modern approach to counseling services.',
-      service: 'brand-identity-design',
-      company: 'Alta Counseling Ethiopia'
-    },
-    {
-      id: 'basha-bekele-branding',
-      image: '/assets/Portfolio/Brand%20identity/Basha%20Bekele%20Specialty%20Coffee%20Producer%20and%20Exporter.webp',
-      category: 'Brand Identity · Coffee',
-      title: 'Brand Identity - Basha Bekele Specialty Coffee Producer & Exporter',
-      description: 'Brand identity design for Basha Bekele Specialty Coffee Producer & Exporter, crafted to communicate quality, origin, and a premium export-ready brand presence.',
-      service: 'brand-identity-design',
-      company: 'Basha Bekele Specialty Coffee Producer & Exporter'
-    },
-    {
-      id: 'criterion-home-care-branding',
-      image: '/assets/Portfolio/Brand%20identity/Criterion%20In%20Home%20Care%20-%20USA.webp',
-      category: 'Brand Identity · Healthcare',
-      title: 'Brand Identity - Criterion In Home Care (USA)',
-      description: 'Professional brand identity for Criterion In Home Care (USA) focused on trust, care, and a clean visual system for service communication.',
-      service: 'brand-identity-design',
-      company: 'Criterion In Home Care'
-    },
-    {
-      id: 'digital-deresegn-branding',
-      image: '/assets/Portfolio/Brand%20identity/Digital%20Deresegn.webp',
-      category: 'Brand Identity · Corporate',
-      title: 'Brand Identity - Digital Deresegn',
-      description: 'Complete visual identity direction for Digital Deresegn, including brand look-and-feel, design consistency, and adaptable brand assets.',
-      service: 'brand-identity-design',
-      company: 'Digital Deresegn'
-    },
-    {
-      id: 'medavail-wholesale-branding',
-      image: '/assets/Portfolio/Brand%20identity/Medavail%20Pharmaceutical%20Import%20and%20Wholesale.webp',
-      category: 'Brand Identity · Pharmaceutical',
-      title: 'Brand Identity - Medavail Pharmaceutical Import & Wholesale',
-      description: 'Brand identity development for Medavail Pharmaceutical Import & Wholesale to strengthen credibility, recognition, and professional market presence.',
-      service: 'brand-identity-design',
-      company: 'Medavail Pharmaceutical Import & Wholesale'
-    },
-    {
-      id: 'raya-hotel-branding',
-      image: '/assets/Portfolio/Brand%20identity/Branding%20Raya%20Hotel%20and%20Convention%20Center.webp',
-      category: 'Brand Identity · Hospitality',
-      title: 'Full Brand Identity - Raya Hotel & Convention Center',
-      description: 'Comprehensive brand identity system including logo design, brand guidelines, visual identity, color palette, typography, and complete brand applications for a hospitality and convention center. The identity captures elegance, luxury, and exceptional hospitality experiences.',
-      service: 'brand-identity-design',
-      company: 'Raya Hotel & Convention Center'
-    },
-    // Latest Projects - from Latest folder
-    {
-      id: 'prime-ethiopia-flyer',
-      image: '/assets/Portfolio/Latest/Flyer%20Prime%20Ethiopia%20copy.webp',
-      category: 'Print Design · Marketing',
-      title: 'Flyer Design - Prime Ethiopia',
-      description: 'Professional flyer design for Prime Ethiopia, featuring compelling visuals and clear messaging for marketing campaigns.',
-      service: 'print-design',
-      company: 'Prime Ethiopia'
-    },
-    {
-      id: 'toco-premium-coffee-packaging',
-      image: '/assets/Portfolio/Latest/Premium%20Coffee%20Packaging%20Design%20-%20Toco%20Speciality%20Coffee.webp',
-      category: 'Packaging Design · Beverage',
-      title: 'Premium Coffee Packaging - Toco Speciality Coffee',
-      description: 'Premium packaging design for Toco Speciality Coffee, combining visual appeal with functional design for retail and distribution.',
-      service: 'brand-applications-assets',
-      company: 'Toco Speciality Coffee'
-    },
-    {
-      id: 'toco-rollup-banner',
-      image: '/assets/Portfolio/Latest/Toco%20Speciality%20Coffee%20Rollup%20Banner.webp',
-      category: 'Environmental Design · Beverage',
-      title: 'Rollup Banner - Toco Speciality Coffee',
-      description: 'Professional rollup banner design for Toco Speciality Coffee, showcasing brand identity for exhibitions and retail environments.',
-      service: 'brand-applications-assets',
-      company: 'Toco Speciality Coffee'
-    },
-    {
-      id: 'ptgr-trifold',
-      image: '/assets/Portfolio/Latest/Trifold%20PTGR.webp',
-      category: 'Print Design · Marketing',
-      title: 'Trifold Brochure - PTGR',
-      description: 'Professional trifold brochure design for PTGR, featuring modern layouts and engaging visual content for marketing materials.',
-      service: 'print-design',
-      company: 'PTGR'
-    },
-    {
-      id: 'company-profile-cci-utop-goozam',
-      image: '/assets/Portfolio/Latest/company-profile-cci-utop-goozam.webp',
-      category: 'Print Design · Corporate',
-      title: 'Company Profile - CCI, Utop & Goozam Technologies',
-      description: 'Professional company profile design for CCI, Utop and Goozam Technologies, showcasing brand identity, services, and corporate messaging for print and digital use.',
-      service: 'print-design',
-      company: 'CCI, Utop & Goozam Technologies'
-    },
-    {
-      id: 'course-outline-cci',
-      image: '/assets/Portfolio/Latest/Course%20Outline%20-%20Center%20For%20Computer%20Intelligence%20%28CCI%29%20%28USA%29.webp',
-      category: 'Print Design · Corporate',
-      title: 'Course Outline - Center For Computer Intelligence (CCI)',
-      description: 'Professional course outline design for Center For Computer Intelligence (CCI) USA, featuring clear structure and engaging layout for educational materials.',
-      service: 'print-design',
-      company: 'Center For Computer Intelligence (CCI)'
-    },
-    // New Print & Layout Projects
-];
+// Starts as empty array; populated from API on mount; PortfolioModal reads this
+export let portfolioProjects = [];
 
 const MOBILE_BREAKPOINT = 768;
 const WEB_BANNERS_MOBILE_MAX = 3;
@@ -410,7 +58,34 @@ const Portfolio = () => {
   const { openPortfolioModal } = useContext(ModalContext);
   const [activeFilter, setActiveFilter] = useState('recent');
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT);
+  const [allProjects, setAllProjects] = useState([]);
   const filtersRef = useRef(null);
+
+  // Fetch all published projects from backend
+  useEffect(() => {
+    apiFetch('/projects?status=PUBLISHED&limit=100&sortBy=displayOrder&order=asc')
+      .then((data) => {
+        if (!Array.isArray(data) || data.length === 0) return;
+        const mapped = data.map((p) => ({
+          id:          p.slug,                                          // slug used as ID for modal lookup
+          image:       p.thumbnail || '',                              // Cloudinary URL (no local fallback needed — admin uploads images)
+          category:    p.category,                                     // e.g. 'Brand Identity', 'Print & Marketing'
+          title:       p.title,
+          description: p.shortDescription,
+          service:     CATEGORY_TO_SERVICE[p.category] || 'print-design',
+          company:     p.title.split(' - ').pop() || 'Various Clients', // extract company from title as best-effort
+          featured:    p.featured,
+          _apiId:      p.id,                                           // original UUID for gallery fetch
+        }));
+        // Update the exported array so PortfolioModal can read it
+        portfolioProjects.length = 0;
+        mapped.forEach((p) => portfolioProjects.push(p));
+        setAllProjects(mapped);
+      })
+      .catch(() => {
+        // API unavailable — allProjects stays empty, filteredProjects will be empty
+      });
+  }, []);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
@@ -426,15 +101,15 @@ const Portfolio = () => {
     { id: 'creative-direction', label: 'Creative Direction' }
   ];
 
-  // Shuffle function to randomize project order (only once on mount)
+  // Shuffle function to randomize project order (re-runs when allProjects loads from API)
   const shuffledProjects = useMemo(() => {
-    const shuffled = [...portfolioProjects];
+    const shuffled = [...allProjects];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;
-  }, []);
+  }, [allProjects]);
 
   // Helper function to shuffle projects ensuring no same company items are adjacent
   const shuffleWithCompanySeparation = (projects) => {
@@ -542,26 +217,28 @@ const Portfolio = () => {
     let filtered = [];
     
     if (activeFilter === 'recent') {
+      // Show projects marked as featured (Recent Projects) from API
+      // Fall back to RECENT_PROJECT_IDS order if available
+      const featuredProjects = allProjects.filter(p => p.featured);
+      if (featuredProjects.length > 0) return featuredProjects;
       filtered = RECENT_PROJECT_IDS.map((id) =>
-        portfolioProjects.find((p) => p.id === id)
+        allProjects.find((p) => p.id === id)
       ).filter(Boolean);
       return filtered;
     } else if (activeFilter === 'brand-identity') {
-      // Brand Identity: Logo design, visual systems, brand consistency (exclude Latest-only projects)
+      // Brand Identity: Logo design, visual systems, brand consistency (exclude Recent Projects)
       filtered = shuffledProjects.filter(project => 
-        !RECENT_PROJECT_IDS.includes(project.id) &&
+        !project.featured &&
         (project.service === 'brand-identity-design' ||
         project.service === 'logo-design' ||
         project.service === 'visual-identity-systems')
       );
-      // Alta Counseling first in branding category
-      filtered.sort((a, b) => (a.id === 'alta-counseling-branding' ? -1 : b.id === 'alta-counseling-branding' ? 1 : 0));
       // Show all brand identity projects (no cap)
       return filtered;
     } else if (activeFilter === 'creative-direction') {
       // Creative Direction: Concept development, visual storytelling, art direction (exclude Latest-only projects)
-      filtered = portfolioProjects.filter(project => 
-        !RECENT_PROJECT_IDS.includes(project.id) &&
+      filtered = allProjects.filter(project => 
+        !project.featured &&
         project.service === 'art-direction-visual-guidance'
       );
       // Sort creative direction projects by ID to maintain numerical order (1-6)
@@ -577,31 +254,24 @@ const Portfolio = () => {
       // Return sorted array directly for creative direction (no shuffling)
       return filtered;
     } else if (activeFilter === 'digital-design') {
-      // Digital Design: Social media visuals, campaigns, content creation (exclude Latest-only projects)
+      // Digital Design: Social media visuals, campaigns, content creation (exclude Recent Projects)
       filtered = shuffledProjects.filter(project => 
-        !RECENT_PROJECT_IDS.includes(project.id) &&
+        !project.featured &&
         (project.service === 'digital-social-media-design' ||
         project.service === 'marketing-campaign-design')
       );
     } else if (activeFilter === 'print-marketing') {
-      // Print & Marketing: Catalogs, brochures, brand collateral (exclude Latest-only projects)
+      // Print & Marketing: Catalogs, brochures, brand collateral (exclude Recent Projects)
       filtered = shuffledProjects.filter(project => 
-        !RECENT_PROJECT_IDS.includes(project.id) &&
+        !project.featured &&
         (project.service === 'print-design' ||
         project.service === 'brand-applications-assets')
       );
-      // Ensure prime-ethiopia-business-proposal appears near the end
-      const businessProfile = filtered.find(p => p.id === 'prime-ethiopia-business-proposal');
-      const others = filtered.filter(p => p.id !== 'prime-ethiopia-business-proposal');
-      const five = selectWithVariety(others, 5);
-      const result = [...five];
-      if (businessProfile) result.push(businessProfile);
-      return result.length > 0 ? result : selectWithVariety(filtered, 6);
     }
     
-    // Limit to 6 items with company variety (already shuffled to avoid same company adjacent)
+    // Limit to 6 items with company variety
     return selectWithVariety(filtered, 6);
-  }, [shuffledProjects, activeFilter]);
+  }, [shuffledProjects, activeFilter, allProjects]);
 
   // Separate Digital Design projects into Social Media and Web Banners
   const digitalDesignGroups = useMemo(() => {
@@ -609,9 +279,9 @@ const Portfolio = () => {
       return { socialMedia: [], webBanners: [] };
     }
     
-    // Get all digital design projects first (exclude Latest-only projects)
+    // Get all digital design projects (exclude Recent Projects)
     const allDigital = shuffledProjects.filter(project => 
-      !RECENT_PROJECT_IDS.includes(project.id) &&
+      !project.featured &&
       (project.service === 'digital-social-media-design' ||
       project.service === 'marketing-campaign-design')
     );
@@ -623,13 +293,12 @@ const Portfolio = () => {
       project.service === 'digital-social-media-design'
     );
     
-    // Keep social media ordering stable and ensure key items are always visible.
+    // Keep social media ordering stable
     const socialMedia = [
       ...SOCIAL_MEDIA_ORDER.map((id) => socialMediaAll.find((p) => p.id === id)).filter(Boolean),
       ...socialMediaAll.filter((p) => !SOCIAL_MEDIA_ORDER.includes(p.id))
     ];
     
-    // For Web Banners: Show all items shuffled to avoid same company adjacent
     const webBanners = shuffleWithCompanySeparation(webBannersAll);
     
     return { socialMedia, webBanners };
@@ -743,7 +412,7 @@ const Portfolio = () => {
                     >
                       <div className="portfolio-image-small">
                         <img 
-                          src={`${process.env.PUBLIC_URL || ''}${project.image}`} 
+                          src={project.image && project.image.startsWith('http') ? project.image : `${process.env.PUBLIC_URL || ''}${project.image}`} 
                           alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
                           className="portfolio-thumb" 
                           loading="lazy" 
@@ -814,7 +483,7 @@ const Portfolio = () => {
                     >
                       <div className="portfolio-image-small">
                         <img 
-                          src={`${process.env.PUBLIC_URL || ''}${project.image}`} 
+                          src={project.image && project.image.startsWith('http') ? project.image : `${process.env.PUBLIC_URL || ''}${project.image}`} 
                           alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
                           className="portfolio-thumb" 
                           loading="lazy" 
@@ -877,7 +546,7 @@ const Portfolio = () => {
               >
                 <div className="portfolio-image-small">
                   <img 
-                    src={`${process.env.PUBLIC_URL || ''}${project.image}`} 
+                    src={project.image && project.image.startsWith('http') ? project.image : `${process.env.PUBLIC_URL || ''}${project.image}`} 
                     alt={`${project.title} - ${project.category} project by Bereket Fikre`} 
                     className="portfolio-thumb" 
                     loading="lazy" 

@@ -1,102 +1,75 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ModalContext } from '../context/ModalContext';
 import { useFocusTrap } from '../hooks/useFocusTrap';
+import apiFetch from '../utils/api';
+
+// Hardcoded icons by slug — SVGs can't be fetched from API
+const SERVICE_ICONS = {
+  'brand-identity': (
+    <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+    </svg>
+  ),
+  'digital-design': (
+    <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/>
+    </svg>
+  ),
+  'print-marketing': (
+    <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+    </svg>
+  ),
+  'creative-direction': (
+    <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+    </svg>
+  ),
+};
+
+// Hardcoded fallback service data (keyed by original ID '1','2','3','4')
+const FALLBACK_SERVICE_DATA = {
+  '1': { number:'01', icon:SERVICE_ICONS['brand-identity'],    category:'Branding Service',  title:'Brand Identity',     description:'Logo design, visual systems, brand consistency',            features:['Logo Design','Visual Systems','Brand Consistency','Brand Guidelines','Color Palette & Typography','Brand Applications'],    type:'Complete Branding',        deliveryTime:'14-21 Business Days' },
+  '3': { number:'02', icon:SERVICE_ICONS['digital-design'],    category:'Digital Service',   title:'Digital Design',     description:'Social media visuals, campaigns, content creation',          features:['Social Media Visuals','Digital Campaigns','Content Creation','Web Visuals','Digital Branding','Online Marketing Materials'],  type:'Digital Design',           deliveryTime:'7-14 Business Days'  },
+  '4': { number:'03', icon:SERVICE_ICONS['print-marketing'],   category:'Print Service',     title:'Print & Marketing',  description:'Catalogs, brochures, brand collateral',                     features:['Catalogs','Brochures','Brand Collateral','Print Marketing Materials','Brand Applications','Marketing Design'],               type:'Print & Marketing Design', deliveryTime:'7-14 Business Days'  },
+  '2': { number:'04', icon:SERVICE_ICONS['creative-direction'],category:'Creative Service',  title:'Creative Direction', description:'Concept development, visual storytelling, art direction',    features:['Concept Development','Visual Storytelling','Art Direction','Campaign Direction','Creative Strategy','Visual Communication'], type:'Creative Leadership',      deliveryTime:'7-14 Business Days'  },
+};
 
 const ServicesModal = () => {
   const { serviceModal, closeServiceModal } = useContext(ModalContext);
   const modalRef = useRef(null);
   useFocusTrap(serviceModal?.isOpen, modalRef);
-  
-  const serviceData = {
-    '1': {
-      number: '01',
-      icon: (
-        <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      ),
-      category: 'Branding Service',
-      title: 'Brand Identity',
-      description: 'Logo design, visual systems, brand consistency',
-      features: [
-        'Logo Design',
-        'Visual Systems',
-        'Brand Consistency',
-        'Brand Guidelines',
-        'Color Palette & Typography',
-        'Brand Applications'
-      ],
-      type: 'Complete Branding',
-      deliveryTime: '14-21 Business Days'
-    },
-    '3': {
-      number: '02',
-      icon: (
-        <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/>
-        </svg>
-      ),
-      category: 'Digital Service',
-      title: 'Digital Design',
-      description: 'Social media visuals, campaigns, content creation',
-      features: [
-        'Social Media Visuals',
-        'Digital Campaigns',
-        'Content Creation',
-        'Web Visuals',
-        'Digital Branding',
-        'Online Marketing Materials'
-      ],
-      type: 'Digital Design',
-      deliveryTime: '7-14 Business Days'
-    },
-    '4': {
-      number: '03',
-      icon: (
-        <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
-        </svg>
-      ),
-      category: 'Print Service',
-      title: 'Print & Marketing',
-      description: 'Catalogs, brochures, brand collateral',
-      features: [
-        'Catalogs',
-        'Brochures',
-        'Brand Collateral',
-        'Print Marketing Materials',
-        'Brand Applications',
-        'Marketing Design'
-      ],
-      type: 'Print & Marketing Design',
-      deliveryTime: '7-14 Business Days'
-    },
-    '2': {
-      number: '04',
-      icon: (
-        <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      ),
-      category: 'Creative Service',
-      title: 'Creative Direction',
-      description: 'Concept development, visual storytelling, art direction',
-      features: [
-        'Concept Development',
-        'Visual Storytelling',
-        'Art Direction',
-        'Campaign Direction',
-        'Creative Strategy',
-        'Visual Communication'
-      ],
-      type: 'Creative Leadership',
-      deliveryTime: '7-14 Business Days'
-    }
-  };
+  const [serviceData, setServiceData] = useState(FALLBACK_SERVICE_DATA);
+
+  // Fetch live service data — update all fields except icons
+  useEffect(() => {
+    apiFetch('/services?limit=10&isActive=true&sortBy=displayOrder&order=asc')
+      .then((data) => {
+        if (!Array.isArray(data) || data.length === 0) return;
+        // Build a lookup by original numeric ID and by slug
+        const merged = {};
+        // Map API services to the expected shape
+        const slugToOldId = { 'brand-identity':'1', 'digital-design':'3', 'print-marketing':'4', 'creative-direction':'2' };
+        data.forEach((s, i) => {
+          const oldId = slugToOldId[s.slug] || String(i + 1);
+          const fallback = FALLBACK_SERVICE_DATA[oldId] || {};
+          merged[oldId] = {
+            number:       s.serviceNumber || fallback.number,
+            icon:         SERVICE_ICONS[s.slug]   || fallback.icon,
+            category:     s.category              || fallback.category,
+            title:        s.title,
+            description:  s.shortDescription,
+            features:     s.bulletPoints?.length  ? s.bulletPoints : fallback.features,
+            type:         s.type                  || fallback.type,
+            deliveryTime: s.deliveryTime           || fallback.deliveryTime,
+          };
+        });
+        if (Object.keys(merged).length > 0) setServiceData(merged);
+      })
+      .catch(() => {});
+  }, []);
 
   // Announce modal opening to screen readers
   useEffect(() => {

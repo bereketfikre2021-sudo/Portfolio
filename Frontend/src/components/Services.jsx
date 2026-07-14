@@ -1,8 +1,66 @@
 import React, { useState, useEffect } from 'react';
+import apiFetch from '../utils/api';
+
+// Hardcoded icons — kept local since SVGs can't be stored in the database
+const SERVICE_ICONS = {
+  'brand-identity': (
+    <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+      <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+    </svg>
+  ),
+  'digital-design': (
+    <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/>
+    </svg>
+  ),
+  'print-marketing': (
+    <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+    </svg>
+  ),
+  'creative-direction': (
+    <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+      <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+    </svg>
+  ),
+};
+
+// Hardcoded fallback — shown until API responds
+const FALLBACK_SERVICES = [
+  { id: '1', slug: 'brand-identity',    number: '01', title: 'Brand Identity',     description: 'Logo design, visual systems, brand consistency' },
+  { id: '3', slug: 'digital-design',    number: '02', title: 'Digital Design',     description: 'Social media visuals, campaigns, content creation' },
+  { id: '4', slug: 'print-marketing',   number: '03', title: 'Print & Marketing',  description: 'Catalogs, brochures, brand collateral' },
+  { id: '2', slug: 'creative-direction',number: '04', title: 'Creative Direction', description: 'Concept development, visual storytelling, art direction' },
+];
 
 const Services = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [services, setServices] = useState(
+    FALLBACK_SERVICES.map((s) => ({ ...s, icon: SERVICE_ICONS[s.slug] }))
+  );
+
+  // Fetch services from backend — update title/description/number, keep icons
+  useEffect(() => {
+    apiFetch('/services?limit=10&isActive=true&sortBy=displayOrder&order=asc')
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setServices(data.map((s, i) => ({
+            id:          s.id,
+            slug:        s.slug,
+            number:      s.serviceNumber || String(i + 1).padStart(2, '0'),
+            title:       s.title,
+            description: s.shortDescription,
+            icon:        SERVICE_ICONS[s.slug] || FALLBACK_SERVICES[i]?.icon || SERVICE_ICONS['brand-identity'],
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -14,61 +72,11 @@ const Services = () => {
   useEffect(() => {
     if (!isMobile) return;
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % 4);
+      setActiveIndex((prev) => (prev + 1) % services.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [isMobile]);
+  }, [isMobile, services.length]);
 
-  const services = [
-    {
-      id: '1',
-      number: '01',
-      icon: (
-        <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      ),
-      title: 'Brand Identity',
-      description: 'Logo design, visual systems, brand consistency'
-    },
-    {
-      id: '3',
-      number: '02',
-      icon: (
-        <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/>
-        </svg>
-      ),
-      title: 'Digital Design',
-      description: 'Social media visuals, campaigns, content creation'
-    },
-    {
-      id: '4',
-      number: '03',
-      icon: (
-        <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
-        </svg>
-      ),
-      title: 'Print & Marketing',
-      description: 'Catalogs, brochures, brand collateral'
-    },
-    {
-      id: '2',
-      number: '04',
-      icon: (
-        <svg className="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-      ),
-      title: 'Creative Direction',
-      description: 'Concept development, visual storytelling, art direction'
-    }
-  ];
 
   return (
     <section id="services" className="services" aria-labelledby="services-heading">

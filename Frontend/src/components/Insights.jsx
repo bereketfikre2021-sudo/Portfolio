@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ModalContext } from '../context/ModalContext';
+import apiFetch from '../utils/api';
 
-const caseStudies = [
+// Hardcoded fallback data (shown until API responds)
+const FALLBACK_CASE_STUDIES = [
   {
     id: 'medavail-pharmaceuticals-company-profile',
     image: '/assets/Portfolio/Case%20Studies/Company%20Profile%20-%20Medavail%20Pharmaceuticals.webp',
     category: 'Company Profile Design',
     title: 'Medavail Pharmaceuticals',
-    description: 'Company profile design for Medavail Pharmaceuticals, an Ethiopia-based pharmaceutical and medical equipment import company. The profile communicates Medavail\'s vision, credibility, and operational strength to partners and stakeholders.'
+    description: 'Company profile design for Medavail Pharmaceuticals, an Ethiopia-based pharmaceutical and medical equipment import company.'
   },
   {
     id: 'alta-counseling',
@@ -28,39 +30,39 @@ const caseStudies = [
     image: '/assets/Portfolio/Case%20Studies/Andegna%20Cataloge.webp',
     category: 'Product Catalog Design',
     title: 'Andegna Furniture',
-    description: 'Product catalog design and visual direction for Andegna Furniture—clear, professional presentation of a wide range of furniture products for easy browsing and a premium, consistent brand look.',
+    description: 'Product catalog design and visual direction for Andegna Furniture.',
     tabletOnly: true
   }
 ];
 
-const blogPosts = [
+const FALLBACK_BLOG_POSTS = [
   {
     id: 'design-principles',
     image: '/assets/Portfolio/Blog/Design%20principles.webp',
     category: 'Design Principles · Fundamentals',
     title: 'Essential Graphic Design Principles Every Designer Should Master',
-    description: 'Explore the 7 fundamental principles of graphic design including balance, contrast, hierarchy, alignment, repetition, proportion, and movement. Learn how these core concepts form the foundation of effective visual communication.'
+    description: 'Explore the 7 fundamental principles of graphic design.'
   },
   {
     id: 'design-trends-2026',
     image: '/assets/Portfolio/Blog/Graphic%20Design%20Trends%202026.webp',
     category: 'Trends · 2026',
     title: 'Graphic Design Trends 2026: What\'s Shaping the Future',
-    description: 'Discover the latest graphic design trends for 2026, from bold typography to sustainable design practices. Stay ahead with insights into emerging visual styles and techniques.'
+    description: 'Discover the latest graphic design trends for 2026.'
   },
   {
     id: 'brand-identity',
     image: '/assets/Portfolio/Blog/Branding.webp',
     category: 'Brand Design · Identity',
     title: 'Building Strong Brand Identities: A Complete Guide',
-    description: 'Learn how to create cohesive brand identities that resonate with audiences. Discover the essential elements of brand design and how to build memorable visual systems that communicate your brand\'s values and personality.'
+    description: 'Learn how to create cohesive brand identities that resonate with audiences.'
   },
   {
     id: 'consistency-luxury-branding',
     image: '/assets/Portfolio/Blog/Consistency.webp',
     category: 'Brand Design · Strategy',
     title: 'Why Consistency Is the Real Luxury in Branding',
-    description: 'Consistency is often mistaken for repetition. In reality, it\'s discipline. Strong brands don\'t rely on constant reinvention; they rely on systems that work everywhere.',
+    description: 'Consistency is often mistaken for repetition. In reality, it\'s discipline.',
     tabletOnly: true
   }
 ];
@@ -68,6 +70,41 @@ const blogPosts = [
 const Insights = () => {
   const { openCaseStudyModal, openBlogModal } = useContext(ModalContext);
   const [activeTab, setActiveTab] = useState('case-studies');
+  const [caseStudies, setCaseStudies] = useState(FALLBACK_CASE_STUDIES);
+  const [blogPosts,   setBlogPosts]   = useState(FALLBACK_BLOG_POSTS);
+
+  // Fetch insights from backend — fall back to hardcoded data if API fails
+  useEffect(() => {
+    apiFetch('/insights?status=PUBLISHED&limit=10&type=CASE_STUDY&sortBy=publishDate&order=asc')
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setCaseStudies(data.map((item, i) => ({
+            id:         item.slug || item.id,
+            image:      item.coverImage || FALLBACK_CASE_STUDIES[i]?.image || '',
+            category:   item.category,
+            title:      item.title,
+            description: item.excerpt,
+            tabletOnly: i === 3, // 4th item is tablet-only (matches original layout)
+          })));
+        }
+      })
+      .catch(() => {});
+
+    apiFetch('/insights?status=PUBLISHED&limit=10&type=BLOG_POST&sortBy=publishDate&order=asc')
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setBlogPosts(data.map((item, i) => ({
+            id:         item.slug || item.id,
+            image:      item.coverImage || FALLBACK_BLOG_POSTS[i]?.image || '',
+            category:   item.category,
+            title:      item.title,
+            description: item.excerpt,
+            tabletOnly: i === 3,
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const isMobile = window.innerWidth <= 768;
@@ -192,7 +229,7 @@ const Insights = () => {
               >
                 <div className="case-study-tile-image">
                   <img
-                    src={`${process.env.PUBLIC_URL || ''}${caseStudy.image}`}
+                    src={caseStudy.image && caseStudy.image.startsWith('http') ? caseStudy.image : `${process.env.PUBLIC_URL || ''}${caseStudy.image}`}
                     alt={`${caseStudy.title} - ${caseStudy.description}`}
                     className="case-study-tile-thumb"
                     loading="lazy"
@@ -245,7 +282,7 @@ const Insights = () => {
               >
                 <div className="blog-card-image">
                   <img
-                    src={`${process.env.PUBLIC_URL || ''}${post.image}`}
+                    src={post.image && post.image.startsWith('http') ? post.image : `${process.env.PUBLIC_URL || ''}${post.image}`}
                     alt={`${post.title} - ${post.category} blog post by Bereket Fikre`}
                     className="blog-card-thumb"
                     loading="lazy"

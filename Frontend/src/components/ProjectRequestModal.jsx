@@ -162,7 +162,7 @@ const ProjectRequestModal = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('https://formspree.io/f/mandzwvb', {
+      const response = await fetch('https://bereket-fikre-backend.onrender.com/api/project-request', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mandzwvb';
+const FORMSPREE_ENDPOINT = 'https://bereket-fikre-backend.onrender.com/api/contact';
 
 const CONTACT_CHANNELS = [
   {
