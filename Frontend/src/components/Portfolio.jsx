@@ -115,7 +115,7 @@ const Portfolio = () => {
   }, []);
 
   const services = [
-    { id: 'recent', label: 'Latest' },
+    { id: 'recent', label: 'Recent Projects' },
     { id: 'brand-identity', label: 'Brand Identity' },
     { id: 'digital-design', label: 'Digital Design' },
     { id: 'print-marketing', label: 'Print & Marketing' },
