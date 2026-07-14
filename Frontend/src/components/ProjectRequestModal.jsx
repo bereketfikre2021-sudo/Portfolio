@@ -162,7 +162,11 @@ const ProjectRequestModal = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('https://bereket-fikre-backend.onrender.com/api/project-request', {
+      const API_BASE =
+        (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
+        'http://localhost:5000/api';
+
+      const response = await fetch(`${API_BASE}/project-request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

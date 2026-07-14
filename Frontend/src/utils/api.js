@@ -10,7 +10,7 @@
 
 const API_BASE =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
-  'https://bereket-fikre-backend.onrender.com/api';
+  'http://localhost:5000/api';
 
 /**
  * Fetch from the backend API.

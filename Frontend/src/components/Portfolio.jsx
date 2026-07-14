@@ -64,7 +64,7 @@ const Portfolio = () => {
         const res = await fetch(
           `${
             (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
-            'https://bereket-fikre-backend.onrender.com/api'
+            'http://localhost:5000/api'
           }/projects?status=PUBLISHED&limit=100&sortBy=displayOrder&order=asc`,
           { signal: controller.signal, headers: { 'Content-Type': 'application/json' } }
         );

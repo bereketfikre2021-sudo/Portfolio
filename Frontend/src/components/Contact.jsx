@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ModalContext } from '../context/ModalContext';
 
-const FORMSPREE_ENDPOINT = 'https://bereket-fikre-backend.onrender.com/api/contact';
+const API_BASE =
+  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
+  'http://localhost:5000/api';
+
+const FORMSPREE_ENDPOINT = `${API_BASE}/contact`;
 
 const CONTACT_CHANNELS = [
   {
