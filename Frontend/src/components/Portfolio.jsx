@@ -1,6 +1,5 @@
 ﻿import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
-import apiFetch from '../utils/api';
 import { STATIC_PROJECTS } from '../data/staticProjects';
 
 // Map admin category values → frontend service filter keys
@@ -24,11 +23,6 @@ export let portfolioProjects = [...STATIC_PROJECTS];
 
 const MOBILE_BREAKPOINT = 768;
 const WEB_BANNERS_MOBILE_IDS = ['finix-banner-1', 'finix-banner-2', 'finix-banner-3'];
-const SOCIAL_MEDIA_ORDER = [
-  'blu-hart-karaoke', 'ace-stainless-social', 'awra-designs-social',
-  'digital-deresegn-social-post', 'niqat-social-8', 'task-plug-social-template-2',
-  'prime-ethiopia-social', 'prime-ethiopia-social-8',
-];
 
 const Portfolio = () => {
   const { openPortfolioModal } = useContext(ModalContext);
@@ -114,122 +108,43 @@ const Portfolio = () => {
     { id: 'creative-direction', label: 'Creative Direction' },
   ];
 
-  const shuffledProjects = useMemo(() => {
-    const shuffled = [...allProjects];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  }, [allProjects]);
-
-  const shuffleWithCompanySeparation = (projects) => {
-    if (projects.length <= 1) return projects;
-    const companyGroups = {};
-    projects.forEach((p) => {
-      const c = p.company || 'Unknown';
-      if (!companyGroups[c]) companyGroups[c] = [];
-      companyGroups[c].push(p);
-    });
-    const companies = Object.keys(companyGroups);
-    const companyIndices = {};
-    companies.forEach((c) => {
-      companyIndices[c] = 0;
-      for (let i = companyGroups[c].length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [companyGroups[c][i], companyGroups[c][j]] = [companyGroups[c][j], companyGroups[c][i]];
-      }
-    });
-    const shuffled = [];
-    let lastCompany = null;
-    while (shuffled.length < projects.length) {
-      let found = false;
-      for (const c of companies) {
-        if (companyIndices[c] < companyGroups[c].length && c !== lastCompany) {
-          shuffled.push(companyGroups[c][companyIndices[c]++]);
-          lastCompany = c; found = true; break;
-        }
-      }
-      if (!found) {
-        for (const c of companies) {
-          if (companyIndices[c] < companyGroups[c].length) {
-            shuffled.push(companyGroups[c][companyIndices[c]++]);
-            lastCompany = c; break;
-          }
-        }
-      }
-    }
-    return shuffled;
-  };
-
-  const selectWithVariety = (projects, maxItems = 6) => {
-    if (projects.length <= maxItems) return shuffleWithCompanySeparation(projects);
-    const companyGroups = {};
-    projects.forEach((p) => {
-      const c = p.company || 'Unknown';
-      if (!companyGroups[c]) companyGroups[c] = [];
-      companyGroups[c].push(p);
-    });
-    const selected = [];
-    for (const c of Object.keys(companyGroups)) {
-      if (selected.length >= maxItems) break;
-      selected.push(companyGroups[c].shift());
-    }
-    if (selected.length < maxItems) {
-      const remaining = projects.filter((p) => !selected.includes(p));
-      selected.push(...remaining.slice(0, maxItems - selected.length));
-    }
-    return shuffleWithCompanySeparation(selected.slice(0, maxItems));
-  };
-
   const filteredProjects = useMemo(() => {
     if (activeFilter === 'recent') {
       const featured = allProjects.filter((p) => p.featured);
       return featured.length > 0 ? featured : allProjects.slice(0, 6);
     }
     if (activeFilter === 'brand-identity') {
-      return shuffledProjects.filter(
+      return allProjects.filter(
         (p) => !p.featured &&
           (p.service === 'brand-identity-design' || p.service === 'logo-design' || p.service === 'visual-identity-systems')
       );
     }
     if (activeFilter === 'creative-direction') {
-      const filtered = allProjects.filter((p) => !p.featured && p.service === 'art-direction-visual-guidance');
-      filtered.sort((a, b) => {
-        const n = (s) => { const m = s.id.match(/-(\d+)$/); return m ? parseInt(m[1]) : 0; };
-        return n(a) - n(b);
-      });
-      return filtered;
+      return allProjects.filter((p) => !p.featured && p.service === 'art-direction-visual-guidance');
     }
     if (activeFilter === 'digital-design') {
-      return selectWithVariety(
-        shuffledProjects.filter((p) => !p.featured &&
-          (p.service === 'digital-social-media-design' || p.service === 'marketing-campaign-design')), 6
+      return allProjects.filter((p) => !p.featured &&
+        (p.service === 'digital-social-media-design' || p.service === 'marketing-campaign-design')
       );
     }
     if (activeFilter === 'print-marketing') {
-      return selectWithVariety(
-        shuffledProjects.filter((p) => !p.featured &&
-          (p.service === 'print-design' || p.service === 'brand-applications-assets')), 6
+      return allProjects.filter((p) => !p.featured &&
+        (p.service === 'print-design' || p.service === 'brand-applications-assets')
       );
     }
     return [];
-  }, [shuffledProjects, activeFilter, allProjects]);
+  }, [activeFilter, allProjects]);
 
   const digitalDesignGroups = useMemo(() => {
     if (activeFilter !== 'digital-design') return { socialMedia: [], webBanners: [] };
-    const allDigital = shuffledProjects.filter(
+    const allDigital = allProjects.filter(
       (p) => !p.featured &&
         (p.service === 'digital-social-media-design' || p.service === 'marketing-campaign-design')
     );
     const socialMediaAll = allDigital.filter((p) => p.service === 'marketing-campaign-design');
     const webBannersAll  = allDigital.filter((p) => p.service === 'digital-social-media-design');
-    const socialMedia = [
-      ...SOCIAL_MEDIA_ORDER.map((id) => socialMediaAll.find((p) => p.id === id)).filter(Boolean),
-      ...socialMediaAll.filter((p) => !SOCIAL_MEDIA_ORDER.includes(p.id)),
-    ];
-    return { socialMedia, webBanners: shuffleWithCompanySeparation(webBannersAll) };
-  }, [shuffledProjects, activeFilter]);
+    return { socialMedia: socialMediaAll, webBanners: webBannersAll };
+  }, [activeFilter, allProjects]);
 
   // Scroll active filter button into view on mobile
   useEffect(() => {
