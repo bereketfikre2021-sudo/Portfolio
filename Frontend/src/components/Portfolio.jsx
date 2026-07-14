@@ -59,32 +59,53 @@ const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState('recent');
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT);
   const [allProjects, setAllProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const filtersRef = useRef(null);
 
-  // Fetch all published projects from backend
+  // Fetch all published projects from backend, with one retry for Render cold-start
   useEffect(() => {
-    apiFetch('/projects?status=PUBLISHED&limit=100&sortBy=displayOrder&order=asc')
-      .then((data) => {
-        if (!Array.isArray(data) || data.length === 0) return;
+    let cancelled = false;
+
+    const fetchProjects = async (attempt = 1) => {
+      try {
+        const data = await apiFetch('/projects?status=PUBLISHED&limit=100&sortBy=displayOrder&order=asc');
+        if (cancelled) return;
+        if (!Array.isArray(data) || data.length === 0) {
+          setIsLoading(false);
+          return;
+        }
         const mapped = data.map((p) => ({
-          id:          p.slug,                                          // slug used as ID for modal lookup
-          image:       p.thumbnail || '',                              // Cloudinary URL (no local fallback needed — admin uploads images)
-          category:    p.category,                                     // e.g. 'Brand Identity', 'Print & Marketing'
+          id:          p.slug,
+          image:       p.thumbnail || '',
+          category:    p.category,
           title:       p.title,
           description: p.shortDescription,
           service:     CATEGORY_TO_SERVICE[p.category] || 'print-design',
-          company:     p.title.split(' - ').pop() || 'Various Clients', // extract company from title as best-effort
+          company:     p.title.split(' - ').pop() || 'Various Clients',
           featured:    p.featured,
-          _apiId:      p.id,                                           // original UUID for gallery fetch
+          _apiId:      p.id,
         }));
         // Update the exported array so PortfolioModal can read it
         portfolioProjects.length = 0;
         mapped.forEach((p) => portfolioProjects.push(p));
         setAllProjects(mapped);
-      })
-      .catch(() => {
-        // API unavailable — allProjects stays empty, filteredProjects will be empty
-      });
+        setIsLoading(false);
+      } catch {
+        if (cancelled) return;
+        // Retry once after 4 s (covers Render free-tier cold-start ~30–60 s on first load,
+        // but a second attempt often hits the now-warm instance quickly)
+        if (attempt === 1) {
+          setTimeout(() => fetchProjects(2), 4000);
+        } else {
+          setFetchError(true);
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchProjects();
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {
@@ -387,7 +408,38 @@ const Portfolio = () => {
           ))}
         </div>
         
-        {activeFilter === 'digital-design' ? (
+        {/* Loading skeletons */}
+        {isLoading && (
+          <div className="portfolio-grid-modern" role="list" aria-label="Loading projects" aria-busy="true">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="portfolio-item-modern portfolio-skeleton" aria-hidden="true">
+                <div className="portfolio-skeleton-image" />
+                <div className="portfolio-skeleton-content">
+                  <div className="portfolio-skeleton-line portfolio-skeleton-line--short" />
+                  <div className="portfolio-skeleton-line" />
+                  <div className="portfolio-skeleton-line portfolio-skeleton-line--medium" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Error state */}
+        {!isLoading && fetchError && (
+          <div className="portfolio-empty-state" role="alert">
+            <p>Couldn't load projects right now. Please refresh the page to try again.</p>
+          </div>
+        )}
+
+        {/* Empty state (API returned no data) */}
+        {!isLoading && !fetchError && allProjects.length === 0 && (
+          <div className="portfolio-empty-state">
+            <p>No projects available at the moment.</p>
+          </div>
+        )}
+
+        {!isLoading && !fetchError && allProjects.length > 0 && (
+          activeFilter === 'digital-design' ? (
           <>
             {/* Social Media Visuals Section */}
             {digitalDesignGroups.socialMedia.length > 0 && (
@@ -587,6 +639,7 @@ const Portfolio = () => {
               </article>
             ))}
           </div>
+          )
         )}
       </div>
     </section>

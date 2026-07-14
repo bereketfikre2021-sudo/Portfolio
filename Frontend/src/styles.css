@@ -11532,3 +11532,52 @@ html {
     object-fit: contain !important;
   }
 }
+
+
+/* ─── Portfolio skeleton loading state ──────────────────────────────────────── */
+@keyframes portfolio-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.portfolio-skeleton {
+  pointer-events: none;
+  cursor: default !important;
+}
+
+.portfolio-skeleton-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md, 8px);
+  background: linear-gradient(90deg, var(--bg-secondary, #1a1a2e) 25%, var(--bg-tertiary, #16213e) 50%, var(--bg-secondary, #1a1a2e) 75%);
+  background-size: 800px 100%;
+  animation: portfolio-shimmer 1.6s infinite linear;
+}
+
+.portfolio-skeleton-content {
+  padding: 1rem 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.portfolio-skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--bg-secondary, #1a1a2e) 25%, var(--bg-tertiary, #16213e) 50%, var(--bg-secondary, #1a1a2e) 75%);
+  background-size: 800px 100%;
+  animation: portfolio-shimmer 1.6s infinite linear;
+}
+
+.portfolio-skeleton-line--short  { width: 40%; }
+.portfolio-skeleton-line--medium { width: 65%; }
+
+/* ─── Portfolio empty / error state ─────────────────────────────────────────── */
+.portfolio-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-muted, #888);
+  font-size: 1rem;
+}
