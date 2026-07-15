@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ModalContext } from '../context/ModalContext';
+import { trackContactForm, trackExternalLink } from '../utils/analytics';
 
 const API_BASE =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
@@ -201,6 +202,7 @@ const Contact = () => {
       if (response.ok && (data.ok === true || data.next)) {
         setFormData({ name: '', email: '', subject: '', message: '' });
         setShowSuccessState(true);
+        trackContactForm('contact_form');
         showFormModal('success');
       } else {
         throw new Error(data.error || 'Form submission failed');
@@ -237,6 +239,7 @@ const Contact = () => {
                     href={channel.href}
                     className="contact-channel-link"
                     aria-label={channel.ariaLabel}
+                    onClick={() => channel.external && trackExternalLink(channel.id, channel.href)}
                     {...(channel.external
                       ? { target: '_blank', rel: 'noopener noreferrer' }
                       : {})}

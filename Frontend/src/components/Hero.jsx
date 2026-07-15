@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTextTypingAnimation } from '../hooks/useTextTypingAnimation';
 import apiFetch from '../utils/api';
+import { trackCTA } from '../utils/analytics';
 
 const LINE1_PREFIX = 'Creating ';
 const LINE1_HIGHLIGHT = 'Extraordinary';
@@ -133,7 +134,7 @@ const Hero = () => {
             <a
               href="#portfolio"
               className="btn btn-primary"
-              onClick={(e) => handleNavClick(e, '#portfolio')}
+              onClick={(e) => { handleNavClick(e, '#portfolio'); trackCTA('Explore Work', 'hero'); }}
               aria-label="Explore my work portfolio"
             >
               <span className="btn-text">Explore Work</span>
@@ -143,7 +144,7 @@ const Hero = () => {
             <a
               href="#contact"
               className="btn btn-outline"
-              onClick={(e) => handleNavClick(e, '#contact')}
+              onClick={(e) => { handleNavClick(e, '#contact'); trackCTA('Get in Touch', 'hero'); }}
               aria-label="Get in touch"
             >
               <span className="btn-text">Get in Touch</span>

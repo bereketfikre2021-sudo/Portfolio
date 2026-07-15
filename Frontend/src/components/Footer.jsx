@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { ModalContext } from '../context/ModalContext';
 import Tooltip from './Tooltip';
+import { trackExternalLink } from '../utils/analytics';
 
 const Footer = () => {
   const { openPrivacyTermsModal } = useContext(ModalContext);
@@ -15,7 +16,7 @@ const Footer = () => {
           <div className="footer-social">
             <div className="social-modern">
               <Tooltip text="View my Behance portfolio" position="top">
-                <a href="https://www.behance.net/bereketfikre" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="Behance (opens in new window)">
+                <a href="https://www.behance.net/bereketfikre" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="Behance (opens in new window)" onClick={() => trackExternalLink('behance', 'https://www.behance.net/bereketfikre')}>
                   <img 
                     src={`${process.env.PUBLIC_URL || ''}/assets/behance-svgrepo-com.svg`} 
                     alt="Behance - View Bereket Fikre's portfolio" 
@@ -29,7 +30,7 @@ const Footer = () => {
                 </a>
               </Tooltip>
               <Tooltip text="View my Freelancer profile" position="top">
-                <a href="https://www.freelancer.com/u/bereketfikre" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="Freelancer (opens in new window)">
+                <a href="https://www.freelancer.com/u/bereketfikre" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="Freelancer (opens in new window)" onClick={() => trackExternalLink('freelancer', 'https://www.freelancer.com/u/bereketfikre')}>
                   <img 
                     src={`${process.env.PUBLIC_URL || ''}/assets/freelancer-svgrepo-com.svg`} 
                     alt="Freelancer - View Bereket Fikre's profile" 
@@ -43,7 +44,7 @@ const Footer = () => {
                 </a>
               </Tooltip>
               <Tooltip text="View my Upwork profile" position="top">
-                <a href="https://www.upwork.com/freelancers/~019189891a0638d811?mp_source=share" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="Upwork (opens in new window)">
+                <a href="https://www.upwork.com/freelancers/~019189891a0638d811?mp_source=share" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="Upwork (opens in new window)" onClick={() => trackExternalLink('upwork', 'https://www.upwork.com/freelancers/~019189891a0638d811')}>
                   <img 
                     src={`${process.env.PUBLIC_URL || ''}/assets/upwork-svgrepo-com.svg`} 
                     alt="Upwork - View Bereket Fikre's profile" 
@@ -57,7 +58,7 @@ const Footer = () => {
                 </a>
               </Tooltip>
               <Tooltip text="View my Dribbble profile" position="top">
-                <a href="https://dribbble.com/bereket-fikre" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="Dribbble (opens in new window)">
+                <a href="https://dribbble.com/bereket-fikre" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="Dribbble (opens in new window)" onClick={() => trackExternalLink('dribbble', 'https://dribbble.com/bereket-fikre')}>
                   <img 
                     src={`${process.env.PUBLIC_URL || ''}/assets/dribble-svgrepo-com.svg`} 
                     alt="Dribbble - View Bereket Fikre's design work" 

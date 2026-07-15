@@ -1,6 +1,7 @@
 ﻿import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
 import { ModalContext } from '../context/ModalContext';
 import { STATIC_PROJECTS } from '../data/staticProjects';
+import { trackProjectView, trackCTA } from '../utils/analytics';
 
 // Map admin category values → frontend service filter keys
 const CATEGORY_TO_SERVICE = {
@@ -176,8 +177,8 @@ const Portfolio = () => {
       data-project={project.id}
       role="listitem"
       tabIndex={0}
-      onClick={() => openPortfolioModal(project.id)}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPortfolioModal(project.id); } }}
+      onClick={() => { trackProjectView(project.title); openPortfolioModal(project.id); }}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trackProjectView(project.title); openPortfolioModal(project.id); } }}
       aria-label={`${project.title} - ${project.category}. Click to view project details`}
     >
       <div className="portfolio-image-small">

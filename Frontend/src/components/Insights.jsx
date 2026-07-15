@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ModalContext } from '../context/ModalContext';
 import apiFetch from '../utils/api';
+import { trackCaseStudyView, trackBlogView } from '../utils/analytics';
 
 // Hardcoded fallback data (shown until API responds)
 const FALLBACK_CASE_STUDIES = [
@@ -162,13 +163,12 @@ const Insights = () => {
     };
   }, [activeTab]);
 
-  const handleOpenBlog = (postId) => {
+  const handleOpenBlog = (postId, postTitle) => {
     try {
+      trackBlogView(postTitle || postId);
       if (openBlogModal) openBlogModal(postId);
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error opening blog modal:', error);
-      }
+      if (import.meta.env.DEV) console.error('Error opening blog modal:', error);
     }
   };
 
@@ -225,7 +225,7 @@ const Insights = () => {
                 key={caseStudy.id}
                 className={`case-study-tile${caseStudy.tabletOnly ? ' case-study-tile-tablet-only' : ''}`}
                 data-project={caseStudy.id}
-                onClick={() => openCaseStudyModal(caseStudy.id)}
+                onClick={() => { trackCaseStudyView(caseStudy.title); openCaseStudyModal(caseStudy.id); }}
               >
                 <div className="case-study-tile-image">
                   <img
@@ -278,7 +278,7 @@ const Insights = () => {
                 data-project={post.id}
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
-                onClick={() => handleOpenBlog(post.id)}
+                onClick={() => handleOpenBlog(post.id, post.title)}
               >
                 <div className="blog-card-image">
                   <img
@@ -304,7 +304,7 @@ const Insights = () => {
                     className="blog-card-link"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleOpenBlog(post.id);
+                      handleOpenBlog(post.id, post.title);
                     }}
                     aria-label={`Read ${post.title} blog post`}
                   >
