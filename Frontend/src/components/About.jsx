@@ -60,18 +60,27 @@ const About = () => {
 
           {/* Profile photo — gives the About section a human face */}
           <div className="about-photo-block" data-aos="fade-up" data-aos-delay="120">
-            <div className="about-photo-wrapper">
-              <img
-                src={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp`}
-                alt="Bereket Fikre — Graphic and Brand Designer"
-                className="about-photo"
-                width="400"
-                height="500"
-                loading="lazy"
-                decoding="async"
-                sizes="(max-width: 768px) 80vw, 320px"
-              />
-              <div className="about-photo-accent" aria-hidden="true" />
+            <div className="about-photo-container">
+              {/* Decorative frame — sits outside the image, mirrors hero pattern */}
+              <div className="about-photo-frame" aria-hidden="true">
+                <div className="about-frame-corner about-frame-corner-tl"></div>
+                <div className="about-frame-corner about-frame-corner-tr"></div>
+                <div className="about-frame-corner about-frame-corner-bl"></div>
+                <div className="about-frame-corner about-frame-corner-br"></div>
+              </div>
+              <div className="about-photo-wrapper">
+                <img
+                  src={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp`}
+                  alt="Bereket Fikre — Graphic and Brand Designer"
+                  className="about-photo"
+                  width="600"
+                  height="480"
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(max-width: 768px) 85vw, 460px"
+                />
+                <div className="about-photo-overlay" aria-hidden="true"></div>
+              </div>
             </div>
           </div>
           
