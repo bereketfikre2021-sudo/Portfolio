@@ -56,11 +56,11 @@ const Footer = () => {
                   />
                 </a>
               </Tooltip>
-              <Tooltip text="View my GitHub profile" position="top">
-                <a href="https://github.com/bereketfikre2021-sudo" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="GitHub (opens in new window)">
+              <Tooltip text="View my Dribbble profile" position="top">
+                <a href="https://dribbble.com/bereket-fikre" target="_blank" rel="noopener noreferrer" className="social-item" aria-label="Dribbble (opens in new window)">
                   <img 
-                    src={`${process.env.PUBLIC_URL || ''}/assets/github-svgrepo-com.svg`} 
-                    alt="GitHub - View Bereket Fikre's profile" 
+                    src={`${process.env.PUBLIC_URL || ''}/assets/dribble-svgrepo-com.svg`} 
+                    alt="Dribbble - View Bereket Fikre's design work" 
                     className="social-icon-img" 
                     loading="lazy" 
                     width="24" 

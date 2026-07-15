@@ -1,101 +1,86 @@
 import React, { useEffect, useRef } from 'react';
 
 const CustomCursor = () => {
-  const cursorRef = useRef(null);
-  const followerRef = useRef(null);
+  const cursorRef    = useRef(null);
+  const followerRef  = useRef(null);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (window.innerWidth <= 768) return;
 
-    const cursor = cursorRef.current;
+    const cursor   = cursorRef.current;
     const follower = followerRef.current;
     if (!cursor || !follower) return;
 
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    let followerX = 0, followerY = 0;
-    let animationFrameId;
-    let isVisible = true;
+    // Position cursor off-screen until first move so it doesn't flash at 0,0
+    let mouseX = -200, mouseY = -200;
+    let cx = -200, cy = -200;
+    let fx = -200, fy = -200;
+    let rafId;
+    let isScaled = false;
 
-    const handleMouseMove = (e) => {
+    // Use transform instead of left/top — GPU composited, no layout reflow
+    cursor.style.cssText   += ';position:fixed;pointer-events:none;will-change:transform;';
+    follower.style.cssText += ';position:fixed;pointer-events:none;will-change:transform;';
+
+    const onMove = (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
     };
 
-    const animate = () => {
-      if (!isVisible) {
-        animationFrameId = requestAnimationFrame(animate);
-        return;
-      }
-      cursorX += (mouseX - cursorX) * 0.15;
-      cursorY += (mouseY - cursorY) * 0.15;
-      followerX += (mouseX - followerX) * 0.08;
-      followerY += (mouseY - followerY) * 0.08;
+    const tick = () => {
+      // Faster lerp factors — 0.25/0.12 vs old 0.15/0.08
+      // Prevents visible lag under load
+      cx += (mouseX - cx) * 0.25;
+      cy += (mouseY - cy) * 0.25;
+      fx += (mouseX - fx) * 0.12;
+      fy += (mouseY - fy) * 0.12;
 
-      if (cursor) {
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top = cursorY + 'px';
-      }
-      if (follower) {
-        follower.style.left = followerX + 'px';
-        follower.style.top = followerY + 'px';
-      }
+      const scale = isScaled ? 1.5 : 1;
+      cursor.style.transform   = `translate(${cx - 10}px, ${cy - 10}px) scale(${scale})`;
+      follower.style.transform = `translate(${fx - 20}px, ${fy - 20}px) scale(${scale})`;
 
-      animationFrameId = requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(tick);
     };
 
-    const handleVisibilityChange = () => {
-      isVisible = document.visibilityState === 'visible';
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    rafId = requestAnimationFrame(tick);
+    window.addEventListener('mousemove', onMove, { passive: true });
 
-    animate();
+    // Event delegation — covers all elements including lazy-loaded ones
+    const INTERACTIVE = 'a, button, [data-service], [data-project], [role="button"]';
 
-    const handleMouseEnter = () => {
-      if (cursor) cursor.style.transform = 'scale(1.5)';
-      if (follower) follower.style.transform = 'scale(1.5)';
+    const onOver = (e) => {
+      if (e.target.closest(INTERACTIVE)) isScaled = true;
     };
 
-    const handleMouseLeave = () => {
-      if (cursor) cursor.style.transform = 'scale(1)';
-      if (follower) follower.style.transform = 'scale(1)';
+    const onOut = (e) => {
+      const from = e.target.closest(INTERACTIVE);
+      const to   = e.relatedTarget?.closest?.(INTERACTIVE);
+      if (from && !to) isScaled = false;
     };
 
-    const interactiveElements = document.querySelectorAll('a, button, [data-service], [data-project]');
-    interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
-    });
+    // Safety reset — if mouse leaves window entirely, always reset
+    const onLeave = () => { isScaled = false; };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseover',  onOver,  { passive: true });
+    document.addEventListener('mouseout',   onOut,   { passive: true });
+    document.addEventListener('mouseleave', onLeave, { passive: true });
 
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('mousemove', handleMouseMove);
-      interactiveElements.forEach(el => {
-        el.removeEventListener('mouseenter', handleMouseEnter);
-        el.removeEventListener('mouseleave', handleMouseLeave);
-      });
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseover',  onOver);
+      document.removeEventListener('mouseout',   onOut);
+      document.removeEventListener('mouseleave', onLeave);
     };
   }, []);
 
   return (
     <>
-      <div ref={cursorRef} className="custom-cursor" aria-hidden="true"></div>
-      <div ref={followerRef} className="cursor-follower" aria-hidden="true"></div>
+      <div ref={cursorRef}   className="custom-cursor"   aria-hidden="true" />
+      <div ref={followerRef} className="cursor-follower" aria-hidden="true" />
     </>
   );
 };
 
 export default CustomCursor;
-
-
-
-
-
-
-
-
-

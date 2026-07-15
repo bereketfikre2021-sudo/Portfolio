@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { FITNESS_APP_URL, DATING_APP_URL, FITNESS_APP_LOGO } from '../data/appUrls';
 
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -96,12 +95,10 @@ const Navigation = () => {
         { href: '#portfolio',    label: 'Featured Works', section: 'portfolio' },
         { href: '#case-studies', label: 'Case Studies',  section: 'case-studies' },
         { href: '#blog',         label: 'Blog',          section: 'blog' },
-        { divider: true },
-        { href: FITNESS_APP_URL, label: 'Fitness Track Pro', external: true, icon: 'fitness' },
-        { href: DATING_APP_URL,  label: 'Dating Invitation Pro', external: true, icon: 'heart'   },
       ],
     },
-    { href: '#contact', label: 'Contact', section: 'contact', number: '05' },
+    { href: '#faq',     label: 'FAQ',     section: 'faq',     number: '05' },
+    { href: '#contact', label: 'Contact', section: 'contact', number: '06' },
   ];
 
   return (

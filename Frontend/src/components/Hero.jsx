@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useTextTypingAnimation } from '../hooks/useTextTypingAnimation';
+import apiFetch from '../utils/api';
 
 const LINE1_PREFIX = 'Creating ';
 const LINE1_HIGHLIGHT = 'Extraordinary';
 const LINE2 = 'Experiences';
 const TYPING_SPEED = 42;
-const START_DELAY = 350;
+const START_DELAY = 550; // slight delay so hero image paints first
 const PAUSE_BETWEEN = 200;
 
 const delayExtra =
@@ -21,6 +22,22 @@ const TypingCursor = () => (
 
 const Hero = () => {
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [stats, setStats] = useState({ projects: '50+', clients: '30+', years: '5+' });
+
+  // Fetch live stats from backend — falls back to hardcoded values if API is unavailable
+  useEffect(() => {
+    apiFetch('/admin/dashboard')
+      .then((data) => {
+        if (!data?.stats) return;
+        const projects = data.stats.projects?.published ?? data.stats.projects?.total ?? 50;
+        setStats({
+          projects: `${projects}+`,
+          clients:  '30+', // no client count in DB — keep static
+          years:    `${new Date().getFullYear() - 2019}+`,
+        });
+      })
+      .catch(() => {}); // silently keep defaults
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -135,17 +152,17 @@ const Hero = () => {
 
           <div className="hero-stats">
             <div className="stat-box">
-              <span className="stat-number" data-target="50">50+</span>
+              <span className="stat-number">{stats.projects}</span>
               <span className="stat-label">Projects</span>
             </div>
             <div className="stat-divider"></div>
             <div className="stat-box">
-              <span className="stat-number" data-target="30">30+</span>
+              <span className="stat-number">{stats.clients}</span>
               <span className="stat-label">Clients</span>
             </div>
             <div className="stat-divider"></div>
             <div className="stat-box">
-              <span className="stat-number" data-target="5">5+</span>
+              <span className="stat-number">{stats.years}</span>
               <span className="stat-label">Years</span>
             </div>
           </div>

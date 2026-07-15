@@ -136,7 +136,10 @@ const FAQ = () => {
                     </div>
                     <div className="faq-answer" aria-live="polite">
                       <div className="faq-answer-content">
-                        <p>{faq.answer}</p>
+                        {/<[a-z][\s\S]*>/i.test(faq.answer)
+                          ? <div dangerouslySetInnerHTML={{ __html: faq.answer }} />
+                          : <p>{faq.answer}</p>
+                        }
                       </div>
                     </div>
                   </div>

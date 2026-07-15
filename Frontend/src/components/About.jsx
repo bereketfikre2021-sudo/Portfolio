@@ -57,6 +57,23 @@ const About = () => {
               />
             </div>
           </div>
+
+          {/* Profile photo — gives the About section a human face */}
+          <div className="about-photo-block" data-aos="fade-up" data-aos-delay="120">
+            <div className="about-photo-wrapper">
+              <img
+                src={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp`}
+                alt="Bereket Fikre — Graphic and Brand Designer"
+                className="about-photo"
+                width="400"
+                height="500"
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 768px) 80vw, 320px"
+              />
+              <div className="about-photo-accent" aria-hidden="true" />
+            </div>
+          </div>
           
           <div className="about-bottom-row desktop-only">
             <div className="skills-showcase skills-minimal" data-aos="fade-up" data-aos-delay="150" role="region" aria-label="Core expertise">

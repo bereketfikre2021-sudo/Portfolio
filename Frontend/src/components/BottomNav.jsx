@@ -121,7 +121,13 @@ const BottomNav = () => {
         <path d="M3 9h18M9 21V9"/>
       </svg>
     )},
-    { href: '#contact', label: 'Contact', section: 'contact', number: '05', icon: (
+    { href: '#faq', label: 'FAQ', section: 'faq', number: '07', icon: (
+      <svg className="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>
+        <circle cx="12" cy="12" r="10"/>
+      </svg>
+    )},
+    { href: '#contact', label: 'Contact', section: 'contact', number: '08', icon: (
       <svg className="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
         <polyline points="22,6 12,13 2,6"/>

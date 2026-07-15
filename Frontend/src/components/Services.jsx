@@ -73,7 +73,7 @@ const Services = () => {
     if (!isMobile) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % services.length);
-    }, 4000);
+    }, 7000);
     return () => clearInterval(interval);
   }, [isMobile, services.length]);
 
@@ -119,6 +119,20 @@ const Services = () => {
                         <li key={i}>{item.trim()}</li>
                       ))}
                     </ul>
+                    <a
+                      href="#contact"
+                      className="service-item-cta"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const target = document.querySelector('#contact');
+                        if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                      }}
+                    >
+                      Request a Quote
+                      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </a>
                   </div>
                 </div>
               </article>

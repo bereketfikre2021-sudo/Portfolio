@@ -238,7 +238,7 @@ const Partners = () => {
           <span className="section-number desktop-number">06</span>
           <span className="section-number mobile-number">06</span>
           <div className="section-header">
-            <span className="section-label">Our Partners</span>
+            <span className="section-label">Clients I've Worked With</span>
             <h2 id="partners-heading" className="section-title">
               <span className="title-main">Trusted</span>
               <span className="title-accent">Partners</span>

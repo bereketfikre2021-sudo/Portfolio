@@ -271,6 +271,11 @@ const Portfolio = () => {
               ? filteredProjects.slice(0, 3)
               : filteredProjects
             ).map((p) => renderCard(p))}
+            {filteredProjects.length === 0 && (
+              <p className="portfolio-empty-state" role="status">
+                No projects in this category yet — check back soon.
+              </p>
+            )}
           </div>
         )}
       </div>
