@@ -3,6 +3,7 @@ import { ModalContext } from '../context/ModalContext';
 import Navigation from './Navigation';
 import Hero from './Hero';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { startSession, trackSectionView } from '../utils/tracker';
 
 // Defer non-critical visual effects to not block LCP
 const CustomCursor = lazy(() => import('./CustomCursor'));
@@ -52,6 +53,33 @@ function debounce(fn, delay) {
 function AppContent() {
   const { openProjectRequestModal } = useContext(ModalContext);
   const [deferEffects, setDeferEffects] = useState(false);
+
+  // ── Start analytics session on mount ──────────────────────────────────────
+  useEffect(() => { startSession(); }, []);
+
+  // ── Section tracking via IntersectionObserver ──────────────────────────────
+  useEffect(() => {
+    const SECTIONS = ['home','about','services','portfolio','insights','partners','faq','contact'];
+    const observed = new Set();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(({ isIntersecting, target }) => {
+        const id = target.id;
+        if (isIntersecting && !observed.has(id)) {
+          observed.add(id);
+          trackSectionView(id);
+        }
+      });
+    }, { threshold: 0.3 });
+    // Wait for sections to render
+    const timer = setTimeout(() => {
+      SECTIONS.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    }, 1000);
+    return () => { clearTimeout(timer); observer.disconnect(); };
+  }, []);
+
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
