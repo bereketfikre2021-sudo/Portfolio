@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import apiFetch from '../utils/api';
 
 const CORE_SKILLS = [
   'Brand Identity',
@@ -17,6 +18,18 @@ const TOOLS = [
 ];
 
 const About = () => {
+  const [siteSettings, setSiteSettings] = useState(null);
+
+  useEffect(() => {
+    apiFetch('/site-settings')
+      .then((data) => { if (data) setSiteSettings(data); })
+      .catch(() => {}); // silently keep hardcoded fallbacks
+  }, []);
+
+  const aboutHeading  = siteSettings?.aboutHeading     ?? "Hello, I'm Bereket Fikre";
+  const aboutBody     = siteSettings?.aboutBodyDesktop  ?? 'A creative designer crafting refined brand identities and digital experiences with clarity, purpose, and precision. I believe the strongest brands don\'t demand attention. They earn it through thoughtful design, timeless aesthetics, and meaningful strategy.';
+  const aboutImageSrc = siteSettings?.aboutImage        ?? null;
+
   return (
     <section id="about" className="about" aria-labelledby="about-heading">
       <div className="container">
@@ -34,15 +47,12 @@ const About = () => {
         
         <div className="about-grid">
           <div className="about-text-block" data-aos="fade-up" data-aos-delay="100">
-            <div className="text-block-header desktop-only">
-              <h3>Hello, I'm Bereket</h3>
+            <div className="text-block-header">
+              <h3>{aboutHeading}</h3>
               <div className="divider-short"></div>
             </div>
-            <p className="text-large desktop-only">
-              I design intentional, strategic visual identities that help brands communicate clearly and consistently.
-            </p>
-            <p className="text-large mobile-only">
-              Senior Graphic Designer and Brand Builder focused on creating intentional, consistent visual identities across digital and print.
+            <p className="text-large">
+              {aboutBody}
             </p>
             
             <div className="signature" style={{ marginTop: '2rem' }}>
@@ -70,7 +80,7 @@ const About = () => {
               </div>
               <div className="about-photo-wrapper">
                 <img
-                  src={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp`}
+                  src={aboutImageSrc || `${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-2.webp`}
                   alt="Bereket Fikre — Graphic and Brand Designer"
                   className="about-photo"
                   width="600"

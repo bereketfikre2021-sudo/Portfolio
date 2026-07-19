@@ -1,86 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Dynamic sitemap is served by the API at https://bereketfikre.et/sitemap.xml -->
+<!-- This static file is a fallback only — the backend generates the authoritative sitemap -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-    
-    <!-- Homepage -->
-    <url>
-        <loc>https://bereketfikre.et/</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>1.0</priority>
-        <image:image>
-            <image:loc>https://bereketfikre.et/assets/Bereket-Fikre-1.webp</image:loc>
-            <image:title>Bereket Fikre - Senior Graphic Designer & Brand Builder Portfolio</image:title>
-            <image:caption>Senior Graphic Designer & Brand Builder specializing in brand identity design, visual systems, logo design, print design, digital design, and art direction</image:caption>
-        </image:image>
-    </url>
-    
-    <!-- Main Sections -->
-    <url>
-        <loc>https://bereketfikre.et/#home</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>1.0</priority>
-    </url>
-    
-    <url>
-        <loc>https://bereketfikre.et/#about</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-    
-    <url>
-        <loc>https://bereketfikre.et/#services</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-    
-    <url>
-        <loc>https://bereketfikre.et/#portfolio</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.9</priority>
-    </url>
-    
-    <url>
-        <loc>https://bereketfikre.et/#blog</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>https://bereketfikre.et/#testimonials</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    
-    <url>
-        <loc>https://bereketfikre.et/#trusted-by</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>
-    
-    <url>
-        <loc>https://bereketfikre.et/#faq</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    
-    <url>
-        <loc>https://bereketfikre.et/#contact</loc>
-        <lastmod>2026-05-20</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
+  <url>
+    <loc>https://bereketfikre.et/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
 </urlset>
-

@@ -2207,7 +2207,7 @@ section {
 }
 
 .text-large {
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   line-height: 1.9;
   color: var(--text-secondary);
   margin-bottom: 1.5rem;
@@ -11761,4 +11761,473 @@ html {
   padding: 3rem 1rem;
   color: var(--color-muted, #888);
   font-size: 1rem;
+}
+
+/* ============================================
+   PROJECT REQUEST MODAL — REDESIGN (prq-*)
+   Matches brand: dark navy bg, mint accent, editorial restraint
+   ============================================ */
+
+/* Backdrop + wrapper */
+.prq-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: prqFadeIn 0.35s var(--ease-out-expo) forwards;
+}
+
+@keyframes prqFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.prq-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 10, 31, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Panel */
+.prq-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary, #0d1127);
+  border: 1px solid var(--color-light-20);
+  border-radius: var(--radius-xl, 20px);
+  box-shadow: 0 32px 80px rgba(5, 10, 31, 0.6), 0 0 0 1px rgba(180, 232, 201, 0.06);
+  overflow: hidden;
+  animation: prqSlideIn 0.4s var(--ease-out-expo) forwards;
+}
+
+@keyframes prqSlideIn {
+  from { transform: translateY(24px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(0)    scale(1);    opacity: 1; }
+}
+
+/* Close button */
+.prq-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 40px;
+  height: 40px;
+  background: var(--color-light-10);
+  border: 1px solid var(--color-light-20);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-light);
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out-expo);
+  z-index: 10;
+}
+.prq-close:hover {
+  background: var(--color-light);
+  color: var(--color-dark);
+  transform: rotate(90deg);
+}
+
+/* Header */
+.prq-header {
+  padding: 2rem 2rem 0;
+  flex-shrink: 0;
+}
+
+.prq-eyebrow {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-light);
+  opacity: 0.6;
+  margin-bottom: 0.5rem;
+}
+
+.prq-title {
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  font-weight: 700;
+  color: var(--text-primary, #e7f2ef);
+  line-height: 1.15;
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display, 'Raleway', sans-serif);
+}
+
+.prq-subtitle {
+  font-size: 0.9rem;
+  color: var(--color-light);
+  opacity: 0.55;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+/* Step indicator */
+.prq-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 0.5rem;
+}
+
+.prq-step-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--color-light-30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-light);
+  opacity: 0.4;
+  transition: all 0.3s var(--ease-out-expo);
+  flex-shrink: 0;
+}
+.prq-step-dot.active {
+  border-color: var(--color-light);
+  opacity: 1;
+  background: var(--color-light-10);
+  box-shadow: 0 0 0 4px var(--color-light-10);
+}
+.prq-step-dot.done {
+  border-color: var(--color-light);
+  background: var(--color-light);
+  color: var(--color-dark);
+  opacity: 1;
+}
+
+.prq-step-line {
+  flex: 1;
+  height: 2px;
+  background: var(--color-light-20);
+  transition: background 0.3s;
+  max-width: 48px;
+}
+.prq-step-line.done {
+  background: var(--color-light);
+}
+
+.prq-step-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-light);
+  opacity: 0.55;
+  margin: 0.5rem 0 0;
+}
+
+/* Divider below header */
+.prq-header::after {
+  content: '';
+  display: block;
+  margin-top: 1.25rem;
+  height: 1px;
+  background: var(--color-light-10);
+}
+
+/* Scrollable body */
+.prq-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 2rem 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-light-20) transparent;
+  display: flex;
+  flex-direction: column;
+}
+.prq-body::-webkit-scrollbar { width: 6px; }
+.prq-body::-webkit-scrollbar-thumb { background: var(--color-light-20); border-radius: 3px; }
+
+.prq-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+/* Two-column row */
+.prq-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Field */
+.prq-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.prq-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-light);
+  opacity: 0.75;
+  letter-spacing: 0.03em;
+}
+.prq-required { color: #ff7a7a; }
+
+/* Input / textarea */
+.prq-input,
+.prq-textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--color-light-05);
+  border: 1px solid var(--color-light-20);
+  border-radius: 10px;
+  color: var(--text-primary, #e7f2ef);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+.prq-input::placeholder,
+.prq-textarea::placeholder {
+  color: var(--color-light);
+  opacity: 0.3;
+}
+.prq-input:focus,
+.prq-textarea:focus {
+  outline: none;
+  border-color: var(--color-light);
+  background: var(--color-light-10);
+}
+.prq-textarea {
+  resize: vertical;
+  min-height: 130px;
+  line-height: 1.6;
+}
+.prq-char-hint {
+  font-size: 0.75rem;
+  color: var(--color-light);
+  opacity: 0.4;
+  margin-top: 0.25rem;
+}
+
+/* Error */
+.prq-field.has-error .prq-input,
+.prq-field.has-error .prq-textarea {
+  border-color: #ff7a7a;
+}
+.prq-error-msg {
+  font-size: 0.75rem;
+  color: #ff7a7a;
+  margin-top: 0.2rem;
+}
+
+/* Chips — inline row */
+.prq-chip-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.prq-chip-wrap {
+  flex-wrap: wrap;
+}
+
+/* Chips — 3-col grid (for services) */
+.prq-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.prq-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--color-light-05);
+  border: 1px solid var(--color-light-20);
+  border-radius: 8px;
+  color: var(--color-light);
+  opacity: 0.65;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out-expo);
+  white-space: nowrap;
+  text-align: left;
+}
+.prq-chip:hover {
+  border-color: var(--color-light-50);
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.prq-chip.selected {
+  background: var(--color-light-20);
+  border-color: var(--color-light);
+  color: var(--color-light);
+  opacity: 1;
+  box-shadow: 0 0 0 1px var(--color-light-30) inset;
+}
+.prq-chip-icon {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+/* Navigation bar */
+.prq-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-light-10);
+  flex-shrink: 0;
+}
+.prq-nav-spacer { flex: 1; }
+
+.prq-btn-back {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 1px solid var(--color-light-20);
+  border-radius: 10px;
+  color: var(--color-light);
+  opacity: 0.6;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.prq-btn-back:hover {
+  border-color: var(--color-light-50);
+  opacity: 1;
+}
+
+.prq-btn-next,
+.prq-btn-submit {
+  padding: 0.85rem 2rem;
+  background: var(--color-light);
+  border: none;
+  border-radius: 10px;
+  color: var(--color-dark);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out-expo);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 16px var(--color-light-20);
+}
+.prq-btn-next:hover,
+.prq-btn-submit:hover {
+  background: #8aea92;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(138, 234, 146, 0.35);
+}
+.prq-btn-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.prq-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-dark);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: prqSpin 0.7s linear infinite;
+}
+@keyframes prqSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .prq-modal { padding: 0; align-items: flex-end; }
+  .prq-container {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 20px 20px 0 0;
+  }
+  .prq-header { padding: 1.5rem 1.25rem 0; }
+  .prq-body { padding: 1.25rem; }
+  .prq-row-2 { grid-template-columns: 1fr; }
+  .prq-chip-grid { grid-template-columns: 1fr 1fr; }
+  .prq-chip-row { flex-wrap: wrap; }
+}
+
+/* ── prq-select + single-page overrides ── */
+.prq-select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--color-light-05);
+  border: 1px solid var(--color-light-20);
+  border-radius: 10px;
+  color: var(--text-primary, #e7f2ef);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b4e8c9' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  transition: border-color 0.2s, background-color 0.2s;
+  box-sizing: border-box;
+}
+.prq-select:focus {
+  outline: none;
+  border-color: var(--color-light);
+  background-color: var(--color-light-10);
+}
+.prq-select option {
+  background: #0d1127;
+  color: #e7f2ef;
+}
+
+/* Fix field error border for select */
+.prq-field.has-error .prq-select {
+  border-color: #ff7a7a;
+}
+
+/* Required star */
+.prq-req { color: #ff7a7a; }
+
+/* Error message (shorter name used in new component) */
+.prq-err {
+  font-size: 0.75rem;
+  color: #ff7a7a;
+  margin-top: 0.25rem;
+}
+
+/* Submit button full-width in single-page form */
+.prq-body .prq-btn-submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.5rem;
+  padding: 1rem;
+}
+
+/* Single-page form: allow scrolling */
+.prq-container {
+  max-height: 92vh;
+}
+.prq-body {
+  gap: 1rem;
 }

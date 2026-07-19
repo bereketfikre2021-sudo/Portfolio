@@ -1,44 +1,66 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useContext } from 'react';
 import { useTextTypingAnimation } from '../hooks/useTextTypingAnimation';
 import apiFetch from '../utils/api';
 import { trackCTA } from '../utils/analytics';
+import { ModalContext } from '../context/ModalContext';
 
-const LINE1_PREFIX = 'Creating ';
-const LINE1_HIGHLIGHT = 'Extraordinary';
-const LINE2 = 'Experiences';
-const TYPING_SPEED = 42;
-const START_DELAY = 550; // slight delay so hero image paints first
+// Hardcoded fallbacks — used while API loads or if it fails
+const DEFAULTS = {
+  line1Prefix:    'Creating ',
+  line1Highlight: 'Extraordinary',
+  line2:          'Experiences',
+  heroImage:      null,
+  stats: {
+    projects: { value: '100+', label: 'Projects' },
+    clients:  { value: '50+',  label: 'Clients'  },
+    years:    { value: '5+',   label: 'Years'    },
+  },
+};
+
+const TYPING_SPEED  = 42;
+const START_DELAY   = 550;
 const PAUSE_BETWEEN = 200;
 
-const delayExtra =
-  START_DELAY + LINE1_PREFIX.length * TYPING_SPEED + PAUSE_BETWEEN;
-const delayExperiences =
-  delayExtra + LINE1_HIGHLIGHT.length * TYPING_SPEED + PAUSE_BETWEEN;
-
 const TypingCursor = () => (
-  <span className="typing-cursor" aria-hidden="true">
-    |
-  </span>
+  <span className="typing-cursor" aria-hidden="true">|</span>
 );
 
 const Hero = () => {
   const [reduceMotion, setReduceMotion] = useState(false);
-  const [stats, setStats] = useState({ projects: '50+', clients: '30+', years: '5+' });
+  const [siteSettings, setSiteSettings] = useState(null);
+  const { openProjectRequestModal } = useContext(ModalContext);
 
-  // Fetch live stats from backend — falls back to hardcoded values if API is unavailable
+  // Fetch site settings (hero text + stats + image) — falls back to defaults
   useEffect(() => {
-    apiFetch('/admin/dashboard')
-      .then((data) => {
-        if (!data?.stats) return;
-        const projects = data.stats.projects?.published ?? data.stats.projects?.total ?? 50;
-        setStats({
-          projects: `${projects}+`,
-          clients:  '30+', // no client count in DB — keep static
-          years:    `${new Date().getFullYear() - 2019}+`,
-        });
-      })
+    apiFetch('/site-settings')
+      .then((data) => { if (data) setSiteSettings(data); })
       .catch(() => {}); // silently keep defaults
   }, []);
+
+  // Derived values — prefer API data, fall back to hardcoded defaults
+  const line1Prefix    = siteSettings?.heroLine1Prefix    ?? DEFAULTS.line1Prefix;
+  const line1Highlight = siteSettings?.heroLine1Highlight ?? DEFAULTS.line1Highlight;
+  const line2          = siteSettings?.heroLine2          ?? DEFAULTS.line2;
+  const heroImageSrc   = siteSettings?.heroImage          ?? null;
+
+  const stats = useMemo(() => [
+    {
+      value: siteSettings?.statProjectsValue ?? DEFAULTS.stats.projects.value,
+      label: siteSettings?.statProjectsLabel ?? DEFAULTS.stats.projects.label,
+    },
+    {
+      value: siteSettings?.statClientsValue  ?? DEFAULTS.stats.clients.value,
+      label: siteSettings?.statClientsLabel  ?? DEFAULTS.stats.clients.label,
+    },
+    {
+      value: siteSettings?.statYearsValue    ?? DEFAULTS.stats.years.value,
+      label: siteSettings?.statYearsLabel    ?? DEFAULTS.stats.years.label,
+    },
+  ], [siteSettings]);
+
+  // Typing animation delays recalculated when text changes
+  const delayExtra       = START_DELAY + line1Prefix.length    * TYPING_SPEED + PAUSE_BETWEEN;
+  const delayExperiences = delayExtra  + line1Highlight.length * TYPING_SPEED + PAUSE_BETWEEN;
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -48,21 +70,9 @@ const Hero = () => {
     return () => mq.removeEventListener('change', update);
   }, []);
 
-  const [creating, isTypingCreating] = useTextTypingAnimation(
-    LINE1_PREFIX,
-    START_DELAY,
-    TYPING_SPEED
-  );
-  const [extraordinary, isTypingExtra] = useTextTypingAnimation(
-    LINE1_HIGHLIGHT,
-    delayExtra,
-    TYPING_SPEED
-  );
-  const [experiences, isTypingExperiences] = useTextTypingAnimation(
-    LINE2,
-    delayExperiences,
-    TYPING_SPEED
-  );
+  const [creating,      isTypingCreating]     = useTextTypingAnimation(line1Prefix,    START_DELAY,       TYPING_SPEED);
+  const [extraordinary, isTypingExtra]        = useTextTypingAnimation(line1Highlight, delayExtra,        TYPING_SPEED);
+  const [experiences,   isTypingExperiences]  = useTextTypingAnimation(line2,          delayExperiences,  TYPING_SPEED);
 
   const showStaticTitle = reduceMotion;
 
@@ -73,13 +83,16 @@ const Hero = () => {
       requestAnimationFrame(() => {
         const isMobile = window.innerWidth <= 768;
         const offsetTop = isMobile ? target.offsetTop - 20 : target.offsetTop - 100;
-        window.scrollTo({
-          top: Math.max(0, offsetTop),
-          behavior: 'smooth',
-        });
+        window.scrollTo({ top: Math.max(0, offsetTop), behavior: 'smooth' });
       });
     }
   };
+
+  // Resolved image source: API image takes priority, local fallback otherwise
+  const imgSrc    = heroImageSrc || `${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp`;
+  const imgSrcSet = heroImageSrc
+    ? `${heroImageSrc} 800w, ${heroImageSrc} 1600w`
+    : `${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp 800w, ${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp 1600w`;
 
   return (
     <section id="home" className="hero" aria-label="Hero section - Introduction">
@@ -94,37 +107,32 @@ const Hero = () => {
         <div className="hero-left">
           <h1
             className="hero-title hero-title-compact hero-title-typing"
-            aria-label="Creating Extraordinary Experiences"
+            aria-label={`${line1Prefix}${line1Highlight} ${line2}`}
           >
             <span className="title-line">
               {showStaticTitle ? (
                 <>
-                  Creating{' '}
-                  <span className="title-word highlight">Extraordinary</span>
+                  {line1Prefix}
+                  <span className="title-word highlight">{line1Highlight}</span>
                 </>
               ) : (
                 <>
                   <span>{creating}</span>
-                  {isTypingCreating && creating.length < LINE1_PREFIX.length && (
-                    <TypingCursor />
-                  )}
+                  {isTypingCreating && creating.length < line1Prefix.length && <TypingCursor />}
                   {extraordinary.length > 0 && (
                     <span className="title-word highlight">{extraordinary}</span>
                   )}
-                  {isTypingExtra && extraordinary.length < LINE1_HIGHLIGHT.length && (
-                    <TypingCursor />
-                  )}
+                  {isTypingExtra && extraordinary.length < line1Highlight.length && <TypingCursor />}
                 </>
               )}
             </span>
             <span className="title-line title-line-accent">
               {showStaticTitle ? (
-                LINE2
+                line2
               ) : (
                 <>
                   <span>{experiences}</span>
-                  {isTypingExperiences &&
-                    experiences.length < LINE2.length && <TypingCursor />}
+                  {isTypingExperiences && experiences.length < line2.length && <TypingCursor />}
                 </>
               )}
             </span>
@@ -141,31 +149,26 @@ const Hero = () => {
               <span className="btn-arrow" aria-hidden="true">→</span>
               <div className="btn-shine"></div>
             </a>
-            <a
-              href="#contact"
+            <button
               className="btn btn-outline"
-              onClick={(e) => { handleNavClick(e, '#contact'); trackCTA('Get in Touch', 'hero'); }}
-              aria-label="Get in touch"
+              onClick={() => { openProjectRequestModal(); trackCTA('Request a Quote', 'hero'); }}
+              aria-label="Request a project quote"
+              type="button"
             >
-              <span className="btn-text">Get in Touch</span>
-            </a>
+              <span className="btn-text">Request a Quote</span>
+            </button>
           </div>
 
           <div className="hero-stats">
-            <div className="stat-box">
-              <span className="stat-number">{stats.projects}</span>
-              <span className="stat-label">Projects</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-box">
-              <span className="stat-number">{stats.clients}</span>
-              <span className="stat-label">Clients</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-box">
-              <span className="stat-number">{stats.years}</span>
-              <span className="stat-label">Years</span>
-            </div>
+            {stats.map((stat, i) => (
+              <React.Fragment key={stat.label}>
+                {i > 0 && <div className="stat-divider"></div>}
+                <div className="stat-box">
+                  <span className="stat-number">{stat.value}</span>
+                  <span className="stat-label">{stat.label}</span>
+                </div>
+              </React.Fragment>
+            ))}
           </div>
         </div>
 
@@ -179,7 +182,7 @@ const Hero = () => {
             </div>
             <div className="image-wrapper">
               <img
-                src={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp`}
+                src={imgSrc}
                 alt="Bereket Fikre, Graphic and brand designer, visual story teller"
                 className="hero-image"
                 width="800"
@@ -188,7 +191,7 @@ const Hero = () => {
                 fetchpriority="high"
                 decoding="async"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
-                srcSet={`${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp 800w, ${process.env.PUBLIC_URL || ''}/assets/Bereket-Fikre-1.webp 1600w`}
+                srcSet={imgSrcSet}
               />
               <div className="image-overlay"></div>
             </div>
